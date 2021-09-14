@@ -14,3 +14,5 @@ Snakemake workflow to combine internal &amp; public dataset for downstream analy
 10. (In batch) Run BiG-FAM db to setup sql server
 11. (In batch) Run Roary to get pangenome presence absence matrix
 12. (In batch) Run BGC analytics to get dataframes df_bgcs, df_genomes, df_genes populated with relevant information
+13. (In batch) Run BGC analytics to get visualization of pangenome, bgc data
+14. (In batch) Run iTOL and save the figures in directories
