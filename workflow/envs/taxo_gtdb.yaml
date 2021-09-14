@@ -1,0 +1,7 @@
+name: taxo_gtdb
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - gtdbtk=1.3.0

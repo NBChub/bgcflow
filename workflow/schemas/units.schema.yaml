@@ -1,0 +1,21 @@
+$schema: "http://json-schema.org/draft-04/schema#"
+description: row of the units.tsv, representing a sequencing unit, i.e. single-end or paired-end data
+type: object
+properties:
+  strain:
+    type: string
+    description: sample name/id the unit has been sequenced from
+  unit:
+    type: string
+    description: unit id
+  illumina_reads:
+    type: string
+    description: path to nanopore FASTQ directory
+  nanopore_reads:
+    type: string
+    description: path to nanopore FASTQ directory
+required:
+  - strain
+  - unit
+  - illumina_reads
+  - nanopore_reads

@@ -1,0 +1,33 @@
+name: automlst_env
+channels:
+  - bioconda
+  - conda-forge
+  - anaconda
+dependencies:
+  - python=2.7
+  - Flask=0.12.2
+  - Flask-Mail=0.9.1
+  - Jinja2=2.10
+  - MarkupSafe=1.0
+  - SQLAlchemy=1.2.5
+  - Werkzeug=0.14.1
+  - biopython=1.70
+  - blinker=1.4
+  - click=6.7
+  - ete3=3.1.1
+  - itsdangerous=0.24
+  - numpy=1.14.2
+  - redis-py=2.10.6
+  - scipy=1.0.0
+  - six=1.11.0
+  - uWSGI=2.0.17
+  - wheel=0.30.0
+  - wsgiref=0.1.2
+  - mafft=7.407
+  - trimal=1.4.1
+  - hmmer=3.1b2
+  - iqtree=1.6.12
+  - prodigal=2.6.3
+  - mash=2.2.1
+  - raxml=8.2.12
+  - biopython

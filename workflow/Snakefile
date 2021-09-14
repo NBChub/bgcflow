@@ -1,0 +1,25 @@
+__version__ = "_v0.5"
+
+include: "rules/common.smk"
+
+# uncomment below for including NCBI genomes in the pipeline
+include: "rules/ncbi_utilities.smk"
+
+##### Target rules #####
+
+
+rule all:
+    input:
+        expand("results/genomes/{strains}/report/{strains}.jpg", strains = STRAINS),
+        # uncomment below for including NCBI genomes in the pipeline
+        expand("results/genomes/{assembly}{version}/{assembly}{version}_antiSMASH/{assembly}{version}.gbk", assembly = NCBI_GENOMES, version=__version__),
+
+##### Modules #####
+
+
+include: "rules/assembly.smk"
+#include: "rules/phylogenetic-placement.smk"
+include: "rules/dummy-phylogenomics-placement.smk"
+include: "rules/annotate.smk"
+include: "rules/install-databases.smk"
+include: "rules/log_report.smk"
