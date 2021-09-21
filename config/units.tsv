@@ -1,3 +1,3 @@
-strain	unit	illumina_reads	nanopore_reads
-P8-A4-2	2	data/illumina/matinnu1	data/nanopore/NP76_run2/barcode02
-P8-A7	1	data/illumina/matinnu3	data/nanopore/NP76_run2/barcode04
+strain	unit	fasta
+P8-A4-2	2	data/raw/internal/fasta
+P8-A7	1	data/raw/internal/fasta

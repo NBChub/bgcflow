@@ -35,21 +35,21 @@ NCBI_GENOMES = ncbi_genomes.assembly.to_list()
 #############################
 rule ncbi_genome_download:
     output:
-        "results/genomes/{assembly}{version}/prokka_input.fna",
+        "data/interim/fasta/{assembly}{version}.fna",
     conda:
         "../envs/prokka.yaml"
     shell:
         """
-        ncbi-genome-download -s refseq -F fasta -A {wildcards.assembly} -o results/NCBI/ bacteria --verbose
-        gunzip -c results/NCBI/refseq/bacteria/{wildcards.assembly}/*.fna.gz > {output}
-        rm -rf results/NCBI/refseq/bacteria/{wildcards.assembly}/
+        ncbi-genome-download -s refseq -F fasta -A {wildcards.assembly} -o data/raw/ncbi/download bacteria --verbose
+        gunzip -c data/raw/ncbi/download/refseq/bacteria/{wildcards.assembly}/*.fna.gz > {output}
+        #rm -rf data/raw/ncbi/download/refseq/bacteria/{wildcards.assembly}
         """
 
 rule prokka_ncbi:
     input: 
-        "results/genomes/{assembly}{version}/prokka_input.fna",
+        "data/interim/fasta/{assembly}{version}.fna",
     output:
-        directory("results/genomes/{assembly}{version}/{assembly}{version}_prokka_actinoannotPFAM")
+        directory("data/interim/prokka/{assembly}{version}")
     conda:
         "../envs/prokka.yaml"
     threads: 12

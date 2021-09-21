@@ -48,5 +48,4 @@ wildcard_constraints:
 
 
 STRAINS = samples.strain.to_list()
-ILLUMINA = {k: v for (k,v) in units.illumina_reads.to_dict().items()}
-NANOPORE = {k: v for (k,v) in units.nanopore_reads.to_dict().items()}
+FASTA = {k: v for (k,v) in units.fasta.to_dict().items()}

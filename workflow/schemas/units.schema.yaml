@@ -8,14 +8,10 @@ properties:
   unit:
     type: string
     description: unit id
-  illumina_reads:
+  fasta:
     type: string
-    description: path to nanopore FASTQ directory
-  nanopore_reads:
-    type: string
-    description: path to nanopore FASTQ directory
+    description: path to fasta file directory
 required:
   - strain
   - unit
-  - illumina_reads
-  - nanopore_reads
+  - fasta

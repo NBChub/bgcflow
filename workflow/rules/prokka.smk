@@ -1,16 +1,17 @@
 rule prepare_for_annotation:
     input:
-        "results/genomes/{strains}/final_polish.fasta"
+        "data/raw/internal/fasta/{strains}.fasta"
     output:
-        "results/genomes/{strains}/prokkainput.fna" 
+        "data/interim/fasta/{strains}.fna" 
     shell:
         """
+        # If polished assembly have contig as accession
         cat {input} | sed "s/contig/{wildcards.strains}/" | sed "s/scaffold/{wildcards.strains}_scaf/" > {output}
         """
 
 rule prokka:
     input: 
-        "results/genomes/{strains}/prokkainput.fna",
+        "data/interim/fasta/{strains}.fna",
         "results/genomes/{strains}/genus", 
         "results/genomes/{strains}/species",
         "resources/Actinos_6species.gbff"
