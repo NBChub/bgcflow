@@ -1,6 +1,6 @@
 rule prepare_for_annotation:
     input:
-        "data/raw/internal/fasta/{strains}.fasta"
+        "data/raw/fasta/{strains}.fasta"
     output:
         "data/interim/fasta/{strains}.fna" 
     shell:
@@ -24,6 +24,7 @@ rule prokka:
         refseq = "resources/Actinos_6species.gbff"
     output:
         gff = "data/interim/prokka/{strains}/{strains}.gff",
+        gbk = "data/interim/prokka/{strains}/{strains}.gbk",
     conda:
         "../envs/prokka.yaml"
     params:
