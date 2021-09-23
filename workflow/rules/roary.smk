@@ -1,15 +1,14 @@
 rule roary:
     input: 
-        gff = expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS)
+        expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS + NCBI_GENOMES),
     output:
-        "data/processed/roary/test/"
+        directory("data/processed/roary/test/")
     conda:
         "../envs/roary.yaml"
     params:
         i = 80,
-        tag = "matmal_dyrehaven"
     threads: 12
     shell:
         """
-        roary -p {threads} -o {params.tag} -f {output} -e -n -i {params.i} -v --maft {input}
+        roary -p {threads} -f {output} -e -n -i {params.i} -v --mafft {input}
         """

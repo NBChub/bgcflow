@@ -35,7 +35,7 @@ NCBI_GENOMES = ncbi_genomes.assembly.to_list()
 #############################
 rule ncbi_genome_download:
     output:
-        "data/interim/fasta/{assembly}{version}.fna",
+        "data/interim/fasta/{assembly}.fna",
     conda:
         "../envs/prokka.yaml"
     shell:
@@ -47,15 +47,18 @@ rule ncbi_genome_download:
 
 rule prokka_ncbi:
     input: 
-        "data/interim/fasta/{assembly}{version}.fna",
+        fna = "data/interim/fasta/{assembly}.fna",
     output:
-        directory("data/interim/prokka/{assembly}{version}")
+        gff = "data/interim/prokka/{assembly}/{assembly}.gff",
+        gbk = "data/interim/prokka/{assembly}/{assembly}.gbk",
+        genus = temp("data/interim/{assembly}/genus"),
+        species = temp("data/interim/{assembly}/species")
     conda:
         "../envs/prokka.yaml"
     threads: 12
     shell:
         """
-        head -1 {input} | cut -d' ' -f2 > genus
-        head -1 {input} | cut -d' ' -f3 > species
-        prokka --outdir {output} --prefix {wildcards.assembly}{wildcards.version} --genus `cat genus` --species `cat species` --strain {wildcards.assembly} --cdsrnaolap --cpus {threads} --rnammer --increment 10 --evalue 1e-05 {input[0]}
+        head -1 {input} | cut -d' ' -f2 > {output.genus}
+        head -1 {input} | cut -d' ' -f3 > {output.species}
+        prokka --outdir data/interim/prokka/{wildcards.assembly} --force --prefix {wildcards.assembly} --genus `cat genus` --species `cat species` --strain {wildcards.assembly} --cdsrnaolap --cpus {threads} --rnammer --increment 10 --evalue 1e-05 {input.fna}
         """
