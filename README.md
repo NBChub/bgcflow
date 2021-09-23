@@ -1,6 +1,15 @@
 # snakemake-BGC
 Snakemake workflow to combine internal &amp; public dataset for downstream analysis
 
+## Speed Run for Roary
+This is just a quick demo for Roary using internal & NCBI dataset
+```
+git clone git@github.com:NBChub/bgcflow.git
+cd bgcflow
+git checkout 0.1.1
+snakemake --use-conda --cores $N
+```
+
 ## General steps for the workflow
 1. Download public genome fasta files from NCBI using input table public.csv 
 2. Download internal genome fasta files from Azure Data Lake using input table internal.csv
