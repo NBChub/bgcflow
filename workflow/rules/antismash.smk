@@ -1,44 +1,24 @@
-"""
-author: matinnu
-date: 2021-06-12
-Run:
-
-"""
-from pathlib import Path
-import pandas as pd
-
-TARGET = Path('/data/a/matinnu/data')
-df_target = pd.read_csv(TARGET / 'metadata.txt', sep='\t')
-STRAINS = df_target.strain.to_list()
-
-rule all:
-    input:
-        expand(TARGET / "genomes/antiSMASH/{strains}_antiSMASH", strains = STRAINS),
-        Path('../databases')
-
-rule antismash_db:
-    input: 
-        TARGET / 'metadata.txt'
+rule antismash_db_setup:
     output:
-        directory(Path('../databases'))
+        directory("resources/antismash_db"),
     conda:
-        "envs/antismash.yaml"
-    threads: 12
-    shell:
+        "../envs/antismash.yaml"
+    shell:  
         """
-        download-antismash-databases --database-dir {output}
+        download-antismash-databases --database-dir resources/antismash_db
         """
 
 rule antismash:
     input: 
-        TARGET / "genomes/{strains}_prokka_actinoannotPFAM",
-        Path('../databases')
+        gbk = "data/interim/prokka/{strains}/{strains}.gbk",
+        resources = "resources/antismash_db/"
     output:
-        directory(TARGET / "genomes/antiSMASH/{strains}_antiSMASH")
+        folder = directory("data/interim/antismash/{strains}"),
+        gbk = "data/interim/antismash/{strains}/{strains}.gbk"
     conda:
-        "envs/antismash.yaml"
+        "../envs/antismash.yaml"
     threads: 12
     shell:
         """
-        antismash --genefinding-tool prodigal --output-dir {output} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input}/{wildcards.strains}.gbk
+        antismash --genefinding-tool prodigal --output-dir {output.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} -v
         """
