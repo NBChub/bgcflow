@@ -5,38 +5,33 @@ rule prepare_for_annotation:
         "data/interim/fasta/{strains}.fna" 
     shell:
         """
-        # If polished assembly have contig as accession
         cat {input} | sed "s/contig/{wildcards.strains}/" | sed "s/scaffold/{wildcards.strains}_scaf/" > {output}
+        """
+
+rule prokka_refseq_setup:
+    output:
+        "resources/Actinos_6species.gbff"
+    conda:
+        "../envs/prokka.yaml"
+    shell:
+        """
+        (cd resources && unzip Actinos_6species.zip)
         """
 
 rule prokka:
     input: 
-        "data/interim/fasta/{strains}.fna",
-        "results/genomes/{strains}/genus", 
-        "results/genomes/{strains}/species",
-        "resources/Actinos_6species.gbff"
+        fna = "data/interim/fasta/{strains}.fna",
+        refseq = "resources/Actinos_6species.gbff"
     output:
-        directory("results/genomes/{strains}/{strains}_prokka_actinoannotPFAM")
+        gff = "data/interim/prokka/{strains}/{strains}.gff",
     conda:
         "../envs/prokka.yaml"
+    params:
+        genus = "Streptomyces",
+        increment = 10, 
+        evalue = "1e-05"
     threads: 12
     shell:
         """
-
-        prokka --outdir {output} --proteins {input[3]} --prefix {wildcards.strains} --genus `cat {input[1]}` --species `cat {input[2]}` --strain {wildcards.strains} --cdsrnaolap --cpus {threads} --rnammer --increment 10 --evalue 1e-05 {input[0]}
-        """
-        
-rule antismash:
-    input: 
-        "results/genomes/{strains}/{strains}_prokka_actinoannotPFAM",
-        "resources/antismash_db.txt"
-    output:
-        directory("results/genomes/{strains}/{strains}_antiSMASH/"),
-        "results/genomes/{strains}/{strains}_antiSMASH/{strains}.gbk"
-    conda:
-        "../envs/antismash.yaml"
-    threads: 12
-    shell:
-        """
-        antismash --genefinding-tool prodigal --output-dir {output[0]} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input[0]}/{wildcards.strains}.gbk -v
+        prokka --outdir data/interim/prokka/{wildcards.strains} --force --proteins {input.refseq} --prefix {wildcards.strains} --genus {params.genus} --strain {wildcards.strains} --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
         """
