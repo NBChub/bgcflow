@@ -2,6 +2,9 @@
 .snakemake/
 data/*/*/*   
 resources/*
+!data/raw/fasta/NBC_01171.1.fna
+!data/raw/fasta/NBC_01270.1.fna 
+!data/raw/fasta/P8-2B-3.1.fna
 !resources/Actinos_6species.zip
 !data/*/*/.gitkeep
 !data/*/README.md
