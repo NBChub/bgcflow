@@ -1,6 +1,7 @@
 .git/
 .snakemake/
 data/*/*/*   
-resources/Actinos_6species.gbff
+resources/*
+!resources/Actinos_6species.zip
 !data/*/*/.gitkeep
 !data/*/README.md

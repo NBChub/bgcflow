@@ -1,3 +1,4 @@
-strain	description
-P8-A4-2	Dyrehaven Strains
-P8-A7	Dyrehaven Strains
+genome_id	organism    genus   species strain
+NBC001270.1	Streptomyces sp. NBC001270    Streptomyces    sp. NBC001270
+NBC001171.1 Streptomyces sp. NBC001171    Streptomyces    sp. NBC001171
+GCF_000359525.1 Streptomyces albus strain J1074    Streptomyces    albus J1074

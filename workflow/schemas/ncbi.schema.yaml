@@ -1,15 +1,24 @@
 $schema: "http://json-schema.org/draft-04/schema#"
-description: row of the ncbi.tsv, representing a refseq and assembly id from https://www.ncbi.nlm.nih.gov/
+description: row of the ncbi.tsv, representing a refseq id from https://www.ncbi.nlm.nih.gov/ this is optional configuration to directly download fasta files from ncbi
+
+# columns that the config/ncbi.tsv file can have and which type they should be
 properties:
+  genome_id:
+    type: string
+    description: ncbi refseq id with genome version, for example GCF_000359525.1
+  organism:
+    type: string
+    description: name of the organism as per ncbi database
+  genus:
+    type: string
+    description: genus of the organism as per ncbi database
+  specie:
+    type: string
+    description: species of the organism as per ncbi database
   strain:
     type: string
-    description: sample name/id the unit has been sequenced from
-  assembly:
-    type: string
-    description: ncbi assembly id
-  refseq:
-    type: string
-    description: ncbi refseq id
+    description: strain id of the organism as per ncbi database
+
+# columns that the config/ncbi.tsv file must have to pass schema validation
 required:
-  - strain
-  - assembly
+  - genome_id

@@ -14,8 +14,8 @@ configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
 # set up sample
-samples = pd.read_csv(config["samples"], sep="\t").set_index("strain", drop=False)
-samples.index.names = ["strain_id"]
+samples = pd.read_csv(config["samples"], sep="\t").set_index("genome_id", drop=False)
+samples.index.names = ["genome_id"]
 
 ##### Wildcard constraints #####
 wildcard_constraints:
@@ -24,4 +24,4 @@ wildcard_constraints:
 ##### Helper functions #####
 
 STRAINS = samples.strain.to_list()
-FASTA = {k: F"data/raw/internal/fasta/{v}.fasta" for (k,v) in samples.strain.to_dict().items()}
+FASTA = {k: F"data/raw/fasta/{v}.fna" for (k,v) in samples.strain.to_dict().items()}

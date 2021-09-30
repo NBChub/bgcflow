@@ -1,2 +1,4 @@
-strain	assembly	refseq
-Carsonella ruddii	GCF_013463375.1	NZ_CP041245.1
+genome_id   organism    genus   species strain
+GCF_000359525.1 Streptomyces albus strain J1074    Streptomyces    albus J1074
+GCF_001577385.1 Streptomyces albus strain SM254 Streptomyces    albus    SM254
+GCF_001704195.1 Streptomyces sampsonii strain KJ40  Streptomyces    sampsonii KJ40
