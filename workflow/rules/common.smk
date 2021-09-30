@@ -14,7 +14,7 @@ configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
 # set up sample for default case with fasta files provided
-df_samples = pd.read_csv(config["samples"], sep="\t").set_index("genome_id", drop=False)
+df_samples = pd.read_csv(config["samples"]).set_index("genome_id", drop=False)
 df_samples.index.names = ["genome_id"]
 
 ##### Wildcard constraints #####

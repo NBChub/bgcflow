@@ -3,4 +3,4 @@
 # one row per sample. It can be parsed easily via pandas.
 
 # samples : list of genomes for analysis of bgcflow with multiple sources mentioned as below
-samples: config/samples.tsv
+samples: config/samples.csv

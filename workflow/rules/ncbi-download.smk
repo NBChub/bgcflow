@@ -5,7 +5,7 @@ rule ncbi_genome_download:
         "../envs/prokka.yaml"
     shell:
         """
-        ncbi-genome-download -s refseq -F fasta -A {wildcards.assembly} -o data/raw/ncbi/download bacteria --verbose
-        gunzip -c data/raw/ncbi/download/refseq/bacteria/{wildcards.assembly}/*.fna.gz > {output}
-        #rm -rf data/raw/ncbi/download/refseq/bacteria/{wildcards.assembly}
+        ncbi-genome-download -s refseq -F fasta -A {strains} -o data/raw/ncbi/download bacteria --verbose
+        gunzip -c data/raw/ncbi/download/refseq/bacteria/{strains}/*.fna.gz > {output}
+        #rm -rf data/raw/ncbi/download/refseq/bacteria/{strains}
         """

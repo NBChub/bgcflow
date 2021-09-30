@@ -1,8 +1,8 @@
 rule roary:
     input: 
-        expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS + NCBI_GENOMES),
+        expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS),
     output:
-        directory("data/processed/roary/test/")
+        directory("data/processed/roary/")
     conda:
         "../envs/roary.yaml"
     params:

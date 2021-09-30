@@ -1,6 +1,6 @@
 rule prepare_for_annotation:
     input:
-        "data/raw/fasta/{strains}.fasta"
+        "data/raw/fasta/{strains}.fna"
     output:
         "data/interim/fasta/{strains}.fna" 
     shell:
