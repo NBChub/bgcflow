@@ -13,18 +13,18 @@ rule install_bigscape:
 
 rule bigscape:
     input: 
-        "resources/BiG-SCAPE/",
+        "resources/BiG-SCAPE",
         expand("data/interim/antismash/{strains}", strains=STRAINS)
     output:
-        directory("data/interim/bigscape/all/")
+        "data/interim/bigscape/index.html",
     conda:
         "../envs/bigscape.yaml"
     params:
         label = "all",
     log:
         "workflow/report/bigscape.log"
-    threads: 12
+    threads: 16
     shell:
         """
-        python bigscape.py -i interim/antismash/ -o interim/antismash/ -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose > {log}
+        python resources/BiG-SCAPE/bigscape.py -i data/interim/antismash/ -o data/interim/bigscape/ -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose > {log}
         """

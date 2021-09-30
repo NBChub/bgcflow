@@ -13,7 +13,7 @@ rule all:
         #expand("data/interim/prokka/{assembly}/{assembly}.gff", assembly = STRAINS),
         #expand("data/interim/antismash/{strains}/{strains}.gbk", strains = STRAINS),
         "data/processed/roary/",
-        "data/interim/bigscape/all"
+        "data/interim/bigscape/index.html"
 
 ##### Modules #####
 include: "rules/prokka.smk"
