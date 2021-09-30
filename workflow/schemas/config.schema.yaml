@@ -6,10 +6,6 @@ type: object
 
 # possible entries of the config file and which type they should be
 properties:
-  internal:
-    type: string
-  ncbi:
-    type: string
   samples:
     type: string
 

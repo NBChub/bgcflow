@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from snakemake.utils import validate
 from snakemake.utils import min_version
@@ -9,19 +10,36 @@ min_version("5.18.0")
 #singularity: "docker://continuumio/miniconda3"
 
 ##### load config and sample sheets #####
-
 configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
-# set up sample
-samples = pd.read_csv(config["samples"], sep="\t").set_index("genome_id", drop=False)
-samples.index.names = ["genome_id"]
+# set up sample for default case with fasta files provided
+df_samples = pd.read_csv(config["samples"], sep="\t").set_index("genome_id", drop=False)
+df_samples.index.names = ["genome_id"]
 
 ##### Wildcard constraints #####
 wildcard_constraints:
-    strains="|".join(samples.index),
+    strains="|".join(df_samples.index),
 
 ##### Helper functions #####
+STRAINS = df_samples.genome_id.to_list()
+FASTA = dict()
 
-STRAINS = samples.strain.to_list()
-FASTA = {k: F"data/raw/fasta/{v}.fna" for (k,v) in samples.strain.to_dict().items()}
+fasta_input_dir = "data/raw/fasta/"
+for genome_id in STRAINS:
+    if df_samples.loc[genome_id, 'source'] == 'custom':
+        if genome_id + '.fna' in os.listdir():
+            FASTA[genome_id] = os.path.join(fasta_input_dir, genome_id + '.fna')
+        # else:
+        #     logging('Error: Genome does not have corresponding fasta file in raw data folder:', genome_id)
+        
+    # elif df_samples.loc[genome_id, 'source'] == 'ncbi':
+    #    then activate NCBI rule and download fna in fasta directory
+    #           once the fna is downloaded in right folder 
+    #           then FASTA[genome_id] = os.path.join(fasta_input_dir, genome_id + '.fna')
+    # elif source has azure id
+    #    then activate az copy and pull the fna from azure
+    #           once the fna is downloaded in right folder 
+    #           then FASTA[genome_id] = os.path.join(fasta_input_dir, genome_id + '.fna')
+    # else
+    #    undefined source found for the genome use one of the above sources

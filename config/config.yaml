@@ -2,11 +2,5 @@
 # In case of sample based data, it should be complemented by a samples.tsv file that contains
 # one row per sample. It can be parsed easily via pandas.
 
-# samples : list of genomes provided in the data/raw/fasta directory with gneome ids as filenames 
+# samples : list of genomes for analysis of bgcflow with multiple sources mentioned as below
 samples: config/samples.tsv
-
-# internal : list of genomes from internal dataset that can be retrieved from blob containers
-internal: config/internal.tsv
-
-# ncbi : list of public genome accession IDs that will be downloaded from the NCBI refseq database
-ncbi: config/ncbi.tsv

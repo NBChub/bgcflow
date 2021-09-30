@@ -6,13 +6,20 @@ properties:
   genome_id:
     type: string
     description: genome id with genome version, same as fasta files stored in data/raw/fasta/ directory
+  source:
+    type: string
+    description: source of the genome to be analyzed choose one of the following-
+    'custom', 'ncbi', 'blob-container'
+# custom  : for provided in the data/raw/fasta directory with gneome ids as filenames 
+# ncbi : for list of public genome accession IDs that will be downloaded from the NCBI refseq database
+# blob-container-url : for list of genomes from internal dataset that can be retrieved from blob containers
   organism:
     type: string
     description: name of the organism that is same as in the fasta header
   genus:
     type: string
     description: genus of the organism
-  specie:
+  species:
     type: string
     description: species of the organism
   strain:
@@ -22,3 +29,8 @@ properties:
 # columns that the config/samples.tsv file must have to pass schema validation
 required:
   - genome_id
+  - source
+  - organism
+  - genus
+  - species
+  - strain
