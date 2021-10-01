@@ -17,12 +17,19 @@ validate(config, schema="../schemas/config.schema.yaml")
 df_samples = pd.read_csv(config["samples"]).set_index("genome_id", drop=False)
 df_samples.index.names = ["genome_id"]
 
-##### Wildcard constraints #####
-wildcard_constraints:
-    strains="|".join(df_samples.index),
-
 ##### Helper functions #####
 STRAINS = df_samples.genome_id.to_list()
+CUSTOM = df_samples[df_samples.source.eq("custom")].genome_id.to_list()
+NCBI = df_samples[df_samples.source.eq("ncbi")].genome_id.to_list()
+
+##### Wildcard constraints #####
+wildcard_constraints:
+    strains="|".join(STRAINS),
+    ncbi="|".join(NCBI),
+    custom="|".join(CUSTOM),
+
+
+##### Unfinished script
 FASTA = dict()
 
 fasta_input_dir = "data/raw/fasta/"
