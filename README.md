@@ -1,16 +1,65 @@
-# snakemake-BGC
-Snakemake workflow to combine internal &amp; public dataset for downstream analysis
+# BGCflow
+[![Snakemake](https://img.shields.io/badge/snakemake-≥6.7.0-brightgreen.svg)](https://snakemake.bitbucket.io)
+[![Build Status](https://travis-ci.org/snakemake-workflows/snakemake-bgc-analytics.svg?branch=master)](https://travis-ci.org/snakemake-workflows/snakemake-bgc-analytics)
 
-## Speed Run for Roary
-This is just a quick demo for Roary using internal & NCBI dataset
-```
-git clone git@github.com:NBChub/bgcflow.git
-cd bgcflow
-git checkout 0.1.1
-snakemake --use-conda --cores $N
-```
+Snakemake workflow to combine internal &amp; public dataset for downstream Biosynthetic Gene Clusters (BGCs) analyses
 
-## General steps for the workflow
+## Workflow overview
+![dag](workflow/report/images/rulegraph.svg)
+## Usage
+### Step 1: Clone the workflow
+
+[Clone](https://help.github.com/en/articles/cloning-a-repository) this repository to your local system, into the place where you want to perform the data analysis. _Make sure to have the right access / SSH Key._
+
+    git clone git@github.com:NBChub/bgcflow.git
+    cd bgcflow
+
+### Step 2: Configure workflow
+#### Setting Up Your Samples Information
+Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `samples.csv` to specify the strains to analyse.
+
+`samples.csv` example:
+
+| genome_id       | source | organism                        | genus        | species | strain     |
+|----------------:|-------:|--------------------------------:|-------------:|--------:| ----------:|
+| NBC_01270.1     | custom | Streptomyces sp. NBC_01270      | Streptomyces | sp.     | NBC001270  |
+| GCF_000359525.1 | ncbi   | Streptomyces albus strain J1074 | Streptomyces | albus   | J1074      |
+
+Further formatting rules will be defined in the `workflow/schemas/` folder.
+
+### Step 3: Install Snakemake
+
+Installing Snakemake using [Mamba](https://github.com/mamba-org/mamba) is advised. In case you don’t use [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge) you can always install [Mamba](https://github.com/mamba-org/mamba) into any other Conda-based Python distribution with:
+
+    conda install -n base -c conda-forge mamba
+
+Then install Snakemake with:
+
+    mamba create -c conda-forge -c bioconda -n snakemake snakemake
+
+For installation details, see the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
+
+### Step 4: Execute workflow
+
+Activate the conda environment:
+
+    conda activate snakemake
+
+Test your configuration by performing a dry-run via:
+
+    snakemake --use-conda -n
+
+Execute the workflow locally via:
+
+    snakemake --use-conda --cores $N --keep-going
+
+Check you job DAG by executing:
+
+    snakemake --dag | dot -Tsvg > workflow/report/images/dag.svg
+
+See the [Snakemake documentation](https://snakemake.readthedocs.io/en/stable/executable.html) for further details.
+
+## General steps for the workflow (To Do)
 1. Download public genome fasta files from NCBI using input table public.csv 
 2. Download internal genome fasta files from Azure Data Lake using input table internal.csv
 3. Run prokka annotation and save output files
