@@ -2,20 +2,17 @@ __version__ = "v0.1"
 
 include: "rules/common.smk"
 
-# uncomment below for including NCBI genomes in the pipeline
-# include: "rules/ncbi-download.smk"
-
 ##### Target rules #####
 
 rule all:
     input:
         expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS),
-        #expand("data/interim/prokka/{assembly}/{assembly}.gff", assembly = STRAINS),
-        #expand("data/interim/antismash/{strains}/{strains}.gbk", strains = STRAINS),
-        "data/processed/roary/",
+        expand("data/interim/antismash/{strains}/{strains}.gbk", strains = STRAINS),
+        "data/interim/roary/",
         "data/interim/bigscape/index.html"
 
 ##### Modules #####
+include: "rules/ncbi-download.smk"
 include: "rules/prokka.smk"
 include: "rules/antismash.smk"
 include: "rules/roary.smk"
