@@ -11,7 +11,7 @@ rule install_bigslice:
 
 rule big_slice_prep:
     input:
-        antismash_dir = "data/interim/antismash/",
+        #antismash_dir = "data/interim/antismash/",
         antismash = expand("data/interim/antismash/{strains}/", strains = STRAINS)
     output:
         table = "data/interim/antismash/datasets.tsv",
@@ -69,7 +69,7 @@ rule fix_gtdb_taxonomy:
 rule bigslice:
     input: 
         ref = "resources/bigslice.txt",
-        folder = "data/interim/antismash/",
+        antismash = expand("data/interim/antismash/{strains}/", strains = STRAINS),
         taxonomy = "data/interim/antismash/all_taxonomy.tsv",
     output:
         folder = directory("data/interim/bigslice/all/")
@@ -78,5 +78,5 @@ rule bigslice:
     threads: 12
     shell:
         """
-        bigslice -i {input.folder} {output.folder}
+        bigslice -i data/interim/antismash/ {output.folder}
         """
