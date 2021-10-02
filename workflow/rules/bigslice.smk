@@ -41,6 +41,7 @@ rule fetch_gtdb_taxonomy:
         taxonomy = "data/interim/antismash/all_taxonomy_raw.tsv",
     shell:
         """
+        wget https://raw.githubusercontent.com/medema-group/bigslice/master/misc/assign_gtdb_taxonomy/fetch_taxonomy_from_api.py -P workflow/scripts/ -nc
         python workflow/scripts/fetch_taxonomy_from_api.py {input.taxonomy_placement} {output.taxonomy}
         """
 
