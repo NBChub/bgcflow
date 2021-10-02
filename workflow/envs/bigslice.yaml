@@ -1,0 +1,6 @@
+name: bigslice
+channels:
+  - conda-forge
+dependencies:
+  - pip:
+    - bigslice
