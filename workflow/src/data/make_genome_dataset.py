@@ -1,8 +1,8 @@
 import os # Directory and file management
 import pandas as pd # Dataframe
-import seaborn as sns # Visualization
-import matplotlib.pyplot as plt # Visualization 
-from matplotlib.ticker import StrMethodFormatter 
+#import seaborn as sns # Visualization
+#import matplotlib.pyplot as plt # Visualization 
+#from matplotlib.ticker import StrMethodFormatter 
 from Bio import SeqIO # Genbank processing 
 from Bio.SeqUtils import GC
 
