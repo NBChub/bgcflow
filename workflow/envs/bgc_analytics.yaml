@@ -1,0 +1,11 @@
+name: bgc_analytics
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - seaborn
+  - pandas
+  - pip:
+      - biopython
+      - networkx
