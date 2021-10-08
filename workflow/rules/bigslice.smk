@@ -5,7 +5,7 @@ rule install_bigslice:
         "../envs/bigslice.yaml"
     shell:
         """
-        download_bigslice_hmmdb
+        (cd resources && download_bigslice_hmmdb && rm bigslice_models.tar.gz)
         bigslice --version . > {output}
         """
 

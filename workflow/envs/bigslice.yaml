@@ -1,6 +1,10 @@
 name: bigslice
 channels:
   - conda-forge
+  - bioconda
 dependencies:
+  - python=3.6
+  - hmmer>=3.2b1
+  - pip
   - pip:
     - bigslice
