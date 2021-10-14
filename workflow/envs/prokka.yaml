@@ -6,3 +6,4 @@ channels:
 dependencies:
   - prokka=1.14.6
   - ncbi-genome-download=0.3.0
+  - pandas

@@ -1,10 +1,6 @@
-import os # Directory and file management
-import pandas as pd # Dataframe
-#import seaborn as sns # Visualization
-#import matplotlib.pyplot as plt # Visualization 
-#from matplotlib.ticker import StrMethodFormatter 
-from Bio import SeqIO # Genbank processing 
-from Bio.SeqUtils import GC
+import os
+import pandas as pd 
+from Bio import SeqIO
 
 from pathlib import Path
 
@@ -29,7 +25,7 @@ def init_genome_dataframe(antismash_dir):
     Returns genome dataframe from input directory containing all antiSMASH results for the genomes
     '''
     path = Path(antismash_dir)
-    genome_ids_list = [folder for folder in os.listdir(path) if os.path.isdir(path / folder)]
+    genome_ids_list = [folder for folder in os.listdir(path) if os.listdir(path / folder)]
     column_names = ['genome_name', 'organism', 'closest_strain', 'ANI_closest_strain','genome_len', 'gc_content', 'accession_nbc', 
                     'topology', 'genus', 'species','records', 'plasmids', 'gene_count', 'bgcs_count',
                     'protoclusters_count', 'cand_clusters_count', 'date']
