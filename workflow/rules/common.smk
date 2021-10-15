@@ -22,31 +22,11 @@ STRAINS = df_samples.genome_id.to_list()
 CUSTOM = df_samples[df_samples.source.eq("custom")].genome_id.to_list()
 NCBI = df_samples[df_samples.source.eq("ncbi")].genome_id.to_list()
 
+# Helper for lamda function
+SAMPLES = {idx : idx for idx in STRAINS}
+
 ##### Wildcard constraints #####
 wildcard_constraints:
     strains="|".join(STRAINS),
     ncbi="|".join(NCBI),
     custom="|".join(CUSTOM),
-
-
-##### Unfinished script
-FASTA = dict()
-
-fasta_input_dir = "data/raw/fasta/"
-for genome_id in STRAINS:
-    if df_samples.loc[genome_id, 'source'] == 'custom':
-        if genome_id + '.fna' in os.listdir():
-            FASTA[genome_id] = os.path.join(fasta_input_dir, genome_id + '.fna')
-        # else:
-        #     logging('Error: Genome does not have corresponding fasta file in raw data folder:', genome_id)
-        
-    # elif df_samples.loc[genome_id, 'source'] == 'ncbi':
-    #    then activate NCBI rule and download fna in fasta directory
-    #           once the fna is downloaded in right folder 
-    #           then FASTA[genome_id] = os.path.join(fasta_input_dir, genome_id + '.fna')
-    # elif source has azure id
-    #    then activate az copy and pull the fna from azure
-    #           once the fna is downloaded in right folder 
-    #           then FASTA[genome_id] = os.path.join(fasta_input_dir, genome_id + '.fna')
-    # else
-    #    undefined source found for the genome use one of the above sources
