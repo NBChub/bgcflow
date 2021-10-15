@@ -20,11 +20,13 @@ rule prokka_refseq_setup:
 
 rule prokka:
     input: 
-        fna = "data/interim/fasta/{custom}.fna",
+        fna = "data/interim/fasta/{strains}.fna",
         refseq = "resources/Actinos_6species.gbff"
     output:
-        gff = "data/interim/prokka/{custom}/{custom}.gff",
-        gbk = "data/interim/prokka/{custom}/{custom}.gbk",
+        gff = "data/interim/prokka/{strains}/{strains}.gff",
+        gbk = "data/interim/prokka/{strains}/{strains}.gbk",
+        genus = temp("data/interim/prokka/{strains}/genus"),
+        species = temp("data/interim/prokka/{strains}/species"),
     conda:
         "../envs/prokka.yaml"
     params:
@@ -34,5 +36,12 @@ rule prokka:
     threads: 8
     shell:
         """
-        prokka --outdir data/interim/prokka/{wildcards.custom} --force --proteins {input.refseq} --prefix {wildcards.custom} --genus {params.genus} --strain {wildcards.custom} --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
+        head -1 {input.fna} | cut -d' ' -f2 > {output.genus}
+        head -1 {input.fna} | cut -d' ' -f3 > {output.species}
+        if [ `cat {output.genus}` == "Streptomyces" ]
+        then
+            prokka --outdir data/interim/prokka/{wildcards.strains} --force --proteins {input.refseq} --prefix {wildcards.strains} --genus `cat {output.genus}` --strain {wildcards.strains} --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
+        else
+            prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus `cat {output.genus}` --species `cat {output.species}` --strain {wildcards.strains} --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input}
+        fi        
         """
