@@ -53,6 +53,10 @@ rule prokka:
         then
             prokka --outdir data/interim/prokka/{wildcards.strains} --force --proteins {input.refseq} --prefix {wildcards.strains} --genus `cat {output.genus}` --strain {wildcards.strains} --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
         else
+<<<<<<< HEAD
             prokka --outdir data/interim/prokka/{wildcards.strains} --force --usegenus --prefix {wildcards.strains} --genus `cat {output.genus}` --species `cat {output.species}` --strain {wildcards.strains} --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input}
+=======
+            prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus `cat {output.genus}` --species `cat {output.species}` --strain {wildcards.strains} --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input}
+>>>>>>> f785353ad46fc8cbca06ea04e5da837b477243ed
         fi        
         """
