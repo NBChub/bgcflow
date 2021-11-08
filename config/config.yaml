@@ -4,3 +4,6 @@
 
 # samples : list of genomes for analysis of bgcflow with multiple sources mentioned as below
 samples: config/samples.csv
+
+# prokka-db : list of the custom prokka genus database provided by user
+prokka-db: config/prokka-db.csv
