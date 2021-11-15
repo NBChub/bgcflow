@@ -16,7 +16,7 @@ Snakemake workflow to combine internal &amp; public dataset for downstream Biosy
 
 ### Step 2: Configure workflow
 #### Setting Up Your Samples Information
-Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `samples.csv` to specify the strains to analyse.
+Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `samples.csv` to specify the strains to analyse. Further, update reference `prokka-db.csv` with high quality manually annotated genomes that you would like to use for prokka annoations as priority. 
 
 `samples.csv` example:
 
@@ -24,6 +24,13 @@ Configure the workflow according to your needs via editing the files in the `con
 |----------------:|-------:|--------------------------------:|-------------:|--------:| ----------:|
 | NBC_01270.1     | custom | Streptomyces sp. NBC_01270      | Streptomyces | sp.     | NBC001270  |
 | GCF_000359525.1 | ncbi   | Streptomyces albus strain J1074 | Streptomyces | albus   | J1074      |
+
+`prokka-db.csv` example for Actinomycete group:
+
+| Accession       | Strain Description             |
+|----------------:|-------------------------------:|
+| GCA_000203835.1 | Streptomyces coelicolor A3(2)  |
+| GCA_000196835.1 | Amycolatopsis mediterranei U32 |
 
 Further formatting rules will be defined in the `workflow/schemas/` folder.
 
