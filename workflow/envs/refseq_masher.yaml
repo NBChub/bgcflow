@@ -1,0 +1,5 @@
+name: refseq_masher
+channels:
+  - bioconda
+dependencies:
+  - refseq_masher
