@@ -18,23 +18,21 @@ df_samples = pd.read_csv(config["samples"]).set_index("genome_id", drop=False)
 df_samples.index.names = ["genome_id"]
 
 # set up custom prokka database
-df_prokkadb = pd.read_csv(config["prokka-db"]).set_index("genus", drop=False)
-df_prokkadb.index.names = ["genus"]
+df_prokka_db = pd.read_csv(config["prokka-db"]).set_index("Accession", drop=False)
+df_prokka_db.index.names = ["Accession"]
 
 ##### Helper functions #####
 STRAINS = df_samples.genome_id.to_list()
 CUSTOM = df_samples[df_samples.source.eq("custom")].genome_id.to_list()
 NCBI = df_samples[df_samples.source.eq("ncbi")].genome_id.to_list()
-PROKKA_GENUS = df_prokkadb.genus.to_list()
-
+PROKKA_DB = df_prokka_db.Accession.to_list()
 
 # Helper for lamda function
 SAMPLES = {idx : idx for idx in STRAINS}
-PROKKA_DB_FILE = {genus : f for (genus, f) in df_prokkadb.location.to_dict().items()}
 
 ##### Wildcard constraints #####
 wildcard_constraints:
     strains="|".join(STRAINS),
     ncbi="|".join(NCBI),
     custom="|".join(CUSTOM),
-    prokka_genus="|".join(PROKKA_GENUS),
+    prokka_db="|".join(PROKKA_DB)
