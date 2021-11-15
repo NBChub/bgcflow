@@ -24,7 +24,7 @@ rule extract_meta_prokka:
             STRAIN_ID = df_samples.loc[idx, 'strain']
             org_info_path = os.path.join('data/interim/prokka/', idx, 'organism_info.txt')
             with open(org_info_path, 'w') as file_obj:
-                file_obj.write(' '.join([GENUS,  SPECIES, STRAIN_ID]))
+                file_obj.write(','.join([GENUS,  SPECIES, STRAIN_ID]))
 
 if PROKKA_DB == []:
     rule prokka_default:
@@ -42,7 +42,7 @@ if PROKKA_DB == []:
         threads: 16
         shell:
             """
-            prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus `cut -d " " -f 1 {input.org_info}` --species `cut -d " " -f 2 {input.org_info}` --strain `cut -d " " -f 3 {input.org_info}` --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
+            prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus `cut -d "," -f 1 {input.org_info}` --species `cut -d "," -f 2 {input.org_info}` --strain `cut -d "," -f 3 {input.org_info}` --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
             """
 else:
     rule prokka_reference_download:

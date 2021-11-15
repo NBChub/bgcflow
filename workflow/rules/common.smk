@@ -25,6 +25,7 @@ df_prokka_db.index.names = ["Accession"]
 STRAINS = df_samples.genome_id.to_list()
 CUSTOM = df_samples[df_samples.source.eq("custom")].genome_id.to_list()
 NCBI = df_samples[df_samples.source.eq("ncbi")].genome_id.to_list()
+PATRIC = df_samples[df_samples.source.eq("patric")].genome_id.to_list()
 PROKKA_DB = df_prokka_db.Accession.to_list()
 
 # Helper for lamda function
@@ -35,4 +36,5 @@ wildcard_constraints:
     strains="|".join(STRAINS),
     ncbi="|".join(NCBI),
     custom="|".join(CUSTOM),
+    patric="|".join(PATRIC),
     prokka_db="|".join(PROKKA_DB)
