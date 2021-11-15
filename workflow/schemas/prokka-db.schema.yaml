@@ -1,0 +1,15 @@
+$schema: "http://json-schema.org/draft-04/schema#"
+description: row of the prokka-db.csv, representing list of genbank accessions of reference genomes to be used for prokka database
+
+# columns that the config/prokka-db.tsv file can have and which type they should be
+properties:
+  Accesion:
+    type: string
+    description: NCBI accession ID (genbank) of the reference genome of selected group of bacteria
+  Strain Descripition:
+    type: string
+    description: Name of the organism
+
+# columns that the config/prokka-db.tsv file must have to pass schema validation
+required:
+  - Accession

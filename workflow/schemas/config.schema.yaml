@@ -8,6 +8,9 @@ type: object
 properties:
   samples:
     type: string
+  prokka-db:
+    type: string
+
 
 # entries that have to be in the config file for successful validation
 required:

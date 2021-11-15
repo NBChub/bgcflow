@@ -1,7 +1,7 @@
 $schema: "http://json-schema.org/draft-04/schema#"
-description: row of the samples.tsv, representing full list of genome_ids with associated fasta files in raw data directory
+description: row of the samples.csv, representing full list of genome_ids with associated fasta files in raw data directory
 
-# columns that the config/samples.tsv file can have and which type they should be
+# columns that the config/samples.csv file can have and which type they should be
 properties:
   genome_id:
     type: string
@@ -26,7 +26,7 @@ properties:
     type: string
     description: strain id of the organism
 
-# columns that the config/samples.tsv file must have to pass schema validation
+# columns that the config/samples.csv file must have to pass schema validation
 required:
   - genome_id
   - source

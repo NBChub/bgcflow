@@ -1,5 +1,5 @@
 genome_id,source,organism,genus,species,strain,closest_placement_reference
-NBC_01270.1,custom,Streptomyces sp. NBC_01270,Streptomyces,sp.,NBC001270,GCF_000719955.1
-NBC_01171.1,custom,Streptomyces sp. NBC_01171,Streptomyces,sp.,NBC001171,GCF_004784475.1
+NBC_01270.1,custom,Streptomyces sp. NBC_01270,Streptomyces,sp.,NBC_01270,GCF_000719955.1
+NBC_01171.1,custom,Streptomyces sp. NBC_01171,Streptomyces,sp.,NBC_01171,GCF_004784475.1
 P8-2B-3.1,custom,Streptomyces sp. P8-2B-3,Streptomyces,sp.,P8-2B-3,GCF_000719955.1
 GCF_000359525.1,ncbi,Streptomyces albus strain J1074,Streptomyces,albus,J1074,
