@@ -20,12 +20,14 @@ rule fetch_gtdb_taxonomy:
         taxonomy_placement = "data/interim/gtdb/placement_list.txt"
     output:
         taxonomy = "data/interim/gtdb/all_taxonomy_raw.tsv",
+    params:
+        version = 'R202'    
     conda:
         "../envs/gtdb.yaml"
     shell:
         """
         wget https://raw.githubusercontent.com/medema-group/bigslice/master/misc/assign_gtdb_taxonomy/fetch_taxonomy_from_api.py -P workflow/scripts/ -nc
-        python workflow/scripts/fetch_taxonomy_from_api.py {input.taxonomy_placement} {output.taxonomy}
+        python workflow/scripts/fetch_taxonomy_from_api.py {input.taxonomy_placement} {output.taxonomy} --gtdb {params.version}
         """
 
 rule fix_gtdb_taxonomy:
