@@ -1,11 +1,11 @@
-rule prepare_for_annotation:
+rule copy_custom_fasta:
     input:
         "data/raw/fasta/{custom}.fna"
     output:
         "data/interim/fasta/{custom}.fna" 
     run:
         """
-        cat {input} | sed "s/contig/{wildcards.custom}/" | sed "s/scaffold/{wildcards.custom}_scaf/" > {output}
+        cp {input} {output}
         """
 
 rule extract_meta_prokka:
