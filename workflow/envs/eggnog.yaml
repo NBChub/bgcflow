@@ -1,0 +1,11 @@
+name: eggnog
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python>=3.7
+  - biopython=1.76
+  - psutil=5.7.0
+  - xlsxwriter
+  - sqlite>=3.8.2
+  - eggnog-mapper
