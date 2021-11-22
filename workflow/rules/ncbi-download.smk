@@ -21,9 +21,6 @@ else:
             assembly_report_path = "data/interim/assembly_report/",
         output:
             meta_out_path = "data/processed/tables/df_ncbi_meta.csv",
-            genus = expand("data/interim/assembly_report/{ncbi}.genus", ncbi = NCBI),
-            species = expand("data/interim/assembly_report/{ncbi}.species", ncbi = NCBI),
-            strain = expand("data/interim/assembly_report/{ncbi}.strain", ncbi = NCBI),
         conda:
             "../envs/prokka.yaml"
         script:

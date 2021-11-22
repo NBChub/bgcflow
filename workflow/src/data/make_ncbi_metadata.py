@@ -13,35 +13,10 @@ def write_ncbi_meta(assembly_report_path, meta_out_path):
     # Generate dataframe
     print('Generating dataframe for NCBI assembly metadata from folder', path, '...')
     df_ncbi_meta = get_assembly_meta(path)
-    write_genome_info(path, df_ncbi_meta)
 
     # Save dataframes to csv tables
     print('Saving metadata dataframes to tables...')
     df_ncbi_meta.to_csv(meta_out_path)
-
-    return None
-
-
-def write_genome_info(assembly_report_path, df_ncbi_meta):
-    '''
-    Write genus, species, strain related information in temporary files for prokka run
-    '''
-    path = Path(assembly_report_path)
-    for genome_id in df_ncbi_meta.index:
-        genus = df_ncbi_meta.loc[genome_id, 'genus']
-        genus_tmp_file = open(os.path.join(path, genome_id + '.genus'), 'w')
-        genus_tmp_file.write(genus)
-        genus_tmp_file.close()
-
-        species = df_ncbi_meta.loc[genome_id, 'species']
-        species_tmp_file = open(os.path.join(path, genome_id + '.species'), 'w')
-        species_tmp_file.write(species)
-        species_tmp_file.close()
-
-        strain = df_ncbi_meta.loc[genome_id, 'strain']
-        strain_tmp_file = open(os.path.join(path, genome_id + '.strain'), 'w')
-        strain_tmp_file.write(strain)       
-        strain_tmp_file.close()
 
     return None
 
