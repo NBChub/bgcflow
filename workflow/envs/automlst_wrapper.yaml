@@ -1,4 +1,4 @@
-name: automlst_env
+name: automlst_wrapper
 channels:
   - bioconda
   - conda-forge

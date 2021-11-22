@@ -8,6 +8,7 @@ rule all:
     input:
         "data/processed/tables/df_gtdb_meta.csv",
         "data/processed/tables/df_ncbi_meta.csv",
+        "data/interim/automlst_wrapper/raxmlpart.txt.treefile",
         expand("data/interim/mlst/{strains}_ST.csv", strains = STRAINS),
         expand("data/interim/eggnog/{strains}/", strains = STRAINS),
         "data/processed/tables/refseq_masher.csv",
@@ -31,3 +32,4 @@ include: "rules/refseq_masher.smk"
 include: "rules/patric.smk"
 include: "rules/eggnog.smk"
 include: "rules/mlst.smk"
+include: "rules/automlst_wrapper.smk"
