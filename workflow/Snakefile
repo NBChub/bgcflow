@@ -12,6 +12,7 @@ rule all:
         expand("data/interim/eggnog/{strains}/", strains = STRAINS),
         "data/processed/tables/refseq_masher.csv",
         expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS),
+        expand("data/interim/prokka/{strains}/{strains}.faa", strains = STRAINS),
         expand("data/processed/genbank/{strains}.gbk", strains = STRAINS),
         expand("data/interim/antismash/{strains}/{strains}.gbk", strains = STRAINS),
         "data/interim/roary/",

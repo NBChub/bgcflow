@@ -33,7 +33,9 @@ if PROKKA_DB == []:
             org_info = "data/interim/prokka/{strains}/organism_info.txt"
         output:
             gff = "data/interim/prokka/{strains}/{strains}.gff",
+            faa = "data/interim/prokka/{strains}/{strains}.faa",
             gbk = "data/interim/prokka/{strains}/{strains}.gbk",
+            gbk_processed = "data/processed/genbank/{strains}.gbk",
         conda:
             "../envs/prokka.yaml"
         params:
@@ -43,6 +45,7 @@ if PROKKA_DB == []:
         shell:
             """
             prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus `cut -d "," -f 1 {input.org_info}` --species `cut -d "," -f 2 {input.org_info}` --strain `cut -d "," -f 3 {input.org_info}` --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
+            cp {output.gbk} {output.gbk_processed}
             """
 else:
     rule prokka_reference_download:
@@ -76,6 +79,7 @@ else:
             org_info = "data/interim/prokka/{strains}/organism_info.txt"
         output:
             gff = "data/interim/prokka/{strains}/{strains}.gff",
+            faa = "data/interim/prokka/{strains}/{strains}.faa",
             gbk = "data/interim/prokka/{strains}/{strains}.gbk",
             gbk_processed = "data/processed/genbank/{strains}.gbk",
         conda:

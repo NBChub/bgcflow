@@ -1,4 +1,4 @@
-rule mslt:
+rule mlst:
     input: 
         gbk = "data/interim/prokka/{strains}/{strains}.gbk",
     output:
