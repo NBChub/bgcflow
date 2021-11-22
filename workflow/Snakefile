@@ -8,6 +8,7 @@ rule all:
     input:
         "data/processed/tables/df_gtdb_meta.csv",
         "data/processed/tables/df_ncbi_meta.csv",
+        expand("data/interim/mlst/{strains}_ST.csv", strains = STRAINS),
         expand("data/interim/eggnog/{strains}/", strains = STRAINS),
         "data/processed/tables/refseq_masher.csv",
         expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS),
@@ -28,3 +29,4 @@ include: "rules/gtdb.smk"
 include: "rules/refseq_masher.smk"
 include: "rules/patric.smk"
 include: "rules/eggnog.smk"
+include: "rules/mlst.smk"
