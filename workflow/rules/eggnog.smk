@@ -6,8 +6,8 @@ rule install_eggnog:
         "../envs/eggnog.yaml"
     shell:
         """
-        download_eggnog_data.py --data_dir {output.eggnog_db}
-        create_dbs.py -m diamond --dbname bacteria --taxa Bacteria --data_dir {output.eggnog_db}
+        download_eggnog_data.py --data_dir {output.eggnog_db} -y
+        create_dbs.py -m diamond --dbname bacteria --taxa Bacteria --data_dir {output.eggnog_db} -y
         """
 
 rule eggnog:
