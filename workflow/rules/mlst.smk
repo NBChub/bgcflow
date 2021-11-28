@@ -1,6 +1,6 @@
 rule mlst:
     input: 
-        gbk = "data/interim/prokka/{strains}/{strains}.gbk",
+        fna = "data/interim/fasta/{strains}.fna",
     output:
         csv = "data/interim/mlst/{strains}_ST.csv"
     conda:
@@ -8,5 +8,5 @@ rule mlst:
     shell:
         """
         mlst --help
-        mlst --csv {input.gbk} > {output.csv}
+        mlst --csv {input.fna} > {output.csv}
         """

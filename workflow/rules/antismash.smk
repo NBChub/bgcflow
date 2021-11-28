@@ -10,7 +10,7 @@ rule antismash_db_setup:
 
 rule antismash:
     input: 
-        gbk = "data/interim/prokka/{strains}/{strains}.gbk",
+        gbk = "data/processed/genbank/{strains}.gbk",
         resources = "resources/antismash_db/"
     output:
         folder = directory("data/interim/antismash/{strains}"),

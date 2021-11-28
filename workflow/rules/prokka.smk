@@ -35,7 +35,6 @@ if PROKKA_DB == []:
             gff = "data/interim/prokka/{strains}/{strains}.gff",
             faa = "data/interim/prokka/{strains}/{strains}.faa",
             gbk = "data/interim/prokka/{strains}/{strains}.gbk",
-            gbk_processed = "data/processed/genbank/{strains}.gbk",
         conda:
             "../envs/prokka.yaml"
         params:
@@ -44,8 +43,7 @@ if PROKKA_DB == []:
         threads: 16
         shell:
             """
-            prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus `cut -d "," -f 1 {input.org_info}` --species `cut -d "," -f 2 {input.org_info}` --strain `cut -d "," -f 3 {input.org_info}` --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
-            cp {output.gbk} {output.gbk_processed}
+            prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
             """
 else:
     rule prokka_reference_download:
@@ -81,7 +79,6 @@ else:
             gff = "data/interim/prokka/{strains}/{strains}.gff",
             faa = "data/interim/prokka/{strains}/{strains}.faa",
             gbk = "data/interim/prokka/{strains}/{strains}.gbk",
-            gbk_processed = "data/processed/genbank/{strains}.gbk",
         conda:
             "../envs/prokka.yaml"
         params:
@@ -90,6 +87,17 @@ else:
         threads: 16
         shell:
             """
-            prokka --outdir data/interim/prokka/{wildcards.strains} --force --proteins {input.refgbff} --prefix {wildcards.strains} --genus `cut -d "," -f 1 {input.org_info}` --species `cut -d "," -f 2 {input.org_info}` --strain `cut -d "," -f 3 {input.org_info}` --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
-            cp {output.gbk} {output.gbk_processed}
+            prokka --outdir data/interim/prokka/{wildcards.strains} --force --proteins {input.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
             """
+
+rule format_gbk:
+    input: 
+        gbk_prokka = "data/interim/prokka/{strains}/{strains}.gbk",
+    output:
+        gbk_processed = "data/processed/genbank/{strains}.gbk",
+    conda:
+        "../envs/prokka.yaml"
+    params:
+        version = __version__
+    script:
+        "../src/data/add_git_hash.py"

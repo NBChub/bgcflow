@@ -11,7 +11,7 @@ rule install_automlst_wrapper:
         (cd resources/automlst-simplified-wrapper-main && unzip reducedcore.zip) 
         """       
 
-rule autoMLST_wrapper:
+rule automlst_wrapper:
     input:
         gbk = expand("data/processed/genbank/{strains}.gbk", strains=STRAINS),
         reduced_core = "resources/automlst-simplified-wrapper-main/reducedcore.hmm"
