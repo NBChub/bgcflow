@@ -1,32 +1,29 @@
 import os
+import sys
 import pandas as pd 
 from Bio import SeqIO
 from alive_progress import alive_bar
 
 from pathlib import Path
 
-def write_table(antismash_dir, genome_table):
+def write_genome_table(fna_dir, antismash_dir, samples_table, genome_table):
     '''
-    write df_genomes.csv and df_bgc_products.csv
+    Write df_genomes.csv table in processed data
     '''
-    # Input 
-    path = Path(antismash_dir)
-    # Generate dataframe
-    print('Generating dataframe for all genomes in the folder', path, '...')
-    df_genomes = init_genome_dataframe(path)
-
-    # Save dataframes to csv tables
-    print('Saving dataframes to tables...')
-    df_genomes.to_csv(genome_table)
     
+    # Generate dataframe
+    df_samples = pd.read_csv(samples_table, index_col='genome_id')
+    df_genomes = init_genome_dataframe(fna_dir, df_samples)
+    df_genomes = update_bgc_info(antismash_dir, df_genomes)
+    # Save dataframes to csv tables
+    df_genomes.to_csv(genome_table)
+
     return None
 
 def init_genome_dataframe(fna_dir, df_samples):
     '''
     Returns genome dataframe with GC content and number of contigs per genome
     '''
-
-    path = Path(fna_dir)
 
     df_genomes = df_samples.copy()
     df_genomes[['contigs', 'gc_content', 'genome_len']] = 0
@@ -101,5 +98,5 @@ def update_bgc_info(antismash_dir, df_genomes):
               
     return df_genomes
 
-#print(snakemake.input.antismash_dir, snakemake.output.df_genomes, snakemake.output.df_bgc_products)
-# write_table(snakemake.input.antismash_dir, snakemake.output.df_genomes, snakemake.output.df_bgc_products)
+if __name__ == "__main__":
+    write_genome_table(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
