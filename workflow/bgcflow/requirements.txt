@@ -1,0 +1,10 @@
+# local package
+-e .
+
+# external requirements
+biopython
+pandas
+subprocess
+datetime
+pathlib
+alive_progress
