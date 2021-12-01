@@ -3,7 +3,7 @@ rule copy_custom_fasta:
         "data/raw/fasta/{custom}.fna"
     output:
         "data/interim/fasta/{custom}.fna" 
-    run:
+    shell:
         """
         cp {input} {output}
         """
@@ -40,7 +40,7 @@ if PROKKA_DB == []:
         params:
             increment = 10, 
             evalue = "1e-05"
-        threads: 16
+        threads: 8
         shell:
             """
             prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
@@ -67,7 +67,7 @@ else:
             "../envs/prokka.yaml"
         shell:
             """
-            cat resources/prokka_db/gbk/*.gbff > {output.refgbff}
+            cat resources/prokka_db/gbk/*.gbff >> {output.refgbff}
             """
 
     rule prokka_custom:
@@ -84,7 +84,7 @@ else:
         params:
             increment = 10, 
             evalue = "1e-05"
-        threads: 16
+        threads: 8
         shell:
             """
             prokka --outdir data/interim/prokka/{wildcards.strains} --force --proteins {input.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
