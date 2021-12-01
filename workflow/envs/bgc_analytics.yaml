@@ -4,8 +4,21 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - jupyterlab>3
+  - ipywidgets>=7.6
+  - jupyter-dash
   - seaborn
   - pandas
+  - plotly
+  - bokeh
+  - openpyxl
+  - nbconvert
+  - ipykernel
+  - ete3 
+  - xlrd >= 1.0.0
+  - pip
   - pip:
       - biopython
       - networkx
+      - -e ../bgcflow
+      - alive_progress
