@@ -1,5 +1,3 @@
-__version__ = "v0.1"
-
 include: "rules/common.smk"
 
 ##### Target rules #####
@@ -8,6 +6,7 @@ rule all:
     input:
         "data/processed/tables/df_gtdb_meta.csv",
         "data/processed/tables/df_ncbi_meta.csv",
+        "data/processed/tables/df_seqfu_stats.csv",
         "data/interim/automlst_wrapper/raxmlpart.txt.treefile",
         expand("data/interim/mlst/{strains}_ST.csv", strains = STRAINS),
         expand("data/interim/eggnog/{strains}/", strains = STRAINS),
@@ -33,3 +32,4 @@ include: "rules/patric.smk"
 include: "rules/eggnog.smk"
 include: "rules/mlst.smk"
 include: "rules/automlst_wrapper.smk"
+include: "rules/seqfu.smk"
