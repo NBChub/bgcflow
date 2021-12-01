@@ -20,7 +20,7 @@ rule eggnog:
     conda:
         "../envs/eggnog.yaml"
     threads:
-        16
+        8
     shell:
         """
         mkdir -p {output.eggnog_dir}

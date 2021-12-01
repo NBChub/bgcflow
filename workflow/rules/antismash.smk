@@ -17,7 +17,7 @@ rule antismash:
         gbk = "data/interim/antismash/{strains}/{strains}.gbk"
     conda:
         "../envs/antismash.yaml"
-    threads: 12
+    threads: 8
     shell:
         """
         antismash --genefinding-tool prodigal --output-dir {output.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} -v

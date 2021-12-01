@@ -1,14 +1,16 @@
 rule roary:
     input: 
-        expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS),
+        gff = expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS),
     output:
-        directory("data/interim/roary/")
+        roary_dir = directory("data/interim/roary/all/"),
+        pangenome = "data/interim/roary/all/gene_presence_absence.csv"
     conda:
         "../envs/roary.yaml"
     params:
         i = 80,
-    threads: 12
+        core = 95,
+    threads: 8
     shell:
         """
-        roary -p {threads} -f data/interim/roary/ -e -n -i {params.i} -v --mafft {input}
+        roary -p {threads} -f {output.roary_dir} -e -n -i {params.i} -cd {params.core} -r -v --mafft {input.gff}
         """
