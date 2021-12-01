@@ -4,6 +4,9 @@
 
 BGCflow implementation for the analysis of [1000 MAGs from waste water treatment in Denmark](https://www.nature.com/articles/s41467-021-22203-2). The genomes are publicly available from https://www.ncbi.nlm.nih.gov/bioproject/prjna629478.
 
+## Correspondence
+robertosan97@gmail.com
+
 ## Workflow overview
 ![dag](workflow/report/images/rulegraph.svg)
 ## Usage
