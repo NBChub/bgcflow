@@ -3,7 +3,7 @@ if NCBI == []:
 else:
     rule ncbi_genome_download:
         output:
-            gbff = "data/interim/genbank/{ncbi}.gbff",
+            gbff = "data/processed/genbank/{ncbi}.gbff",
             assembly_report = "data/interim/assembly_report/{ncbi}.txt"
         conda:
             "../envs/prokka.yaml"
