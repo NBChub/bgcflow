@@ -3,16 +3,19 @@ if NCBI == []:
 else:
     rule ncbi_genome_download:
         output:
-            fna = "data/interim/fasta/{ncbi}.fna",
+            gbff = "data/interim/genbank/{ncbi}.gbff",
             assembly_report = "data/interim/assembly_report/{ncbi}.txt"
         conda:
             "../envs/prokka.yaml"
+        params:
+            src = "genbank",
+            fmt = "genbank"
         shell:
             """
-            ncbi-genome-download -s refseq -F fasta,assembly-report -A {wildcards.ncbi} -o data/raw/ncbi/download bacteria --verbose
-            gunzip -c data/raw/ncbi/download/refseq/bacteria/{wildcards.ncbi}/*.fna.gz > {output.fna}
-            cp data/raw/ncbi/download/refseq/bacteria/{wildcards.ncbi}/*report.txt {output.assembly_report}
-            rm -rf data/raw/ncbi/download/refseq/bacteria/{wildcards.ncbi}
+            ncbi-genome-download -s {params.src} -F {params.fmt},assembly-report -A {wildcards.ncbi} -o data/raw/ncbi/download bacteria --verbose
+            gunzip -c data/raw/ncbi/download/{params.src}/bacteria/{wildcards.ncbi}/*.gbff.gz > {output.gbff}
+            cp data/raw/ncbi/download/{params.src}/bacteria/{wildcards.ncbi}/*report.txt {output.assembly_report}
+            rm -rf data/raw/ncbi/download/{params.src}/bacteria/{wildcards.ncbi}
             """
 
     rule ncbi_metadata:
