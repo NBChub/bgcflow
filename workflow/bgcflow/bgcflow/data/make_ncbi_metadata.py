@@ -40,39 +40,58 @@ def get_assembly_meta(assembly_report_path):
     
     for genome_id in genome_list:
         report_path = os.path.join(path, genome_id + '.txt')
-        df_meta_genome = pd.read_csv(report_path, sep=':', header=None, index_col=0)
-        assembly_accn = df_meta_genome.loc['# Assembly name', 1].strip()
-            
-        if assembly_accn.startswith('ASM'):
-            df_ncbi_meta.loc[genome_id, 'assembly'] = assembly_accn
-        else:
-            print('Assembly accession not in standard format', assembly_accn, genome_id)
-        df_ncbi_meta.loc[genome_id, 'assembly'] = assembly_accn
-        df_ncbi_meta.loc[genome_id, 'organism'] = df_meta_genome.loc['# Organism name', 1].strip()
-        df_ncbi_meta.loc[genome_id, 'genus'] = df_meta_genome.loc['# Organism name', 1].strip().split(' ')[0]
-        df_ncbi_meta.loc[genome_id, 'species'] = df_meta_genome.loc['# Organism name', 1].strip().split(' ')[1]
-        if '# Infraspecific name' in df_meta_genome.index:
-            strain = df_meta_genome.loc['# Infraspecific name', 1].strip()
-            if 'strain=' in strain:
-                df_ncbi_meta.loc[genome_id, 'strain'] = strain.split('=')[1]
-            elif '# Isolate' in df_meta_genome.index:
-                strain = df_meta_genome.loc['# Isolate', 1].strip()
-                df_ncbi_meta.loc[genome_id, 'strain'] = strain
+
+        with open(report_path, 'r') as report_file:
+            lines = report_file.readlines()
+            strain_found = False
+
+            for line in lines:
+                if line.startswith('# Assembly name:'):
+                    assembly_accn = line.split('Assembly name:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'assembly'] = assembly_accn
+                elif line.startswith('# Organism name'):
+                    organism = line.split('Organism name:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'organism'] = organism
+                    df_ncbi_meta.loc[genome_id, 'genus'] = organism.strip().split(' ')[0]
+                    df_ncbi_meta.loc[genome_id, 'species'] = organism.strip().split(' ')[1]
+                elif line.startswith('# Infraspecific name:'):
+                    strain = line.split('Infraspecific name:')[1].strip()
+                    if 'strain=' in strain:
+                        df_ncbi_meta.loc[genome_id, 'strain'] = strain.split('strain=')[1]
+                        strain_found = True
+                elif line.startswith('# Isolate:'):
+                    if strain_found == False:
+                        strain = line.split('Isolate:')[1].strip()
+                        df_ncbi_meta.loc[genome_id, 'strain'] = strain
+                        strain_found = True
+                elif line.startswith('# Taxid'):
+                    tax_id = line.split('Taxid:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'tax_id'] = tax_id
+                elif line.startswith('# BioSample'):
+                    biosample = line.split('BioSample:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'biosample'] = biosample
+                elif line.startswith('# Submitter'):
+                    submitter = line.split('Submitter:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'submitter'] = submitter
+                elif line.startswith('# Date'):
+                    date = line.split('Date:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'date'] = date
+                elif line.startswith('# RefSeq category'):
+                    refseq_category = line.split('RefSeq category:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'refseq_category'] = refseq_category
+                elif line.startswith('# RefSeq assembly accession'):
+                    refseq = line.split('RefSeq assembly accession:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'refseq'] = refseq
+                elif line.startswith('# GenBank assembly accession'):
+                    genbank = line.split('GenBank assembly accession:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'genbank'] = genbank
+                elif line.startswith('# RefSeq assembly and GenBank assemblies identical'):
+                    refseq_genbank_identity = line.split('RefSeq assembly and GenBank assemblies identical:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'refseq_genbank_identity'] = refseq_genbank_identity
                 
-        df_ncbi_meta.loc[genome_id, 'tax_id'] = df_meta_genome.loc['# Taxid', 1].strip()
-        df_ncbi_meta.loc[genome_id, 'biosample'] = df_meta_genome.loc['# BioSample', 1].strip()
-        df_ncbi_meta.loc[genome_id, 'submitter'] = df_meta_genome.loc['# Submitter', 1].strip()
-        df_ncbi_meta.loc[genome_id, 'date'] = df_meta_genome.loc['# Date', 1].strip()
-            
-        if '# RefSeq category' in df_meta_genome.index:
-            df_ncbi_meta.loc[genome_id, 'refseq_category'] = df_meta_genome.loc['# RefSeq category', 1].strip()
-        if '# RefSeq assembly accession' in df_meta_genome.index:
-            df_ncbi_meta.loc[genome_id, 'refseq'] = df_meta_genome.loc['# RefSeq assembly accession', 1].strip()
-        if '# GenBank assembly accession' in df_meta_genome.index:
-            df_ncbi_meta.loc[genome_id, 'genbank'] = df_meta_genome.loc['# GenBank assembly accession', 1].strip()
-        if '# RefSeq assembly and GenBank assemblies identical' in df_meta_genome.index:
-            df_ncbi_meta.loc[genome_id, 'refseq_genbank_identity'] = df_meta_genome.loc['# RefSeq assembly and GenBank assemblies identical', 1].strip()
-            
+            if strain_found == False:
+                df_ncbi_meta.loc[genome_id, 'strain'] = genome_id
+
     return df_ncbi_meta
 
 write_ncbi_meta(snakemake.input.assembly_report_path, snakemake.output.meta_out_path)
