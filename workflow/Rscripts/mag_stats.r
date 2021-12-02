@@ -1,19 +1,23 @@
-library(tidyverse)
+library(tidyverse, quietly=TRUE)
+library(argparser, quietly=TRUE)
 
-old_stats <- read_tsv("MAG_statistics_STABLEX_20200911_RS95.tsv")
-bac202 <- read_tsv("gtdbtk.bac120.summary.tsv")
-ar202 <- read_tsv("gtdbtk.ar122.summary.tsv")
-midas4.8 <- read_tsv("MiDAS4.8_reformatted_correct.txt", col_names = c("MAG", "midas4.8tax", "midas_identity")) %>%
-  mutate(MAG = str_sub(MAG, end = -4)) %>%
-  select(1:3)
+# Create a parser
+p <- arg_parser("Joins GTDBtk summary tables for bacteria and archaea")
 
-MAGs <- old_stats %>%
-  mutate(MAG = str_sub(MAG, end = -4)) %>%
-  left_join(
-    bind_rows(bac202[,c("user_genome", "classification")],
-             ar202[,c("user_genome", "classification")]), 
-    by = c('MAG' = 'user_genome')) %>%
-  select(MAG, TotBP, gtdb202tax = classification) %>%
-  left_join(midas4.8, by = "MAG")
+# Add command line arguments
 
-write.csv(MAGs, "mag_stats.csv")
+p <- add_argument(p, "--output_directory", short = "-o", help = "output_directory")
+p <- add_argument(p, "--archaea", short = "-a", help = "Summary file for archaea")
+p <- add_argument(p, "--bacteria", short = "-b", help = "Summary file for bacteria")
+
+
+# Parse the command line arguments
+argv <- parse_args(p)
+
+bac202 <- read_tsv(argv$bacteria)
+ar202 <- read_tsv(argv$archaea)
+
+MAGs <- bind_rows(bac202[,c("user_genome", "classification")],
+                  ar202[,c("user_genome", "classification")])
+
+write.csv(MAGs, file.path(argv$output_directory, "mag_stats.csv"))
