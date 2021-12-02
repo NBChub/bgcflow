@@ -1,5 +1,4 @@
-library(dplyr)
-library(readr)
+library(tidyverse)
 
 old_stats <- read_tsv("MAG_statistics_STABLEX_20200911_RS95.tsv")
 bac202 <- read_tsv("gtdbtk.bac120.summary.tsv")

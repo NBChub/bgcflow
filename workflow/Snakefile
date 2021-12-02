@@ -18,6 +18,7 @@ rule all:
         #expand("data/interim/antismash/{strains}/{strains}.gbk", strains = STRAINS),
         #"data/interim/roary/",
         #"data/interim/bigscape/index.html",
+        "workflow/Rscripts/mag_stats.csv"
 
 ##### Modules #####
 include: "rules/ncbi-download.smk"
@@ -33,3 +34,4 @@ include: "rules/mlst.smk"
 include: "rules/automlst_wrapper.smk"
 include: "rules/seqfu.smk"
 include: "rules/bgc_analytics.smk"
+include: "rules/R.smk"
