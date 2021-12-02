@@ -100,4 +100,4 @@ rule format_gbk:
     params:
         version = __version__
     script:
-        "../src/data/add_git_hash.py"
+        "../bgcflow/bgcflow/data/format_genbank_meta.py"

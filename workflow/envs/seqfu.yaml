@@ -1,0 +1,7 @@
+name: seqfu
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - seqfu

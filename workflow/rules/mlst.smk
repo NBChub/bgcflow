@@ -7,6 +7,5 @@ rule mlst:
         "../envs/mlst.yaml"
     shell:
         """
-        mlst --help
         mlst --csv {input.fna} > {output.csv}
         """

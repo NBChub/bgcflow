@@ -6,3 +6,5 @@ channels:
   - r
 dependencies:
   - roary
+  - r
+  - r-ggplot2

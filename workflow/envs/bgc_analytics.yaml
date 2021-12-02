@@ -20,5 +20,4 @@ dependencies:
   - pip:
       - biopython
       - networkx
-      - -e ../bgcflow
       - alive_progress

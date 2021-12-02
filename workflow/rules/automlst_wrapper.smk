@@ -11,16 +11,28 @@ rule install_automlst_wrapper:
         (cd resources/automlst-simplified-wrapper-main && unzip reducedcore.zip) 
         """       
 
-rule automlst_wrapper:
+rule prep_automlst_gbk:
     input:
-        gbk = expand("data/processed/genbank/{strains}.gbk", strains=STRAINS),
-        reduced_core = "resources/automlst-simplified-wrapper-main/reducedcore.hmm"
+        gbk = "data/processed/genbank/{strains}.gbk",
     output:
-        automlst_dir = directory("data/interim/automlst_wrapper/"),
-        tree = "data/interim/automlst_wrapper/raxmlpart.txt.treefile"        
-    conda: "../envs/automlst_wrapper.yaml"
+        auto_gbk = "data/interim/automlst_wrapper/{strains}.gbk",
+    conda:
+        "../envs/automlst_wrapper.yaml"
     shell:
         """
-        cp {input.gbk} {output.automlst_dir}
-        python resources/automlst-simplified-wrapper-main/simplified_wrapper.py {output.automlst_dir}
+        python workflow/bgcflow/bgcflow/features/prep_automlst.py {input.gbk} {output.auto_gbk} {wildcards.strains}
+        """
+
+rule automlst_wrapper:
+    input:
+        gbk = expand("data/interim/automlst_wrapper/{strains}.gbk", strains=STRAINS),
+        reduced_core = "resources/automlst-simplified-wrapper-main/reducedcore.hmm",
+        automlst_dir = "data/interim/automlst_wrapper/"
+    output:
+        tree = "data/interim/automlst_wrapper/raxmlpart.txt.treefile"        
+    conda: 
+        "../envs/automlst_wrapper.yaml"
+    shell:
+        """
+        python resources/automlst-simplified-wrapper-main/simplified_wrapper.py {input.automlst_dir}
         """

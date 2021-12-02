@@ -24,4 +24,4 @@ else:
         conda:
             "../envs/prokka.yaml"
         script:
-            "../src/data/make_ncbi_metadata.py"
+            "../bgcflow/bgcflow/data/make_ncbi_metadata.py"
