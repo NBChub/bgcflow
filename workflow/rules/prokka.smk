@@ -10,21 +10,20 @@ rule copy_custom_fasta:
 
 rule extract_meta_prokka:
     input:
-        expand("data/interim/fasta/{strains}.fna", strains = STRAINS)
+        fna = expand("data/interim/fasta/{strains}.fna", strains = STRAINS),
+        samples_path = config["samples"],
+        prokka_dir = "data/interim/prokka/",
+        all_reports = expand("data/interim/assembly_report/{ncbi}.txt", ncbi = NCBI),
+        assembly_report_path = "data/interim/assembly_report/",
     output:
-        expand("data/interim/prokka/{strains}/organism_info.txt", strains = STRAINS)
-    run:
-        # set up sample for default case with fasta files provided
-        df_samples = pd.read_csv(config["samples"]).set_index("genome_id", drop=False)
-        df_samples.index.names = ["genome_id"]
-
-        for idx in df_samples.index:
-            GENUS = df_samples.loc[idx, 'genus']
-            SPECIES = df_samples.loc[idx, 'species']
-            STRAIN_ID = df_samples.loc[idx, 'strain']
-            org_info_path = os.path.join('data/interim/prokka/', idx, 'organism_info.txt')
-            with open(org_info_path, 'w') as file_obj:
-                file_obj.write(','.join([GENUS,  SPECIES, STRAIN_ID]))
+        ncbi_meta_path = "data/processed/tables/df_ncbi_meta.csv",
+        org_info = expand("data/interim/prokka/{strains}/organism_info.txt", strains = STRAINS),
+    conda:
+        "../envs/bgc_analytics.yaml"
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/get_organism_info.py {input.samples_path} {input.assembly_report_path} {input.prokka_dir} {output.ncbi_meta_path}
+        """ 
 
 if PROKKA_DB == []:
     rule prokka_default:

@@ -14,14 +14,3 @@ else:
             cp data/raw/ncbi/download/refseq/bacteria/{wildcards.ncbi}/*report.txt {output.assembly_report}
             rm -rf data/raw/ncbi/download/refseq/bacteria/{wildcards.ncbi}
             """
-
-    rule ncbi_metadata:
-        input: 
-            _all_ = expand("data/interim/assembly_report/{ncbi}.txt", ncbi = NCBI),
-            assembly_report_path = "data/interim/assembly_report/",
-        output:
-            meta_out_path = "data/processed/tables/df_ncbi_meta.csv",
-        conda:
-            "../envs/prokka.yaml"
-        script:
-            "../bgcflow/bgcflow/data/make_ncbi_metadata.py"
