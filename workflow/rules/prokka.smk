@@ -92,11 +92,14 @@ else:
 rule format_gbk:
     input: 
         gbk_prokka = "data/interim/prokka/{strains}/{strains}.gbk",
+        gtdb = "data/processed/tables/df_gtdb_meta.csv",
     output:
         gbk_processed = "data/processed/genbank/{strains}.gbk",
     conda:
         "../envs/prokka.yaml"
     params:
         version = __version__
-    script:
-        "../bgcflow/bgcflow/data/format_genbank_meta.py"
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/format_genbank_meta.py {input.gbk_prokka} {params.version} {input.gtdb} {wildcards.strains} {output.gbk_processed}
+        """

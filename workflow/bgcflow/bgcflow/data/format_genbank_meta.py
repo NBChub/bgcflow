@@ -1,4 +1,6 @@
 import subprocess
+import sys
+import pandas as pd
 from Bio import SeqIO
 from datetime import datetime
 
@@ -37,15 +39,18 @@ def get_version(version):
     return version
 
 
-def add_bgcflow_comments(gbk_in_path, gbk_out_path, version):
+def add_bgcflow_comments(gbk_in_path, version, gtdb_path, genome_id, gbk_out_path):
     """ 
     Add bgcflow meta-annotation to genbank output
     """
-    gbk_in_path = Path(gbk_in_path)
-    gbk_out_path = Path(gbk_out_path)
 
     version = get_version(version)
     records = SeqIO.parse(gbk_in_path, 'genbank')
+    df_gtdb_meta = pd.read_csv(gtdb_path, index_col='genome_id')
+
+    tax_levels = ['Kingdom','Phylum','Class','Order','Family','Genus','Species']
+    taxonomy_str = df_gtdb_meta.loc[genome_id, tax_levels].tolist()
+    print('Taxonomy found:', taxonomy_str)
 
     antismash_comment = (
         "##BGCflow-Data-START##\n"
@@ -64,9 +69,20 @@ def add_bgcflow_comments(gbk_in_path, gbk_out_path, version):
             record.annotations['comment'] += '\n' + comment
         else:
             record.annotations['comment'] = comment
+
+        if 'organism' in record.annotations:
+            organism = record.annotations['organism']
+            if 'Unclassified' in organism:
+                record.annotations['organism'] = organism.split(' Unclassified')[0].strip()
+        
+        record.annotations['taxonomy'] = taxonomy_str
+
         new_records.append(record)
     
     with open(gbk_out_path, "w") as output_handle:
         SeqIO.write(new_records, output_handle, "genbank")
 
-add_bgcflow_comments(snakemake.input.gbk_prokka, snakemake.output.gbk_processed, snakemake.params.version)
+
+if __name__ == "__main__":
+    add_bgcflow_comments(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+    
