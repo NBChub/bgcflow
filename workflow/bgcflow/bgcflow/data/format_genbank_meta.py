@@ -48,11 +48,13 @@ def add_bgcflow_comments(gbk_in_path, version, gtdb_path, genome_id, gbk_out_pat
     records = SeqIO.parse(gbk_in_path, 'genbank')
     df_gtdb_meta = pd.read_csv(gtdb_path, index_col='genome_id')
 
+    df_gtdb_meta.fillna('Unclassified',inplace=True)
+
     tax_levels = ['Kingdom','Phylum','Class','Order','Family','Genus','Species']
     taxonomy_str = df_gtdb_meta.loc[genome_id, tax_levels].tolist()
     print('Taxonomy found:', taxonomy_str)
 
-    antismash_comment = (
+    bgcflow_comment = (
         "##BGCflow-Data-START##\n"
         "Version      :: {version}\n"
         "Run date     :: {date}\n"
@@ -64,7 +66,7 @@ def add_bgcflow_comments(gbk_in_path, version, gtdb_path, genome_id, gbk_out_pat
 
     new_records = []
     for record in records:
-        comment = antismash_comment
+        comment = bgcflow_comment
         if 'comment' in record.annotations:
             record.annotations['comment'] += '\n' + comment
         else:
