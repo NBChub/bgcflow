@@ -5,6 +5,7 @@ resources/*
 workflow/report/bigscape.log
 workflow/scripts/fetch_taxonomy_from_api.py
 workflow/notebook/.ipynb_checkpoints/
+workflow/notebook/
 workflow/bgcflow/bgcflow.egg-info*
 *.pyc
 *.cache
