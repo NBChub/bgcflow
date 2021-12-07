@@ -7,7 +7,7 @@ rule all:
         "data/processed/tables/df_gtdb_meta.csv",
         "data/processed/tables/df_ncbi_meta.csv",
         "data/processed/tables/df_seqfu_stats.csv",
-        "data/processed/tables/df_genomes.csv",
+        "data/processed/tables/df_antismash_summary.csv",
         "data/interim/automlst_wrapper/raxmlpart.txt.treefile",
         expand("data/interim/mlst/{strains}_ST.csv", strains = STRAINS),
         expand("data/interim/eggnog/{strains}/", strains = STRAINS),
