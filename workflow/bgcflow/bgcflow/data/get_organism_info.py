@@ -14,7 +14,10 @@ def get_ncbi_meta(assembly_report_path, df_samples):
     genome_list = df_samples[df_samples.source.eq("ncbi")].genome_id.to_list()
     
     # List of columns in df_ncbi_meta
-    ncbi_meta_columns = ['assembly', 'organism', 'genus', 'species', 'strain', 'tax_id', 'refseq_category', 'refseq', 'genbank', 'refseq_genbank_identity', 'biosample', 'submitter', 'date']
+    ncbi_meta_columns = ['assembly', 'organism', 'genus', 'species', 'strain', 'tax_id', 
+                            'refseq_category', 'refseq', 'genbank', 'assembly_type', 'release_type',
+                            'assembly_level', 'genome_representation', 'refseq_genbank_identity', 
+                            'biosample', 'submitter', 'date']
     
     df_ncbi_meta = pd.DataFrame(index = genome_list, columns = ncbi_meta_columns)
     df_ncbi_meta.index.name = 'genome_id'
@@ -57,6 +60,18 @@ def get_ncbi_meta(assembly_report_path, df_samples):
                 elif line.startswith('# Date'):
                     date = line.split('Date:')[1].strip()
                     df_ncbi_meta.loc[genome_id, 'date'] = date
+                elif line.startswith('# Assembly type:'):
+                    assembly_type = line.split('Assembly type:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'assembly_type'] = assembly_type
+                elif line.startswith('# Release type:'):
+                    release_type = line.split('Release type:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'release_type'] = release_type
+                elif line.startswith('# Assembly level:'):
+                    assembly_level = line.split('Assembly level:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'assembly_level'] = assembly_level
+                elif line.startswith('# Genome representation:'):
+                    genome_representation = line.split('Genome representation:')[1].strip()
+                    df_ncbi_meta.loc[genome_id, 'genome_representation'] = genome_representation
                 elif line.startswith('# RefSeq category'):
                     refseq_category = line.split('RefSeq category:')[1].strip()
                     df_ncbi_meta.loc[genome_id, 'refseq_category'] = refseq_category
