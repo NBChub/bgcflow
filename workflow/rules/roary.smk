@@ -3,7 +3,6 @@ rule roary:
         gff = expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS),
     output:
         roary_dir = directory("data/interim/roary/all/"),
-        pangenome = "data/interim/roary/all/gene_presence_absence.csv"
     conda:
         "../envs/roary.yaml"
     params:

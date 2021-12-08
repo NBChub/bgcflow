@@ -80,19 +80,22 @@ def update_bgc_info(antismash_dir, df_genomes):
         bgc_cntr = 0
         protoclusters_cntr = 0
         cand_clusters_cntr = 0
+        contig_edge_cntr = 0
         
         for rec in records_list:
             # Information on the number of BGCs, protoclusters and candidate clusters
             for feat in rec.features:
                 if feat.type == 'region':
                     bgc_cntr = bgc_cntr + 1
-                    bgc_type = '.'.join(sorted(feat.qualifiers['product']))
+                    if feat.qualifiers['contig_edge'] == 'True':
+                        contig_edge_cntr = contig_edge_cntr + 1
                 if feat.type == 'protocluster':
                     protoclusters_cntr = protoclusters_cntr + 1
                 if feat.type == 'cand_cluster':
                     cand_clusters_cntr = cand_clusters_cntr + 1
                                     
         df_genomes.loc[genome_id, 'bgcs_count'] = bgc_cntr
+        df_genomes.loc[genome_id, 'bgcs_on_contig_edge'] = contig_edge_cntr
         df_genomes.loc[genome_id, 'protoclusters_count'] = protoclusters_cntr
         df_genomes.loc[genome_id, 'cand_clusters_count'] = cand_clusters_cntr
               

@@ -1,8 +1,8 @@
 rule refseq_masher:
     input: 
-        fasta = expand("data/interim/fasta/{strains}.fna", strains=STRAINS)
+        fasta = "data/interim/fasta/{strains}.fna",
     output:
-        masher_csv = "data/processed/tables/refseq_masher.csv"
+        masher_csv = "data/interim/refseq_masher/{strains}_masher.csv"
     conda:
         "../envs/refseq_masher.yaml"
     params:

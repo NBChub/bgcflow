@@ -8,14 +8,14 @@ else:
         conda:
             "../envs/prokka.yaml"
         params:
-            src = "genbank",
-            fmt = "genbank"
+            src = "refseq",
+            fmt = "fasta"
         shell:
             """
-            ncbi-genome-download -s {params.src} -F {params.fmt},assembly-report -A {wildcards.ncbi} -o data/raw/ncbi/download bacteria --verbose
-            gunzip -c data/raw/ncbi/download/{params.src}/bacteria/{wildcards.ncbi}/*.gbff.gz > {output.gbff}
-            cp data/raw/ncbi/download/{params.src}/bacteria/{wildcards.ncbi}/*report.txt {output.assembly_report}
-            rm -rf data/raw/ncbi/download/{params.src}/bacteria/{wildcards.ncbi}
+            ncbi-genome-download -s refseq -F fasta,assembly-report -A {wildcards.ncbi} -o data/raw/ncbi/download bacteria --verbose
+            gunzip -c data/raw/ncbi/download/refseq/bacteria/{wildcards.ncbi}/*.fna.gz > {output.fna}
+            cp data/raw/ncbi/download/refseq/bacteria/{wildcards.ncbi}/*report.txt {output.assembly_report}
+            rm -rf data/raw/ncbi/download/refseq/bacteria/{wildcards.ncbi}
             """
 
     rule ncbi_metadata:
