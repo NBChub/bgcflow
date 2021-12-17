@@ -5,6 +5,6 @@ channels:
   - defaults
   - r
 dependencies:
-  - roary
+  - roary=3.13.0
   - r
   - r-ggplot2

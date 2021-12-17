@@ -9,7 +9,8 @@ rule roary:
         i = 80,
         core = 95,
     threads: 8
+    log: "workflow/report/roary.log"
     shell:
         """
-        roary -p {threads} -f {output.roary_dir} -e -n -i {params.i} -cd {params.core} -r -v --mafft {input.gff}
+        roary -p {threads} -f {output.roary_dir} -e -n -i {params.i} -cd {params.core} -r -v --mafft {input.gff} >> {log}
         """
