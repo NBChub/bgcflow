@@ -3,6 +3,8 @@ rule copy_custom_fasta:
         "data/raw/fasta/{custom}.fna"
     output:
         "data/interim/fasta/{custom}.fna" 
+    conda:
+        "../envs/bgc_analytics.yaml"
     shell:
         """
         cp {input} {output}
@@ -38,11 +40,14 @@ if PROKKA_DB == []:
             "../envs/prokka.yaml"
         params:
             increment = 10, 
-            evalue = "1e-05"
+            evalue = "1e-05",
+            rna_detection = "" # To use rnammer change value to --rnammer
         threads: 8
+        log : "workflow/report/{strains}/prokka_run.log"
         shell:
             """
-            prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
+            prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} --evalue {params.evalue} {input.fna}
+            cp data/interim/prokka/{wildcards.strains}/{wildcards.strains}.log {log}
             """
 else:
     rule prokka_reference_download:
@@ -82,11 +87,14 @@ else:
             "../envs/prokka.yaml"
         params:
             increment = 10, 
-            evalue = "1e-05"
+            evalue = "1e-05",
+            rna_detection = "" # To use rnammer change value to --rnammer
         threads: 8
+        log : "workflow/report/{strains}/prokka_run.log"
         shell:
             """
-            prokka --outdir data/interim/prokka/{wildcards.strains} --force --proteins {input.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} --rnammer --increment {params.increment} --evalue {params.evalue} {input.fna}
+            prokka --outdir data/interim/prokka/{wildcards.strains} --force --proteins {input.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} --evalue {params.evalue} {input.fna}
+            cp data/interim/prokka/{wildcards.strains}/{wildcards.strains}.log {log}
             """
 
 rule format_gbk:
