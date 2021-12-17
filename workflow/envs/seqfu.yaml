@@ -4,4 +4,4 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - seqfu
+  - seqfu=1.9.0
