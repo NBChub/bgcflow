@@ -8,4 +8,4 @@ dependencies:
   - psutil=5.7.0
   - xlsxwriter
   - sqlite>=3.8.2
-  - eggnog-mapper
+  - eggnog-mapper=2.1.6

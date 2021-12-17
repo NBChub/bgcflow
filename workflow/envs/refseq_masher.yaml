@@ -1,5 +1,7 @@
 name: refseq_masher
 channels:
+  - conda-forge
   - bioconda
+  - defaults
 dependencies:
-  - refseq_masher
+  - refseq_masher=0.1.2
