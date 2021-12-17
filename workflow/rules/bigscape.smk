@@ -1,6 +1,6 @@
 rule install_bigscape:
     output:
-        directory("resources/BiG-SCAPE/")
+        bigscape = directory("resources/BiG-SCAPE/")
     conda:
         "../envs/bigscape.yaml"
     shell:
@@ -13,18 +13,19 @@ rule install_bigscape:
 
 rule bigscape:
     input: 
-        "resources/BiG-SCAPE",
-        expand("data/interim/antismash/{strains}", strains=STRAINS)
+        bigscape = "resources/BiG-SCAPE",
+        gbk = expand("data/interim/antismash/{version}/{strains}", strains=STRAINS, version=dependency_version["antismash"])
     output:
-        "data/interim/bigscape/index.html",
+        index = expand("data/interim/bigscape/antismash_{version}/index.html", version=dependency_version["antismash"])
     conda:
         "../envs/bigscape.yaml"
     params:
+        antismash_dir = expand("data/interim/antismash/{version}", version=dependency_version["antismash"]),
+        bigscape_dir = expand("data/interim/bigscape/antismash_{version}", version=dependency_version["antismash"]),
         label = "all",
-    log:
-        "workflow/report/bigscape.log"
+    log: "workflow/report/bigscape.log"
     threads: 16
     shell:
         """
-        python resources/BiG-SCAPE/bigscape.py -i data/interim/antismash/ -o data/interim/bigscape/ -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose > {log}
+        python {input.bigscape}/bigscape.py -i {params.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose > {log}        
         """
