@@ -1,14 +1,11 @@
 import os
 import pandas as pd
+import yaml, json
 from snakemake.utils import validate
 from snakemake.utils import min_version
 
-min_version("5.18.0")
+min_version("6.7.0")
 __version__ = "0.1.0"
-
-# this container defines the underlying OS for each job when using the workflow
-# with --use-conda --use-singularity
-#singularity: "docker://continuumio/miniconda3"
 
 ##### load config and sample sheets #####
 configfile: "config/config.yaml"
@@ -39,3 +36,41 @@ wildcard_constraints:
     custom="|".join(CUSTOM),
     patric="|".join(PATRIC),
     prokka_db="|".join(PROKKA_DB)
+
+# dependency versions
+def get_dependency_version(dep, dep_key):
+    """
+    return dependency version tags given a dictionary (dep) and its key (dep_key)
+    """
+    with open(dep[dep_key]) as file:
+        result = []
+        documents = yaml.full_load(file)
+        for i in documents["dependencies"]:
+            if i.startswith(dep_key):
+                result = i.split("=")[-1]
+    return str(result)
+
+def write_dependecies_to_json(dep, outfile):
+    """
+    write dependency version to a json file
+    """
+    with open(outfile, "w") as file:
+        dv = {}
+        for ky in dependencies.keys():
+            vr = get_dependency_version(dependencies, ky)
+            dv[ky] = vr
+        json.dump(dv, file, indent=2,)
+        file.close()
+    return dv
+
+# list of the main dependecies used in the workflow
+dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
+                "prokka": r"workflow/envs/prokka.yaml",
+                "mlst" : r"workflow/envs/mlst.yaml",
+                "eggnog-mapper" : r"workflow/envs/eggnog.yaml",
+                "roary" : r"workflow/envs/roary.yaml",
+                "refseq_masher" : r"workflow/envs/refseq_masher.yaml",
+                "seqfu" : r"workflow/envs/seqfu.yaml"
+                }
+
+dependency_version = write_dependecies_to_json(dependencies, "workflow/report/dependency_versions.json")
