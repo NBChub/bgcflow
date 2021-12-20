@@ -3,7 +3,7 @@ rule antismash_db_setup:
         directory("resources/antismash_db"),
     conda:
         "../envs/antismash.yaml"
-    log: "workflow/report/antismash_db_setup.log"
+    log: "workflow/report/logs/antismash_db_setup.log"
     shell:  
         """
         download-antismash-databases --database-dir resources/antismash_db
@@ -21,8 +21,8 @@ rule antismash:
     conda:
         "../envs/antismash.yaml"
     threads: 8
-    log: "workflow/report/{strains}/antismash_{version}.log"
+    log: "workflow/report/logs/{strains}/antismash_{version}.log"
     shell:
         """
-        antismash --genefinding-tool prodigal --output-dir {output.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} >> {log}
+        antismash --genefinding-tool prodigal --output-dir {output.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} -v 2> {log}
         """

@@ -3,12 +3,13 @@ rule install_bigscape:
         bigscape = directory("resources/BiG-SCAPE/")
     conda:
         "../envs/bigscape.yaml"
+    log: "workflow/report/logs/bigscape-install_bigscape.log"
     shell:
         """
-        (cd resources && wget https://git.wageningenur.nl/medema-group/BiG-SCAPE/-/archive/master/BiG-SCAPE-master.zip)
+        (cd resources && wget https://git.wageningenur.nl/medema-group/BiG-SCAPE/-/archive/master/BiG-SCAPE-master.zip >> {log}) 
         (cd resources && unzip BiG-SCAPE-master.zip && mv BiG-SCAPE-master/ BiG-SCAPE/ && rm BiG-SCAPE-master.zip)
-        (cd resources/BiG-SCAPE && wget ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.hmm.gz && gunzip Pfam-A.hmm.gz)
-        (cd resources/BiG-SCAPE && hmmpress Pfam-A.hmm)
+        (cd resources/BiG-SCAPE && wget ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.hmm.gz && gunzip Pfam-A.hmm.gz >> {log})
+        (cd resources/BiG-SCAPE && hmmpress Pfam-A.hmm >> {log}) 
         """
 
 rule bigscape:
@@ -23,7 +24,7 @@ rule bigscape:
         antismash_dir = expand("data/interim/antismash/{version}", version=dependency_version["antismash"]),
         bigscape_dir = expand("data/interim/bigscape/antismash_{version}", version=dependency_version["antismash"]),
         label = "all",
-    log: "workflow/report/bigscape.log"
+    log: "workflow/report/logs/bigscape.log"
     threads: 16
     shell:
         """

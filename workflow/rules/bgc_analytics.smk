@@ -8,7 +8,8 @@ rule antismash_summary:
         df_antismash_summary = "data/processed/tables/df_antismash_{version}_summary.csv"
     conda:
         "../envs/bgc_analytics.yaml"
+    log: "workflow/report/logs/antismash_{version}_summary.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/make_genome_dataset.py {input.fna_dir} {input.antismash_dir}/{wildcards.version} {input.df_samples} {output.df_antismash_summary}
+        python workflow/bgcflow/bgcflow/data/make_genome_dataset.py {input.fna_dir} {input.antismash_dir}/{wildcards.version} {input.df_samples} {output.df_antismash_summary} 2> {log}
         """
