@@ -5,9 +5,10 @@ rule copy_custom_fasta:
         "data/interim/fasta/{custom}.fna" 
     conda:
         "../envs/bgc_analytics.yaml"
+    log: "workflow/report/{custom}/prokka_custom_copy.log"
     shell:
         """
-        cp {input} {output}
+        cp {input} {output} 2>> {log}
         """
 
 rule extract_meta_prokka:
@@ -22,9 +23,10 @@ rule extract_meta_prokka:
         org_info = expand("data/interim/prokka/{strains}/organism_info.txt", strains = STRAINS),
     conda:
         "../envs/bgc_analytics.yaml"
+    log: "workflow/report/logs/prokka_meta.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/get_organism_info.py {input.samples_path} {input.assembly_report_path} {input.prokka_dir} {output.ncbi_meta_path}
+        python workflow/bgcflow/bgcflow/data/get_organism_info.py {input.samples_path} {input.assembly_report_path} {input.prokka_dir} {output.ncbi_meta_path} 2>> {log}
         """ 
 
 if PROKKA_DB == []:
@@ -43,11 +45,11 @@ if PROKKA_DB == []:
             evalue = "1e-05",
             rna_detection = "" # To use rnammer change value to --rnammer
         threads: 8
-        log : "workflow/report/{strains}/prokka_run.log"
+        log : "workflow/report/logs/{strains}/prokka_run.log"
         shell:
             """
             prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} --evalue {params.evalue} {input.fna}
-            cp data/interim/prokka/{wildcards.strains}/{wildcards.strains}.log {log}
+            cat data/interim/prokka/{wildcards.strains}/{wildcards.strains}.log > {log}
             """
 else:
     rule prokka_reference_download:
@@ -55,9 +57,10 @@ else:
             gbff = "resources/prokka_db/gbk/{prokka_db}.gbff"
         conda:
             "../envs/prokka.yaml"
+        log: "workflow/report/logs/prokka_db/{prokka_db}.log"
         shell:
             """
-            ncbi-genome-download -s genbank -F genbank -A {wildcards.prokka_db} -o resources/prokka_db/download bacteria --verbose
+            ncbi-genome-download -s genbank -F genbank -A {wildcards.prokka_db} -o resources/prokka_db/download bacteria --verbose >> {log}
             gunzip -c resources/prokka_db/download/genbank/bacteria/{wildcards.prokka_db}/*.gbff.gz > {output.gbff}
             rm -rf resources/prokka_db/download/genbank/bacteria/{wildcards.prokka_db}
             """
@@ -69,9 +72,11 @@ else:
             refgbff = "resources/prokka_db/reference.gbff"
         conda:
             "../envs/prokka.yaml"
+        log: "workflow/report/logs/prokka_db/prokka_db.log"
         shell:
             """
             cat resources/prokka_db/gbk/*.gbff >> {output.refgbff}
+            head {output.refgbff} >> {log}
             """
 
     rule prokka_custom:
@@ -90,7 +95,7 @@ else:
             evalue = "1e-05",
             rna_detection = "" # To use rnammer change value to --rnammer
         threads: 8
-        log : "workflow/report/{strains}/prokka_run.log"
+        log : "workflow/report/logs/{strains}/prokka_run.log"
         shell:
             """
             prokka --outdir data/interim/prokka/{wildcards.strains} --force --proteins {input.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} --evalue {params.evalue} {input.fna}
@@ -107,7 +112,8 @@ rule format_gbk:
         "../envs/prokka.yaml"
     params:
         version = __version__
+    log: "workflow/report/logs/{strains}/prokka_format_gbk.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/format_genbank_meta.py {input.gbk_prokka} {params.version} {input.gtdb} {wildcards.strains} {output.gbk_processed}
+        python workflow/bgcflow/bgcflow/data/format_genbank_meta.py {input.gbk_prokka} {params.version} {input.gtdb} {wildcards.strains} {output.gbk_processed} 2> {log}
         """
