@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import yaml, json
+import sys
 from snakemake.utils import validate
 from snakemake.utils import min_version
 
@@ -37,7 +38,7 @@ wildcard_constraints:
     patric="|".join(PATRIC),
     prokka_db="|".join(PROKKA_DB)
 
-# dependency versions
+##### dependency versions #####
 def get_dependency_version(dep, dep_key):
     """
     return dependency version tags given a dictionary (dep) and its key (dep_key)
@@ -74,3 +75,62 @@ dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
                 }
 
 dependency_version = write_dependecies_to_json(dependencies, "workflow/report/dependency_versions.json")
+
+##### Customizable Analysis #####
+def get_final_output():
+    """
+    Generate final output for rule all given a TRUE value in config["rules"]
+    """
+    # dictionary of rules and its output files
+    rule_dict = {"mlst" : expand("data/interim/mlst/{strains}_ST.csv", strains = STRAINS),
+                "eggnog" : expand("data/interim/eggnog/{strains}/", strains = STRAINS),
+                "refseq_masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", strains = STRAINS),
+                "automlst_wrapper" : "data/interim/automlst_wrapper/raxmlpart.txt.treefile",
+                "roary" : "data/interim/roary/all",
+                "bigscape" : expand("data/interim/bigscape/antismash_{version}/index.html", version=dependency_version["antismash"]),
+                "seqfu" : "data/processed/tables/df_seqfu_stats.csv"
+                }
+
+    # get keys from config
+    opt_rules = config["rules"].keys()
+
+    # if values are true add output files to rule all
+    final_output = [rule_dict[r] for r in opt_rules if config["rules"][r]]
+    return final_output
+
+##### Custome Resource Directory #####
+def custom_resource_dir():
+    """
+    Generate symlink for user defined resources location
+    """
+    resource_dbs = config["resources_path"]
+    sys.stderr.write(f"Checking for user-defined local resources...\n")
+    for r in resource_dbs.keys():
+        # check for default path
+        if resource_dbs[r] == f"resources/{r}":
+            pass 
+        # check for user-defined external resources
+        else:
+            try:    
+                path = Path(resource_dbs[r])
+                slink = Path(f"resources/{r}")
+                existing_path = Path.readlink(slink)
+                # check if symlink for extrenal path is already generated
+                if existing_path == path:
+                    sys.stderr.write(f"- Symlink for {r} already exists at: {existing_path}\n")
+                # update symlink because new path is given
+                else:
+                    slink.unlink()
+                    slink.symlink_to( path )
+                    updated_path = Path.readlink(Path(slink)) 
+                    sys.stderr.write(f"- Updating symlink for {r} from: {existing_path} to: {updated_path}\n")
+            # generate a new symlink
+            except FileNotFoundError:    
+                if path.exists():
+                    sys.stderr.write(f"- Generating symlink for {r} from: {path}\n")                    
+                    slink.symlink_to( path )
+                # raise an Error if external path not found
+                else:
+                    raise FileNotFoundError(f"Error: User-defined resource {r} at {path} does not exist. Check the config.yaml and provide the right path for resource {r} or change it to the default path: resources/{r}\n")
+    return 
+custom_resource_dir()
