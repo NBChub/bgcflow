@@ -7,3 +7,19 @@ samples: config/samples.csv
 
 # prokka-db : list of the custom accessions to use as prokka genus database
 prokka-db: config/prokka-db.csv
+
+# rules: set value to TRUE if you want to run the analysis or FALSE if you don't
+rules:
+  bigscape: TRUE
+  mlst: TRUE
+  refseq_masher: TRUE
+  seqfu: TRUE
+  eggnog: FALSE
+  automlst_wrapper: FALSE
+
+# resources : the location of the resources to run the rule. 
+# The default location is at "resources/{resource_name}".
+resources_path : 
+  antismash_db: "resources/antismash_db"
+  eggnog_db: "resources/eggnog_db"
+  BiG-SCAPE: "resources/BiG-SCAPE"
