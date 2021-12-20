@@ -90,7 +90,7 @@ def get_final_output():
                 "bigscape" : expand("data/interim/bigscape/antismash_{version}/index.html", version=dependency_version["antismash"]),
                 "seqfu" : "data/processed/tables/df_seqfu_stats.csv"
                 }
-
+    
     # get keys from config
     opt_rules = config["rules"].keys()
 
@@ -107,12 +107,12 @@ def custom_resource_dir():
     sys.stderr.write(f"Checking for user-defined local resources...\n")
     for r in resource_dbs.keys():
         # check for default path
+        path = Path(resource_dbs[r])
         if resource_dbs[r] == f"resources/{r}":
             pass 
         # check for user-defined external resources
-        else:
+        elif path.exists():
             try:    
-                path = Path(resource_dbs[r])
                 slink = Path(f"resources/{r}")
                 existing_path = Path.readlink(slink)
                 # check if symlink for extrenal path is already generated
@@ -125,12 +125,11 @@ def custom_resource_dir():
                     updated_path = Path.readlink(Path(slink)) 
                     sys.stderr.write(f"- Updating symlink for {r} from: {existing_path} to: {updated_path}\n")
             # generate a new symlink
-            except FileNotFoundError:    
-                if path.exists():
-                    sys.stderr.write(f"- Generating symlink for {r} from: {path}\n")                    
-                    slink.symlink_to( path )
-                # raise an Error if external path not found
-                else:
-                    raise FileNotFoundError(f"Error: User-defined resource {r} at {path} does not exist. Check the config.yaml and provide the right path for resource {r} or change it to the default path: resources/{r}\n")
+            except FileNotFoundError:
+                sys.stderr.write(f"- Generating symlink for {r} from: {path}\n")                    
+                slink.symlink_to( path )
+        # raise an Error if external path not found
+        else:
+            raise FileNotFoundError(f"Error: User-defined resource {r} at {path} does not exist. Check the config.yaml and provide the right path for resource {r} or change it to the default path: resources/{r}\n")
     return 
 custom_resource_dir()
