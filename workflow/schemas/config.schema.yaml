@@ -1,4 +1,4 @@
-$schema: "http://json-schema.org/draft-04/schema#"
+$schema: "http://json-schema.org/draft-07/schema#"
 
 description: snakemake configuration file
 
@@ -8,10 +8,38 @@ type: object
 properties:
   samples:
     type: string
+  
   prokka-db:
     type: string
-
+  
+  rules:
+    type: object
+    properties:
+      bigscape:
+        type: boolean
+      mlst:
+        type: boolean
+      refseq_masher:
+        type: boolean
+      seqfu:
+        type: boolean
+      eggnog:
+        type: boolean
+      automlst_wrapper:
+        type: boolean
+  
+  resources_path:
+    type: object
+    properties:
+      antismash_db:
+        type: string
+      eggnog_db:
+        type: string
+      BiG-SCAPE:
+        type: string
 
 # entries that have to be in the config file for successful validation
 required:
   - samples
+  - rules
+  - resources_path
