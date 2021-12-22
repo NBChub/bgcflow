@@ -1,0 +1,3 @@
+genome_id,source,organism,genus,species,strain,closest_placement_reference
+dummy_P8-2B-3_1.1,custom,Streptomyces sp. P8-2B-3,Streptomyces,sp.,P8-2B-3,GCF_000719955.1
+dummy_CM002275,custom,Streptomyces sp. PVA 94-07,Streptomyces,sp.,PVA 94-07,GCF_000495755.1
