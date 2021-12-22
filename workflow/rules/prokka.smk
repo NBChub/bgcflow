@@ -5,7 +5,7 @@ rule copy_custom_fasta:
         "data/interim/fasta/{custom}.fna" 
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/{custom}/prokka_custom_copy.log"
+    log: "workflow/report/logs/{custom}/prokka_custom_copy.log"
     shell:
         """
         cp {input} {output} 2>> {log}

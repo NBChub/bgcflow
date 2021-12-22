@@ -2,12 +2,6 @@ import os
 import sys
 import pandas as pd
 
-"""def merge_multiple_inputs(samples_path):
-    if type(assembly_report_path) == list:
-        dfList = [pd.read_csv(s).set_index('genome_id', drop=False) for s in assembly_report_path]
-        df = pd.concat(dfList, axis=0)
-    return"""
-
 def get_ncbi_meta(assembly_report_path, df_samples):
     '''
     Returns metadata dataframe from input directory containing all assembly reports downloaded using 
