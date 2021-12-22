@@ -4,7 +4,7 @@ rule install_eggnog:
         dmnd = "resources/eggnog_db/bacteria.dmnd"
     conda:
         "../envs/eggnog.yaml"
-    log: "workflow/reports/logs/eggnog-install_eggnog.log"
+    log: "workflow/report/logs/eggnog-install_eggnog.log"
     shell:
         """
         download_eggnog_data.py --data_dir {output.eggnog_db} -y >> {log}
@@ -21,7 +21,7 @@ rule eggnog:
     conda:
         "../envs/eggnog.yaml"
     threads: 8
-    log: "workflow/reports/logs/{strains}/eggnog.log"
+    log: "workflow/report/logs/{strains}/eggnog.log"
     shell:
         """
         mkdir -p {output.eggnog_dir}

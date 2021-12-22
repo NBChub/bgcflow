@@ -12,21 +12,39 @@ rule install_bigscape:
         (cd resources/BiG-SCAPE && hmmpress Pfam-A.hmm >> {log}) 
         """
 
+rule get_bigscape_inputs:
+    input:
+        gbk = lambda wildcards: get_bigscape_inputs(wildcards.name, wildcards.version)
+    output:
+        tempdir = temp(directory("data/interim/bigscape/temp_{name}_antismash_{version}/"))
+    conda:
+        "../envs/bigscape.yaml"
+    log: "workflow/report/logs/{name}_antismash_{version}/temp_bigscape.log"
+    shell:
+        """
+        mkdir {output.tempdir}
+        for i in {input.gbk} 
+        do 
+            infile=$i 
+            strain=$(basename $i)
+            ln -s $i "{output.tempdir}/$strain"
+        done
+        """
+
 rule bigscape:
     input: 
         bigscape = "resources/BiG-SCAPE",
-        gbk = expand("data/interim/antismash/{version}/{strains}", strains=STRAINS, version=dependency_version["antismash"])
+        antismash_dir = "data/interim/bigscape/temp_{name}_antismash_{version}/"
     output:
-        index = expand("data/interim/bigscape/antismash_{version}/index.html", version=dependency_version["antismash"])
+        index = "data/interim/bigscape/{name}_antismash_{version}/index.html"
     conda:
         "../envs/bigscape.yaml"
     params:
-        antismash_dir = expand("data/interim/antismash/{version}", version=dependency_version["antismash"]),
-        bigscape_dir = expand("data/interim/bigscape/antismash_{version}", version=dependency_version["antismash"]),
-        label = "all",
-    log: "workflow/report/logs/bigscape.log"
+        bigscape_dir = "data/interim/bigscape/{name}_antismash_{version}/",
+        label = "{name}_antismash_{version}",
+    log: "workflow/report/logs/{name}_antismash_{version}/bigscape.log"
     threads: 16
     shell:
         """
-        python {input.bigscape}/bigscape.py -i {params.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose > {log}        
+        python {input.bigscape}/bigscape.py -i {input.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose > {log}        
         """

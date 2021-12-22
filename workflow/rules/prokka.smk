@@ -11,10 +11,61 @@ rule copy_custom_fasta:
         cp {input} {output} 2>> {log}
         """
 
+rule prokka_reference_download:
+    output:
+        gbff = temp("resources/prokka_db/gbk/{prokka_db}.gbff") # all projects ncbi accession 
+    conda:
+        "../envs/prokka.yaml"
+    log: "workflow/report/logs/prokka_db/{prokka_db}.log"
+    shell:
+        """
+        ncbi-genome-download -s genbank -F genbank -A {wildcards.prokka_db} -o resources/prokka_db/download bacteria --verbose >> {log}
+        gunzip -c resources/prokka_db/download/genbank/bacteria/{wildcards.prokka_db}/*.gbff.gz > {output.gbff}
+        rm -rf resources/prokka_db/download/genbank/bacteria/{wildcards.prokka_db}
+        """
+
+rule prokka_db_setup:
+    input:
+        gbff = get_prokka_db_accessions
+    output:
+        refgbff = "resources/prokka_db/reference_{name}.gbff"
+    conda:
+        "../envs/prokka.yaml"
+    log: "workflow/report/logs/prokka_db/prokka_db_{name}.log"
+    shell:
+        """
+        cat resources/prokka_db/gbk/*.gbff >> {output.refgbff}
+        head {output.refgbff} >> {log}
+        """
+
+rule prokka:
+    input: 
+        fna = "data/interim/fasta/{strains}.fna",
+        org_info = "data/interim/prokka/{strains}/organism_info.txt",
+        refgbff = expand("resources/prokka_db/reference_{name}.gbff", name=PROJECT_IDS)
+    output:
+        gff = "data/interim/prokka/{strains}/{strains}.gff",
+        faa = "data/interim/prokka/{strains}/{strains}.faa",
+        gbk = "data/interim/prokka/{strains}/{strains}.gbk",
+    conda: 
+        "../envs/prokka.yaml"
+    log: "workflow/report/logs/{strains}/prokka_run.log"
+    params:
+        increment = 10, 
+        evalue = "1e-05",
+        rna_detection = "", # To use rnammer change value to --rnammer
+        refgbff = lambda wildcards: get_prokka_refdb(wildcards, DF_SAMPLES)
+    threads: 8
+    shell:
+        """
+        prokka --outdir data/interim/prokka/{wildcards.strains} --force {params.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} --evalue {params.evalue} {input.fna}
+        cat data/interim/prokka/{wildcards.strains}/{wildcards.strains}.log > {log}
+        """
+
 rule extract_meta_prokka:
     input:
         fna = expand("data/interim/fasta/{strains}.fna", strains = STRAINS),
-        samples_path = config["samples"],
+        samples_path = SAMPLE_PATHS,
         prokka_dir = "data/interim/prokka/",
         all_reports = expand("data/interim/assembly_report/{ncbi}.txt", ncbi = NCBI),
         assembly_report_path = "data/interim/assembly_report/",
@@ -26,81 +77,8 @@ rule extract_meta_prokka:
     log: "workflow/report/logs/prokka_meta.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/get_organism_info.py {input.samples_path} {input.assembly_report_path} {input.prokka_dir} {output.ncbi_meta_path} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/get_organism_info.py "{input.samples_path}" {input.assembly_report_path} {input.prokka_dir} {output.ncbi_meta_path} 2>> {log}
         """ 
-
-if PROKKA_DB == []:
-    rule prokka_default:
-        input: 
-            fna = "data/interim/fasta/{strains}.fna",
-            org_info = "data/interim/prokka/{strains}/organism_info.txt"
-        output:
-            gff = "data/interim/prokka/{strains}/{strains}.gff",
-            faa = "data/interim/prokka/{strains}/{strains}.faa",
-            gbk = "data/interim/prokka/{strains}/{strains}.gbk",
-        conda:
-            "../envs/prokka.yaml"
-        params:
-            increment = 10, 
-            evalue = "1e-05",
-            rna_detection = "" # To use rnammer change value to --rnammer
-        threads: 8
-        log : "workflow/report/logs/{strains}/prokka_run.log"
-        shell:
-            """
-            prokka --outdir data/interim/prokka/{wildcards.strains} --force --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} --evalue {params.evalue} {input.fna}
-            cat data/interim/prokka/{wildcards.strains}/{wildcards.strains}.log > {log}
-            """
-else:
-    rule prokka_reference_download:
-        output:
-            gbff = "resources/prokka_db/gbk/{prokka_db}.gbff"
-        conda:
-            "../envs/prokka.yaml"
-        log: "workflow/report/logs/prokka_db/{prokka_db}.log"
-        shell:
-            """
-            ncbi-genome-download -s genbank -F genbank -A {wildcards.prokka_db} -o resources/prokka_db/download bacteria --verbose >> {log}
-            gunzip -c resources/prokka_db/download/genbank/bacteria/{wildcards.prokka_db}/*.gbff.gz > {output.gbff}
-            rm -rf resources/prokka_db/download/genbank/bacteria/{wildcards.prokka_db}
-            """
-
-    rule prokka_db_setup:
-        input:
-            gbff = expand("resources/prokka_db/gbk/{prokka_db}.gbff", prokka_db = PROKKA_DB)
-        output:
-            refgbff = "resources/prokka_db/reference.gbff"
-        conda:
-            "../envs/prokka.yaml"
-        log: "workflow/report/logs/prokka_db/prokka_db.log"
-        shell:
-            """
-            cat resources/prokka_db/gbk/*.gbff >> {output.refgbff}
-            head {output.refgbff} >> {log}
-            """
-
-    rule prokka_custom:
-        input: 
-            fna = "data/interim/fasta/{strains}.fna",
-            refgbff = "resources/prokka_db/reference.gbff",
-            org_info = "data/interim/prokka/{strains}/organism_info.txt"
-        output:
-            gff = "data/interim/prokka/{strains}/{strains}.gff",
-            faa = "data/interim/prokka/{strains}/{strains}.faa",
-            gbk = "data/interim/prokka/{strains}/{strains}.gbk",
-        conda:
-            "../envs/prokka.yaml"
-        params:
-            increment = 10, 
-            evalue = "1e-05",
-            rna_detection = "" # To use rnammer change value to --rnammer
-        threads: 8
-        log : "workflow/report/logs/{strains}/prokka_run.log"
-        shell:
-            """
-            prokka --outdir data/interim/prokka/{wildcards.strains} --force --proteins {input.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} --evalue {params.evalue} {input.fna}
-            cp data/interim/prokka/{wildcards.strains}/{wildcards.strains}.log {log}
-            """
 
 rule format_gbk:
     input: 

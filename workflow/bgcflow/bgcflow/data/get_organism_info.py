@@ -2,6 +2,11 @@ import os
 import sys
 import pandas as pd
 
+"""def merge_multiple_inputs(samples_path):
+    if type(assembly_report_path) == list:
+        dfList = [pd.read_csv(s).set_index('genome_id', drop=False) for s in assembly_report_path]
+        df = pd.concat(dfList, axis=0)
+    return"""
 
 def get_ncbi_meta(assembly_report_path, df_samples):
     '''
@@ -9,7 +14,7 @@ def get_ncbi_meta(assembly_report_path, df_samples):
     ncbi-genome-download https://github.com/kblin/ncbi-genome-download
     Use assembly_report as --formats while running ncbi-genome-download 
     '''
-    
+
     # Extract NCBI genomes from the df_samples
     genome_list = df_samples[df_samples.source.eq("ncbi")].genome_id.to_list()
     
@@ -137,8 +142,11 @@ def extract_org_info(samples_path, assembly_report_path, prokka_dir, ncbi_meta_p
     '''
     Write df_ncbi_meta.csv with metadata from NCBI assembly reports
     '''
-    # Generate dataframe
-    df_samples = pd.read_csv(samples_path).set_index("genome_id", drop=False)
+    # wrap single or multiple inputs & generate dataframe
+    shell_input = samples_path.split()
+    dfList = [pd.read_csv(s).set_index('genome_id', drop=False) for s in shell_input]
+    df_samples = pd.concat(dfList, axis=0)
+    
     df_ncbi_meta = get_ncbi_meta(assembly_report_path, df_samples)
 
     # Save dataframes to csv tables

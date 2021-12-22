@@ -3,14 +3,12 @@ include: "rules/common.smk"
 ##### Target rules #####
 rule all:
     input:
+        expand("data/interim/antismash/{version}/{strains}/{strains}.gbk", strains = STRAINS, version=dependency_version["antismash"]),
+        expand("data/interim/prokka/{strains}/organism_info.txt", strains = STRAINS),
         "data/processed/tables/df_gtdb_meta.csv",
         "data/processed/tables/df_ncbi_meta.csv",
-        expand("data/processed/tables/df_antismash_{version}_summary.csv", version=dependency_version["antismash"]),
-        expand("data/interim/prokka/{strains}/organism_info.txt", strains = STRAINS),
-        expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS),
-        expand("data/interim/prokka/{strains}/{strains}.faa", strains = STRAINS),
-        expand("data/processed/genbank/{strains}.gbk", strains = STRAINS),
-        expand("data/interim/antismash/{version}/{strains}/{strains}.gbk", strains = STRAINS, version=dependency_version["antismash"]),
+        expand("data/processed/tables/df_antismash_{version}_summary.csv", name = PROJECT_IDS, version=dependency_version["antismash"]), # there is a bug which changes the input file
+        expand("data/processed/genbank/{strains}.gbk", strains = STRAINS, name = PROJECT_IDS),
         get_final_output(),
 
 ##### Modules #####
@@ -24,6 +22,6 @@ include: "rules/refseq_masher.smk"
 include: "rules/patric.smk"
 include: "rules/eggnog.smk"
 include: "rules/mlst.smk"
-include: "rules/automlst_wrapper.smk"
+#include: "rules/automlst_wrapper.smk"
 include: "rules/seqfu.smk"
 include: "rules/bgc_analytics.smk"
