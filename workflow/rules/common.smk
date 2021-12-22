@@ -56,10 +56,11 @@ def extract_project_information():
             df2["name"] = projects.loc[i, "name"]
             df2 = df2.set_index('Accession', drop=False)
             prokka_db.append(df2)
-        except ValueError:
+            df_prokka_db = pd.concat(prokka_db, axis=0).reset_index(drop=True)
+        except (ValueError, KeyError) as e:
+            df_prokka_db = pd.DataFrame(columns=["Accession"])
             pass
-    df_prokka_db = pd.concat(prokka_db, axis=0).reset_index(drop=True)
-
+    
     return df_samples, df_prokka_db
 
 DF_SAMPLES, DF_PROKKA_DB = extract_project_information()
