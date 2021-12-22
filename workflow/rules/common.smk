@@ -144,17 +144,14 @@ def get_dependency_version(dep, dep_key):
                 result = i.split("=")[-1]
     return str(result)
 
-def write_dependecies_to_json(dep, outfile):
+def get_dependencies(dep):
     """
-    write dependency version to a json file
+    get dependency version
     """
-    with open(outfile, "w") as file:
-        dv = {}
-        for ky in dependencies.keys():
-            vr = get_dependency_version(dependencies, ky)
-            dv[ky] = vr
-        json.dump(dv, file, indent=2,)
-        file.close()
+    dv = {}
+    for ky in dep.keys():
+        vr = get_dependency_version(dep, ky)
+        dv[ky] = vr
     return dv
 
 # list of the main dependecies used in the workflow
@@ -167,7 +164,7 @@ dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
                 "seqfu" : r"workflow/envs/seqfu.yaml"
                 }
 
-dependency_version = write_dependecies_to_json(dependencies, "workflow/report/dependency_versions.json")
+dependency_version = get_dependencies(dependencies)
 
 
 ##### Customizable Analysis #####
