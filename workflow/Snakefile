@@ -9,6 +9,7 @@ rule all:
         "data/processed/tables/df_ncbi_meta.csv",
         expand("data/processed/tables/df_antismash_{version}_summary.csv", name = PROJECT_IDS, version=dependency_version["antismash"]), # there is a bug which changes the input file
         expand("data/processed/genbank/{strains}.gbk", strains = STRAINS, name = PROJECT_IDS),
+        "workflow/report/dependency_versions.json",
         get_final_output(),
 
 ##### Modules #####

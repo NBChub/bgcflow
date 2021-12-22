@@ -13,3 +13,14 @@ rule antismash_summary:
         """
         python workflow/bgcflow/bgcflow/data/make_genome_dataset.py {input.fna_dir} {input.antismash_dir}/{wildcards.version} '{input.df_samples}' {output.df_antismash_summary} 2> {log}
         """
+
+rule write_dependency_versions:
+    output:
+        "workflow/report/dependency_versions.json"
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log: "workflow/report/logs/dependency_versions.log"
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/get_dependencies.py {output} 2> {log}
+        """
