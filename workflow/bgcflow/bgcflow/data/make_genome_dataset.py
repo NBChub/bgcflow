@@ -10,9 +10,12 @@ def write_genome_table(fna_dir, antismash_dir, samples_table, genome_table):
     '''
     Write df_genomes.csv table in processed data
     '''
+    # Accomodate multiple inputs to generate dataframe
+    shell_input = samples_table.split()
+    dfList = [pd.read_csv(s).set_index('genome_id', drop=False) for s in shell_input]
+    df_samples = pd.concat(dfList, axis=0)
     
     # Generate dataframe
-    df_samples = pd.read_csv(samples_table, index_col='genome_id')
     df_genomes = init_genome_dataframe(fna_dir, df_samples)
     df_genomes = update_bgc_info(antismash_dir, df_genomes)
     # Save dataframes to csv tables
@@ -30,7 +33,7 @@ def init_genome_dataframe(fna_dir, df_samples):
 
     with alive_bar(df_genomes.shape[0]) as bar:
         for genome_id in df_genomes.index:
-            fna_file_path = os.path.join(fna_dir, genome_id + '.fna')
+            fna_file_path = os.path.join(fna_dir, str(genome_id) + '.fna')
             records_list = SeqIO.parse(fna_file_path, 'fasta')
             
             record_cntr = 0

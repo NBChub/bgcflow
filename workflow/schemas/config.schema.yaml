@@ -6,12 +6,21 @@ type: object
 
 # possible entries of the config file and which type they should be
 properties:
-  samples:
-    type: string
-  
-  prokka-db:
-    type: string
-  
+  projects:
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+        samples:
+          type: string
+        prokka-db:
+          type: [string, None]
+    uniqueItems: true
+    required:
+      - name
+      - samples
   rules:
     type: object
     properties:
@@ -38,8 +47,9 @@ properties:
       BiG-SCAPE:
         type: string
 
+
 # entries that have to be in the config file for successful validation
 required:
-  - samples
+  - projects
   - rules
   - resources_path

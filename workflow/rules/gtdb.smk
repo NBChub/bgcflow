@@ -4,6 +4,7 @@ rule gtdb_prep:
     output:
         taxonomy_placement = "data/interim/gtdb/placement_list.txt",
     run:
+        df_samples = pd.concat(DF_SAMPLES, axis=0)
         # NCBI accession or closest NCBI
         custom_placement = df_samples[df_samples.source.eq("custom")].closest_placement_reference.tolist()
         ncbi_placement = df_samples[df_samples.source.eq("ncbi")].genome_id.tolist()
@@ -15,11 +16,11 @@ rule gtdb_prep:
                 out.write(acc + "\n")
             out.close()    
 
-rule fetch_gtdb_taxonomy:
+rule fetch_gtdb_taxonomy: #need to update by installing bigslice
     input: 
         taxonomy_placement = "data/interim/gtdb/placement_list.txt"
     output:
-        taxonomy = "data/interim/gtdb/all_taxonomy_raw.tsv",
+        taxonomy = temp("data/interim/gtdb/all_taxonomy_raw.tsv"),
     params:
         version = 'R202'    
     conda:
@@ -37,6 +38,7 @@ rule fix_gtdb_taxonomy:
         taxonomy = "data/interim/gtdb/all_taxonomy.tsv",
         meta = "data/processed/tables/df_gtdb_meta.csv"
     run:
+        df_samples = pd.concat(DF_SAMPLES, axis=0)
         df_tax = pd.read_csv(input.taxonomy_raw, sep="\t")
         df_tax = df_tax.set_index("#Genome folder", drop=False)
 

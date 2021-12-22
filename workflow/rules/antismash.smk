@@ -24,5 +24,6 @@ rule antismash:
     log: "workflow/report/logs/{strains}/antismash_{version}.log"
     shell:
         """
-        antismash --genefinding-tool prodigal --output-dir {output.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} -v 2> {log}
+        antismash --genefinding-tool prodigal --output-dir {output.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} -v
+        ls {output.folder} > {log}
         """

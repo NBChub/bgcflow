@@ -1,34 +1,125 @@
 import os
 import pandas as pd
-import yaml, json
-import sys
+import yaml, json, sys, itertools
 from snakemake.utils import validate
 from snakemake.utils import min_version
 
 min_version("6.7.0")
 __version__ = "0.1.0"
 
+
 ##### load config and sample sheets #####
 configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
-# set up sample for default case with fasta files provided
-df_samples = pd.read_csv(config["samples"]).set_index("genome_id", drop=False)
-df_samples.index.names = ["genome_id"]
 
-# set up custom prokka database
-df_prokka_db = pd.read_csv(config["prokka-db"]).set_index("Accession", drop=False)
-df_prokka_db.index.names = ["Accession"]
+##### extract project information #####
+def extract_project_information():
+    """
+    Wrapper to extract variables from projects in config.yaml.
+    Under development to accomodate multiple projects running in one snakemake run.
+    """
+    class ConfigError(Exception):
+        """Raised when config.yaml does not satisty requirements"""
+        pass
+
+    def merge_nested_list(nested_list):
+        """Merge nested list or dict values / keys"""
+        return list(itertools.chain(*nested_list))
+    
+    # load information from config
+    projects = pd.DataFrame(config["projects"])
+    
+    # check validity of {sample}.csv Value should be unique
+    check_duplicates = projects[projects.samples.duplicated()]
+    if len(check_duplicates) > 0:
+        raise ConfigError(f"Project: {check_duplicates.name.to_list()} input file name: {check_duplicates.samples.to_list()} is not unique. Check your config.yaml configuration.")
+
+    samples = []
+    for i in projects.index:
+        df1 = pd.read_csv(projects.loc[i, "samples"])
+        df1["sample_paths"] = projects.loc[i, "samples"]
+        df1["name"] = projects.loc[i, "name"]
+        df1 = df1.set_index('genome_id', drop=False)
+        samples.append(df1)
+    df_samples = pd.concat(samples, axis=0)
+
+    # check validity of genome_ids. Value should be unique.
+    check_duplicates = df_samples[df_samples.genome_id.duplicated()]
+    if len(check_duplicates) > 0:
+        raise ConfigError(f"Strain ids in: {check_duplicates.sample_paths.to_list()} are not unique. Check your config.yaml configuration.")
+
+    prokka_db = []
+    for i in projects.index:
+        try:
+            df2 = pd.read_csv(projects.loc[i, "prokka-db"])
+            df2["name"] = projects.loc[i, "name"]
+            df2 = df2.set_index('Accession', drop=False)
+            prokka_db.append(df2)
+        except ValueError:
+            pass
+    df_prokka_db = pd.concat(prokka_db, axis=0).reset_index(drop=True)
+
+    return df_samples, df_prokka_db
+
+DF_SAMPLES, DF_PROKKA_DB = extract_project_information()
+
 
 ##### Helper functions #####
-STRAINS = df_samples.genome_id.to_list()
-CUSTOM = df_samples[df_samples.source.eq("custom")].genome_id.to_list()
-NCBI = df_samples[df_samples.source.eq("ncbi")].genome_id.to_list()
-PATRIC = df_samples[df_samples.source.eq("patric")].genome_id.to_list()
-PROKKA_DB = df_prokka_db.Accession.to_list()
+PROJECT_IDS = DF_SAMPLES.name.unique()
+STRAINS = DF_SAMPLES.genome_id.to_list()
+CUSTOM = DF_SAMPLES[DF_SAMPLES.source.eq("custom")].genome_id.to_list()
+NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
+PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
+PROKKA_DB = DF_PROKKA_DB.Accession.to_list()
+SAMPLE_PATHS = DF_SAMPLES.sample_paths.unique()
 
-# Helper for lamda function
-SAMPLES = {idx : idx for idx in STRAINS}
+
+##### Helper for lambda functions #####
+def get_project_only_strains(wildcards, df_samples=DF_SAMPLES):
+    """
+    Given a project name, extract the corresponding strain ids
+    """
+    PROJECT_STRAINS = {name : DF_SAMPLES[DF_SAMPLES.name.eq(name)].genome_id.to_list() for name in PROJECT_IDS}
+    output = PROJECT_STRAINS[wildcards.name]
+    return output
+
+# prokka #
+def get_prokka_db_accessions(wildcards, df_prokka_db=DF_PROKKA_DB):
+    """
+    Given a project name, find which accessions to create a prokka reference gbff
+    """
+    accession = df_prokka_db[df_prokka_db["name"] == wildcards.name].Accession.to_list()
+    output = [f"resources/prokka_db/gbk/{acc}.gbff" for acc in accession]
+    return output
+
+def get_prokka_refdb(wildcards, df_samples=DF_SAMPLES):
+    """
+    Given a strain id, find which prokka db to use
+    """
+    name = df_samples[df_samples["genome_id"] == wildcards.strains].name.values
+    if name in DF_PROKKA_DB.name.unique():
+        output = f"--proteins resources/prokka_db/reference_{name[0]}.gbff"
+    else:
+        output = ""
+    return output
+
+def get_prokka_sample_path(wildcards, df_samples=DF_SAMPLES):
+    """
+    Given a project name, find the corresponding sample file
+    """
+    output = df_samples[df_samples["genome_id"] == wildcards.name].samples_path.values
+    return output
+
+# bigscape #
+def get_bigscape_inputs(name, version, df_samples=DF_SAMPLES):
+    """
+    Given a project name, find the corresponding sample file
+    """
+    selection = df_samples[df_samples["name"] == name].genome_id.values
+    output = [f"data/interim/antismash/{version}/{s}/{s}.gbk" for s in selection]
+    return output
+
 
 ##### Wildcard constraints #####
 wildcard_constraints:
@@ -36,9 +127,10 @@ wildcard_constraints:
     ncbi="|".join(NCBI),
     custom="|".join(CUSTOM),
     patric="|".join(PATRIC),
-    prokka_db="|".join(PROKKA_DB)
+    name="|".join(PROJECT_IDS),
 
-##### dependency versions #####
+
+##### Get dependency versions #####
 def get_dependency_version(dep, dep_key):
     """
     return dependency version tags given a dictionary (dep) and its key (dep_key)
@@ -76,6 +168,7 @@ dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
 
 dependency_version = write_dependecies_to_json(dependencies, "workflow/report/dependency_versions.json")
 
+
 ##### Customizable Analysis #####
 def get_final_output():
     """
@@ -86,19 +179,21 @@ def get_final_output():
                 "eggnog" : expand("data/interim/eggnog/{strains}/", strains = STRAINS),
                 "refseq_masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", strains = STRAINS),
                 "automlst_wrapper" : "data/interim/automlst_wrapper/raxmlpart.txt.treefile",
-                "roary" : "data/interim/roary/all",
-                "bigscape" : expand("data/interim/bigscape/antismash_{version}/index.html", version=dependency_version["antismash"]),
+                "roary" : expand("data/interim/roary/{name}", name=PROJECT_IDS),
+                "bigscape" : expand("data/interim/bigscape/{name}_antismash_{version}/index.html", version=dependency_version["antismash"], name=PROJECT_IDS),
                 "seqfu" : "data/processed/tables/df_seqfu_stats.csv"
                 }
     
     # get keys from config
     opt_rules = config["rules"].keys()
 
-    # if values are true add output files to rule all
+    # if values are TRUE add output files to rule all
     final_output = [rule_dict[r] for r in opt_rules if config["rules"][r]]
+     
     return final_output
 
-##### Custome Resource Directory #####
+
+##### Custom Resource Directory #####
 def custom_resource_dir():
     """
     Generate symlink for user defined resources location
@@ -132,4 +227,5 @@ def custom_resource_dir():
         else:
             raise FileNotFoundError(f"Error: User-defined resource {r} at {path} does not exist. Check the config.yaml and provide the right path for resource {r} or change it to the default path: resources/{r}\n")
     return 
+
 custom_resource_dir()

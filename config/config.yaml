@@ -1,13 +1,21 @@
 # This file should contain everything to configure the workflow on a global scale.
-# In case of sample based data, it should be complemented by a samples.tsv file that contains
-# one row per sample. It can be parsed easily via pandas.
 
-# samples : list of genomes for analysis of bgcflow with multiple sources mentioned as below
-samples: config/samples.csv
+#### PROJECT INFORMATION ####
+# This section control your project configuration. Each project are separated by "-". 
+# A project must contain the variable "name" and "samples".
+# Ideally, a project is a set of genomes of certain clade (pangenome) and can be annotated using a set of well-known reference genomes.
+# - name : name of your project
+# - samples : a csv file containing a list of genome ids for analysis with multiple sources mentioned. Genome ids must be unique.
+# - prokka-db : list of the custom accessions to use as prokka reference database
+projects:
+  - name: my_project
+    samples: config/samples.csv
+    prokka-db: config/prokka-db.csv
 
-# prokka-db : list of the custom accessions to use as prokka genus database
-prokka-db: config/prokka-db.csv
+  - name: dummy_test
+    samples: config/samples_test.csv
 
+#### RULE CONFIGURATION ####
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
 rules:
   bigscape: TRUE
@@ -15,10 +23,10 @@ rules:
   refseq_masher: TRUE
   seqfu: TRUE
   eggnog: FALSE
-  automlst_wrapper: FALSE
+  #automlst_wrapper: FALSE # unstable
 
-# resources : the location of the resources to run the rule. 
-# The default location is at "resources/{resource_name}".
+#### RESOURCES CONFIGURATION ####
+# resources : the location of the resources to run the rule. The default location is at "resources/{resource_name}".
 resources_path: 
   antismash_db: resources/antismash_db
   eggnog_db: resources/eggnog_db
