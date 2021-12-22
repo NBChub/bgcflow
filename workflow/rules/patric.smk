@@ -9,5 +9,5 @@ else:
         log: "workflow/report/logs/{patric}/patric_download.log"
         shell:
             """
-            (cd data/interim/fasta && wget -qN "ftp://ftp.patricbrc.org/genomes/{wildcards.patric}/{wildcards.patric}.fna" >> {log})
+            (cd data/interim/fasta && wget -qN "ftp://ftp.patricbrc.org/genomes/{wildcards.patric}/{wildcards.patric}.fna" 2> ../../../{log})
             """
