@@ -10,6 +10,7 @@
 projects:
   - name: dummy_test
     samples: config/samples_test.csv
+    prokka-db: config/prokka-db.csv
 
 #### RULE CONFIGURATION ####
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
