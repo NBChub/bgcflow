@@ -3,7 +3,6 @@ import sys
 import yaml, json, sys, itertools
 
 # list of the main dependecies used in the workflow
-# list of the main dependecies used in the workflow
 dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
                 "prokka": r"workflow/envs/prokka.yaml",
                 "mlst" : r"workflow/envs/mlst.yaml",
