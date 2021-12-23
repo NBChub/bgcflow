@@ -58,7 +58,7 @@ def extract_project_information():
             prokka_db.append(df2)
             df_prokka_db = pd.concat(prokka_db, axis=0).reset_index(drop=True)
         except (ValueError, KeyError) as e:
-            df_prokka_db = pd.DataFrame(columns=["Accession"])
+            df_prokka_db = pd.DataFrame(columns=["Accession", "name"])
             pass
     
     return df_samples, df_prokka_db
