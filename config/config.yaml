@@ -1,19 +1,20 @@
 # This file should contain everything to configure the workflow on a global scale.
 
 #### PROJECT INFORMATION ####
-# This section control your project configuration. Each project are separated by "-". 
+# This section control your project configuration. 
+# Each project are separated by "-". 
 # A project must contain the variable "name" and "samples".
-# Ideally, a project is a set of genomes of certain clade (pangenome) and can be annotated using a set of well-known reference genomes.
 # - name : name of your project
 # - samples : a csv file containing a list of genome ids for analysis with multiple sources mentioned. Genome ids must be unique.
-# - prokka-db : list of the custom accessions to use as prokka reference database
+# - prokka-db (optional): list of the custom accessions to use as prokka reference database
 projects:
-  - name: my_project
+# Project 1
+  - name: example
     samples: config/samples.csv
     prokka-db: config/prokka-db.csv
 
-  - name: dummy_test
-    samples: config/samples_test.csv
+#  - name: dummy_test
+#    samples: config/samples_test.csv
 
 #### RULE CONFIGURATION ####
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
