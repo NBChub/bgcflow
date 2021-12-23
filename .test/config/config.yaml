@@ -8,9 +8,12 @@
 # - samples : a csv file containing a list of genome ids for analysis with multiple sources mentioned. Genome ids must be unique.
 # - prokka-db : list of the custom accessions to use as prokka reference database
 projects:
-  - name: dummy_test
-    samples: config/samples_test.csv
+  - name: test1
+    samples: config/samples.csv
     prokka-db: config/prokka-db.csv
+  
+  - name: test2
+    samples: config/samples_test.csv
 
 #### RULE CONFIGURATION ####
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
