@@ -35,10 +35,11 @@ The parameter `samples` denote the location of your `samples.csv` which specify 
 
 `samples.csv` example:
 
-| genome_id       | source | organism                        | genus        | species | strain     |
-|----------------:|-------:|--------------------------------:|-------------:|--------:| ----------:|
-| NBC_01270.1     | custom | Streptomyces sp. NBC_01270      | Streptomyces | sp.     | NBC001270  |
-| GCF_000359525.1 | ncbi   | Streptomyces albus strain J1074 | Streptomyces | albus   | J1074      |
+| genome_id       | source | organism                        | genus        | species | strain     |closest_placement_reference|
+|----------------:|-------:|--------------------------------:|-------------:|--------:| ----------:|--------------------------:|
+| GCF_000359525.1 | ncbi   | Streptomyces albus strain J1074 | Streptomyces | albus   | J1074      | GCF_000359525.1           |
+| 1223307.4       | patric | Streptomyces sp. PVA 94-07      | Streptomyces | sp.     | PVA 94-07  | GCF_000495755.1           |
+| P8-2B-3.1       | custom | Streptomyces sp. P8-2B-3        | Streptomyces | sp.     | P8-2B-3    | GCF_000719955.1           |
 
 Further formatting rules are defined in the `workflow/schemas/` folder.
 
@@ -97,13 +98,14 @@ The file `prokka-db.csv` should contain a list of high quality annotated genomes
 You can have multiple projects running by starting a new line of project information with "`-`":
 
 ```yaml
+projects:
 # Project 1
   - name: example
     samples: config/samples.csv
     prokka-db: config/prokka-db.csv
 # Project 2
-  - name: dummy_test
-    samples: config/samples_test.csv
+  - name: example_2
+    samples: config/samples_2.csv
 ```
 Note that each `project` must have unique `name` and `samples` value.
 ### Choosing which analysis to run

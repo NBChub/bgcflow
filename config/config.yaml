@@ -12,9 +12,9 @@ projects:
   - name: example
     samples: config/samples.csv
     prokka-db: config/prokka-db.csv
-
-#  - name: dummy_test
-#    samples: config/samples_test.csv
+# Project 2
+#  - name: example_2
+#    samples: config/samples_2.csv
 
 #### RULE CONFIGURATION ####
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
@@ -24,7 +24,6 @@ rules:
   refseq_masher: TRUE
   seqfu: TRUE
   eggnog: FALSE
-  #automlst_wrapper: FALSE # unstable
 
 #### RESOURCES CONFIGURATION ####
 # resources : the location of the resources to run the rule. The default location is at "resources/{resource_name}".

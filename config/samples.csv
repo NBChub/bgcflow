@@ -1,3 +1,4 @@
 genome_id,source,organism,genus,species,strain,closest_placement_reference
 GCF_000359525.1,ncbi,,,,,GCF_000359525.1
 1223307.4,patric,Streptomyces sp. PVA 94-07,Streptomyces,sp.,PVA 94-07,GCF_000495755.1
+P8-2B-3.1,custom,Streptomyces sp. P8-2B-3,Streptomyces,sp.,P8-2B-3,GCF_000719955.1
