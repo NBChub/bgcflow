@@ -179,7 +179,8 @@ def get_final_output():
                 "automlst_wrapper" : "data/interim/automlst_wrapper/raxmlpart.txt.treefile",
                 "roary" : expand("data/interim/roary/{name}", name=PROJECT_IDS),
                 "bigscape" : expand("data/interim/bigscape/{name}_antismash_{version}/index.html", version=dependency_version["antismash"], name=PROJECT_IDS),
-                "seqfu" : "data/processed/tables/df_seqfu_stats.csv"
+                "seqfu" : "data/processed/tables/df_seqfu_stats.csv",
+                "rnammer": "resources/rnammer_test.txt" 
                 }
     
     # get keys from config
