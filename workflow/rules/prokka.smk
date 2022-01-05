@@ -1,3 +1,21 @@
+if config["rules"]["rnammer"] == True:
+    prokka_params_rna = "--rnammer"
+    rule rnammer_setup:
+        output: 
+            "resources/rnammer_test.txt" 
+        priority: 50
+        conda:
+            "../envs/prokka.yaml"
+        log: "workflow/report/logs/rnammer_setup.log"
+        shell:
+            """
+            ln -s $PWD/resources/RNAmmer/rnammer $CONDA_PREFIX/bin/rnammer 2>> {log}
+            rnammer -S bac -m lsu,ssu,tsu -gff - example/ecoli.fsa >> {output}
+            """
+else:
+    prokka_params_rna = ""
+    pass
+
 rule copy_custom_fasta:
     input:
         "data/raw/fasta/{custom}.fna"
@@ -19,9 +37,18 @@ rule prokka_reference_download:
     log: "workflow/report/logs/prokka_db/{prokka_db}.log"
     shell:
         """
-        ncbi-genome-download -s genbank -F genbank -A {wildcards.prokka_db} -o resources/prokka_db/download bacteria --verbose >> {log}
-        gunzip -c resources/prokka_db/download/genbank/bacteria/{wildcards.prokka_db}/*.gbff.gz > {output.gbff}
-        rm -rf resources/prokka_db/download/genbank/bacteria/{wildcards.prokka_db}
+        if [[ {wildcards.prokka_db} == GCF* ]]
+        then
+            source="refseq"
+        elif [[ {wildcards.prokka_db} == GCA* ]]
+        then
+            source="genbank"
+        else
+            echo "accession must start with GCA or GCF" >> {log}
+        fi
+        ncbi-genome-download -s $source -F genbank -A {wildcards.prokka_db} -o resources/prokka_db/download bacteria --verbose >> {log}
+        gunzip -c resources/prokka_db/download/$source/bacteria/{wildcards.prokka_db}/*.gbff.gz > {output.gbff}
+        rm -rf resources/prokka_db/download/$source/bacteria/{wildcards.prokka_db}
         """
 
 rule prokka_db_setup:
@@ -53,7 +80,7 @@ rule prokka:
     params:
         increment = 10, 
         evalue = "1e-05",
-        rna_detection = "", # To use rnammer change value to --rnammer
+        rna_detection = prokka_params_rna,
         refgbff = lambda wildcards: get_prokka_refdb(wildcards, DF_SAMPLES)
     threads: 8
     shell:
