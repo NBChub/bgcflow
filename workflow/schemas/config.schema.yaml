@@ -36,6 +36,8 @@ properties:
         type: boolean
       automlst_wrapper:
         type: boolean
+      rnammer:
+        type: boolean
   
   resources_path:
     type: object
@@ -45,6 +47,8 @@ properties:
       eggnog_db:
         type: string
       BiG-SCAPE:
+        type: string
+      RNAmmer:
         type: string
 
 
