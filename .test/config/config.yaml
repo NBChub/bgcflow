@@ -24,6 +24,7 @@ rules:
   seqfu: TRUE
   eggnog: TRUE
   #automlst_wrapper: FALSE # unstable
+  rnammer: FALSE
 
 #### RESOURCES CONFIGURATION ####
 # resources : the location of the resources to run the rule. The default location is at "resources/{resource_name}".
@@ -31,3 +32,4 @@ resources_path:
   antismash_db: resources/antismash_db
   eggnog_db: resources/eggnog_db
   BiG-SCAPE: resources/BiG-SCAPE
+  #RNAmmer: resources/RNAmmer # Path must be specified if rule configuration "rnammer" is TRUE
