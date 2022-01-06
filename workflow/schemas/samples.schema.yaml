@@ -15,7 +15,8 @@ properties:
     enum: [custom, ncbi, patric]
     description: source of the genome to be analyzed choose one of the following-'custom', 'ncbi', 'patric'
     # custom  : for provided in the data/raw/fasta directory with gneome ids as filenames 
-    # ncbi : for list of public genome accession IDs that will be downloaded from the NCBI refseq database
+    # ncbi : for list of public genome accession IDs that will be downloaded from the NCBI refseq (GCF...) or genbank (GCA...) database
+    # patric: for list of public genome accession IDs that will be downloaded from the PATRIC database
     # blob-container-url : for list of genomes from internal dataset that can be retrieved from blob containers
   
   organism:
