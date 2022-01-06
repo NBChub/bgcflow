@@ -6,10 +6,10 @@ rule install_bigscape:
     log: "workflow/report/logs/bigscape-install_bigscape.log"
     shell:
         """
-        (cd resources && wget https://git.wageningenur.nl/medema-group/BiG-SCAPE/-/archive/master/BiG-SCAPE-master.zip >> {log}) 
+        (cd resources && wget https://git.wageningenur.nl/medema-group/BiG-SCAPE/-/archive/master/BiG-SCAPE-master.zip) > {log}
         (cd resources && unzip BiG-SCAPE-master.zip && mv BiG-SCAPE-master/ BiG-SCAPE/ && rm BiG-SCAPE-master.zip)
-        (cd resources/BiG-SCAPE && wget ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.hmm.gz && gunzip Pfam-A.hmm.gz >> {log})
-        (cd resources/BiG-SCAPE && hmmpress Pfam-A.hmm >> {log}) 
+        (cd resources/BiG-SCAPE && wget ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.hmm.gz && gunzip Pfam-A.hmm.gz) >> {log}
+        (cd resources/BiG-SCAPE && hmmpress Pfam-A.hmm) >> {log}
         """
 
 rule get_bigscape_inputs:

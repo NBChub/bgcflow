@@ -10,7 +10,7 @@ if config["rules"]["rnammer"] == True:
         shell:
             """
             ln -s $PWD/resources/RNAmmer/rnammer $CONDA_PREFIX/bin/rnammer 2>> {log}
-            rnammer -S bac -m lsu,ssu,tsu -gff - example/ecoli.fsa >> {output}
+            rnammer -S bac -m lsu,ssu,tsu -gff - resources/RNAmmer/example/ecoli.fsa >> {output}
             """
 else:
     prokka_params_rna = ""
