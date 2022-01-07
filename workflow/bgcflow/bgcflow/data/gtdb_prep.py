@@ -4,8 +4,8 @@ import pandas as pd
 
 def gtdb_prep(samples_path, outfile):
     # wrap single or multiple inputs & generate dataframe
-    shell_input = samples_path.split()
-    dfList = [pd.read_csv(s).set_index('genome_id', drop=False) for s in shell_input]
+    shell_input = samples_path.replace("[","").replace("]","")
+    dfList = [pd.read_csv(s).set_index('genome_id', drop=False) for s in shell_input.split()]
     df_samples = pd.concat(dfList, axis=0)
 
     # NCBI accession or closest NCBI
