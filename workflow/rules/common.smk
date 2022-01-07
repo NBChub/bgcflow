@@ -73,7 +73,7 @@ CUSTOM = DF_SAMPLES[DF_SAMPLES.source.eq("custom")].genome_id.to_list()
 NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
 PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
 PROKKA_DB = DF_PROKKA_DB.Accession.to_list()
-SAMPLE_PATHS = DF_SAMPLES.sample_paths.unique()
+SAMPLE_PATHS = list(DF_SAMPLES.sample_paths.unique())
 
 
 ##### Helper for lambda functions #####
