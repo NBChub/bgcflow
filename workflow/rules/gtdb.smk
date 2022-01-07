@@ -1,15 +1,16 @@
 rule gtdb_prep:
     input:
         fasta = expand("data/interim/fasta/{strains}.fna", strains = STRAINS),
-        samples_path = SAMPLE_PATHS,
     output:
         taxonomy_placement = "data/interim/gtdb/placement_list.txt",
     log: "workflow/report/logs/gtdb_prep.log"
     conda: 
         "../envs/bgc_analytics.yaml"
+    params:
+        samples_path = SAMPLE_PATHS,
     shell: 
         """
-        python workflow/bgcflow/bgcflow/data/gtdb_prep.py '{input.samples_path}' {output.taxonomy_placement} 2> {log}
+        python workflow/bgcflow/bgcflow/data/gtdb_prep.py '{params.samples_path}' {output.taxonomy_placement} 2> {log}
         """
 
 rule fetch_gtdb_taxonomy: #need to update by installing bigslice
@@ -31,14 +32,15 @@ rule fetch_gtdb_taxonomy: #need to update by installing bigslice
 rule fix_gtdb_taxonomy:
     input: 
         taxonomy_raw = "data/interim/gtdb/all_taxonomy_raw.tsv",
-        samples_path = SAMPLE_PATHS,
     output:
         taxonomy = "data/interim/gtdb/all_taxonomy.tsv",
         meta = "data/processed/tables/df_gtdb_meta.csv"
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/fix_gtdb_taxonomy.log"
+    params:
+        samples_path = SAMPLE_PATHS,
     shell: 
         """
-        python workflow/bgcflow/bgcflow/data/fix_gtdb_taxonomy.py '{input.samples_path}' {input.taxonomy_raw} {output.taxonomy} {output.meta} 2> {log}
+        python workflow/bgcflow/bgcflow/data/fix_gtdb_taxonomy.py '{params.samples_path}' {input.taxonomy_raw} {output.taxonomy} {output.meta} 2> {log}
         """
