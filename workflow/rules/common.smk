@@ -121,6 +121,15 @@ def get_bigscape_inputs(name, version, df_samples=DF_SAMPLES):
     output = [f"data/interim/antismash/{version}/{s}/{s}.gbk" for s in selection]
     return output
 
+# roary #
+def get_roary_inputs(name, df_samples=DF_SAMPLES):
+    """
+    Given a project name, find the corresponding sample file
+    """
+    selection = df_samples[df_samples["name"] == name].genome_id.values
+    output = [f"data/interim/prokka/{s}/{s}.gff" for s in selection]
+    return output
+
 
 ##### Wildcard constraints #####
 wildcard_constraints:
@@ -177,7 +186,7 @@ def get_final_output():
                 "eggnog" : expand("data/interim/eggnog/{strains}/", strains = STRAINS),
                 "refseq_masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", strains = STRAINS),
                 "automlst_wrapper" : "data/interim/automlst_wrapper/raxmlpart.txt.treefile",
-                "roary" : expand("data/interim/roary/{name}", name=PROJECT_IDS),
+                "roary" : expand("data/interim/roary/{name}/", name=PROJECT_IDS),
                 "bigscape" : expand("data/interim/bigscape/{name}_antismash_{version}/index.html", version=dependency_version["antismash"], name=PROJECT_IDS),
                 "seqfu" : "data/processed/tables/df_seqfu_stats.csv",
                 "rnammer": "resources/rnammer_test.txt" 

@@ -24,6 +24,7 @@ rules:
   refseq_masher: TRUE
   seqfu: TRUE
   eggnog: FALSE
+  roary: TRUE
   # other parameter settings
   rnammer: FALSE
 
