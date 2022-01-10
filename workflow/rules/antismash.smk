@@ -17,14 +17,15 @@ rule antismash:
         resources = "resources/antismash_db/"
     output:
         gbk = "data/interim/antismash/{version}/{strains}/{strains}.gbk",
+        folder = directory("data/interim/antismash/{version}/{strains}/"),
     conda:
         "../envs/antismash.yaml"
     threads: 8
     log: "workflow/report/logs/{strains}/antismash_{version}.log"
     params:
-        folder = directory("data/interim/antismash/{version}/{strains}"),
+        folder = directory("data/interim/antismash/{version}/{strains}/"),
     shell:
         """
-        antismash --genefinding-tool prodigal --output-dir {params.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} -v
+        antismash --genefinding-tool prodigal --output-dir {output.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} -v
         ls {params.folder} > {log}
         """
