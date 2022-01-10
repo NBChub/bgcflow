@@ -38,6 +38,7 @@ rule fix_gtdb_taxonomy:
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/fix_gtdb_taxonomy.log"
+    priority: 50
     params:
         samples_path = SAMPLE_PATHS,
     shell: 

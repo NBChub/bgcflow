@@ -16,25 +16,28 @@ rule get_bigscape_inputs:
     input:
         gbk = lambda wildcards: get_bigscape_inputs(wildcards.name, wildcards.version)
     output:
-        tempdir = temp(directory("data/interim/bigscape/temp_{name}_antismash_{version}/"))
+        input_list = "data/interim/bigscape/{name}_antismash_{version}.txt"
     conda:
         "../envs/bigscape.yaml"
     log: "workflow/report/logs/{name}_antismash_{version}/temp_bigscape.log"
+    params:
+        tempdir = directory("data/interim/bigscape/temp_{name}_antismash_{version}/")
     shell:
         """
-        mkdir {output.tempdir}
+        mkdir -p {params.tempdir} 2> {log}
         for i in {input.gbk} 
         do 
             infile=$i 
             strain=$(basename $i)
-            ln -s $i "{output.tempdir}/$strain"
+            ln -sf $i "{params.tempdir}/$strain" 2>> {log}
         done
+        ls {params.tempdir} > {output.input_list}
         """
 
 rule bigscape:
     input: 
         bigscape = "resources/BiG-SCAPE",
-        antismash_dir = "data/interim/bigscape/temp_{name}_antismash_{version}/"
+        input_list = "data/interim/bigscape/{name}_antismash_{version}.txt"
     output:
         index = "data/interim/bigscape/{name}_antismash_{version}/index.html"
     conda:
@@ -42,9 +45,10 @@ rule bigscape:
     params:
         bigscape_dir = "data/interim/bigscape/{name}_antismash_{version}/",
         label = "{name}_antismash_{version}",
+        antismash_dir = "data/interim/bigscape/temp_{name}_antismash_{version}/"
     log: "workflow/report/logs/{name}_antismash_{version}/bigscape.log"
     threads: 16
     shell:
         """
-        python {input.bigscape}/bigscape.py -i {input.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose > {log}        
+        python {input.bigscape}/bigscape.py -i {params.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose > {log}
         """
