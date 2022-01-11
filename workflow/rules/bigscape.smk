@@ -21,15 +21,16 @@ rule get_bigscape_inputs:
         "../envs/bigscape.yaml"
     log: "workflow/report/logs/{name}_antismash_{version}/temp_bigscape.log"
     params:
-        tempdir = directory("data/interim/bigscape/temp_{name}_antismash_{version}/")
+        tempdir = directory("data/interim/bigscape/tmp/{name}_antismash_{version}")
     shell:
         """
         mkdir -p {params.tempdir} 2> {log}
         for i in {input.gbk} 
         do 
-            infile=$i 
-            strain=$(basename $i)
-            ln -sf $i "{params.tempdir}/$strain" 2>> {log}
+            infile=$PWD/$(dirname $i)
+            strain=$(basename $infile)
+            echo $infile $strain
+            (cd {params.tempdir} && ln -s $infile $strain) 2>> {log}
         done
         ls {params.tempdir} > {output.input_list}
         """
@@ -45,7 +46,7 @@ rule bigscape:
     params:
         bigscape_dir = "data/interim/bigscape/{name}_antismash_{version}/",
         label = "{name}_antismash_{version}",
-        antismash_dir = "data/interim/bigscape/temp_{name}_antismash_{version}/"
+        antismash_dir = "data/interim/bigscape/tmp/{name}_antismash_{version}/"
     log: "workflow/report/logs/{name}_antismash_{version}/bigscape.log"
     threads: 16
     shell:
