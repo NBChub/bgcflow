@@ -25,15 +25,19 @@ properties:
   
   genus:
     type: string
-    description: genus of the organism
+    description: genus of the organism. Ideally identified with GTDBtk.
   
   species:
     type: string
-    description: species of the organism
+    description: species epithet (the second word in a species name) of the organism. Ideally identified with GTDBtk.
   
   strain:
     type: [string, number]
     description: strain id of the organism
+
+  closest_placement_reference:
+    type: [string, number]
+    description: the closest NCBI genome to the organism. Ideally identified with GTDBtk.
 
 # columns that the config/samples.csv file must have to pass schema validation
 required:
