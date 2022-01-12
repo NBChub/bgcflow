@@ -31,15 +31,27 @@ Ideally, a project is a set of genomes of certain clade (pangenome) and can be a
 See [further configuration](#further-configuration) for more details.
 
 #### 2.2 Setting Up Your Samples Information
-The parameter `samples` denote the location of your `samples.csv` which specify the strains to analyse.
+The parameter `samples` denote the location of your `.csv` file which specify the genomes to analyse. Note that you can name the file anything as long as you define it in the `config.yaml`.
 
-`samples.csv` example:
+Example : `samples.csv`
 
 | genome_id       | source | organism                        | genus        | species | strain     |closest_placement_reference|
 |----------------:|-------:|--------------------------------:|-------------:|--------:| ----------:|--------------------------:|
 | GCF_000359525.1 | ncbi   | Streptomyces albus strain J1074 | Streptomyces | albus   | J1074      | GCF_000359525.1           |
 | 1223307.4       | patric | Streptomyces sp. PVA 94-07      | Streptomyces | sp.     | PVA 94-07  | GCF_000495755.1           |
 | P8-2B-3.1       | custom | Streptomyces sp. P8-2B-3        | Streptomyces | sp.     | P8-2B-3    | GCF_000719955.1           |
+
+Columns description:
+- **`genome_id`** _[required]_:  The genome accession ids (with genome version for `ncbi` and `patric` genomes). For `custom` fasta file provided by users, it should refer to the fasta file names stored in `data/raw/fasta/` directory with `.fna` extension. **Example:** genome id P8-2B-3.1 refers to the file `data/raw/fasta/P8-2B-3.1.fna`.
+- **`source`** _[required]_: Source of the genome to be analyzed choose one of the following: `custom`, `ncbi`, `patric`. Where:
+  - `custom` : for user provided genomes (`.fna`) in the `data/raw/fasta` directory with genome ids as filenames 
+  - `ncbi` : for list of public genome accession IDs that will be downloaded from the NCBI refseq (GCF...) or genbank (GCA...) database
+  - `patric`: for list of public genome accession IDs that will be downloaded from the PATRIC database 
+- `organism` _[optional]_ : name of the organism that is same as in the fasta header
+- `genus` _[optional]_ : genus of the organism. Ideally identified with GTDBtk.
+- `species` _[optional]_ : species epithet (the second word in a species name) of the organism. Ideally identified with GTDBtk.
+- `strain` _[optional]_ : strain id of the organism
+- `closest_placement_reference` _[optional]_: if known, the closest NCBI genome to the organism. Ideally identified with GTDBtk.
 
 Further formatting rules are defined in the `workflow/schemas/` folder.
 
