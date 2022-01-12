@@ -19,18 +19,20 @@ rule get_bigscape_inputs:
         input_list = "data/interim/bigscape/{name}_antismash_{version}.txt"
     conda:
         "../envs/bigscape.yaml"
-    log: "workflow/report/logs/{name}_antismash_{version}/temp_bigscape.log"
+    log: "workflow/report/logs/bigscape/{name}_antismash_{version}/temp_bigscape.log"
     params:
         tempdir = directory("data/interim/bigscape/tmp/{name}_antismash_{version}")
     shell:
         """
         mkdir -p {params.tempdir} 2> {log}
-        for i in {input.gbk} 
-        do 
-            infile=$PWD/$(dirname $i)
-            strain=$(basename $infile)
-            echo $infile $strain
-            (cd {params.tempdir} && ln -s $infile $strain) 2>> {log}
+        for i in $(dirname {input.gbk})
+        do
+            for r in $(ls $i/*.region*.gbk)
+            do
+                parent_dir=$(dirname $PWD/$r)
+                filename=$(basename $r)
+                (cd {params.tempdir} && ln -s $parent_dir/$filename $filename) 2>> {log}
+            done
         done
         ls {params.tempdir} > {output.input_list}
         """
@@ -47,7 +49,7 @@ rule bigscape:
         bigscape_dir = "data/interim/bigscape/{name}_antismash_{version}/",
         label = "{name}_antismash_{version}",
         antismash_dir = "data/interim/bigscape/tmp/{name}_antismash_{version}/"
-    log: "workflow/report/logs/{name}_antismash_{version}/bigscape.log"
+    log: "workflow/report/logs/bigscape/{name}_antismash_{version}/bigscape.log"
     threads: 16
     shell:
         """
