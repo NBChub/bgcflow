@@ -87,6 +87,14 @@ Check you job DAG by executing:
 
 See the [Snakemake documentation](https://snakemake.readthedocs.io/en/stable/executable.html) for further details.
 
+### Step 5: Investigate results
+
+After successful execution, you can zip a self-contained interactive HTML report with all results via:
+
+    snakemake --report report.zip
+
+This report can, e.g., be forwarded to your collaborators.
+
 ## Further configuration
 ### Custom Prokka database
 You can add an optional parameters: `prokka-db`, which refer to the location of a `.csv` file containing a list of your custom reference genomes for [`prokka`](https://github.com/tseemann/prokka#option---proteins) annotation:
