@@ -2,7 +2,7 @@ rule seqfu_stats:
     input: 
         fna = expand("data/interim/fasta/{strains}.fna", strains = STRAINS)
     output:
-        all_csv = report("data/processed/tables/df_seqfu_stats.csv", "../report/workflow.rst")
+        all_csv = report("data/processed/tables/df_seqfu_stats.csv", caption="../report/table-seqfu.rst", category="Quality Control")
     conda:
         "../envs/seqfu.yaml"
     log: "workflow/report/logs/seqfu.log"

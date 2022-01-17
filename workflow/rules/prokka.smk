@@ -112,7 +112,7 @@ rule format_gbk:
     input: 
         gbk_prokka = "data/interim/prokka/{strains}/{strains}.gbk",
     output:
-        gbk_processed = "data/processed/genbank/{strains}.gbk",
+        gbk_processed = report("data/processed/genbank/{strains}.gbk", caption="../report/file-genbank.rst", category="Genome Overview")
     conda:
         "../envs/prokka.yaml"
     params:
