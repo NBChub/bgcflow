@@ -34,7 +34,7 @@ rule fix_gtdb_taxonomy:
         taxonomy_raw = "data/interim/gtdb/all_taxonomy_raw.tsv",
     output:
         taxonomy = "data/interim/gtdb/all_taxonomy.tsv",
-        meta = "data/processed/tables/df_gtdb_meta.csv"
+        meta = report("data/processed/tables/df_gtdb_meta.csv", "../report/workflow.rst")
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/fix_gtdb_taxonomy.log"
