@@ -82,7 +82,7 @@ rule prokka:
         evalue = "1e-05",
         rna_detection = prokka_params_rna,
         refgbff = lambda wildcards: get_prokka_refdb(wildcards, DF_SAMPLES)
-    threads: 8
+    threads: 16
     shell:
         """
         prokka --outdir data/interim/prokka/{wildcards.strains} --force {params.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} --evalue {params.evalue} {input.fna}
@@ -96,7 +96,7 @@ rule extract_meta_prokka:
         all_reports = expand("data/interim/assembly_report/{ncbi}.txt", ncbi = NCBI),
         assembly_report_path = "data/interim/assembly_report/",
     output:
-        ncbi_meta_path = "data/processed/tables/df_ncbi_meta.csv",
+        ncbi_meta_path = report("data/processed/tables/df_ncbi_meta.csv", caption="../report/table-ncbi_meta.rst", category="Genome Overview", subcategory="Metadata"),
         org_info = expand("data/interim/prokka/{strains}/organism_info.txt", strains = STRAINS),
     conda:
         "../envs/bgc_analytics.yaml"
@@ -112,7 +112,7 @@ rule format_gbk:
     input: 
         gbk_prokka = "data/interim/prokka/{strains}/{strains}.gbk",
     output:
-        gbk_processed = report("data/processed/genbank/{strains}.gbk", caption="../report/file-genbank.rst", category="Genome Overview")
+        gbk_processed = report("data/processed/genbank/{strains}.gbk", caption="../report/file-genbank.rst", category="Genome Overview", subcategory="Annotated Genbanks")
     conda:
         "../envs/prokka.yaml"
     params:

@@ -20,21 +20,20 @@ rule antismash:
         zip = "data/interim/antismash/{version}/{strains}/{strains}.zip",
     conda:
         "../envs/antismash.yaml"
-    threads: 8
+    threads: 16
     log: "workflow/report/logs/{strains}/antismash_{version}.log"
     params:
         folder = directory("data/interim/antismash/{version}/{strains}/"),
     shell:
         """
-        antismash --genefinding-tool prodigal --output-dir {params.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} -v
-        ls {params.folder} > {log}
+        antismash --genefinding-tool prodigal --output-dir {params.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} --logfile {log} 2>> {log}
         """
 
 rule copy_antismash_zip:
     input:
         zip = "data/interim/antismash/{version}/{strains}/{strains}.zip",
     output:
-        zip = report("data/processed/antismash/{version}/{strains}.zip", caption="../report/file-antismash.rst", category="BGC Prediction")
+        zip = report("data/processed/antismash/{version}/{strains}.zip", caption="../report/file-antismash.rst", category="BGC Prediction", subcategory="AntiSMASH Results")
     conda:
         "../envs/antismash.yaml"
     log: "workflow/report/logs/{strains}/antismash_{version}_copy.log"
