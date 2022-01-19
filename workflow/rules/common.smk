@@ -199,6 +199,7 @@ def get_final_output():
                 "seqfu" : "data/processed/tables/df_seqfu_stats.csv",
                 "rnammer": "resources/rnammer_test.txt",
                 "bigslice": expand("data/interim/bigslice/{name}_antismash_{version}/", name = PROJECT_IDS, version=dependency_version["antismash"]),
+                "query_bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}.txt", name = PROJECT_IDS, version=dependency_version["antismash"]),
                 }
     
     # get keys from config

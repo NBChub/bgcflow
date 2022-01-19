@@ -68,10 +68,42 @@ rule bigslice:
     threads: 64
     log:
         "workflow/report/logs/bigslice/{name}_antismash_{version}/bigslice.log"
-    params:
-        n_ranks = 10,
-        folder = "data/interim/bigslice/{name}_antismash_{version}/",
     shell:
         """
-        bigslice -i data/interim/bigslice/tmp/ {output.folder} > {log} 2>> {log}
+        bigslice -i data/interim/bigslice/tmp/ {output.folder} -t {threads}> {log} 2>> {log}
         """
+
+rule fetch_bigslice_db:
+    input:
+        resource = "resources/bigslice/install_note.txt",
+    output:
+        folder = directory("resources/bigslice/full_run_result/")
+    conda:
+        "../envs/bigslice.yaml"
+    log:
+        "workflow/report/logs/bigslice/fetch_bigslice.log"
+    shell:
+        """
+        (cd resources/bigslice && wget -c -nc http://bioinformatics.nl/~kauts001/ltr/bigslice/paper_data/data/full_run_result.zip && unzip full_run_result.zip) 2>> {log}
+        rm resources/bigslice/full_run_result.zip
+        """
+
+rule query_bigslice:
+    input:
+        tmp_dir = "data/interim/bigslice/tmp/{name}_antismash_{version}/",
+        bigslice_dir = "resources/bigslice/full_run_result/"
+    output:
+        log = "data/interim/bigslice/query/{name}_antismash_{version}.txt"
+    conda:
+        "../envs/bigslice.yaml"
+    threads: 32
+    log:
+        "workflow/report/logs/bigslice/{name}_antismash_{version}/bigslice_query.log"
+    params:
+        n_ranks = 10,
+    shell:
+        """
+        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads}> {log} 2>> {log}
+        echo fin > {output.log}
+        """
+

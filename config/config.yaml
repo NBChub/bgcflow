@@ -20,12 +20,13 @@ projects:
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
 rules:
   bigscape: TRUE
-  bigslice: FALSE
+  query_bigslice: FALSE
   mlst: TRUE
   refseq_masher: TRUE
   seqfu: TRUE
   eggnog: FALSE
   roary: TRUE
+  bigslice: FALSE
   # other parameter settings
   rnammer: FALSE
 
