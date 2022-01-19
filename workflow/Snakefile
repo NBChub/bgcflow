@@ -5,11 +5,12 @@ rule all:
     input:
         expand("data/processed/antismash/{version}/{strains}.zip", strains = STRAINS, version=dependency_version["antismash"]),
         expand("data/interim/prokka/{strains}/organism_info.txt", strains = STRAINS),
-        "data/processed/tables/df_gtdb_meta.csv",
+        expand("data/processed/tables/df_gtdb_meta-{name}.csv", name = PROJECT_IDS),
         "data/processed/tables/df_ncbi_meta.csv",
         expand("data/processed/tables/df_antismash_{version}_summary.csv", name = PROJECT_IDS, version=dependency_version["antismash"]), # there is a bug which changes the input file
         expand("data/processed/genbank/{strains}.gbk", strains = STRAINS, name = PROJECT_IDS),
         "workflow/report/dependency_versions.json",
+        #expand("data/interim/bigslice/{name}_antismash_{version}_check.txt", name = PROJECT_IDS, version=dependency_version["antismash"]),
         get_final_output(),
 
 ##### Modules #####
@@ -18,6 +19,7 @@ include: "rules/prokka.smk"
 include: "rules/antismash.smk"
 include: "rules/roary.smk"
 include: "rules/bigscape.smk"
+#include: "rules/bigslice.smk"
 include: "rules/gtdb.smk"
 include: "rules/refseq_masher.smk"
 include: "rules/patric.smk"

@@ -130,6 +130,14 @@ def get_roary_inputs(name, df_samples=DF_SAMPLES):
     output = [f"data/interim/prokka/{s}/{s}.gff" for s in selection]
     return output
 
+# gtdb #
+def get_json_inputs(name, df_samples=DF_SAMPLES):
+    """
+    Given a project name, find the corresponding sample file
+    """
+    selection = df_samples[df_samples["name"] == name].genome_id.values
+    output = [f"data/interim/gtdb/{s}.json" for s in selection]
+    return output
 
 ##### Wildcard constraints #####
 wildcard_constraints:

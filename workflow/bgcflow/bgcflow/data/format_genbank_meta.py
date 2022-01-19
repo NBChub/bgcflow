@@ -39,19 +39,22 @@ def get_version(version):
     return version
 
 
-def add_bgcflow_comments(gbk_in_path, version, gtdb_path, genome_id, gbk_out_path):
+def add_bgcflow_comments(gbk_in_path, version, json_path, genome_id, gbk_out_path):
     """ 
     Add bgcflow meta-annotation to genbank output
     """
 
     version = get_version(version)
     records = SeqIO.parse(gbk_in_path, 'genbank')
-    df_gtdb_meta = pd.read_csv(gtdb_path, index_col='genome_id')
 
-    df_gtdb_meta.fillna('Unclassified',inplace=True)
-
-    tax_levels = ['Kingdom','Phylum','Class','Order','Family','Genus','Species']
-    taxonomy_str = df_gtdb_meta.loc[genome_id, tax_levels].tolist()
+    df_gtdb_meta = pd.read_json(json_path, orient="index").T
+    df_gtdb_meta.fillna('Unclassified', inplace=True)
+    df_tax = pd.DataFrame([i for i in df_gtdb_meta.gtdb_taxonomy])
+    for col in df_tax.columns:
+        df_tax[col] = df_tax[col].apply(lambda x: x.split('__')[1])
+    df_tax.columns = [c.title() for c in df_tax.columns]
+    tax_levels = ['Domain','Phylum','Class','Order','Family','Genus','Species']
+    taxonomy_str = df_Tax.loc[0, tax_levels].tolist()
     print('Taxonomy found:', taxonomy_str)
 
     bgcflow_comment = (
