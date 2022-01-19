@@ -20,6 +20,7 @@ projects:
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
 rules:
   bigscape: TRUE
+  bigslice: FALSE
   mlst: TRUE
   refseq_masher: TRUE
   seqfu: TRUE
