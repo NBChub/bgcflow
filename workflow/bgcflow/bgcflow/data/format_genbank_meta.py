@@ -54,7 +54,7 @@ def add_bgcflow_comments(gbk_in_path, version, json_path, genome_id, gbk_out_pat
         df_tax[col] = df_tax[col].apply(lambda x: x.split('__')[1])
     df_tax.columns = [c.title() for c in df_tax.columns]
     tax_levels = ['Domain','Phylum','Class','Order','Family','Genus','Species']
-    taxonomy_str = df_Tax.loc[0, tax_levels].tolist()
+    taxonomy_str = df_tax.loc[0, tax_levels].tolist()
     print('Taxonomy found:', taxonomy_str)
 
     bgcflow_comment = (
