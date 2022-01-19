@@ -1,8 +1,10 @@
 rule install_bigslice:
     output:
-        "resources/bigslice.txt"
+        "resources/bigslice/install_note.txt"
     conda:
         "../envs/bigslice.yaml"
+    log:
+        "workflow/report/logs/bigslice_install.log"
     shell:
         """
         (cd resources && download_bigslice_hmmdb && rm bigslice_models.tar.gz)
@@ -23,37 +25,53 @@ rule get_bigslice_inputs:
         dataset = "data/interim/bigslice/tmp/datasets.tsv"
     shell:
         """
+        echo "Preparing BiG-SLICE input for {wildcards.name}..."
         mkdir -p {output.tempdir} 2> {log}
+
+        # Generate symlink for each regions in genomes in dataset
         for i in $(dirname {input.gbk})
         do
+            mkdir {output.tempdir}/$(basename $i) 2>> {log}
             for r in $(ls $i/*.region*.gbk)
             do
                 parent_dir=$(dirname $PWD/$r)
                 filename=$(basename $r)
-                mkdir {output.tempdir}/$(basename $parent_dir)
-                python workflow/bgcflow/bgcflow/data/bigslice_prep.py {input.table} {output.taxonomy}
                 (cd {output.tempdir}/$(basename $parent_dir) && ln -s $parent_dir/$filename $filename) 2>> {log}
             done
-        echo -e '# Dataset name\tPath to folder\tPath to taxonomy\tDescription' > {params.dataset}
-        sed -i 'a {wildcards.name}_antismash_{wildcards.version}\t{wildcards.name}_antismash_{wildcards.version}\ttaxonomy/taxonomy_{wildcards.name}_antismash_{wildcards.version}.tsv\t{wildcards.name}' {params.dataset}
         done
+
+        # generate taxonomic information for dataset
+        python workflow/bgcflow/bgcflow/data/bigslice_prep.py {input.table} {output.taxonomy} 2>> {log}
+
+        # append new dataset information
+        ## check if previous dataset exists
+        if [[ -s {params.dataset} ]]
+        then
+            echo "Previous dataset detected, appending dataset information for {wildcards.name}..."
+            sed -i 'a {wildcards.name}_antismash_{wildcards.version}\t{wildcards.name}_antismash_{wildcards.version}\ttaxonomy/taxonomy_{wildcards.name}_antismash_{wildcards.version}.tsv\t{wildcards.name}' {params.dataset} 2>> {log}
+        else
+            echo "No previous dataset detected, generating dataset information for {wildcards.name}..."
+            echo -e '# Dataset name\tPath to folder\tPath to taxonomy\tDescription' > {params.dataset} 2>> {log}
+            sed -i 'a {wildcards.name}_antismash_{wildcards.version}\t{wildcards.name}_antismash_{wildcards.version}\ttaxonomy/taxonomy_{wildcards.name}_antismash_{wildcards.version}.tsv\t{wildcards.name}' {params.dataset} 2>> {log}
+        fi
         """
 
 rule bigslice:
     input: 
-        ref = "resources/bigslice.txt",
-        dir = directory("data/interim/bigslice/tmp/{name}_antismash_{version}/"),
+        resource = "resources/bigslice/install_note.txt",
+        tmp_dir = "data/interim/bigslice/tmp/{name}_antismash_{version}/",
         taxonomy = "data/interim/bigslice/tmp/taxonomy/taxonomy_{name}_antismash_{version}.tsv",
     output:
-        log ="data/interim/bigslice/{name}_antismash_{version}_check.txt"
+        folder = directory("data/interim/bigslice/{name}_antismash_{version}/")
     conda:
         "../envs/bigslice.yaml"
     threads: 64
+    log:
+        "workflow/report/logs/bigslice/{name}_antismash_{version}/bigslice.log"
     params:
         n_ranks = 10,
         folder = "data/interim/bigslice/{name}_antismash_{version}/",
     shell:
         """
-        bigslice -i data/interim/bigslice/tmp/ {params.folder}
-        echo finish > {output.log}
+        bigslice -i data/interim/bigslice/tmp/ {output.folder} > {log} 2>> {log}
         """

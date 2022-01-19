@@ -197,7 +197,8 @@ def get_final_output():
                 "roary" : expand("data/interim/roary/{name}/", name=PROJECT_IDS),
                 "bigscape" : expand("data/interim/bigscape/{name}_antismash_{version}/index.html", version=dependency_version["antismash"], name=PROJECT_IDS),
                 "seqfu" : "data/processed/tables/df_seqfu_stats.csv",
-                "rnammer": "resources/rnammer_test.txt" 
+                "rnammer": "resources/rnammer_test.txt",
+                "bigslice": expand("data/interim/bigslice/{name}_antismash_{version}/", name = PROJECT_IDS, version=dependency_version["antismash"]),
                 }
     
     # get keys from config

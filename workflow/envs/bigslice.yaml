@@ -5,6 +5,8 @@ channels:
 dependencies:
   - python=3.6
   - hmmer>=3.2b1
+  - flask=2.0.2
+  - pysqlite3=0.4.6
   - pip
   - pip:
     - bigslice
