@@ -6,7 +6,7 @@ if config["rules"]["rnammer"] == True:
         priority: 50
         conda:
             "../envs/prokka.yaml"
-        log: "workflow/report/logs/rnammer_setup.log"
+        log: "workflow/report/logs/prokka/rnammer_setup.log"
         shell:
             """
             ln -s $PWD/resources/RNAmmer/rnammer $CONDA_PREFIX/bin/rnammer 2>> {log}
@@ -23,7 +23,7 @@ rule copy_custom_fasta:
         "data/interim/fasta/{custom}.fna" 
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/{custom}/prokka_custom_copy.log"
+    log: "workflow/report/logs/prokka/copy_custom_fasta-{custom}.log"
     shell:
         """
         cp {input} {output} 2>> {log}
@@ -34,7 +34,7 @@ rule prokka_reference_download:
         gbff = temp("resources/prokka_db/gbk/{prokka_db}.gbff") # all projects ncbi accession 
     conda:
         "../envs/prokka.yaml"
-    log: "workflow/report/logs/prokka_db/{prokka_db}.log"
+    log: "workflow/report/logs/prokka/prokka_reference_download/prokka_reference_download-{prokka_db}.log"
     shell:
         """
         if [[ {wildcards.prokka_db} == GCF* ]]
@@ -58,11 +58,43 @@ rule prokka_db_setup:
         refgbff = "resources/prokka_db/reference_{name}.gbff"
     conda:
         "../envs/prokka.yaml"
-    log: "workflow/report/logs/prokka_db/prokka_db_{name}.log"
+    log: "workflow/report/logs/prokka/prokka_db_setup/prokka_db_setup-{name}.log"
     shell:
         """
         cat resources/prokka_db/gbk/*.gbff >> {output.refgbff}
         head {output.refgbff} >> {log}
+        """
+
+rule extract_meta_prokka:
+    input:
+        fna = "data/interim/fasta/{strains}.fna",
+        prokka_dir = "data/interim/prokka/",
+        assembly_report_path = "data/interim/assembly_report/",
+    output:
+        org_info = "data/interim/prokka/{strains}/organism_info.txt",
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log: "workflow/report/logs/prokka/extract_meta_prokka/extract_meta_prokka-{strains}.log"
+    params:
+        samples_path = SAMPLE_PATHS,
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/get_organism_info.py {wildcards.strains} "{params.samples_path}" {input.assembly_report_path} {input.prokka_dir} 2>> {log}
+        """
+
+rule extract_ncbi_information:
+    input:
+        all_reports = expand("data/interim/prokka/{ncbi}/organism_info.txt", ncbi = NCBI),
+        all_json = expand("data/interim/assembly_report/{ncbi}.json", ncbi = NCBI),
+        assembly_report_path = "data/interim/assembly_report/",
+    output:
+        ncbi_meta_path = report("data/processed/tables/df_ncbi_meta.csv", caption="../report/table-ncbi_meta.rst", category="Genome Overview", subcategory="Metadata"),
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log: "workflow/report/logs/prokka/extract_ncbi_information.log"
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/extract_ncbi_information.py {input.assembly_report_path} {output.ncbi_meta_path} 2>> {log}
         """
 
 rule prokka:
@@ -76,7 +108,7 @@ rule prokka:
         gbk = "data/interim/prokka/{strains}/{strains}.gbk",
     conda: 
         "../envs/prokka.yaml"
-    log: "workflow/report/logs/{strains}/prokka_run.log"
+    log: "workflow/report/logs/prokka/prokka/prokka-{strains}.log"
     params:
         increment = 10, 
         evalue = "1e-05",
@@ -89,25 +121,6 @@ rule prokka:
         cat data/interim/prokka/{wildcards.strains}/{wildcards.strains}.log > {log}
         """
 
-rule extract_meta_prokka:
-    input:
-        fna = expand("data/interim/fasta/{strains}.fna", strains = STRAINS),
-        prokka_dir = "data/interim/prokka/",
-        all_reports = expand("data/interim/assembly_report/{ncbi}.txt", ncbi = NCBI),
-        assembly_report_path = "data/interim/assembly_report/",
-    output:
-        ncbi_meta_path = report("data/processed/tables/df_ncbi_meta.csv", caption="../report/table-ncbi_meta.rst", category="Genome Overview", subcategory="Metadata"),
-        org_info = expand("data/interim/prokka/{strains}/organism_info.txt", strains = STRAINS),
-    conda:
-        "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/prokka_meta.log"
-    params:
-        samples_path = SAMPLE_PATHS,
-    shell:
-        """
-        python workflow/bgcflow/bgcflow/data/get_organism_info.py "{params.samples_path}" {input.assembly_report_path} {input.prokka_dir} {output.ncbi_meta_path} 2>> {log}
-        """ 
-
 rule format_gbk:
     input: 
         gbk_prokka = "data/interim/prokka/{strains}/{strains}.gbk",
@@ -118,7 +131,7 @@ rule format_gbk:
         "../envs/prokka.yaml"
     params:
         version = __version__,
-    log: "workflow/report/logs/{strains}/prokka_format_gbk.log"
+    log: "workflow/report/logs/prokka/format_gbk/format_gbk-{strains}.log"
     shell:
         """
         python workflow/bgcflow/bgcflow/data/format_genbank_meta.py {input.gbk_prokka} {params.version} {input.gtdb_json} {wildcards.strains} {output.gbk_processed} 2> {log}
