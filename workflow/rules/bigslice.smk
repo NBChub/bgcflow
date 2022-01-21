@@ -4,11 +4,11 @@ rule install_bigslice:
     conda:
         "../envs/bigslice.yaml"
     log:
-        "workflow/report/logs/bigslice_install.log"
+        "workflow/report/logs/bigslice/install_bigslice.log"
     shell:
         """
-        (cd resources && download_bigslice_hmmdb && rm bigslice_models.tar.gz)
-        bigslice --version . > {output}
+        (cd resources && download_bigslice_hmmdb && rm bigslice_models.tar.gz) 2>> {log}
+        bigslice --version . > {output} 2>> {log}
         """
 
 rule get_bigslice_inputs:
@@ -20,7 +20,7 @@ rule get_bigslice_inputs:
         tempdir = directory("data/interim/bigslice/tmp/{name}_antismash_{version}")
     conda:
         "../envs/bigscape.yaml"
-    log: "workflow/report/logs/bigslice/{name}_antismash_{version}/temp_bigscape.log"
+    log: "workflow/report/logs/bigslice/get_bigslice_inputs/get_bigslice_inputs_{name}-antismash-{version}.log"
     params:
         dataset = "data/interim/bigslice/tmp/datasets.tsv"
     shell:
@@ -67,7 +67,7 @@ rule bigslice:
         "../envs/bigslice.yaml"
     threads: 64
     log:
-        "workflow/report/logs/bigslice/{name}_antismash_{version}/bigslice.log"
+        "workflow/report/logs/bigslice/bigslice/bigslice_{name}-antismash-{version}.log"
     shell:
         """
         bigslice -i data/interim/bigslice/tmp/ {output.folder} -t {threads}> {log} 2>> {log}
@@ -81,7 +81,7 @@ rule fetch_bigslice_db:
     conda:
         "../envs/bigslice.yaml"
     log:
-        "workflow/report/logs/bigslice/fetch_bigslice.log"
+        "workflow/report/logs/bigslice/fetch_bigslice_db.log"
     shell:
         """
         (cd resources/bigslice && wget -c -nc http://bioinformatics.nl/~kauts001/ltr/bigslice/paper_data/data/full_run_result.zip && unzip full_run_result.zip) 2>> {log}
@@ -98,12 +98,12 @@ rule query_bigslice:
         "../envs/bigslice.yaml"
     threads: 32
     log:
-        "workflow/report/logs/bigslice/{name}_antismash_{version}/bigslice_query.log"
+        "workflow/report/logs/bigslice/query_bigslice/query_bigslice_{name}-antismash-{version}.log"
     params:
         n_ranks = 10,
     shell:
         """
-        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads}> {log} 2>> {log}
+        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} > {log} 2>> {log}
         echo fin > {output.log}
         """
 
