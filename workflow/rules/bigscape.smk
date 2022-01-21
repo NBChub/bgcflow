@@ -3,7 +3,7 @@ rule install_bigscape:
         bigscape = directory("resources/BiG-SCAPE/")
     conda:
         "../envs/bigscape.yaml"
-    log: "workflow/report/logs/bigscape-install_bigscape.log"
+    log: "workflow/report/logs/bigscape/bigscape-install_bigscape.log"
     shell:
         """
         (cd resources && wget https://git.wageningenur.nl/medema-group/BiG-SCAPE/-/archive/master/BiG-SCAPE-master.zip) > {log}

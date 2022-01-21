@@ -7,7 +7,7 @@ rule antismash_summary:
         df_antismash_summary = report("data/processed/tables/df_antismash_{version}_summary.csv", caption="../report/table-antismash.rst", category="BGC Prediction", subcategory="Summary")
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/antismash_{version}_summary.log"
+    log: "workflow/report/logs/bgc_analytics/antismash_summary-{version}.log"
     params:
         df_samples = SAMPLE_PATHS,
     shell:
@@ -20,7 +20,7 @@ rule write_dependency_versions:
         "workflow/report/dependency_versions.json"
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/dependency_versions.log"
+    log: "workflow/report/logs/bgc_analytics/write_dependency_versions.log"
     shell:
         """
         python workflow/bgcflow/bgcflow/data/get_dependencies.py {output} 2> {log}

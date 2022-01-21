@@ -1,7 +1,7 @@
 rule gtdb_prep:
     output:
         gtdb_json = "data/interim/gtdb/{strains}.json",
-    log: "workflow/report/logs/{strains}/gtdb_prep.log"
+    log: "workflow/report/gtdb/gtdb_prep/gtdb_prep-{strains}.log"
     conda: 
         "../envs/bgc_analytics.yaml"
     params:
@@ -19,7 +19,7 @@ rule fix_gtdb_taxonomy:
         meta = report("data/processed/tables/df_gtdb_meta-{name}.csv", caption="../report/table-gtdb.rst", category="Genome Overview", subcategory="Taxonomic Placement")
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/{name}/fix_gtdb_taxonomy.log"
+    log: "workflow/report/logs/gtdb/fix_gtdb_taxonomy/fix_gtdb_taxonomy-{name}.log"
     priority: 50
     params:
         samples_path = SAMPLE_PATHS,
