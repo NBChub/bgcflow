@@ -68,8 +68,6 @@ rule prokka_db_setup:
 rule extract_meta_prokka:
     input:
         fna = "data/interim/fasta/{strains}.fna",
-        prokka_dir = "data/interim/prokka/",
-        assembly_report_path = "data/interim/assembly_report/",
     output:
         org_info = "data/interim/prokka/{strains}/organism_info.txt",
     conda:
@@ -79,7 +77,7 @@ rule extract_meta_prokka:
         samples_path = SAMPLE_PATHS,
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/get_organism_info.py {wildcards.strains} "{params.samples_path}" {input.assembly_report_path} {input.prokka_dir} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/get_organism_info.py {wildcards.strains} "{params.samples_path}" data/interim/assembly_report/ data/interim/prokka/ 2>> {log}
         """
 
 rule extract_ncbi_information:

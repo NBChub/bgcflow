@@ -70,7 +70,7 @@ rule bigslice:
         "workflow/report/logs/bigslice/bigslice/bigslice_{name}-antismash-{version}.log"
     shell:
         """
-        bigslice -i data/interim/bigslice/tmp/ {output.folder} -t {threads}> {log} 2>> {log}
+        bigslice -i data/interim/bigslice/tmp/ {output.folder} -t {threads} > {log} 2>> {log}
         """
 
 rule fetch_bigslice_db:
