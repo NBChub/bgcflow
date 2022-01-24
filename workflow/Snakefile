@@ -14,7 +14,7 @@ rule all:
 
 ##### Modules #####
 include: "rules/ncbi-download.smk"
-include: "rules/prokka.smk"
+#include: "rules/prokka.smk"
 include: "rules/antismash.smk"
 include: "rules/roary.smk"
 include: "rules/bigscape.smk"
@@ -26,3 +26,4 @@ include: "rules/mlst.smk"
 #include: "rules/automlst_wrapper.smk"
 include: "rules/seqfu.smk"
 include: "rules/bgc_analytics.smk"
+include: "rules/R.smk"

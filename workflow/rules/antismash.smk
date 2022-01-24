@@ -13,7 +13,7 @@ rule antismash_db_setup:
 
 rule antismash:
     input: 
-        gbk = "data/processed/genbank/{strains}.gbk",
+        gbk = "data/processed/genbank/{strains}.gbff",
         resources = "resources/antismash_db/"
     output:
         gbk = "data/interim/antismash/{version}/{strains}/{strains}.gbk",
