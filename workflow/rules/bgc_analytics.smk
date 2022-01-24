@@ -4,7 +4,7 @@ rule antismash_summary:
         antismash_dir = "data/interim/antismash/",
         fna_dir = "data/interim/fasta/",
     output:
-        df_antismash_summary = report("data/processed/tables/df_antismash_{version}_summary.csv", "../report/workflow.rst")
+        df_antismash_summary = "data/processed/tables/df_antismash_{version}_summary.csv"
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/antismash_{version}_summary.log"

@@ -1,1 +1,0 @@
-[BGCflow](https://github.com/NBChub/bgcflow): Snakemake workflow to systematically analyze Biosynthetic Gene Clusters from a collection of genomes (pangenomes) from internal & public genome datasets.
