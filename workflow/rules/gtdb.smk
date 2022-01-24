@@ -1,7 +1,7 @@
 rule gtdb_prep:
     output:
         gtdb_json = "data/interim/gtdb/{strains}.json",
-    log: "workflow/report/gtdb/gtdb_prep/gtdb_prep-{strains}.log"
+    log: "workflow/report/logs/gtdb/gtdb_prep/gtdb_prep-{strains}.log"
     conda: 
         "../envs/bgc_analytics.yaml"
     params:
