@@ -1,6 +1,4 @@
 genome_id,source,organism,genus,species,strain,closest_placement_reference
-GCA_016722025.1,ncbi,Acidimicrobiaceae bacterium,,,Skiv_18-Q3-R9-52_BAT3C.106,
-GCA_016711835.1,ncbi,Acidimicrobiaceae bacterium,,,Hade_18-Q3-R52-61_BATAC.47,
-GCA_016716005.1,ncbi,Acidimicrobiales bacterium,,,Kalu_18-Q3-R12-55_MAXAC.061,
-GCA_016715865.1,ncbi,Acidobacteria bacterium,,,Kalu_18-Q3-R12-55_MAXAC.123,
-GCA_016715115.1,ncbi,Acidobacteria bacterium,,,Mari_18-Q3-R65-66_MAXAC.226,
+GCF_000359525.1,ncbi,,,,,GCF_000359525.1
+1223307.4,patric,Streptomyces sp. PVA 94-07,Streptomyces,sp.,PVA 94-07,GCF_000495755.1
+P8-2B-3.1,custom,Streptomyces sp. P8-2B-3,Streptomyces,sp.,P8-2B-3,GCF_000719955.1

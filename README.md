@@ -1,11 +1,8 @@
-# BGCflow - AAU HQ MAGS Analysis
+# BGCflow
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.7.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/snakemake-workflows/snakemake-bgc-analytics.svg?branch=master)](https://travis-ci.org/snakemake-workflows/snakemake-bgc-analytics)
 
-BGCflow implementation for the analysis of [1000 MAGs from waste water treatment in Denmark](https://www.nature.com/articles/s41467-021-22203-2). The genomes are publicly available from https://www.ncbi.nlm.nih.gov/bioproject/prjna629478.
-
-## Correspondence
-robertosan97@gmail.com
+Snakemake workflow to systematically analyze Biosynthetic Gene Clusters from a collection of genomes (pangenomes) from internal &amp; public genome datasets.
 
 ## Workflow overview
 ![dag](workflow/report/images/rulegraph.svg)
@@ -14,7 +11,7 @@ robertosan97@gmail.com
 
 [Clone](https://help.github.com/en/articles/cloning-a-repository) this repository to your local system, into the place where you want to perform the data analysis. _Make sure to have the right access / SSH Key._
 
-    git clone git@github.com:robertosanchezn/bgcflow.git
+    git clone git@github.com:NBChub/bgcflow.git
     cd bgcflow
 
 ### Step 2: Configure the workflow
