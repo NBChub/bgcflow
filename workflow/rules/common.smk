@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import pandas as pd
 import yaml, json, sys, itertools
 from snakemake.utils import validate
@@ -39,6 +40,14 @@ def extract_project_information():
     for i in projects.index:
         df1 = pd.read_csv(projects.loc[i, "samples"])
         df1["sample_paths"] = projects.loc[i, "samples"]
+
+        # try to fetch user-defined gtdb classification
+        try:
+            df1["gtdb_paths"] = projects.loc[i, "gtdb-tax"]
+        except KeyError:
+            df1["gtdb_paths"] = np.nan
+            pass
+
         df1["name"] = projects.loc[i, "name"]
         df1 = df1.set_index('genome_id', drop=False)
         samples.append(df1)
@@ -74,6 +83,7 @@ NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
 PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
 PROKKA_DB = DF_PROKKA_DB.Accession.to_list()
 SAMPLE_PATHS = list(DF_SAMPLES.sample_paths.unique())
+GTDB_PATHS = list(DF_SAMPLES.gtdb_paths.unique())
 
 
 ##### Helper for lambda functions #####
