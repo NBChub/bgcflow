@@ -1,40 +1,103 @@
 import os, sys, json
+import numpy as nan
 import pandas as pd
 import requests
 
-def gtdb_prep(genome_id, outfile, df_path, release='R202'):
+def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # what happen if it does not find?
     """
     Given a genome id and the samples Pandas dataframe, write  a JSON file containing taxonomic information from GTDB API. The script will first search using the closest taxonomic placement (NCBI accession id), then using the genus information provided by user. If no information is provided, return an empty taxonomic information.
     """
-    df = pd.read_csv(df_path)
-    query = df[df.loc[:, "genome_id"] == genome_id].fillna("")
+
+    def empty_result(genome_id, gtdb_tax):
+        """
+        Helper script for creating empty result
+        """
+        sys.stderr.write(f"No taxonomic information found, returning empty values for {genome_id}.\n")
+        gtdb_tax['genome_id'] = genome_id
+        gtdb_tax["gtdb_taxonomy"] = {"domain" : "d__",
+                                    "phylum" : "p__",
+                                    "class" : "c__",
+                                    "order" : "o__",
+                                    "family" : "f__",
+                                    "genus" : "g__",
+                                    "species" : "s__"}
+        return gtdb_tax
+
+    shell_input = samples_table.split()
+    dfList = [pd.read_csv(s).set_index('genome_id', drop=False) for s in shell_input]
+    df_samples = pd.concat(dfList, axis=0)
+
+    query = df_samples[df_samples.loc[:, "genome_id"] == genome_id].fillna("")
 
     gtdb_tax = {}
     sys.stderr.write(f"Fetching taxonomic information for {genome_id}...\n")
-    if query.source.values[0] == "ncbi":
-        gtdb_tax = get_ncbi_taxon_GTDB(query.genome_id.values[0], release)
-    elif query.closest_placement_reference.values[0] != "":
-        gtdb_tax = get_ncbi_taxon_GTDB(query.closest_placement_reference.values[0], release)
-        gtdb_tax["genome_id"] = genome_id
-    elif query.genus.values[0] != "":
-        gtdb_tax['genome_id'] = genome_id
-        gtdb_tax.update(get_parent_taxon_GTDB(query.genus.values[0], "genus", release))
-        gtdb_tax['gtdb_taxonomy']["species"] = f"s__{gtdb_tax['gtdb_taxonomy']['genus'].split('__')[-1]} sp."
-    else:
-        sys.stderr.write(f"No taxonomic information found, returning an empty dictionary for {genome_id}.\n")
-        gtdb_tax['genome_id'] = genome_id
-        gtdb_tax["gtdb_taxonomy"] = {"domain" : "",
-                                     "phylum" : "",
-                                     "class" : "",
-                                     "order" : "",
-                                     "family" : "",
-                                     "genus" : "",
-                                     "species" : ""}
+    # Go through user provided taxonomic placement
+    if any(os.path.isfile(t) for t in tax_path.split()):
+        try:
+            gtdb_tax = get_user_defined_classification(genome_id, tax_path)
+        except KeyError:
+            sys.stderr.write(f"{genome_id}: Not found in user provided taxonomic placement...\n")
+            # If closest placement reference is provided, try finding taxonomic information from GTDB API
+            if query.closest_placement_reference.values[0] != "":
+                sys.stderr.write("Inferring taxonomic placement from provided closest reference....\n")
+                gtdb_tax = get_ncbi_taxon_GTDB(query.closest_placement_reference.values[0], release)
+                gtdb_tax["genome_id"] = genome_id
+
+            # If NCBI accession is provided, try to find taxonomic information from GTDB API
+            elif query.source.values[0] == "ncbi":
+                try:
+                    sys.stderr.write("Inferring taxonomic placement from NCBI accession....\n")
+                    gtdb_tax = get_ncbi_taxon_GTDB(query.genome_id.values[0], release)
+                except KeyError:
+                    if query.genus.values[0] != "":
+                        sys.stderr.write("Inferring taxonomic placement from provided genus information....\n")
+                        gtdb_tax['genome_id'] = genome_id
+                        gtdb_tax.update(get_parent_taxon_GTDB(query.genus.values[0], "genus", release))
+                        gtdb_tax['gtdb_taxonomy']["species"] = f"s__{gtdb_tax['gtdb_taxonomy']['genus'].split('__')[-1]} sp."
+                    else:
+                        gtdb_tax = empty_result(genome_id, gtdb_tax)
+
+            # Try to get taxonomic information from genus information
+            elif query.genus.values[0] != "":
+                sys.stderr.write("Inferring taxonomic placement from provided genus information....\n")
+                gtdb_tax['genome_id'] = genome_id
+                gtdb_tax.update(get_parent_taxon_GTDB(query.genus.values[0], "genus", release))
+                gtdb_tax['gtdb_taxonomy']["species"] = f"s__{gtdb_tax['gtdb_taxonomy']['genus'].split('__')[-1]} sp."
+
+            # If no information is found, return an empty dict
+            else:
+                gtdb_tax = empty_result(genome_id, gtdb_tax)
 
     with open(outfile, 'w') as file:
         json.dump(gtdb_tax, file, indent=2)
         file.close
     return
+
+def get_user_defined_classification(genome_id, tax_path):
+    """
+    Get taxonomic information from user provided GTDB-like output
+    """
+    shell_input = tax_path.split()
+    dfList = [pd.read_csv(s, sep="\t").set_index('user_genome', drop=False) for s in shell_input]
+    df_tax = pd.concat(dfList, axis=0)
+
+    level_dict = {"d" :"domain",
+                  "p" : "phylum",
+                  "c" : "class",
+                  "o" : "order",
+                  "f" : "family",
+                  "g" : "genus",
+                  "s" : "species"}
+
+    query = df_tax.loc[genome_id, "classification"].split(";")
+
+    result = {}
+    result["genome_id"] = genome_id
+    result["gtdb_url"] = "user provided classification"
+    result["gtdb_release"] = "unknown"
+    result["gtdb_taxonomy"] = {level_dict[q.split("__")[0]] : q for q in query}
+    sys.stderr.write(f"Using user provided GTDB classification.\n")
+    return result
 
 def get_ncbi_taxon_GTDB(accession, release = "R202"):
     """
@@ -96,4 +159,4 @@ def get_parent_taxon_GTDB(taxon, level, release = "R202"):
     return result
 
 if __name__ == "__main__":
-    gtdb_prep(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    gtdb_prep(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])

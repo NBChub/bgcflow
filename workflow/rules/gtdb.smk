@@ -6,10 +6,11 @@ rule gtdb_prep:
         "../envs/bgc_analytics.yaml"
     params:
         samples_path = SAMPLE_PATHS,
+        gtdb_paths = GTDB_PATHS,
         version = 'R202'
     shell: 
         """
-        python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} {params.samples_path} {params.version} 2> {log}
+        python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} '{params.samples_path}' '{params.gtdb_paths}' {params.version} 2> {log}
         """
 
 rule fix_gtdb_taxonomy:

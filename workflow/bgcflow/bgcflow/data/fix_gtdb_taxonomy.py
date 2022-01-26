@@ -16,7 +16,11 @@ def summarize_gtdb_json(accession_list, df_gtdb_output):
     for col in df.columns:
         df[col] = df[col].apply(lambda x: x.split('__')[1])
     df["organism"] = df["species"]
-    df["species"] = df["species"].apply(lambda x: x.split(' ')[1])
+    for idx in df.index:
+        try:
+            df.loc[idx, "species"] = df.loc[idx, "species"].split(' ')[1]
+        except IndexError: # leave blank for empty taxonomy
+            pass
     df.columns = [c.title() for c in df.columns]
     df.insert(0, "genome_id", df_tax.genome_id)
     df.to_csv(df_gtdb_output, index=False)
