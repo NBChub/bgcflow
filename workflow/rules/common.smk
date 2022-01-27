@@ -140,6 +140,15 @@ def get_roary_inputs(name, df_samples=DF_SAMPLES):
     output = [f"data/interim/prokka/{s}/{s}.gff" for s in selection]
     return output
 
+# automlst #
+def get_automlst_inputs(name, df_samples=DF_SAMPLES):
+    """
+    Given a project name, find the corresponding sample file
+    """
+    selection = df_samples[df_samples["name"] == name].genome_id.values
+    output = [f"data/interim/automlst_wrapper/{name}/{s}.gbk" for s in selection]
+    return output
+
 # gtdb #
 def get_json_inputs(name, df_samples=DF_SAMPLES):
     """
@@ -203,7 +212,7 @@ def get_final_output():
     rule_dict = {"mlst" : expand("data/interim/mlst/{strains}_ST.csv", strains = STRAINS),
                 "eggnog" : expand("data/interim/eggnog/{strains}/", strains = STRAINS),
                 "refseq_masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", strains = STRAINS),
-                "automlst_wrapper" : "data/interim/automlst_wrapper/raxmlpart.txt.treefile",
+                "automlst_wrapper" : expand("data/processed/automlst_wrapper/{name}.newick", name=PROJECT_IDS),
                 "roary" : expand("data/interim/roary/{name}/", name=PROJECT_IDS),
                 "bigscape" : expand("data/interim/bigscape/{name}_antismash_{version}/index.html", version=dependency_version["antismash"], name=PROJECT_IDS),
                 "seqfu" : "data/processed/tables/df_seqfu_stats.csv",
