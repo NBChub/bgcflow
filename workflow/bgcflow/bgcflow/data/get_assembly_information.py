@@ -67,6 +67,9 @@ def get_ncbi_meta(assembly_report_path, outfile=None, genome_id=None):
             elif line.startswith('# BioSample'):
                 biosample = line.split('BioSample:')[1].strip()
                 df_ncbi_meta.loc[genome_id, 'biosample'] = biosample
+            elif line.startswith('# BioProject'):
+                bioproject = line.split('# BioProject:')[1].strip()
+                df_ncbi_meta.loc[genome_id, 'BioProject'] = bioproject
             elif line.startswith('# Submitter'):
                 submitter = line.split('Submitter:')[1].strip()
                 df_ncbi_meta.loc[genome_id, 'submitter'] = submitter
