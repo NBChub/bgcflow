@@ -12,6 +12,10 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
         """Raised when this script returns empty dict"""
         pass
 
+    class PlacementError(Exception):
+        """Raised when this script returns empty dict"""
+        pass
+
     def empty_result(genome_id):
         """
         Helper script for creating empty result
@@ -35,9 +39,13 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
         """
         # If closest placement reference is provided, try finding taxonomic information from GTDB API
         if query.closest_placement_reference.values[0] != "":
-            sys.stderr.write("Inferring taxonomic placement from provided closest reference....\n")
-            gtdb_tax = get_ncbi_taxon_GTDB(query.closest_placement_reference.values[0], release)
-            gtdb_tax["genome_id"] = genome_id
+            try:
+                sys.stderr.write("Inferring taxonomic placement from provided closest reference....\n")
+                gtdb_tax = get_ncbi_taxon_GTDB(query.closest_placement_reference.values[0], release)
+                gtdb_tax["genome_id"] = genome_id
+            except KeyError as e:
+                raise PlacementError(f"Cannot infer taxonomic placement from provided closest reference. Make sure the accession id: {query.closest_placement_reference.values[0]} is part of GTDB release: {e}\n")
+
 
         # If NCBI accession is provided, try to find taxonomic information from GTDB API
         elif query.source.values[0] == "ncbi":
@@ -51,7 +59,7 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
                     gtdb_tax.update(get_parent_taxon_GTDB(query.genus.values[0], "genus", release))
                     gtdb_tax['gtdb_taxonomy']["species"] = f"s__{gtdb_tax['gtdb_taxonomy']['genus'].split('__')[-1]} sp."
                 else:
-                    gtdb_tax = empty_result(genome_id, gtdb_tax)
+                    gtdb_tax = empty_result(genome_id)
 
         # Try to get taxonomic information from genus information
         elif query.genus.values[0] != "":
@@ -62,7 +70,7 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
 
         # If no information is found, return an empty dict
         else:
-            gtdb_tax = empty_result(genome_id, gtdb_tax)
+            gtdb_tax = empty_result(genome_id)
 
         return gtdb_tax
 
