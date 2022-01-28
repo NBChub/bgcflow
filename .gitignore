@@ -2,6 +2,7 @@
 .snakemake/
 data/*/*/*   
 resources/*
+config/*
 workflow/report/bigscape.log
 workflow/scripts/fetch_taxonomy_from_api.py
 workflow/notebook/.ipynb_checkpoints/
