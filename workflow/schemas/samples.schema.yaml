@@ -20,26 +20,30 @@ properties:
     # blob-container-url : for list of genomes from internal dataset that can be retrieved from blob containers
   
   organism:
-    type: string
+    type: [string, null]
     description: name of the organism that is same as in the fasta header
   
   genus:
-    type: string
+    type: [string, null]
     description: genus of the organism. Ideally identified with GTDBtk.
   
   species:
-    type: string
+    type: [string, null]
     description: species epithet (the second word in a species name) of the organism. Ideally identified with GTDBtk.
   
   strain:
-    type: [string, number]
+    type: [string, number, null]
     description: strain id of the organism
 
   closest_placement_reference:
-    type: [string, number]
+    type: [string, number, null]
     description: the closest NCBI genome to the organism. Ideally identified with GTDBtk.
 
 # columns that the config/samples.csv file must have to pass schema validation
 required:
   - genome_id
   - source
+  - genus
+  - species
+  - strain
+  - closest_placement_reference

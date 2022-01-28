@@ -52,6 +52,7 @@ def extract_project_information():
         df1 = df1.set_index('genome_id', drop=False)
         samples.append(df1)
     df_samples = pd.concat(samples, axis=0)
+    validate(df_samples.fillna(""), schema="../schemas/samples.schema.yaml")
 
     # check validity of genome_ids. Value should be unique.
     check_duplicates = df_samples[df_samples.genome_id.duplicated()]
