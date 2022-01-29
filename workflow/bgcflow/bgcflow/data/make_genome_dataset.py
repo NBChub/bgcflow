@@ -90,7 +90,7 @@ def update_bgc_info(antismash_dir, df_genomes):
             for feat in rec.features:
                 if feat.type == 'region':
                     bgc_cntr = bgc_cntr + 1
-                    if feat.qualifiers['contig_edge'] == 'True':
+                    if feat.qualifiers['contig_edge'][0] == 'True':
                         contig_edge_cntr = contig_edge_cntr + 1
                 if feat.type == 'protocluster':
                     protoclusters_cntr = protoclusters_cntr + 1
