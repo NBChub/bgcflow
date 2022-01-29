@@ -5,7 +5,7 @@ rule mlst:
         csv = "data/interim/mlst/{strains}_ST.csv"
     conda:
         "../envs/mlst.yaml"
-    log: "workflow/report/logs/mslt/mlst-{strains}.log"
+    log: "workflow/report/logs/mlst/mlst-{strains}.log"
     shell:
         """
         mlst --csv {input.fna} > {output.csv}
