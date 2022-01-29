@@ -3,13 +3,10 @@
 data/*/*/*   
 resources/*
 config/*
-workflow/report/bigscape.log
+workflow/report/*
 workflow/scripts/fetch_taxonomy_from_api.py
-workflow/notebook/.ipynb_checkpoints/
-workflow/notebook/
+workflow/notebook/*
 workflow/bgcflow/bgcflow.egg-info*
-workflow/report/logs/
-workflow/notebook/
 *.pyc
 *.cache
 *.ipynb
