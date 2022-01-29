@@ -24,9 +24,11 @@ rules:
   mlst: TRUE
   refseq_masher: TRUE
   seqfu: TRUE
+  checkm: TRUE
   eggnog: FALSE
   roary: TRUE
   bigslice: FALSE
+  automlst_wrapper: FALSE
   # other parameter settings
   rnammer: FALSE
 

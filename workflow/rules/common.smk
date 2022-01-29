@@ -198,7 +198,8 @@ dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
                 "eggnog-mapper" : r"workflow/envs/eggnog.yaml",
                 "roary" : r"workflow/envs/roary.yaml",
                 "refseq_masher" : r"workflow/envs/refseq_masher.yaml",
-                "seqfu" : r"workflow/envs/seqfu.yaml"
+                "seqfu" : r"workflow/envs/seqfu.yaml",
+                'checkm' : r"workflow/envs/checkm.yaml",
                 }
 
 dependency_version = get_dependencies(dependencies)
@@ -220,6 +221,7 @@ def get_final_output():
                 "rnammer": "resources/rnammer_test.txt",
                 "bigslice": expand("data/interim/bigslice/{name}_antismash_{version}/", name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "query_bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}.txt", name = PROJECT_IDS, version=dependency_version["antismash"]),
+                "checkm" : expand("data/interim/checkm/json/{strains}.json", strains=STRAINS),
                 }
     
     # get keys from config
