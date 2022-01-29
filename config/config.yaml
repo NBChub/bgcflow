@@ -39,4 +39,5 @@ resources_path:
   eggnog_db: resources/eggnog_db
   BiG-SCAPE: resources/BiG-SCAPE
   bigslice: resources/bigslice
+  checkm: resources/checkm
   #RNAmmer: resources/RNAmmer # Path must be specified if rule configuration "rnammer" is TRUE
