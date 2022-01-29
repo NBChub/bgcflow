@@ -7,7 +7,7 @@ else:
             assembly_report = "data/interim/assembly_report/{ncbi}.txt",
             json_report = "data/interim/assembly_report/{ncbi}.json",
         conda:
-            "../envs/prokka.yaml"
+            "../envs/ncbi_utilities.yaml"
         log: "workflow/report/logs/ncbi-download/ncbi_genome_download_{ncbi}.log"
         shell:
             """
