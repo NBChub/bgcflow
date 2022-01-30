@@ -9,12 +9,25 @@ min_version("6.7.0")
 __version__ = "0.1.0"
 
 
-##### load config and sample sheets #####
+##### TABLE OF CONTENTS #####
+# This .smk file helps the rules interact with the user config and contains 
+# many helper scripts. The structure can be divided into these sections:
+#   1. Load config
+#   2. Extract project information
+#   3. Generate wildcard constants
+#   4. Wildcard constraints
+#   5. Helper lambda functions for rules I/O
+#   6. Get dependency versions
+#   7. Customize final output based on config["rule"] values
+#   8. Set up custom resource directory provided in config["resources_path"] 
+
+
+##### 1. Load config #####
 configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
 
-##### extract project information #####
+##### 2. Extract project information #####
 def extract_project_information():
     """
     Wrapper to extract variables from projects in config.yaml.
@@ -29,17 +42,26 @@ def extract_project_information():
         return list(itertools.chain(*nested_list))
     
     # load information from config
-    projects = pd.DataFrame(config["projects"])
+    projects = pd.DataFrame(config["projects"]).set_index('name', drop=False)
     
     # check validity of {sample}.csv Value should be unique
     check_duplicates = projects[projects.samples.duplicated()]
     if len(check_duplicates) > 0:
-        raise ConfigError(f"Project: {check_duplicates.name.to_list()} input file name: {check_duplicates.samples.to_list()} is not unique. Check your config.yaml configuration.")
+        raise ConfigError(f"Project: {check_duplicates.name.to_list()} \
+                            input file name: {check_duplicates.samples.to_list()} \
+                            is not unique. Check your config.yaml configuration.")
 
     samples = []
     for i in projects.index:
         df1 = pd.read_csv(projects.loc[i, "samples"])
         df1["sample_paths"] = projects.loc[i, "samples"]
+
+        # try to fetch user-provided custom reference for prokka
+        try:
+            df1["prokka-db"] = projects.loc[i, "prokka-db"]
+        except KeyError:
+            df1["prokka-db"] = np.nan
+            pass
 
         # try to fetch user-defined gtdb classification
         try:
@@ -57,7 +79,8 @@ def extract_project_information():
     # check validity of genome_ids. Value should be unique.
     check_duplicates = df_samples[df_samples.genome_id.duplicated()]
     if len(check_duplicates) > 0:
-        raise ConfigError(f"Strain ids in: {check_duplicates.sample_paths.to_list()} are not unique. Check your config.yaml configuration.")
+        raise ConfigError(f"Strain ids in: {check_duplicates.sample_paths.to_list()} \
+                            are not unique. Check your config.yaml configuration.")
 
     prokka_db = []
     for i in projects.index:
@@ -71,12 +94,12 @@ def extract_project_information():
             df_prokka_db = pd.DataFrame(columns=["Accession", "name"])
             pass
     
-    return df_samples, df_prokka_db
+    return projects, df_samples, df_prokka_db
 
-DF_SAMPLES, DF_PROKKA_DB = extract_project_information()
+DF_PROJECTS, DF_SAMPLES, DF_PROKKA_DB = extract_project_information()
 
 
-##### Helper functions #####
+##### 3. Generate wildcard constants #####
 PROJECT_IDS = DF_SAMPLES.name.unique()
 STRAINS = DF_SAMPLES.genome_id.to_list()
 CUSTOM = DF_SAMPLES[DF_SAMPLES.source.eq("custom")].genome_id.to_list()
@@ -87,7 +110,16 @@ SAMPLE_PATHS = list(DF_SAMPLES.sample_paths.unique())
 GTDB_PATHS = list(DF_SAMPLES.gtdb_paths.unique())
 
 
-##### Helper for lambda functions #####
+##### 4. Wildcard constraints #####
+wildcard_constraints:
+    strains="|".join(STRAINS),
+    ncbi="|".join(NCBI),
+    custom="|".join(CUSTOM),
+    patric="|".join(PATRIC),
+    name="|".join(PROJECT_IDS),
+
+
+##### 5. Helper lambda functions for calling rules I/O #####
 def get_project_only_strains(wildcards, df_samples=DF_SAMPLES):
     """
     Given a project name, extract the corresponding strain ids
@@ -96,7 +128,7 @@ def get_project_only_strains(wildcards, df_samples=DF_SAMPLES):
     output = PROJECT_STRAINS[wildcards.name]
     return output
 
-# prokka #
+# prokka.smk #
 def get_prokka_db_accessions(wildcards, df_prokka_db=DF_PROKKA_DB):
     """
     Given a project name, find which accessions to create a prokka reference gbff
@@ -105,15 +137,26 @@ def get_prokka_db_accessions(wildcards, df_prokka_db=DF_PROKKA_DB):
     output = [f"resources/prokka_db/gbk/{acc}.gbff" for acc in accession]
     return output
 
-def get_prokka_refdb(wildcards, df_samples=DF_SAMPLES):
+def get_prokka_refdb(genome_id, params, df_samples=DF_SAMPLES):
     """
-    Given a strain id, find which prokka db to use
+    Given a genome id, find which prokka-db input to use
     """
-    name = df_samples[df_samples["genome_id"] == wildcards.strains].name.values
-    if name in DF_PROKKA_DB.name.unique():
-        output = f"--proteins resources/prokka_db/reference_{name[0]}.gbff"
+    prokka_db = df_samples.loc[genome_id, "prokka-db"][0]
+    name = df_samples.loc[genome_id, "name"][0]
+    if not os.path.isfile(str(prokka_db)):
+        if params == "file":
+            output = []
+        else:
+            output = ""
+    elif params == "table":
+        output = prokka_db
+    elif params == "file":
+        output = f"resources/prokka_db/reference_{name}.gbff"
+    elif params == "params":
+        output = f"--proteins resources/prokka_db/reference_{name}.gbff"
     else:
-        output = ""
+        sys.stderr.write(f"Second argument should be: table, file, or params.\n")
+        raise
     return output
 
 def get_prokka_sample_path(wildcards, df_samples=DF_SAMPLES):
@@ -123,7 +166,7 @@ def get_prokka_sample_path(wildcards, df_samples=DF_SAMPLES):
     output = df_samples[df_samples["genome_id"] == wildcards.name].samples_path.values
     return output
 
-# bigscape #
+# bigscape.smk #
 def get_bigscape_inputs(name, version, df_samples=DF_SAMPLES):
     """
     Given a project name, find the corresponding sample file
@@ -132,7 +175,7 @@ def get_bigscape_inputs(name, version, df_samples=DF_SAMPLES):
     output = [f"data/interim/antismash/{version}/{s}/{s}.gbk" for s in selection]
     return output
 
-# roary #
+# roary.smk #
 def get_roary_inputs(name, df_samples=DF_SAMPLES):
     """
     Given a project name, find the corresponding sample file
@@ -141,7 +184,7 @@ def get_roary_inputs(name, df_samples=DF_SAMPLES):
     output = [f"data/interim/prokka/{s}/{s}.gff" for s in selection]
     return output
 
-# automlst #
+# automlst_wrapper.smk #
 def get_automlst_inputs(name, df_samples=DF_SAMPLES):
     """
     Given a project name, find the corresponding sample file
@@ -150,7 +193,7 @@ def get_automlst_inputs(name, df_samples=DF_SAMPLES):
     output = [f"data/interim/automlst_wrapper/{name}/{s}.gbk" for s in selection]
     return output
 
-# gtdb #
+# gtdb.smk #
 def get_json_inputs(name, df_samples=DF_SAMPLES):
     """
     Given a project name, find the corresponding sample file
@@ -159,16 +202,8 @@ def get_json_inputs(name, df_samples=DF_SAMPLES):
     output = [f"data/interim/gtdb/{s}.json" for s in selection]
     return output
 
-##### Wildcard constraints #####
-wildcard_constraints:
-    strains="|".join(STRAINS),
-    ncbi="|".join(NCBI),
-    custom="|".join(CUSTOM),
-    patric="|".join(PATRIC),
-    name="|".join(PROJECT_IDS),
 
-
-##### Get dependency versions #####
+##### 6. Get dependency versions #####
 def get_dependency_version(dep, dep_key):
     """
     return dependency version tags given a dictionary (dep) and its key (dep_key)
@@ -205,7 +240,7 @@ dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
 dependency_version = get_dependencies(dependencies)
 
 
-##### Customizable Analysis #####
+##### 7. Customize final output based on config["rule"] values #####
 def get_final_output():
     """
     Generate final output for rule all given a TRUE value in config["rules"]
@@ -213,14 +248,19 @@ def get_final_output():
     # dictionary of rules and its output files
     rule_dict = {"mlst" : expand("data/interim/mlst/{strains}_ST.csv", strains = STRAINS),
                 "eggnog" : expand("data/interim/eggnog/{strains}/", strains = STRAINS),
-                "refseq_masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", strains = STRAINS),
-                "automlst_wrapper" : expand("data/processed/automlst_wrapper/{name}.newick", name=PROJECT_IDS),
+                "refseq_masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", \
+                                         strains = STRAINS),
+                "automlst_wrapper" : expand("data/processed/automlst_wrapper/{name}.newick", \
+                                            name=PROJECT_IDS),
                 "roary" : expand("data/interim/roary/{name}/", name=PROJECT_IDS),
-                "bigscape" : expand("data/interim/bigscape/{name}_antismash_{version}/index.html", version=dependency_version["antismash"], name=PROJECT_IDS),
+                "bigscape" : expand("data/interim/bigscape/{name}_antismash_{version}/index.html", \
+                                    version=dependency_version["antismash"], name=PROJECT_IDS),
                 "seqfu" : "data/processed/tables/df_seqfu_stats.csv",
                 "rnammer": "resources/rnammer_test.txt",
-                "bigslice": expand("data/interim/bigslice/{name}_antismash_{version}/", name = PROJECT_IDS, version=dependency_version["antismash"]),
-                "query_bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}.txt", name = PROJECT_IDS, version=dependency_version["antismash"]),
+                "bigslice": expand("data/interim/bigslice/{name}_antismash_{version}/", \
+                                    name = PROJECT_IDS, version=dependency_version["antismash"]),
+                "query_bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}.txt", \
+                                         name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "checkm" : expand("data/interim/checkm/json/{strains}.json", strains=STRAINS),
                 }
     
@@ -233,7 +273,7 @@ def get_final_output():
     return final_output
 
 
-##### Custom Resource Directory #####
+##### 8. Set up custom resource directory provided in config["resources_path"] #####
 def custom_resource_dir():
     """
     Generate symlink for user defined resources location
@@ -265,7 +305,9 @@ def custom_resource_dir():
                 slink.symlink_to( path )
         # raise an Error if external path not found
         else:
-            raise FileNotFoundError(f"Error: User-defined resource {r} at {path} does not exist. Check the config.yaml and provide the right path for resource {r} or change it to the default path: resources/{r}\n")
+            raise FileNotFoundError(f"Error: User-defined resource {r} at {path} does not exist. \
+                                    Check the config.yaml and provide the right path for resource {r} \
+                                    or change it to the default path: resources/{r}\n")
     return 
 
 custom_resource_dir()

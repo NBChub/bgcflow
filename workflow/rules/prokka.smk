@@ -29,40 +29,17 @@ rule copy_custom_fasta:
         cp {input} {output} 2>> {log}
         """
 
-rule prokka_reference_download:
-    output:
-        gbff = temp("resources/prokka_db/gbk/{prokka_db}.gbff") # all projects ncbi accession 
-    conda:
-        "../envs/prokka.yaml"
-    log: "workflow/report/logs/prokka/prokka_reference_download/prokka_reference_download-{prokka_db}.log"
-    shell:
-        """
-        if [[ {wildcards.prokka_db} == GCF* ]]
-        then
-            source="refseq"
-        elif [[ {wildcards.prokka_db} == GCA* ]]
-        then
-            source="genbank"
-        else
-            echo "accession must start with GCA or GCF" >> {log}
-        fi
-        ncbi-genome-download -s $source -F genbank -A {wildcards.prokka_db} -o resources/prokka_db/download bacteria --verbose >> {log}
-        gunzip -c resources/prokka_db/download/$source/bacteria/{wildcards.prokka_db}/*.gbff.gz > {output.gbff}
-        rm -rf resources/prokka_db/download/$source/bacteria/{wildcards.prokka_db}
-        """
-
 rule prokka_db_setup:
     input:
-        gbff = get_prokka_db_accessions
+        table = lambda wildcards: DF_PROJECTS.loc[wildcards, "prokka-db"]
     output:
         refgbff = "resources/prokka_db/reference_{name}.gbff"
     conda:
-        "../envs/prokka.yaml"
+        "../envs/ncbi_utilities.yaml"
     log: "workflow/report/logs/prokka/prokka_db_setup/prokka_db_setup-{name}.log"
     shell:
         """
-        cat resources/prokka_db/gbk/*.gbff >> {output.refgbff}
-        head {output.refgbff} >> {log}
+        python workflow/bgcflow/bgcflow/data/make_prokka_db.py {wildcards.name} {input.table} {output.refgbff} 2>> {log}
         """
 
 rule extract_meta_prokka:
@@ -99,7 +76,7 @@ rule prokka:
     input: 
         fna = "data/interim/fasta/{strains}.fna",
         org_info = "data/interim/prokka/{strains}/organism_info.txt",
-        refgbff = expand("resources/prokka_db/reference_{name}.gbff", name=PROJECT_IDS)
+        refgbff = lambda wildcards: get_prokka_refdb(wildcards, "file")
     output:
         gff = "data/interim/prokka/{strains}/{strains}.gff",
         faa = "data/interim/prokka/{strains}/{strains}.faa",
@@ -111,7 +88,7 @@ rule prokka:
         increment = 10, 
         evalue = "1e-05",
         rna_detection = prokka_params_rna,
-        refgbff = lambda wildcards: get_prokka_refdb(wildcards, DF_SAMPLES)
+        refgbff = lambda wildcards: get_prokka_refdb(wildcards, "params")
     threads: 16
     shell:
         """
