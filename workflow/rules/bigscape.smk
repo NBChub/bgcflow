@@ -31,7 +31,7 @@ rule get_bigscape_inputs:
             do
                 parent_dir=$(dirname $PWD/$r)
                 filename=$(basename $r)
-                (cd {params.tempdir} && ln -s $parent_dir/$filename $filename) 2>> {log}
+                (cd {params.tempdir} && ln -sf $parent_dir/$filename $filename) 2>> {log}
             done
         done
         ls {params.tempdir} > {output.input_list}
