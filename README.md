@@ -37,9 +37,9 @@ Example : `samples.csv`
 
 | genome_id       | source | organism                        | genus        | species | strain     |closest_placement_reference|
 |----------------:|-------:|--------------------------------:|-------------:|--------:| ----------:|--------------------------:|
-| GCF_000359525.1 | ncbi   | Streptomyces albus strain J1074 | Streptomyces | albus   | J1074      | GCF_000359525.1           |
+| GCF_000359525.1 | ncbi   |                                 |              |         | J1074      |                           |
 | 1223307.4       | patric | Streptomyces sp. PVA 94-07      | Streptomyces | sp.     | PVA 94-07  | GCF_000495755.1           |
-| P8-2B-3.1       | custom | Streptomyces sp. P8-2B-3        | Streptomyces | sp.     | P8-2B-3    | GCF_000719955.1           |
+| P8-2B-3.1       | custom | Streptomyces sp. P8-2B-3        | Streptomyces | sp.     | P8-2B-3    |                           |
 
 Columns description:
 - **`genome_id`** _[required]_:  The genome accession ids (with genome version for `ncbi` and `patric` genomes). For `custom` fasta file provided by users, it should refer to the fasta file names stored in `data/raw/fasta/` directory with `.fna` extension. **Example:** genome id P8-2B-3.1 refers to the file `data/raw/fasta/P8-2B-3.1.fna`.
@@ -113,6 +113,22 @@ The file `prokka-db.csv` should contain a list of high quality annotated genomes
 |----------------:|-------------------------------:|
 | GCA_000203835.1 | Streptomyces coelicolor A3(2)  |
 | GCA_000196835.1 | Amycolatopsis mediterranei U32 |
+
+### Taxonomic Placement
+The workflow will prioritize user provided taxonomic placement by adding an optional parameters: `gtdb-tax`, which refer to a similar GTDB-tk summary file, but only the "user_genome" and "classification" columns are required.
+
+`gtdbtk.bac120.summary.tsv` example:
+
+| user_genome | classification	                                                                                                                       |
+|------------:|---------------------------------------------------------------------------------------------------------------------------------------:|
+| P8-2B-3.1   | d__Bacteria;p__Actinobacteriota;c__Actinomycetia;o__Streptomycetales;f__Streptomycetaceae;g__Streptomyces;s__Streptomyces albidoflavus |
+
+If these are not provided, the workflow will use the `closest_placement_reference` columns in the sample file (see above). Note that the value must be a valid genome accession in the latest GTDB release (currently R202), otherwise it will raise an error. 
+
+If these information is not provided, then the workflow will guess the taxonomic placement by:
+1. If the `source` is `ncbi`, it will try to find the accession via GTDB API. If it doesn't find any information then,
+2. It will use the `genus` table and find the parent taxonomy via GTDB API, which then results in `_genus_ sp.` preceded by the matching parent taxonomy.
+3. If both option does not find any taxonomic information, then it will return empty taxonomic values.
 
 ### Running multiple projects
 You can have multiple projects running by starting a new line of project information with "`-`":

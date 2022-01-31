@@ -5,7 +5,7 @@ import yaml, json, sys, itertools
 from snakemake.utils import validate
 from snakemake.utils import min_version
 
-min_version("6.7.0")
+min_version("6.15.1")
 __version__ = "0.1.0"
 
 
