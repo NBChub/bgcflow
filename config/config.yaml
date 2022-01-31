@@ -27,6 +27,9 @@ rules:
   mlst: FALSE
   refseq_masher: FALSE
   checkm: FALSE
+  prokka-gbk: FALSE
+  antismash-summary: TRUE
+  antismash-zip: FALSE
   query_bigslice: FALSE
   bigscape: TRUE
   bigslice: FALSE

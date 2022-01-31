@@ -120,26 +120,24 @@ wildcard_constraints:
 
 
 ##### 5. Helper lambda functions for calling rules I/O #####
-def get_project_only_strains(wildcards, df_samples=DF_SAMPLES):
+
+# seqfu.smk #
+def get_fasta_inputs(name, df_samples=DF_SAMPLES):
     """
-    Given a project name, extract the corresponding strain ids
+    Given a project name, list all corresponding strains (genome_id)
     """
-    PROJECT_STRAINS = {name : DF_SAMPLES[DF_SAMPLES.name.eq(name)].genome_id.to_list() for name in PROJECT_IDS}
-    output = PROJECT_STRAINS[wildcards.name]
+    selection = df_samples[df_samples["name"] == name].genome_id.values
+    output = [f"data/interim/fasta/{s}.fna" for s in selection]
     return output
 
 # prokka.smk #
-def get_prokka_db_accessions(wildcards, df_prokka_db=DF_PROKKA_DB):
-    """
-    Given a project name, find which accessions to create a prokka reference gbff
-    """
-    accession = df_prokka_db[df_prokka_db["name"] == wildcards.name].Accession.to_list()
-    output = [f"resources/prokka_db/gbk/{acc}.gbff" for acc in accession]
-    return output
-
 def get_prokka_refdb(genome_id, params, df_samples=DF_SAMPLES):
     """
-    Given a genome id, find which prokka-db input to use
+    Given a genome id, find which prokka-db input to use.
+    params:
+        - "table" - will return the corresponding prokka-db table to use
+        - "file" - will return the corresponding reference gbks
+        - "params" - will return prokka protein params and the corresponding file
     """
     prokka_db = df_samples.loc[genome_id, "prokka-db"][0]
     name = df_samples.loc[genome_id, "name"][0]
@@ -159,17 +157,10 @@ def get_prokka_refdb(genome_id, params, df_samples=DF_SAMPLES):
         raise
     return output
 
-def get_prokka_sample_path(wildcards, df_samples=DF_SAMPLES):
+# bigscape.smk, bigslice.smk, and bgc_analytics.smk #
+def get_antismash_inputs(name, version, df_samples=DF_SAMPLES):
     """
-    Given a project name, find the corresponding sample file
-    """
-    output = df_samples[df_samples["genome_id"] == wildcards.name].samples_path.values
-    return output
-
-# bigscape.smk #
-def get_bigscape_inputs(name, version, df_samples=DF_SAMPLES):
-    """
-    Given a project name, find the corresponding sample file
+    Given a project name, find the corresponding sample file to use
     """
     selection = df_samples[df_samples["name"] == name].genome_id.values
     output = [f"data/interim/antismash/{version}/{s}/{s}.gbk" for s in selection]
@@ -178,7 +169,7 @@ def get_bigscape_inputs(name, version, df_samples=DF_SAMPLES):
 # roary.smk #
 def get_roary_inputs(name, df_samples=DF_SAMPLES):
     """
-    Given a project name, find the corresponding sample file
+    Given a project name, find the corresponding sample file to use
     """
     selection = df_samples[df_samples["name"] == name].genome_id.values
     output = [f"data/interim/prokka/{s}/{s}.gff" for s in selection]
@@ -187,7 +178,7 @@ def get_roary_inputs(name, df_samples=DF_SAMPLES):
 # automlst_wrapper.smk #
 def get_automlst_inputs(name, df_samples=DF_SAMPLES):
     """
-    Given a project name, find the corresponding sample file
+    Given a project name, find the corresponding sample file to use
     """
     selection = df_samples[df_samples["name"] == name].genome_id.values
     output = [f"data/interim/automlst_wrapper/{name}/{s}.gbk" for s in selection]
@@ -196,7 +187,7 @@ def get_automlst_inputs(name, df_samples=DF_SAMPLES):
 # gtdb.smk #
 def get_json_inputs(name, df_samples=DF_SAMPLES):
     """
-    Given a project name, find the corresponding sample file
+    Given a project name, find the corresponding sample file to use
     """
     selection = df_samples[df_samples["name"] == name].genome_id.values
     output = [f"data/interim/gtdb/{s}.json" for s in selection]
@@ -250,18 +241,22 @@ def get_final_output():
                 "eggnog" : expand("data/interim/eggnog/{strains}/", strains = STRAINS),
                 "refseq_masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", \
                                          strains = STRAINS),
-                "automlst_wrapper" : expand("data/processed/automlst_wrapper/{name}.newick", \
+                "automlst_wrapper" : expand("data/processed/{name}/automlst_wrapper/{name}.newick", \
                                             name=PROJECT_IDS),
                 "roary" : expand("data/interim/roary/{name}/", name=PROJECT_IDS),
                 "bigscape" : expand("data/interim/bigscape/{name}_antismash_{version}/index.html", \
                                     version=dependency_version["antismash"], name=PROJECT_IDS),
-                "seqfu" : "data/processed/tables/df_seqfu_stats.csv",
+                "seqfu" : expand("data/processed/{name}/tables/df_seqfu_stats.csv", name=PROJECT_IDS),
                 "rnammer": "resources/rnammer_test.txt",
                 "bigslice": expand("data/interim/bigslice/{name}_antismash_{version}/", \
                                     name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "query_bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}.txt", \
                                          name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "checkm" : expand("data/interim/checkm/json/{strains}.json", strains=STRAINS),
+                "prokka-gbk" : [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/genbank/{strains}.gbk" for strains in STRAINS],
+                "antismash-summary": expand("data/processed/{name}/tables/df_antismash_{version}_summary.csv", \
+                                            name = PROJECT_IDS, version=dependency_version["antismash"]),
+                "antismash-zip": [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/antismash/{dependency_version['antismash']}/{strains}.zip" for strains in STRAINS]
                 }
     
     # get keys from config

@@ -14,7 +14,7 @@ rule install_bigscape:
 
 rule get_bigscape_inputs:
     input:
-        gbk = lambda wildcards: get_bigscape_inputs(wildcards.name, wildcards.version)
+        gbk = lambda wildcards: get_antismash_inputs(wildcards.name, wildcards.version)
     output:
         input_list = "data/interim/bigscape/{name}_antismash_{version}.txt"
     conda:

@@ -101,12 +101,12 @@ rule format_gbk:
         gbk_prokka = "data/interim/prokka/{strains}/{strains}.gbk",
         gtdb_json = "data/interim/gtdb/{strains}.json",
     output:
-        gbk_processed = report("data/processed/genbank/{strains}.gbk", caption="../report/file-genbank.rst", category="Genome Overview", subcategory="Annotated Genbanks")
+        gbk_processed = report("data/processed/{name}/genbank/{strains}.gbk", caption="../report/file-genbank.rst", category="Genome Overview", subcategory="Annotated Genbanks")
     conda:
         "../envs/prokka.yaml"
     params:
         version = __version__,
-    log: "workflow/report/logs/prokka/format_gbk/format_gbk-{strains}.log"
+    log: "workflow/report/logs/prokka/format_gbk/format_gbk-{strains}-{name}.log"
     shell:
         """
         python workflow/bgcflow/bgcflow/data/format_genbank_meta.py {input.gbk_prokka} {params.version} {input.gtdb_json} {wildcards.strains} {output.gbk_processed} 2> {log}

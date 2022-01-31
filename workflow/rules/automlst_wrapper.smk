@@ -31,7 +31,7 @@ rule automlst_wrapper:
         reduced_core = "resources/automlst-simplified-wrapper-main/reducedcore.hmm",
     output:
         tree = "data/interim/automlst_wrapper/{name}/raxmlpart.txt.treefile",
-        final_tree = "data/processed/automlst_wrapper/{name}.newick"
+        final_tree = "data/processed/{name}/automlst_wrapper/{name}.newick"
     log: "workflow/report/logs/automlst_wrapper/automlst_wrapper/automlst_wrapper-{name}.log"
     conda: 
         "../envs/automlst_wrapper.yaml"

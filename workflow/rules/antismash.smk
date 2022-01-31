@@ -34,10 +34,10 @@ rule copy_antismash_zip:
     input:
         zip = "data/interim/antismash/{version}/{strains}/{strains}.zip",
     output:
-        zip = report("data/processed/antismash/{version}/{strains}.zip", caption="../report/file-antismash.rst", category="BGC Prediction", subcategory="AntiSMASH Results")
+        zip = report("data/processed/{name}/antismash/{version}/{strains}.zip", caption="../report/file-antismash.rst", category="BGC Prediction", subcategory="AntiSMASH Results")
     conda:
         "../envs/antismash.yaml"
-    log: "workflow/report/logs/antismash/copy_antismash_zip/copy_antismash_zip_{version}-{strains}.log"
+    log: "workflow/report/logs/antismash/copy_antismash_zip/copy_antismash_zip_{version}-{strains}-{name}.log"
     shell:
         """
         cp {input.zip} {output.zip} 2>> {log}
