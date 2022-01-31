@@ -61,9 +61,13 @@ Installing Snakemake using [Mamba](https://github.com/mamba-org/mamba) is advise
 
     conda install -n base -c conda-forge mamba
 
-Then install Snakemake with:
+Then install Snakemake (version 6.15.1) with:
 
-    mamba create -c conda-forge -c bioconda -n snakemake snakemake
+    mamba create -c conda-forge -c bioconda -n snakemake snakemake=6.15.1
+
+If you already have Snakemake, then update it to version 6.15.1 that is supported by BGCflow with:
+
+    mamba update -c conda-forge -c bioconda -n snakemake snakemake=6.15.1
 
 For installation details, see the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
 
