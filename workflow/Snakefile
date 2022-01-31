@@ -3,11 +3,8 @@ include: "rules/common.smk"
 ##### Target rules #####
 rule all:
     input:
-        expand("data/processed/antismash/{version}/{strains}.zip", strains = STRAINS, version=dependency_version["antismash"]),
-        expand("data/processed/tables/df_gtdb_meta-{name}.csv", name = PROJECT_IDS),
-        "data/processed/tables/df_ncbi_meta.csv",
-        expand("data/processed/tables/df_antismash_{version}_summary.csv", name = PROJECT_IDS, version=dependency_version["antismash"]),
-        expand("data/processed/genbank/{strains}.gbk", strains = STRAINS, name = PROJECT_IDS),
+        expand("data/processed/{name}/tables/df_gtdb_meta.csv", name = PROJECT_IDS),
+        "data/processed/tables/df_ncbi_meta.csv", # potential to break if no ncbi genome provided?
         "workflow/report/dependency_versions.json",
         get_final_output(),
 

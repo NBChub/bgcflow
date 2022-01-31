@@ -13,7 +13,7 @@ rule install_bigslice:
 
 rule get_bigslice_inputs:
     input:
-        gbk = lambda wildcards: get_bigscape_inputs(wildcards.name, wildcards.version),
+        gbk = lambda wildcards: get_antismash_inputs(wildcards.name, wildcards.version),
         table = "data/processed/tables/df_gtdb_meta-{name}.csv"
     output:
         taxonomy = "data/interim/bigslice/tmp/taxonomy/taxonomy_{name}_antismash_{version}.tsv",

@@ -1,11 +1,11 @@
 rule seqfu_stats:
     input: 
-        fna = expand("data/interim/fasta/{strains}.fna", strains = STRAINS)
+        fna = lambda wildcards: get_fasta_inputs(wildcards.name)
     output:
-        all_csv = report("data/processed/tables/df_seqfu_stats.csv", caption="../report/table-seqfu.rst", category="Quality Control")
+        all_csv = report("data/processed/{name}/tables/df_seqfu_stats.csv", caption="../report/table-seqfu.rst", category="Quality Control")
     conda:
         "../envs/seqfu.yaml"
-    log: "workflow/report/logs/seqfu/seqfu.log"
+    log: "workflow/report/logs/seqfu/seqfu-{name}.log"
     shell:
         """
         seqfu stats {input.fna} --csv -b > {output.all_csv}

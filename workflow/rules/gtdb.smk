@@ -17,7 +17,7 @@ rule fix_gtdb_taxonomy:
     input: 
         json_list = lambda wildcards: get_json_inputs(wildcards.name)
     output:
-        meta = report("data/processed/tables/df_gtdb_meta-{name}.csv", caption="../report/table-gtdb.rst", category="Genome Overview", subcategory="Taxonomic Placement")
+        meta = report("data/processed/{name}/tables/df_gtdb_meta.csv", caption="../report/table-gtdb.rst", category="{name}", subcategory="Taxonomic Placement")
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/gtdb/fix_gtdb_taxonomy/fix_gtdb_taxonomy-{name}.log"
