@@ -14,7 +14,7 @@ rule install_automlst_wrapper:
 
 rule prep_automlst_gbk:
     input:
-        gbk = "data/processed/genbank/{strains}.gbk",
+        gbk = lambda wildcards: f"data/processed/{DF_SAMPLES.loc[wildcards.strains, 'name']}/genbank/{wildcards.strains}.gbk",
     output:
         auto_gbk = "data/interim/automlst_wrapper/{name}/{strains}.gbk",
     conda:

@@ -13,7 +13,7 @@ rule antismash_db_setup:
 
 rule antismash:
     input: 
-        gbk = "data/processed/genbank/{strains}.gbk",
+        gbk = lambda wildcards: f"data/processed/{DF_SAMPLES.loc[wildcards.strains, 'name']}/genbank/{wildcards.strains}.gbk",
         resources = "resources/antismash_db/"
     output:
         folder = directory("data/interim/antismash/{version}/{strains}/"),
