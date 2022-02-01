@@ -253,6 +253,7 @@ def get_final_output():
                 "automlst_wrapper" : expand("data/processed/automlst_wrapper/{name}.newick", \
                                             name=PROJECT_IDS),
                 "roary" : expand("data/interim/roary/{name}/", name=PROJECT_IDS),
+                "eggnog-roary" : expand("data/interim/roary/{name}/eggnog", name=PROJECT_IDS),
                 "bigscape" : expand("data/interim/bigscape/{name}_antismash_{version}/index.html", \
                                     version=dependency_version["antismash"], name=PROJECT_IDS),
                 "seqfu" : "data/processed/tables/df_seqfu_stats.csv",
