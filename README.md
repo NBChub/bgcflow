@@ -1,6 +1,6 @@
 # BGCflow
-[![Snakemake](https://img.shields.io/badge/snakemake-≥6.7.0-brightgreen.svg)](https://snakemake.bitbucket.io)
-[![Build Status](https://travis-ci.org/snakemake-workflows/snakemake-bgc-analytics.svg?branch=master)](https://travis-ci.org/snakemake-workflows/snakemake-bgc-analytics)
+[![Snakemake](https://img.shields.io/badge/snakemake-≥6.15.1-brightgreen.svg)](https://snakemake.bitbucket.io)
+[![Build Status](https://travis-ci.org/snakemake-workflows/snakemake-bgc-analytics.svg?branch=main)](https://travis-ci.org/snakemake-workflows/snakemake-bgc-analytics)
 
 Snakemake workflow to systematically analyze Biosynthetic Gene Clusters from a collection of genomes (pangenomes) from internal &amp; public genome datasets.
 
@@ -169,3 +169,20 @@ resources_path:
   eggnog_db: $HOME/your_local_directory/eggnog_db
   BiG-SCAPE: $HOME/your_local_directory/BiG-SCAPE
 ```
+## List of Configurable Features
+Here you can find rules keyword that you can run within BGCflow.
+| Keywords | Description | Links |
+|:---------| :------------- | :------------------------- |
+| seqfu | Returns contig statistics of the genomes | [SeqFu](https://github.com/telatin/seqfu2)|
+| mlst | Returns genome classification within multi-locus sequence types (STs) | [mlst](https://github.com/tseemann/mlst) |
+| refseq_masher | Identify the closest 10 NCBI Refseq genomes | [RefSeq Masher](https://github.com/phac-nml/refseq_masher) |
+| checkm | Assess genome quality | [CheckM](https://github.com/Ecogenomics/CheckM) |
+| prokka-gbk | Returns annotated `.gbk` files| [Prokka](https://github.com/tseemann/prokka) |
+| antismash-summary | Summary of BGCs statistics | [antiSMASH](https://github.com/antismash/antismash) |
+| antismash-zip | Returns zipped antiSMASH result | [antiSMASH](https://github.com/antismash/antismash) |
+| query_bigslice | Query BGCs with BiG-FAM db* | [BiG-SLICE](https://github.com/medema-group/bigslice) |
+| bigscape | Build Gene Cluster Families with BiG-SCAPE | [BiG-SCAPE](https://git.wageningenur.nl/medema-group/BiG-SCAPE) |
+| bigslice | Build Gene Cluster Families with BiG-SLICE | [BiG-SLICE](https://github.com/medema-group/bigslice) |
+| automlst_wrapper | Build a phylogenomic tree with autoMLST wrapper | [autoMLST-wrapper](https://github.com/KatSteinke/automlst-simplified-wrapper), [autoMLST](https://bitbucket.org/ziemertlab/automlst/src/master/) |
+| roary | Build Pangenome | [Roary](https://github.com/sanger-pathogens/Roary) |
+| eggnog | Functional annotation with EggNOG-mapper | [EggNOG-mapper](https://github.com/eggnogdb/eggnog-mapper) |
