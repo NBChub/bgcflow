@@ -101,13 +101,26 @@ rule format_gbk:
         gbk_prokka = "data/interim/prokka/{strains}/{strains}.gbk",
         gtdb_json = "data/interim/gtdb/{strains}.json",
     output:
-        gbk_processed = report("data/processed/{name}/genbank/{strains}.gbk", caption="../report/file-genbank.rst", category="Genome Overview", subcategory="Annotated Genbanks")
+        gbk_processed = "data/interim/processed-genbank/{strains}.gbk"
     conda:
         "../envs/prokka.yaml"
     params:
         version = __version__,
-    log: "workflow/report/logs/prokka/format_gbk/format_gbk-{strains}-{name}.log"
+    log: "workflow/report/logs/prokka/format_gbk/format_gbk-{strains}.log"
     shell:
         """
         python workflow/bgcflow/bgcflow/data/format_genbank_meta.py {input.gbk_prokka} {params.version} {input.gtdb_json} {wildcards.strains} {output.gbk_processed} 2> {log}
+        """
+
+rule copy_prokka_gbk:
+    input:
+        gbk = "data/interim/processed-genbank/{strains}.gbk",
+    output:
+        gbk = report("data/processed/{name}/genbank/{strains}.gbk", caption="../report/file-genbank.rst", category="{name}", subcategory="Annotated Genbanks")
+    conda:
+        "../envs/antismash.yaml"
+    log: "workflow/report/logs/prokka/copy_prokka_gbk/copy_prokka_gbk_-{strains}-{name}.log"
+    shell:
+        """
+        cp {input.gbk} {output.gbk} 2>> {log}
         """

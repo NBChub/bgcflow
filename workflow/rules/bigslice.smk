@@ -14,7 +14,7 @@ rule install_bigslice:
 rule get_bigslice_inputs:
     input:
         gbk = lambda wildcards: get_antismash_inputs(wildcards.name, wildcards.version),
-        table = "data/processed/tables/df_gtdb_meta-{name}.csv"
+        table = "data/processed/{name}/tables/df_gtdb_meta.csv"
     output:
         taxonomy = "data/interim/bigslice/tmp/taxonomy/taxonomy_{name}_antismash_{version}.tsv",
         tempdir = directory("data/interim/bigslice/tmp/{name}_antismash_{version}")
@@ -36,7 +36,7 @@ rule get_bigslice_inputs:
             do
                 parent_dir=$(dirname $PWD/$r)
                 filename=$(basename $r)
-                (cd {output.tempdir}/$(basename $parent_dir) && ln -s $parent_dir/$filename $filename) 2>> {log}
+                (cd {output.tempdir}/$(basename $parent_dir) && ln -sf $parent_dir/$filename $filename) 2>> {log}
             done
         done
 
