@@ -34,6 +34,7 @@ rules:
   bigscape: TRUE
   bigslice: FALSE
   automlst_wrapper: FALSE
+  arts: FALSE
   roary: FALSE
   eggnog: FALSE
   # other parameter settings

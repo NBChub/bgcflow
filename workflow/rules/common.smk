@@ -256,7 +256,9 @@ def get_final_output():
                 "prokka-gbk" : [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/genbank/{strains}.gbk" for strains in STRAINS],
                 "antismash-summary": expand("data/processed/{name}/tables/df_antismash_{version}_summary.csv", \
                                             name = PROJECT_IDS, version=dependency_version["antismash"]),
-                "antismash-zip": [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/antismash/{dependency_version['antismash']}/{strains}.zip" for strains in STRAINS]
+                "antismash-zip": [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/antismash/{dependency_version['antismash']}/{strains}.zip" for strains in STRAINS],
+                "arts": expand("data/interim/arts/antismash-{version}/{strains}/aligned_core_genes.zip", \
+                                version=dependency_version["antismash"], strains = STRAINS)
                 }
     
     # get keys from config
