@@ -254,7 +254,7 @@ def get_final_output():
                 "automlst_wrapper" : expand("data/processed/{name}/automlst_wrapper/{name}.newick", \
                                             name=PROJECT_IDS),
                 "roary" : expand("data/interim/roary/{name}/", name=PROJECT_IDS),
-                "bigscape" : expand("data/interim/bigscape/{name}_antismash_{version}/index.html", \
+                "bigscape" : expand("data/processed/{name}/bigscape/{name}_bigscape_as{version}.zip", \
                                     version=dependency_version["antismash"], name=PROJECT_IDS),
                 "seqfu" : expand("data/processed/{name}/tables/df_seqfu_stats.csv", name=PROJECT_IDS),
                 "rnammer": "resources/rnammer_test.txt",
