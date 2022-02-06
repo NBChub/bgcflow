@@ -89,11 +89,9 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
     if any(os.path.isfile(t) for t in tax_path.split()):
         try:
             gtdb_tax = get_user_defined_classification(genome_id, tax_path)
-            print(gtdb_tax)
         except KeyError:
             sys.stderr.write(f"{genome_id}: Not found in user provided taxonomic placement...\n")
             gtdb_tax = find_taxonomy(query, genome_id, gtdb_tax)
-            print(gtdb_tax)
     else:
         gtdb_tax = find_taxonomy(query, genome_id, gtdb_tax)
 
@@ -135,15 +133,23 @@ def get_ncbi_taxon_GTDB(accession, release = "R202"):
     """
     Given an NCBI accession, return a json object of taxonomic information from GTDB API
     """
-    api_url = f"https://gtdb.ecogenomic.org/api/v1/taxonomy/genome/{accession}"
-    response = requests.get(api_url)
-    js = response.json()
+    def gtdb_api_request(accession, api_type):
+        if api_type == "taxonomy":
+            api_url = f"https://gtdb.ecogenomic.org/api/v1/{api_type}/genome/{accession}"
+        elif api_type == "summary":
+            api_url = f"https://gtdb.ecogenomic.org/api/v1/genome/{api_type}/{accession}"
+        response = requests.get(api_url)
+        js = response.json()
+        return js, api_url
+
+    # get taxonomic information
+    js_tax, api_url_tax = gtdb_api_request(accession, "taxonomy")
     result = {}
     result["genome_id"] = accession
-    result["gtdb_url"] = api_url
+    result["gtdb_url"] = api_url_tax
     result["gtdb_release"] = release
     try:
-        result["gtdb_taxonomy"] = js["gtdb_taxonomy"][release]
+        result["gtdb_taxonomy"] = js_tax["gtdb_taxonomy"][release]
     except KeyError as err:
         if err.args[0] == "gtdb_taxonomy":
             sys.stderr.write(f"Malformed genome id: {accession}. Make sure to use the right NCBI genome accession format.\n")
@@ -151,6 +157,12 @@ def get_ncbi_taxon_GTDB(accession, release = "R202"):
         elif err.args[0] == release:
             sys.stderr.write(f"Cannot find genome id: {accession} in GTDB API.\n")
             raise
+
+    # get other metadata from genome summary
+    js_sum, api_url_sum = gtdb_api_request(accession, "summary")
+    result["metadata_url"] = api_url_sum
+    result["metadata"] = js_sum
+
     return result
 
 def get_parent_taxon_GTDB(taxon, level, release = "R202"):
