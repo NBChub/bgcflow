@@ -17,7 +17,7 @@ rule get_bigscape_inputs:
         gbk = lambda wildcards: get_antismash_inputs(wildcards.name, wildcards.version)
     output:
         tempdir = directory("data/interim/bigscape/tmp/{name}_antismash_{version}"),
-        input_list = "data/interim/bigscape/{name}_antismash_{version}.txt"
+        bgc_mapping = "data/interim/bigscape/{name}_antismash_{version}.csv"
     conda:
         "../envs/bigscape.yaml"
     log: "workflow/report/logs/bigscape/get_bigscape_inputs/get_bigscape_inputs-{name}_antismash_{version}.log"
@@ -39,13 +39,13 @@ rule get_bigscape_inputs:
         done
 
         # generate mapping for visualization
-        find {output.tempdir} -iname "*.gbk" > {output.input_list}
+        python workflow/bgcflow/bgcflow/data/get_bigscape_mapping.py {output.tempdir} {output.bgc_mapping}
         """
 
 rule bigscape:
     input: 
         bigscape = "resources/BiG-SCAPE",
-        input_list = "data/interim/bigscape/{name}_antismash_{version}.txt"
+        bgc_mapping = "data/interim/bigscape/{name}_antismash_{version}.csv"
     output:
         index = "data/interim/bigscape/{name}_antismash_{version}/index.html"
     conda:
@@ -59,4 +59,20 @@ rule bigscape:
     shell:
         """
         python {input.bigscape}/bigscape.py -i {params.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose > {log}
+        """
+
+rule copy_bigscape_zip:
+    input: 
+        bgc_mapping = "data/interim/bigscape/{name}_antismash_{version}.csv",
+        index = "data/interim/bigscape/{name}_antismash_{version}/index.html"
+    output:
+        zip = "data/processed/{name}/bigscape/{name}_bigscape_as{version}.zip"
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log: "workflow/report/logs/bigscape/copy_bigscape_zip/copy_bigscape_zip-{name}-{version}.log"
+    shell:
+        """
+        topdir=$PWD
+        (cd data/interim/bigscape && zip -r $topdir/{output.zip} {wildcards.name}_antismash_{wildcards.version}.csv \
+            {wildcards.name}_antismash_{wildcards.version} -x {wildcards.name}_antismash_{wildcards.version}/cache/**\* &>> $topdir/{log})
         """
