@@ -193,6 +193,15 @@ def get_json_inputs(name, df_samples=DF_SAMPLES):
     output = [f"data/interim/gtdb/{s}.json" for s in selection]
     return output
 
+# ncbi.smk #
+def get_ncbi_assembly_inputs(name, df_samples=DF_SAMPLES):
+    """
+    Given a project name, find the corresponding sample file to use
+    """
+    selection = df_samples[df_samples["name"] == name].genome_id.values
+    selection_ncbi = df_samples[df_samples["source"] == "ncbi"].genome_id.values
+    output = [f"data/interim/assembly_report/{s}.json" for s in selection_ncbi]
+    return output
 
 ##### 6. Get dependency versions #####
 def get_dependency_version(dep, dep_key):
@@ -216,6 +225,7 @@ def get_dependencies(dep):
         vr = get_dependency_version(dep, ky)
         dv[ky] = vr
     return dv
+
 
 # list of the main dependecies used in the workflow
 dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
@@ -266,6 +276,11 @@ def get_final_output():
 
     # if values are TRUE add output files to rule all
     final_output = [rule_dict[r] for r in opt_rules if config["rules"][r]]
+
+    if NCBI == []:
+        pass
+    else:
+        final_output.extend(expand("data/processed/{name}/tables/df_ncbi_meta.csv", name = PROJECT_IDS))
      
     return final_output
 

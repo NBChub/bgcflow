@@ -59,24 +59,6 @@ rule extract_meta_prokka:
             "{params.samples_path}" data/interim/assembly_report/ data/interim/prokka/ 2>> {log}
         """
 
-rule extract_ncbi_information:
-    input:
-        all_reports = expand("data/interim/prokka/{ncbi}/organism_info.txt", ncbi = NCBI),
-        all_json = expand("data/interim/assembly_report/{ncbi}.json", ncbi = NCBI),
-        assembly_report_path = "data/interim/assembly_report/",
-    output:
-        ncbi_meta_path = report("data/processed/tables/df_ncbi_meta.csv", \
-            caption="../report/table-ncbi_meta.rst", \
-            category="Genome Overview", subcategory="Metadata"),
-    conda:
-        "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/prokka/extract_ncbi_information.log"
-    shell:
-        """
-        python workflow/bgcflow/bgcflow/data/extract_ncbi_information.py \
-            {input.assembly_report_path} {output.ncbi_meta_path} 2>> {log}
-        """
-
 rule prokka:
     input: 
         fna = "data/interim/fasta/{strains}.fna",
