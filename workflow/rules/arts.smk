@@ -20,10 +20,10 @@ rule arts:
         antismash = "data/interim/antismash/{version}/{strains}/{strains}.gbk",
         resources = "resources/arts/"
     output:
-        folder = "data/interim/arts/antismash-{version}/{strains}/aligned_core_genes.zip",
+        folder = directory("data/interim/arts/antismash-{version}/{strains}/"),
     conda:
         "../envs/arts.yaml"
-    threads: 16
+    threads: 8
     log: "workflow/report/logs/arts/arts/arts-{version}-{strains}.log"
     params:
         ref = "resources/arts/reference/actinobacteria/"
