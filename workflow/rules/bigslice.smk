@@ -19,14 +19,14 @@ rule get_bigslice_inputs:
         taxonomy = "data/interim/bigslice/tmp/taxonomy/taxonomy_{name}_antismash_{version}.tsv",
         tempdir = directory("data/interim/bigslice/tmp/{name}_antismash_{version}")
     conda:
-        "../envs/bigscape.yaml"
-    log: "workflow/report/logs/bigslice/get_bigslice_inputs/get_bigslice_inputs_{name}-antismash-{version}.log"
+        "../envs/bigslice.yaml"
+    log: "workflow/report/logs/bigslice/get_bigslice_inputs/get_bigslice_inputs-{name}_antismash_{version}.log"
     params:
         dataset = "data/interim/bigslice/tmp/datasets.tsv"
     shell:
         """
-        echo "Preparing BiG-SLICE input for {wildcards.name}..."
-        mkdir -p {output.tempdir} 2> {log}
+        echo "Preparing BiG-SLICE input for {wildcards.name}..." 2>> {log}
+        mkdir -p {output.tempdir} 2>> {log}
 
         # Generate symlink for each regions in genomes in dataset
         for i in $(dirname {input.gbk})
@@ -101,9 +101,9 @@ rule query_bigslice:
         "workflow/report/logs/bigslice/query_bigslice/query_bigslice_{name}-antismash-{version}.log"
     params:
         n_ranks = 10,
+        query_name = "{name}"
     shell:
         """
-        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} > {log} 2>> {log}
-        echo fin > {output.log}
+        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} --query_name {params.query_name} 2>> {log}
         """
 

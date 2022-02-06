@@ -6,35 +6,40 @@ rule install_bigscape:
     log: "workflow/report/logs/bigscape/bigscape-install_bigscape.log"
     shell:
         """
-        (cd resources && wget https://git.wageningenur.nl/medema-group/BiG-SCAPE/-/archive/master/BiG-SCAPE-master.zip) > {log}
-        (cd resources && unzip BiG-SCAPE-master.zip && mv BiG-SCAPE-master/ BiG-SCAPE/ && rm BiG-SCAPE-master.zip)
-        (cd resources/BiG-SCAPE && wget ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.hmm.gz && gunzip Pfam-A.hmm.gz) >> {log}
-        (cd resources/BiG-SCAPE && hmmpress Pfam-A.hmm) >> {log}
+        (cd resources && wget https://git.wageningenur.nl/medema-group/BiG-SCAPE/-/archive/master/BiG-SCAPE-master.zip) 2>> {log}
+        (cd resources && unzip BiG-SCAPE-master.zip && mv BiG-SCAPE-master/ BiG-SCAPE/ && rm BiG-SCAPE-master.zip) 2>> {log}
+        (cd resources/BiG-SCAPE && wget ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.hmm.gz && gunzip Pfam-A.hmm.gz) 2>> {log}
+        (cd resources/BiG-SCAPE && hmmpress Pfam-A.hmm) 2>> {log}
         """
 
 rule get_bigscape_inputs:
     input:
         gbk = lambda wildcards: get_antismash_inputs(wildcards.name, wildcards.version)
     output:
+        tempdir = directory("data/interim/bigscape/tmp/{name}_antismash_{version}"),
         input_list = "data/interim/bigscape/{name}_antismash_{version}.txt"
     conda:
         "../envs/bigscape.yaml"
-    log: "workflow/report/logs/bigscape/{name}_antismash_{version}/temp_bigscape.log"
-    params:
-        tempdir = directory("data/interim/bigscape/tmp/{name}_antismash_{version}")
+    log: "workflow/report/logs/bigscape/get_bigscape_inputs/get_bigscape_inputs-{name}_antismash_{version}.log"
     shell:
         """
-        mkdir -p {params.tempdir} 2> {log}
+        echo "Preparing BiG-SCAPE input for {wildcards.name}..." 2>> {log}
+        mkdir -p {output.tempdir} 2>> {log}
+
+        # Generate symlink for each regions in genomes in dataset
         for i in $(dirname {input.gbk})
         do
+            mkdir {output.tempdir}/$(basename $i) 2>> {log}
             for r in $(ls $i/*.region*.gbk)
             do
                 parent_dir=$(dirname $PWD/$r)
                 filename=$(basename $r)
-                (cd {params.tempdir} && ln -sf $parent_dir/$filename $filename) 2>> {log}
+                (cd {output.tempdir}/$(basename $parent_dir) && ln -sf $parent_dir/$filename $filename) 2>> {log}
             done
         done
-        ls {params.tempdir} > {output.input_list}
+
+        # generate mapping for visualization
+        find {output.tempdir} -iname "*.gbk" > {output.input_list}
         """
 
 rule bigscape:
