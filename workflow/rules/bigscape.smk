@@ -45,7 +45,7 @@ rule get_bigscape_inputs:
 rule bigscape:
     input: 
         bigscape = "resources/BiG-SCAPE",
-        input_list = "data/interim/bigscape/{name}_antismash_{version}.txt"
+        bgc_mapping = "data/interim/bigscape/{name}_antismash_{version}.csv"
     output:
         index = "data/interim/bigscape/{name}_antismash_{version}/index.html"
     conda:
