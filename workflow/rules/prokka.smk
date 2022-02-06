@@ -23,7 +23,7 @@ rule copy_custom_fasta:
         "data/interim/fasta/{custom}.fna" 
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/prokka/copy_custom_fasta-{custom}.log"
+    log: "workflow/report/logs/prokka/copy_custom_fasta/copy_custom_fasta-{custom}.log"
     shell:
         """
         cp {input} {output} 2>> {log}
@@ -39,7 +39,8 @@ rule prokka_db_setup:
     log: "workflow/report/logs/prokka/prokka_db_setup/prokka_db_setup-{name}.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/make_prokka_db.py {wildcards.name} {input.table} {output.refgbff} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/make_prokka_db.py {wildcards.name} \
+            {input.table} {output.refgbff} 2>> {log}
         """
 
 rule extract_meta_prokka:
@@ -54,7 +55,8 @@ rule extract_meta_prokka:
         samples_path = SAMPLE_PATHS,
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/get_organism_info.py {wildcards.strains} "{params.samples_path}" data/interim/assembly_report/ data/interim/prokka/ 2>> {log}
+        python workflow/bgcflow/bgcflow/data/get_organism_info.py {wildcards.strains} \
+            "{params.samples_path}" data/interim/assembly_report/ data/interim/prokka/ 2>> {log}
         """
 
 rule extract_ncbi_information:
@@ -63,13 +65,16 @@ rule extract_ncbi_information:
         all_json = expand("data/interim/assembly_report/{ncbi}.json", ncbi = NCBI),
         assembly_report_path = "data/interim/assembly_report/",
     output:
-        ncbi_meta_path = report("data/processed/tables/df_ncbi_meta.csv", caption="../report/table-ncbi_meta.rst", category="Genome Overview", subcategory="Metadata"),
+        ncbi_meta_path = report("data/processed/tables/df_ncbi_meta.csv", \
+            caption="../report/table-ncbi_meta.rst", \
+            category="Genome Overview", subcategory="Metadata"),
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/prokka/extract_ncbi_information.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/extract_ncbi_information.py {input.assembly_report_path} {output.ncbi_meta_path} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/extract_ncbi_information.py \
+            {input.assembly_report_path} {output.ncbi_meta_path} 2>> {log}
         """
 
 rule prokka:
@@ -92,8 +97,11 @@ rule prokka:
     threads: 16
     shell:
         """
-        prokka --outdir data/interim/prokka/{wildcards.strains} --force {params.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} --evalue {params.evalue} {input.fna}
-        cat data/interim/prokka/{wildcards.strains}/{wildcards.strains}.log > {log}
+        prokka --outdir data/interim/prokka/{wildcards.strains} --force \
+            {params.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" \
+            --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" \
+            --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} \
+            --evalue {params.evalue} {input.fna} 2>> {log}
         """
 
 rule format_gbk:
@@ -109,14 +117,16 @@ rule format_gbk:
     log: "workflow/report/logs/prokka/format_gbk/format_gbk-{strains}.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/format_genbank_meta.py {input.gbk_prokka} {params.version} {input.gtdb_json} {wildcards.strains} {output.gbk_processed} 2> {log}
+        python workflow/bgcflow/bgcflow/data/format_genbank_meta.py {input.gbk_prokka} \
+            {params.version} {input.gtdb_json} {wildcards.strains} {output.gbk_processed} 2> {log}
         """
 
 rule copy_prokka_gbk:
     input:
         gbk = "data/interim/processed-genbank/{strains}.gbk",
     output:
-        gbk = report("data/processed/{name}/genbank/{strains}.gbk", caption="../report/file-genbank.rst", category="{name}", subcategory="Annotated Genbanks")
+        gbk = report("data/processed/{name}/genbank/{strains}.gbk", \
+            caption="../report/file-genbank.rst", category="{name}", subcategory="Annotated Genbanks")
     conda:
         "../envs/antismash.yaml"
     log: "workflow/report/logs/prokka/copy_prokka_gbk/copy_prokka_gbk_-{strains}-{name}.log"
