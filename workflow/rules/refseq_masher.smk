@@ -11,5 +11,6 @@ rule refseq_masher:
     log: "workflow/report/logs/refseq_masher/refseq_masher-{strains}.log"
     shell:
         """
-        refseq_masher matches --output-type {params.output_type} --top-n-results {params.top_n_results} --output {output.masher_csv} {input.fasta} >> {log}
+        refseq_masher matches --output-type {params.output_type} --top-n-results \
+            {params.top_n_results} --output {output.masher_csv} {input.fasta} 2>> {log}
         """

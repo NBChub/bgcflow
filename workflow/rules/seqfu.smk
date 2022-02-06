@@ -8,6 +8,5 @@ rule seqfu_stats:
     log: "workflow/report/logs/seqfu/seqfu-{name}.log"
     shell:
         """
-        seqfu stats {input.fna} --csv -b > {output.all_csv}
-        head {output.all_csv} > {log}
+        seqfu stats {input.fna} --csv -b > {output.all_csv} 2>> {log}
         """
