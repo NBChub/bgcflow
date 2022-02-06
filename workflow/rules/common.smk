@@ -257,7 +257,7 @@ def get_final_output():
                 "antismash-summary": expand("data/processed/{name}/tables/df_antismash_{version}_summary.csv", \
                                             name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "antismash-zip": [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/antismash/{dependency_version['antismash']}/{strains}.zip" for strains in STRAINS],
-                "arts": expand("data/interim/arts/antismash-{version}/{strains}/aligned_core_genes.zip", \
+                "arts": expand("data/interim/arts/antismash-{version}/{strains}/", \
                                 version=dependency_version["antismash"], strains = STRAINS)
                 }
     
