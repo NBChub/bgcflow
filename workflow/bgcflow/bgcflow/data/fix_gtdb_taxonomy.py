@@ -12,6 +12,8 @@ def summarize_gtdb_json(accession_list, df_gtdb_output):
 
     # Formatting
     df_tax = pd.concat([df_tax, pd.DataFrame([i for i in df_tax.gtdb_taxonomy])], axis=1)
+
+    # Get taxonomic information
     df = pd.DataFrame([i for i in df_tax.gtdb_taxonomy])
     for col in df.columns:
         df[col] = df[col].apply(lambda x: x.split('__')[1])
@@ -23,6 +25,20 @@ def summarize_gtdb_json(accession_list, df_gtdb_output):
             pass
     df.columns = [c.title() for c in df.columns]
     df.insert(0, "genome_id", df_tax.genome_id)
+
+    # Get metadata
+    for i in df_tax.index:
+        try:
+            metadata = df_tax.loc[i, "metadata"]
+            for k in metadata.keys():
+                if k.startswith("checkm"):
+                    df.loc[i, k] = metadata[k]
+                if k.startswith("ncbi"):
+                    df.loc[i, k] = metadata[k]
+        except:
+            pass
+
+    # save to file
     df.to_csv(df_gtdb_output, index=False)
     return None
 
