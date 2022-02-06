@@ -4,12 +4,11 @@ include: "rules/common.smk"
 rule all:
     input:
         expand("data/processed/{name}/tables/df_gtdb_meta.csv", name = PROJECT_IDS),
-        "data/processed/tables/df_ncbi_meta.csv", # potential to break if no ncbi genome provided?
         "workflow/report/dependency_versions.json",
         get_final_output(),
 
 ##### Modules #####
-include: "rules/ncbi-download.smk"
+include: "rules/ncbi.smk"
 include: "rules/prokka.smk"
 include: "rules/antismash.smk"
 include: "rules/roary.smk"
