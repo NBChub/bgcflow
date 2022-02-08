@@ -1,1 +1,1 @@
-Summary of genome sequence statistics.
+Summary of genome sequence quality using checkm.
