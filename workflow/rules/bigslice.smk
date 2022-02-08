@@ -93,7 +93,7 @@ rule query_bigslice:
         tmp_dir = "data/interim/bigslice/tmp/{name}_antismash_{version}/",
         bigslice_dir = "resources/bigslice/full_run_result/"
     output:
-        log = "data/interim/bigslice/query/{name}_antismash_{version}.txt"
+        folder = directory("data/interim/bigslice/query/{name}_antismash_{version}/")
     conda:
         "../envs/bigslice.yaml"
     threads: 32
@@ -105,5 +105,5 @@ rule query_bigslice:
     shell:
         """
         bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} --query_name {params.query_name} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/get_bigslice_query_result.py {params.query_name} {output.folder} {input.bigslice_dir} 2>> {log}
         """
-

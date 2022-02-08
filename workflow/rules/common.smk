@@ -260,7 +260,7 @@ def get_final_output():
                 "rnammer": "resources/rnammer_test.txt",
                 "bigslice": expand("data/interim/bigslice/{name}_antismash_{version}/", \
                                     name = PROJECT_IDS, version=dependency_version["antismash"]),
-                "query_bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}.txt", \
+                "query_bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}/", \
                                          name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "checkm" : expand("data/interim/checkm/json/{strains}.json", strains=STRAINS),
                 "prokka-gbk" : [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/genbank/{strains}.gbk" for strains in STRAINS],
