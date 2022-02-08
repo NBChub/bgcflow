@@ -34,7 +34,7 @@ rule checkm:
 
 rule checkm_out:
     input:
-        stat = "data/interim/checkm/storage/bin_stats_ext.tsv",
+        stat =  report("data/interim/checkm/storage/bin_stats_ext.csv",  caption="../report/table-checkm.rst", category="Quality Control"),
         _all_ = expand("data/interim/checkm/bins/{strains}/genes.faa", strains=STRAINS),
     output:
         stat_processed = "data/processed/tables/checkm_stats.tsv",
