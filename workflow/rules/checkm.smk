@@ -34,10 +34,10 @@ rule checkm:
 
 rule checkm_out:
     input:
-        stat =  report("data/interim/checkm/storage/bin_stats_ext.csv",  caption="../report/table-checkm.rst", category="Quality Control"),
+        stat = "data/interim/checkm/storage/bin_stats_ext.tsv",
         _all_ = expand("data/interim/checkm/bins/{strains}/genes.faa", strains=STRAINS),
     output:
-        stat_processed = "data/processed/tables/checkm_stats.tsv",
+        stat_processed = report("data/processed/tables/df_checkm_stats.csv",  caption="../report/table-checkm.rst", category="Quality Control"),
         checkm_json = directory("data/interim/checkm/json/"),
         json_all = expand("data/interim/checkm/json/{strains}.json", strains=STRAINS),
     log: "workflow/report/logs/checkm/checkm_out.log"
