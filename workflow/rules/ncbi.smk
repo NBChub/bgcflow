@@ -8,7 +8,7 @@ else:
             json_report = "data/interim/assembly_report/{ncbi}.json",
         conda:
             "../envs/ncbi_utilities.yaml"
-        log: "workflow/report/logs/ncbi/ncbi_genome_download_{ncbi}.log"
+        log: "workflow/report/logs/ncbi/ncbi_genome_download/ncbi_genome_download_{ncbi}.log"
         shell:
             """
             if [[ {wildcards.ncbi} == GCF* ]]
@@ -41,5 +41,5 @@ else:
             """
             echo 1 2>> {log}
             python workflow/bgcflow/bgcflow/data/extract_ncbi_information.py \
-                {input.all_json} {output.ncbi_meta_path} 2>> {log}
+                '{input.all_json}' {output.ncbi_meta_path} 2>> {log}
         """
