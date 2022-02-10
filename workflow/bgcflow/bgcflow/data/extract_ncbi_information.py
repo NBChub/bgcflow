@@ -28,8 +28,8 @@ def extract_ncbi_information(assembly_report_path, outfile):
     elif os.path.isfile(assembly_report_path) and assembly_report_path.endswith(".json"):
         sys.stderr.write(f"Getting NCBI assembly information from a single file: {assembly_report_path}\n")
         ncbi_json_files = [assembly_report_path]
-    elif assembly_report_path == str:
-        ncbi_json_files = [os.path.join(assembly_report_path, f) for f in os.listdir(assembly_report_path) if f.endswith(".json")]
+    elif type(assembly_report_path) == str:
+        ncbi_json_files = [f for f in assembly_report_path.split() if f.endswith(".json")]
         sys.stderr.write(f"Summarizing NCBI assembly information from the given list of {len(ncbi_json_files)} files...\n")
 
     dfs = [] # an empty list to store the data frames
