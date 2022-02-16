@@ -25,7 +25,7 @@ rule checkm:
     log: "workflow/report/logs/checkm/checkm.log"
     params: 
         checkm_log = "data/interim/checkm/checkm.log",
-    threads: 64
+    threads: 16
     shell:
         """
         checkm lineage_wf -t {threads} --reduced_tree -x fna {input.fna} {output.checkm_dir} 2>> {log}

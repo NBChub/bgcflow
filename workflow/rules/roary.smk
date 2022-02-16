@@ -8,7 +8,7 @@ rule roary:
     params:
         i = 80,
         core = 95,
-    threads: 64
+    threads: 16
     log: "workflow/report/logs/roary/roary-{name}.log"
     shell:
         """
