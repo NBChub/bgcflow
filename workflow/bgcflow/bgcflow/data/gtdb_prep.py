@@ -3,6 +3,12 @@ import numpy as nan
 import pandas as pd
 import requests
 
+import logging
+log_format = '%(levelname)-8s %(asctime)s   %(message)s'
+date_format = "%d/%m %H:%M:%S"
+logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
+
+
 def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # what happen if it does not find?
     """
     Given a genome id and the samples Pandas dataframe, write  a JSON file containing taxonomic information from GTDB API. The script will first search using the closest taxonomic placement (NCBI accession id), then using the genus information provided by user. If no information is provided, return an empty taxonomic information.
@@ -20,7 +26,7 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
         """
         Helper script for creating empty result
         """
-        sys.stderr.write(f"No taxonomic information found, returning empty values for {genome_id}.\n")
+        logging.info(f"No taxonomic information found, returning empty values for {genome_id}.")
         gtdb_tax = {}
         gtdb_tax['genome_id'] = genome_id
         gtdb_tax["gtdb_taxonomy"] = {"domain" : "d__",
@@ -40,21 +46,21 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
         # If closest placement reference is provided, try finding taxonomic information from GTDB API
         if query.closest_placement_reference.values[0] != "":
             try:
-                sys.stderr.write("Inferring taxonomic placement from provided closest reference....\n")
+                logging.info("Inferring taxonomic placement from provided closest reference....")
                 gtdb_tax = get_ncbi_taxon_GTDB(query.closest_placement_reference.values[0], release)
                 gtdb_tax["genome_id"] = genome_id
             except KeyError as e:
-                raise PlacementError(f"Cannot infer taxonomic placement from provided closest reference. Make sure the accession id: {query.closest_placement_reference.values[0]} is part of GTDB release: {e}\n")
+                raise PlacementError(f"Cannot infer taxonomic placement from provided closest reference. Make sure the accession id: {query.closest_placement_reference.values[0]} is part of GTDB release: {e}")
 
 
         # If NCBI accession is provided, try to find taxonomic information from GTDB API
         elif query.source.values[0] == "ncbi":
             try:
-                sys.stderr.write("Inferring taxonomic placement from NCBI accession....\n")
+                logging.info("Inferring taxonomic placement from NCBI accession....")
                 gtdb_tax = get_ncbi_taxon_GTDB(query.genome_id.values[0], release)
             except KeyError:
                 if query.genus.values[0] != "":
-                    sys.stderr.write("Inferring taxonomic placement from provided genus information....\n")
+                    logging.info("Inferring taxonomic placement from provided genus information....")
                     gtdb_tax['genome_id'] = genome_id
                     gtdb_tax.update(get_parent_taxon_GTDB(query.genus.values[0], "genus", release))
                     gtdb_tax['gtdb_taxonomy']["species"] = f"s__{gtdb_tax['gtdb_taxonomy']['genus'].split('__')[-1]} sp."
@@ -63,7 +69,7 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
 
         # Try to get taxonomic information from genus information
         elif query.genus.values[0] != "":
-            sys.stderr.write("Inferring taxonomic placement from provided genus information....\n")
+            logging.info("Inferring taxonomic placement from provided genus information....")
             gtdb_tax['genome_id'] = genome_id
             gtdb_tax.update(get_parent_taxon_GTDB(query.genus.values[0], "genus", release))
             gtdb_tax['gtdb_taxonomy']["species"] = f"s__{gtdb_tax['gtdb_taxonomy']['genus'].split('__')[-1]} sp."
@@ -84,13 +90,13 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
     gtdb_tax = {}
 
     # Starting process
-    sys.stderr.write(f"Fetching taxonomic information for {genome_id}...\n")
+    logging.info(f"Fetching taxonomic information for {genome_id}...")
     # Go through user provided taxonomic placement
     if any(os.path.isfile(t) for t in tax_path.split()):
         try:
             gtdb_tax = get_user_defined_classification(genome_id, tax_path)
         except KeyError:
-            sys.stderr.write(f"{genome_id}: Not found in user provided taxonomic placement...\n")
+            logging.warning(f"{genome_id}: Not found in user provided taxonomic placement...")
             gtdb_tax = find_taxonomy(query, genome_id, gtdb_tax)
     else:
         gtdb_tax = find_taxonomy(query, genome_id, gtdb_tax)
@@ -98,9 +104,12 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
     if gtdb_tax == {}:
         raise EmptyTaxError(f"Oops, this shouldn't happen. It returns an empty dict. Something is wrong with the script.")
 
+    logging.info(f"Writing results to {outfile}...")
     with open(outfile, 'w') as file:
         json.dump(gtdb_tax, file, indent=2)
         file.close
+
+    logging.info(f"Job finished!")
     return
 
 def get_user_defined_classification(genome_id, tax_path):
@@ -126,7 +135,7 @@ def get_user_defined_classification(genome_id, tax_path):
     result["gtdb_url"] = "user provided classification"
     result["gtdb_release"] = "unknown"
     result["gtdb_taxonomy"] = {level_dict[q.split("__")[0]] : q for q in query}
-    sys.stderr.write(f"Using user provided GTDB classification.\n")
+    logging.info(f"Using user provided GTDB classification.")
     return result
 
 def get_ncbi_taxon_GTDB(accession, release = "R202"):
@@ -135,12 +144,27 @@ def get_ncbi_taxon_GTDB(accession, release = "R202"):
     """
     def gtdb_api_request(accession, api_type):
         if api_type == "taxonomy":
-            api_url = f"https://gtdb.ecogenomic.org/api/v1/{api_type}/genome/{accession}"
+            api_url = f"https://api.gtdb.ecogenomic.org/genome/{accession}/taxon-history"
         elif api_type == "summary":
-            api_url = f"https://gtdb.ecogenomic.org/api/v1/genome/{api_type}/{accession}"
+            api_url = f"https://api.gtdb.ecogenomic.org/genome/{accession}/card"
         response = requests.get(api_url)
-        js = response.json()
+
+        try:
+            js = response.json()
+        except json.JSONDecodeError as e:
+            logging.critical(f"Cannot decode response from GTDB API. Make sure this is a valid url: {api_url}")
+            raise
+
         return js, api_url
+
+    # Mapping to bgcflow format
+    level_dict = {"d" :"domain",
+                  "p" : "phylum",
+                  "c" : "class",
+                  "o" : "order",
+                  "f" : "family",
+                  "g" : "genus",
+                  "s" : "species"}
 
     # get taxonomic information
     js_tax, api_url_tax = gtdb_api_request(accession, "taxonomy")
@@ -149,13 +173,15 @@ def get_ncbi_taxon_GTDB(accession, release = "R202"):
     result["gtdb_url"] = api_url_tax
     result["gtdb_release"] = release
     try:
-        result["gtdb_taxonomy"] = js_tax["gtdb_taxonomy"][release]
+        result["gtdb_taxonomy"] = [tax for tax in js_tax if tax['release'] == release][0]
+        result["gtdb_taxonomy"].pop('release', None)
+        result["gtdb_taxonomy"] = {level_dict[k] : result["gtdb_taxonomy"][k] for k in result["gtdb_taxonomy"].keys()}
     except KeyError as err:
         if err.args[0] == "gtdb_taxonomy":
-            sys.stderr.write(f"Malformed genome id: {accession}. Make sure to use the right NCBI genome accession format.\n")
+            logging.critical(f"Malformed genome id: {accession}. Make sure to use the right NCBI genome accession format.")
             raise
         elif err.args[0] == release:
-            sys.stderr.write(f"Cannot find genome id: {accession} in GTDB API.\n")
+            logging.critical(f"Cannot find genome id: {accession} in GTDB API.")
             raise
 
     # get other metadata from genome summary
@@ -180,10 +206,10 @@ def get_parent_taxon_GTDB(taxon, level, release = "R202"):
     try:
         query = f"{level_dict[level]}__{taxon}"
     except KeyError:
-        sys.stderr.write(f"Incorrect taxon level format. Please choose from available format: {list(level_dict.keys())}.\n")
+        logging.critical(f"Incorrect taxon level format. Please choose from available format: {list(level_dict.keys())}.")
         raise
 
-    api_url = f"https://gtdb.ecogenomic.org/api/v1/taxonomy/taxon/{query}/parent"
+    api_url = f"https://api.gtdb.ecogenomic.org/taxonomy/partial/{query}/all-releases"
     response = requests.get(api_url)
     js = response.json()
     result = {}
@@ -191,13 +217,23 @@ def get_parent_taxon_GTDB(taxon, level, release = "R202"):
     result["gtdb_release"] = release
     result["gtdb_taxonomy"] = {}
 
+    level_dict_rev = {"d" :"domain",
+                  "p" : "phylum",
+                  "c" : "class",
+                  "o" : "order",
+                  "f" : "family",
+                  "g" : "genus",
+                  "s" : "species"}
+
     try:
-        for k in js.keys():
-            if release in js[k]["releases"]:
-                t = js[k]["taxon"]
-                result["gtdb_taxonomy"][k] = t
+        for item in js:
+            if release in item['release']:
+                t = item["taxonomy"]
+                taxonomy = {level_dict_rev[k] : t[k] for k in t.keys()}
+
+                result["gtdb_taxonomy"] = taxonomy
     except TypeError:
-        sys.stderr.write(f"{js['message']}\n")
+        logging.critical(f"{js['message']}")
         raise
 
     return result
