@@ -65,7 +65,7 @@ rule bigslice:
         folder = directory("data/interim/bigslice/{name}_antismash_{version}/")
     conda:
         "../envs/bigslice.yaml"
-    threads: 64
+    threads: 16
     log:
         "workflow/report/logs/bigslice/bigslice/bigslice_{name}-antismash-{version}.log"
     shell:
@@ -96,7 +96,7 @@ rule query_bigslice:
         folder = directory("data/interim/bigslice/query/{name}_antismash_{version}/")
     conda:
         "../envs/bigslice.yaml"
-    threads: 32
+    threads: 8
     log:
         "workflow/report/logs/bigslice/query_bigslice/query_bigslice_{name}-antismash-{version}.log"
     params:

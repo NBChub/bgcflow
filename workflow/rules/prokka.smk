@@ -76,7 +76,7 @@ rule prokka:
         evalue = "1e-05",
         rna_detection = prokka_params_rna,
         refgbff = lambda wildcards: get_prokka_refdb(wildcards, "params")
-    threads: 16
+    threads: 4
     shell:
         """
         prokka --outdir data/interim/prokka/{wildcards.strains} --force \

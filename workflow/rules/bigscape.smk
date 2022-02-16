@@ -55,7 +55,7 @@ rule bigscape:
         label = "{name}_antismash_{version}",
         antismash_dir = "data/interim/bigscape/tmp/{name}_antismash_{version}/"
     log: "workflow/report/logs/bigscape/{name}_antismash_{version}/bigscape.log"
-    threads: 64
+    threads: 16
     shell:
         """
         python {input.bigscape}/bigscape.py -i {params.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose > {log}
