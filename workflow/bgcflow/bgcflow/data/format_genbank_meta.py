@@ -193,11 +193,11 @@ def modify_id(accession_id, original_id, locus_index, record_counts, id_collecti
     """
     logging.info(f"{original_id}: Attempting to change locus name...")
 
-    # For genbank or refseq record, remove version from string
+    # For refseq record, remove the accession prefix (first two digits) from string
     if accession_id.startswith("GCF"):
-        logging.debug(f"{original_id}: Assuming locus came from Refseq. Removing version from locus name.")
+        logging.debug(f"{original_id}: Assuming locus came from Refseq. Removing refseq accession prefix.")
         refseq_type, refseq_number, refseq_version = re.split('_|[.]', original_id)
-        new_id = f"{refseq_type}_{refseq_number}"
+        new_id = f"{refseq_number}.{refseq_version}"
 
     elif accession_id.startswith("GCA"):
         logging.info(f"{original_id}: Assuming locus came from Genbank. Removing version from locus name...")
