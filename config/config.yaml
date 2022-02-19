@@ -37,6 +37,7 @@ rules:
   arts: FALSE
   roary: FALSE
   eggnog: FALSE
+  eggnog-roary: FALSE
   # other parameter settings
   rnammer: FALSE
 
