@@ -253,7 +253,7 @@ def get_final_output():
                                          strains = STRAINS),
                 "automlst_wrapper" : expand("data/processed/{name}/automlst_wrapper/{name}.newick", \
                                             name=PROJECT_IDS),
-                "roary" : expand("data/interim/roary/{name}/", name=PROJECT_IDS),
+                "roary" : expand("data/processed/{name}/roary/gene_presence_absence.csv", name=PROJECT_IDS),
                 "bigscape" : expand("data/processed/{name}/bigscape/{name}_bigscape_as{version}.zip", \
                                     version=dependency_version["antismash"], name=PROJECT_IDS),
                 "seqfu" : expand("data/processed/{name}/tables/df_seqfu_stats.csv", name=PROJECT_IDS),
