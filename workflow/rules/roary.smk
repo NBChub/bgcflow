@@ -16,8 +16,7 @@ rule roary:
 
 rule eggnog_roary:
     input:
-        roary_dir = directory("data/interim/roary/{name}/"),
-        faa = "data/interim/roary/{name}/pan_genome_reference.fa",
+        roary_dir = "data/interim/roary/{name}/",
         eggnog_db = "resources/eggnog_db",
         dmnd = "resources/eggnog_db/bacteria.dmnd"
     output:
@@ -26,10 +25,13 @@ rule eggnog_roary:
         "../envs/eggnog.yaml"
     threads: 8
     log: "workflow/report/logs/eggnog-roary/eggnog-{name}.log"
+    params:
+        faa = "data/interim/roary/{name}/pan_genome_reference.fa",
     shell:
         """
         mkdir -p {output.eggnog_dir}
-        emapper.py -i {input.faa} --decorate_gff "yes" --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} >> {log}
+        emapper.py -i {params.faa} --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} >> {log}
+        rm -r emappertmp*
         """ 
 
 rule roary_out:
