@@ -14,12 +14,30 @@ rule roary:
         roary -p {threads} -f {output.roary_dir} -e -n -i {params.i} -r -v --mafft -z {input.gff} >> {log}
         """
 
+rule eggnog_roary:
+    input:
+        roary_dir = directory("data/interim/roary/{name}/"),
+        faa = "data/interim/roary/{name}/pan_genome_reference.fa",
+        eggnog_db = "resources/eggnog_db",
+        dmnd = "resources/eggnog_db/bacteria.dmnd"
+    output:
+        eggnog_dir = directory("data/interim/eggnog_roary/{name}/")
+    conda:
+        "../envs/eggnog.yaml"
+    threads: 8
+    log: "workflow/report/logs/eggnog-roary/eggnog-{name}.log"
+    shell:
+        """
+        mkdir -p {output.eggnog_dir}
+        emapper.py -i {input.faa} --decorate_gff "yes" --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} >> {log}
+        """ 
+
 rule roary_out:
     input: 
         roary_interim_dir = "data/interim/roary/{name}/",
     output:
         roary_processed_dir = directory("data/processed/{name}/roary"),
-        gene_presence = directory("data/processed/{name}/roary/gene_presence_absence.csv"),
+        gene_presence = "data/processed/{name}/roary/gene_presence_absence.csv",
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/roary/roary-out-{name}.log"
