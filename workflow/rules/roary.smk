@@ -3,7 +3,6 @@ rule roary:
         gff = lambda wildcards: get_roary_inputs(wildcards.name)
     output:
         roary_dir = directory("data/interim/roary/{name}/"),
-        gene_presence = directory("data/interim/roary/{name}/gene_presence_absence.csv"),
     conda:
         "../envs/roary.yaml"
     params:
@@ -17,7 +16,6 @@ rule roary:
 
 rule roary_out:
     input: 
-        gene_presence = "data/interim/roary/{name}/gene_presence_absence.csv",
         roary_interim_dir = "data/interim/roary/{name}/",
     output:
         roary_processed_dir = directory("data/processed/{name}/roary"),
