@@ -3,14 +3,29 @@ rule roary:
         gff = lambda wildcards: get_roary_inputs(wildcards.name)
     output:
         roary_dir = directory("data/interim/roary/{name}/"),
+        gene_presence = directory("data/interim/roary/{name}/gene_presence_absence.csv"),
     conda:
         "../envs/roary.yaml"
     params:
         i = 80,
-        core = 95,
-    threads: 16
+    threads: 8
     log: "workflow/report/logs/roary/roary-{name}.log"
     shell:
         """
-        roary -p {threads} -f {output.roary_dir} -e -n -i {params.i} -cd {params.core} -r -v --mafft {input.gff} >> {log}
+        roary -p {threads} -f {output.roary_dir} -e -n -i {params.i} -r -v --mafft -z {input.gff} >> {log}
+        """
+
+rule roary_out:
+    input: 
+        gene_presence = "data/interim/roary/{name}/gene_presence_absence.csv",
+        roary_interim_dir = "data/interim/roary/{name}/",
+    output:
+        roary_processed_dir = directory("data/processed/{name}/roary"),
+        gene_presence = directory("data/processed/{name}/roary/gene_presence_absence.csv"),
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log: "workflow/report/logs/roary/roary-out-{name}.log"
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/make_pangenome_dataset.py {input.roary_interim_dir} {output.roary_processed_dir} 2> {log}
         """
