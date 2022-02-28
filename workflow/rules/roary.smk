@@ -11,7 +11,7 @@ rule roary:
     log: "workflow/report/logs/roary/roary-{name}.log"
     shell:
         """
-        roary -p {threads} -f {output.roary_dir} -e -n -i {params.i} -r -v --mafft -z {input.gff} >> {log}
+        roary -p {threads} -f {output.roary_dir} -i {params.i} -r -v {input.gff} >> {log}
         """
 
 rule eggnog_roary:
@@ -31,7 +31,6 @@ rule eggnog_roary:
         """
         mkdir -p {output.eggnog_dir}
         emapper.py -i {params.faa} --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} >> {log}
-        rm -r emappertmp*
         """ 
 
 rule roary_out:
