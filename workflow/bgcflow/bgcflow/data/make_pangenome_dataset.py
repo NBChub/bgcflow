@@ -34,7 +34,6 @@ def get_roary_data(roary_interim_folder, roary_processed_folder):
 
     gene_summary_out = os.path.join(roary_processed_folder, 'pangene_summary.csv')
     df_gene_summary = df_gene_presence_summary[gene_summary_columns].fillna('')
-    df_gene_summary.to_csv(gene_summary_out)
 
     # Add locus_tag and pangenome_id from pan_genome_reference.fa file
     pan_fasta_path = os.path.join(roary_interim_folder, 'pan_genome_reference.fa')
@@ -45,6 +44,8 @@ def get_roary_data(roary_interim_folder, roary_processed_folder):
         pan_gene_id = ' '.join([pan_gene_id for pan_gene_id in pan_gene_desc[1:]])
         if pan_gene_id in df_gene_summary.index:
             df_gene_summary.loc[pan_gene_id, 'locus_tag'] = locus_tag
+    
+    df_gene_summary.to_csv(gene_summary_out)
 
     # Extract locus tags 
     df_gene_presence = df_gene_presence_summary.drop(columns=gene_summary_columns).fillna('')
@@ -135,11 +136,12 @@ def plot_core_pan_curve(roary_interim_folder, roary_processed_folder):
                               arrayminus=avg_pan - min_pan))) # fill to trace0 y
     
     fig_pan_core.update_layout(autosize=False, width=800, height=500, margin=dict(l=20, r=20, b=30, t=30, pad=4),
-                      title_text='Pangenome curve', xaxis_title_text='#Genomes', yaxis_title_text='#Genes', 
+                      title_text='Pangenome and coregenome curve', xaxis_title_text='#Genomes', yaxis_title_text='#Genes', 
                       paper_bgcolor="White")
 
     fig_pan_core_path = os.path.join(roary_processed_folder, 'pan_core_curve.jpeg')
-    fig_pan_core.write_image(fig_pan_core_path)
+    if not os.path.isfile(fig_pan_core_path):
+        fig_pan_core.write_image(fig_pan_core_path)
         
     # Plot new and unique genome curves in JPEG format
     fig_new_uniq = go.Figure()
@@ -154,13 +156,14 @@ def plot_core_pan_curve(roary_interim_folder, roary_processed_folder):
                               arrayminus=avg_uniq - min_uniq))) # fill to trace0 y
     
     fig_new_uniq.update_layout(autosize=False, width=800, height=500, margin=dict(l=20, r=20, b=30, t=30, pad=4),
-                      title_text='Pangenome curve', xaxis_title_text='#Genomes', yaxis_title_text='#Genes', 
+                      title_text='New and unique genes curve', xaxis_title_text='#Genomes', yaxis_title_text='#Genes', 
                       paper_bgcolor="White")
 
     fig_new_uniq_path = os.path.join(roary_processed_folder, 'new_unique_curve.jpeg')
-    fig_new_uniq.write_image(fig_new_uniq_path)
+    if not os.path.isfile(fig_new_uniq_path):
+        fig_new_uniq.write_image(fig_new_uniq_path)
 
-    return None
+    return fig_pan_core.show(), fig_new_uniq.show()
     
 def plot_pan_freq_plot(df_gene_presence_binary, roary_processed_folder):
     """
@@ -189,9 +192,10 @@ def plot_pan_freq_plot(df_gene_presence_binary, roary_processed_folder):
         yaxis_title_text='#Genes', # yaxis label
         )
     fig_out_path = os.path.join(roary_processed_folder, 'gene_frequency.jpeg')
-    fig.write_image(fig_out_path)
+    if not os.path.isfile(fig_out_path):
+        fig.write_image(fig_out_path)
 
-    return None
+    return fig.show()
     
     
 def plot_pan_pie_chart(df_gene_presence_binary, roary_processed_folder, core=0.99, softcore=0.95, shell=0.15):
@@ -251,10 +255,11 @@ def plot_pan_pie_chart(df_gene_presence_binary, roary_processed_folder, core=0.9
             autopct=my_autopct, textprops={'fontsize': 20, 'fontweight': 'bold'})
     
     fig_out_path = os.path.join(roary_processed_folder, 'pangenome_pie.jpeg')
-    plt.savefig(fig_out_path, facecolor='w', edgecolor='w', orientation='portrait', 
+    if not os.path.isfile(fig_out_path):
+        plt.savefig(fig_out_path, facecolor='w', edgecolor='w', orientation='portrait', 
                 format='jpeg', transparent=False, bbox_inches='tight', pad_inches=0.1)
 
-    return None
+    return plt.show()
 
 if __name__ == "__main__":
     roary_interim_folder = sys.argv[1]
