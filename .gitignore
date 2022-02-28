@@ -9,6 +9,7 @@ workflow/report/*
 !workflow/report/*.rst
 workflow/notebook/
 workflow/bgcflow/bgcflow.egg-info*
+workflow/bgcflow/build*
 *.pyc
 *.cache
 *.ipynb
