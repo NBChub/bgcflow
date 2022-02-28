@@ -21,3 +21,4 @@ dependencies:
       - biopython
       - networkx
       - alive_progress
+      - kaleido
