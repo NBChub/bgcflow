@@ -10,6 +10,7 @@ dependencies:
   - seaborn
   - pandas
   - plotly
+  - python-kaleido
   - bokeh
   - openpyxl
   - nbconvert
