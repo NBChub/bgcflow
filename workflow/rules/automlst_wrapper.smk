@@ -31,12 +31,27 @@ rule automlst_wrapper:
         reduced_core = "resources/automlst-simplified-wrapper-main/reducedcore.hmm",
     output:
         tree = "data/interim/automlst_wrapper/{name}/raxmlpart.txt.treefile",
-        final_tree = "data/processed/{name}/automlst_wrapper/{name}.newick"
     log: "workflow/report/logs/automlst_wrapper/automlst_wrapper/automlst_wrapper-{name}.log"
     conda: 
         "../envs/automlst_wrapper.yaml"
     shell:
         """
         python resources/automlst-simplified-wrapper-main/simplified_wrapper.py data/interim/automlst_wrapper/{wildcards.name}
-        cp {output.tree} {output.final_tree}
+        """
+
+rule automlst_wrapper_out:
+    input:
+        tree = "data/interim/automlst_wrapper/{name}/raxmlpart.txt.treefile",
+        automlst_interim = "data/interim/automlst_wrapper/{name}/",
+        prokka_interim = "data/interim/prokka",
+        gtdb_interim = "data/interim/gtdb",
+    output:
+        automlst_processed = directory("data/processed/{name}/automlst_wrapper/"),
+        final_tree = "data/processed/{name}/automlst_wrapper/final.newick",
+    log: "workflow/report/logs/automlst_wrapper/automlst_wrapper/automlst_wrapper_out-{name}.log"
+    conda:
+        "../envs/bgc_analytics.yaml"
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/make_phylo_tree.py {input.automlst_interim} {output.automlst_processed} {input.prokka_interim} {input.gtdb_interim} 2> {log}
         """

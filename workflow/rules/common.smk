@@ -251,7 +251,7 @@ def get_final_output():
                 "eggnog" : expand("data/interim/eggnog/{strains}/", strains = STRAINS),
                 "refseq_masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", \
                                          strains = STRAINS),
-                "automlst_wrapper" : expand("data/processed/{name}/automlst_wrapper/{name}.newick", \
+                "automlst_wrapper" : expand("data/processed/{name}/automlst_wrapper/final.newick", \
                                             name=PROJECT_IDS),
                 "roary" : expand("data/processed/{name}/roary/gene_presence_absence.csv", name=PROJECT_IDS),
                 "eggnog-roary" : expand("data/interim/eggnog_roary/{name}/", name=PROJECT_IDS),
