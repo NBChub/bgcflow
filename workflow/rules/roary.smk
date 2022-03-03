@@ -36,13 +36,14 @@ rule eggnog_roary:
 rule roary_out:
     input: 
         roary_interim_dir = "data/interim/roary/{name}/",
+        automlst_processed_dir = "data/processed/{name}/automlst_wrapper/",
     output:
         roary_processed_dir = directory("data/processed/{name}/roary"),
-        gene_presence = "data/processed/{name}/roary/gene_presence_absence.csv",
+        gene_presence = "data/processed/{name}/roary/df_gene_presence_binary.csv",
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/roary/roary-out-{name}.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/make_pangenome_dataset.py {input.roary_interim_dir} {output.roary_processed_dir} 2> {log}
+        python workflow/bgcflow/bgcflow/data/make_pangenome_dataset.py {input.roary_interim_dir} {output.roary_processed_dir} {input.automlst_processed_dir} 2> {log}
         """
