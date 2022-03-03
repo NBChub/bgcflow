@@ -32,23 +32,27 @@ def copy_automlst_out(automlst_interim_folder, automlst_processed_folder):
     
     # Selected tree newick file for downstream analysis by default automlst_wrapper
     treefile = os.path.join(automlst_interim_folder, 'raxmlpart.txt.treefile')
-    out_newick = os.path.join(automlst_processed_folder, 'final.newick')
+    out_newick_processed = os.path.join(automlst_processed_folder, 'final.newick')
+    out_newick_interim = os.path.join(automlst_interim_folder, 'final.newick')
     
     if os.path.isfile(treefile):
-        print(treefile, out_newick)
-        copyfile(treefile, out_newick)
+        copyfile(treefile, out_newick_interim)
+        copyfile(treefile, out_newick_processed)
 
     # Save list of MLST genes in pandas table (currently with only index with TIGR IDs)
     aligned_dir = os.path.join(automlst_interim_folder, 'aligned')
-    mlst_out_path = os.path.join(automlst_processed_folder, 'df_mlst_genes.csv')
+    mlst_out_path_processed = os.path.join(automlst_processed_folder, 'df_mlst_genes.csv')
+    mlst_out_path_interim = os.path.join(automlst_interim_folder, 'df_mlst_genes.csv')
+    
     mlst_gene_list = os.listdir(aligned_dir)
-
+    
     df_mlst = pd.DataFrame(index=mlst_gene_list, columns=['aligned_path'])
     for mlst_gene in df_mlst.index:
         df_mlst.loc[mlst_gene, 'aligned_path'] = os.path.join(aligned_dir, mlst_gene + '.faa')
     df_mlst.index.name = 'mlst_gene'
     
-    df_mlst.to_csv(mlst_out_path)
+    df_mlst.to_csv(mlst_out_path_interim)
+    df_mlst.to_csv(mlst_out_path_processed)
     
     return None
 
@@ -112,8 +116,11 @@ def get_genome_tree_table(automlst_processed_folder, prokka_interim_folder, gtdb
             except IndexError: # leave blank for empty taxonomy
                 df_genomes_tree.loc[genome_id, 'species'] = ''
     
-    genomes_tree_path = os.path.join(automlst_processed_folder, 'df_genomes_tree.csv')
-    df_genomes_tree.to_csv(genomes_tree_path, index=False)
+    genomes_tree_path_interim = os.path.join(automlst_processed_folder, 'df_genomes_tree.csv')
+    genomes_tree_path_processed = os.path.join(automlst_processed_folder, 'df_genomes_tree.csv')
+
+    df_genomes_tree.to_csv(genomes_tree_path_interim)
+    df_genomes_tree.to_csv(genomes_tree_path_processed)
 
     return df_genomes_tree
 
