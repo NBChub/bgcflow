@@ -2,7 +2,7 @@ import os
 import sys
 import pandas as pd
 from shutil import copyfile
-from Bio import SeqIO
+from Bio import SeqIO, Phylo
 import plotly.graph_objects as go
 import plotly.express as px
 import matplotlib.pyplot as plt
@@ -32,7 +32,8 @@ def get_roary_data(roary_interim_folder, roary_processed_folder):
         'Accessory Fragment', 'Accessory Order with Fragment', 'QC',
         'Min group size nuc', 'Max group size nuc', 'Avg group size nuc']
 
-    gene_summary_out = os.path.join(roary_processed_folder, 'pangene_summary.csv')
+    gene_summary_out_interim = os.path.join(roary_interim_folder, 'df_pangene_summary.csv')
+    gene_summary_out_processed = os.path.join(roary_processed_folder, 'df_pangene_summary.csv')
     df_gene_summary = df_gene_presence_summary[gene_summary_columns].fillna('')
 
     # Add locus_tag and pangenome_id from pan_genome_reference.fa file
@@ -45,18 +46,24 @@ def get_roary_data(roary_interim_folder, roary_processed_folder):
         if pan_gene_id in df_gene_summary.index:
             df_gene_summary.loc[pan_gene_id, 'locus_tag'] = locus_tag
     
-    df_gene_summary.to_csv(gene_summary_out)
+    df_gene_summary.to_csv(gene_summary_out_interim)
+    df_gene_summary.to_csv(gene_summary_out_processed)
 
     # Extract locus tags 
     df_gene_presence = df_gene_presence_summary.drop(columns=gene_summary_columns).fillna('')
-    gene_presence_out = os.path.join(roary_processed_folder, 'gene_presence_absence.csv')
-    df_gene_presence.to_csv(gene_presence_out)
+    gene_presence_locustag_out_interim = os.path.join(roary_interim_folder, 'df_gene_presence_locustag.csv')
+    gene_presence_locustag_out_processed = os.path.join(roary_processed_folder, 'df_gene_presence_locustag.csv')
+    df_gene_presence.to_csv(gene_presence_locustag_out_interim)
+    df_gene_presence.to_csv(gene_presence_locustag_out_processed)
 
     # Save the gene presence absence binary matrix
     gene_presence_binary_path = os.path.join(roary_interim_folder, 'gene_presence_absence.Rtab')
-    gene_presence_binary_out = os.path.join(roary_processed_folder, 'gene_presence_absence_binary.csv')
+    gene_presence_binary_out_interim = os.path.join(roary_interim_folder, 'df_gene_presence_binary.csv')
+    gene_presence_binary_out_processed = os.path.join(roary_processed_folder, 'df_gene_presence_binary.csv')
+
     df_gene_presence_binary = pd.read_csv(gene_presence_binary_path, index_col='Gene', sep='\t')
-    df_gene_presence_binary.to_csv(gene_presence_binary_out)
+    df_gene_presence_binary.to_csv(gene_presence_binary_out_interim)
+    df_gene_presence_binary.to_csv(gene_presence_binary_out_processed)
 
     # Copy other output files to processed directory
     copyfile(os.path.join(roary_interim_folder, 'conserved_vs_total_genes.png'),
@@ -207,7 +214,7 @@ def plot_pan_pie_chart(df_gene_presence_binary, roary_processed_folder, core=0.9
     1. df_gene_presence_binary : pd.DataFrame
         Dataframe with presence absence matrix of genes in the pangenome
     2. roary_processed_folder : str / path
-        Location of the processed output directory where gene frequency plot will be saved
+        Location of the processed output directory for Roary
     3. core: int (0 to 1) 
         default = 0.99
         Fraction of genomes the gene must be present to be group in core (99% <= strains <= 100%)
@@ -261,10 +268,127 @@ def plot_pan_pie_chart(df_gene_presence_binary, roary_processed_folder, core=0.9
 
     return plt.show()
 
+
+def plot_tree_presence_map(t, df_gene_presence_binary, df_genomes_tree, df_roary_sorted, roary_processed_folder):
+    """
+    Plots gene presence heatmap with phylogenetic tree
+
+    Parameters
+    ----------
+    1. tree : Phlyo.tree
+        Phylogenetic tree object of Bio.Phylo from autoMLST
+    1. df_gene_presence_binary : pd.DataFrame
+        Dataframe with presence absence matrix of genes in the pangenome
+    2. df_genomes_tree : pd.DataFrame
+        Dataframe with genomes ordered phylogenetically
+    3. df_roary_sorted : pd.DataFrame
+        Sorted matrix with gene presence across the genomes
+    4. roary_processed_folder : str / path
+        Location of the processed output directory for Roary
+    
+    Returns
+    -------
+    1. heatmap : jpeg
+        Heatmap of gene presence with genomes in phylogenetic order    
+    """
+    
+    # Max distance to create better plot
+    mdist = max([t.distance(t.root, x) for x in t.get_terminals()])
+
+    
+    # Considere clustering methods for sorting the matrix
+    
+    # PLot presence/absence matrix against the tree
+    fig = plt.figure(figsize=(30, df_roary_sorted.shape[1]/6))
+
+    ax1=plt.subplot2grid((1,40), (0, 10), colspan=30)
+    a=ax1.imshow(df_roary_sorted.T, cmap=plt.cm.Blues,
+               vmin=0, vmax=1,
+               aspect='auto',
+               interpolation='none',
+                )
+    ax1.set_yticks([])
+    ax1.set_xticks([])
+    ax1.axis('off')
+
+    ax = fig.add_subplot(1,2,1)
+    ax=plt.subplot2grid((1,40), (0, 0), colspan=10)
+
+    fig.subplots_adjust(wspace=1, hspace=0)
+
+    ax1.set_title('Roary matrix\n(%d gene clusters)'%df_roary_sorted.shape[0])
+
+    # Tree labels are extracted from the column 'strain' of df_genmomes_tree
+    Phylo.draw(t, axes=ax,
+               show_confidence=False,
+               label_func=lambda x: df_genomes_tree.loc[x.name[:-1] + '.' + x.name[-1], 'strain'] if x.is_terminal() else '',
+               xticks=([],), yticks=([],),
+               ylabel=('',), xlabel=('',),
+               xlim=(-0.01,mdist+0.01),
+               axis=('off',),
+               title=('autoMLST tree\n(%d strains)'%df_roary_sorted.shape[1],), 
+              )
+    
+    fig_out_path = os.path.join(roary_processed_folder, 'phylo_presence_heatmap.jpeg')
+    if not os.path.isfile(fig_out_path):
+        plt.savefig(fig_out_path, facecolor='w', edgecolor='w', orientation='portrait', 
+                format='jpeg', transparent=False, bbox_inches='tight', pad_inches=0.1)
+
+    return plt.show()
+
+
+def sort_roary_matrix(df_gene_presence_binary, df_genomes_tree, roary_interim_folder, roary_processed_folder):
+    """
+    Sort roary presence matric- genomes in phylogenetic order and gene in order of the sum of strains present
+
+    Parameters
+    ---------- 
+    1. df_gene_presence_binary : pd.DataFrame
+        Dataframe with presence absence matrix of genes in the pangenome
+    2. df_genomes_tree : pd.DataFrame
+        Dataframe with genomes ordered phylogenetically
+
+    Returns
+    -------
+    1. df_roary_sorted : pd.DataFrame
+        Sorted matrix with gene presence across the genomes
+        Saves sorted matrix as csv table    
+    """
+
+    # Gene presence matrix
+    df_roary = df_gene_presence_binary.copy()   
+    # Sort the matrix by the sum of strains presence
+    sorted_idx = df_roary.sum(axis=1).sort_values(ascending=False).index
+    df_roary_sorted = df_roary.loc[sorted_idx]
+    # Sort the matrix according to phylogeny
+    df_roary_sorted = df_roary_sorted[df_genomes_tree.index]
+
+    roary_sorted_interim = os.path.join(roary_interim_folder, 'df_roary_tree_sum_sorted.csv')
+    roary_sorted_processed = os.path.join(roary_processed_folder, 'df_roary_tree_sum_sorted.csv')
+
+    df_roary_sorted.to_csv(roary_sorted_interim)
+    df_roary_sorted.to_csv(roary_sorted_processed)
+
+    # TO DO: Considere clustering methods for sorting the matrix
+
+    return df_roary_sorted
+
+
 if __name__ == "__main__":
     roary_interim_folder = sys.argv[1]
     roary_processed_folder = sys.argv[2]
+    automlst_interim_folder = sys.argv[3]
     df_gene_presence, df_gene_presence_binary, df_gene_summary = get_roary_data(roary_interim_folder, roary_processed_folder)
     plot_core_pan_curve(roary_interim_folder, roary_processed_folder)
     plot_pan_freq_plot(df_gene_presence_binary, roary_processed_folder)
     plot_pan_pie_chart(df_gene_presence_binary, roary_processed_folder, core=0.99, softcore=0.95, shell=0.15)
+
+    # Read tree file
+    newick_path = os.path.join(automlst_interim_folder,'final.newick')
+    t = Phylo.read(newick_path, 'newick')
+    genome_tree_table_path = os.path.join(automlst_interim_folder, 'df_genomes_tree.csv')
+    df_genomes_tree = pd.read_csv(genome_tree_table_path, index_col='genome_id')
+
+    # Sort the matrix according to phylogeny
+    df_roary_sorted = sort_roary_matrix(df_gene_presence_binary, df_genomes_tree, roary_interim_folder, roary_processed_folder)
+    plot_tree_presence_map(t, df_gene_presence_binary, df_genomes_tree, df_roary_sorted, roary_processed_folder)
