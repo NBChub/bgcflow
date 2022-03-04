@@ -7,8 +7,8 @@ rule install_eggnog:
     log: "workflow/report/logs/eggnog/install_eggnog.log"
     shell:
         """
-        download_eggnog_data.py --data_dir {output.eggnog_db} -y >> {log}
-        create_dbs.py -m diamond --dbname bacteria --taxa Bacteria --data_dir {output.eggnog_db} -y >> {log}
+        download_eggnog_data.py --data_dir {output.eggnog_db} -y 2>> {log}
+        create_dbs.py -m diamond --dbname bacteria --taxa Bacteria --data_dir {output.eggnog_db} -y 2>> {log}
         """
 
 rule eggnog:
@@ -25,5 +25,5 @@ rule eggnog:
     shell:
         """
         mkdir -p {output.eggnog_dir}
-        emapper.py -i {input.faa} --decorate_gff "yes" --excel --cpu {threads} -o {wildcards.strains} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} >> {log}
+        emapper.py -i {input.faa} --decorate_gff "yes" --excel --cpu {threads} -o {wildcards.strains} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} 2>> {log}
         """
