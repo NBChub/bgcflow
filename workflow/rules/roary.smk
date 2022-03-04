@@ -11,7 +11,7 @@ rule roary:
     log: "workflow/report/logs/roary/roary-{name}.log"
     shell:
         """
-        roary -p {threads} -f {output.roary_dir} -i {params.i} -r -v {input.gff} >> {log}
+        roary -p {threads} -f {output.roary_dir} -i {params.i} -r -v {input.gff} 2>> {log}
         """
 
 rule eggnog_roary:
@@ -30,7 +30,7 @@ rule eggnog_roary:
     shell:
         """
         mkdir -p {output.eggnog_dir}
-        emapper.py -i {params.faa} --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} >> {log}
+        emapper.py -i {params.faa} --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} 2>> {log}
         """ 
 
 rule roary_out:
@@ -45,5 +45,5 @@ rule roary_out:
     log: "workflow/report/logs/roary/roary-out-{name}.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/make_pangenome_dataset.py {input.roary_interim_dir} {output.roary_processed_dir} {input.automlst_processed_dir} 2> {log}
+        python workflow/bgcflow/bgcflow/data/make_pangenome_dataset.py {input.roary_interim_dir} {output.roary_processed_dir} {input.automlst_processed_dir} 2>> {log}
         """
