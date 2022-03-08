@@ -11,7 +11,7 @@ rule roary:
     log: "workflow/report/logs/roary/roary-{name}.log"
     shell:
         """
-        roary -p {threads} -f {output.roary_dir} -i {params.i} -r -v {input.gff} 2>> {log}
+        roary -p {threads} -f {output.roary_dir} -i {params.i} -e -n -r -v {input.gff} 2>> {log}
         """
 
 rule eggnog_roary:
