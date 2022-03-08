@@ -8,7 +8,7 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 
 
-def get_roary_data(roary_interim_folder, roary_processed_folder):
+def get_roary_data(roary_interim_folder, roary_processed_folder, core=0.99, softcore=0.95, shell=0.15):
     '''
     Copy important files from Roary interim to proecessed directory 
 
@@ -16,7 +16,18 @@ def get_roary_data(roary_interim_folder, roary_processed_folder):
     ---------- 
     1. roary_folder : str / path
         Location of the output from Roary in the interim directory
-    
+    2. roary_processed_folder : str / path
+        Location of the processed output directory for important Roary results
+    3. core: int (0 to 1) 
+        default = 0.99
+        Fraction of genomes the gene must be present to be group in core (99% <= strains <= 100%)
+    4. softcore: int (0 to 1) 
+        default = 0.95
+        Fraction of genomes the gene must be present to be group in softcore (95% <= strains < 99%)
+    5. shell: int (0 to 1) 
+        default = 0.15
+        Fraction of genomes the gene must be present to be group in softcore (15% <= strains < 95%)
+        Remaining genes will be in cloud
     Returns
     -------
     1. roary_processed_folder : str / path
@@ -36,19 +47,6 @@ def get_roary_data(roary_interim_folder, roary_processed_folder):
     gene_summary_out_processed = os.path.join(roary_processed_folder, 'df_pangene_summary.csv')
     df_gene_summary = df_gene_presence_summary[gene_summary_columns].fillna('')
 
-    # Add locus_tag and pangenome_id from pan_genome_reference.fa file
-    pan_fasta_path = os.path.join(roary_interim_folder, 'pan_genome_reference.fa')
-    records = SeqIO.parse(pan_fasta_path, format='fasta')
-    for rec in records:
-        locus_tag = rec.id
-        pan_gene_desc = rec.description.split(' ')
-        pan_gene_id = ' '.join([pan_gene_id for pan_gene_id in pan_gene_desc[1:]])
-        if pan_gene_id in df_gene_summary.index:
-            df_gene_summary.loc[pan_gene_id, 'locus_tag'] = locus_tag
-    
-    df_gene_summary.to_csv(gene_summary_out_interim)
-    df_gene_summary.to_csv(gene_summary_out_processed)
-
     # Extract locus tags 
     df_gene_presence = df_gene_presence_summary.drop(columns=gene_summary_columns).fillna('')
     gene_presence_locustag_out_interim = os.path.join(roary_interim_folder, 'df_gene_presence_locustag.csv')
@@ -64,6 +62,31 @@ def get_roary_data(roary_interim_folder, roary_processed_folder):
     df_gene_presence_binary = pd.read_csv(gene_presence_binary_path, index_col='Gene', sep='\t')
     df_gene_presence_binary.to_csv(gene_presence_binary_out_interim)
     df_gene_presence_binary.to_csv(gene_presence_binary_out_processed)
+
+    # Add locus_tag and pangenome_id from pan_genome_reference.fa file
+    pan_fasta_path = os.path.join(roary_interim_folder, 'pan_genome_reference.fa')
+    records = SeqIO.parse(pan_fasta_path, format='fasta')
+    for rec in records:
+        locus_tag = rec.id
+        pan_gene_desc = rec.description.split(' ')
+        pan_gene_id = ' '.join([pan_gene_id for pan_gene_id in pan_gene_desc[1:]])
+        if pan_gene_id in df_gene_summary.index:
+            df_gene_summary.loc[pan_gene_id, 'locus_tag'] = locus_tag
+
+    # Add pangenome class and save gene summary table
+    total_genomes = df_gene_presence.shape[1]
+    for pan_gene_id in df_gene_summary.index:
+        no_isolates = df_gene_summary.loc[pan_gene_id, 'No. isolates']
+        if no_isolates >= core * total_genomes:
+            df_gene_summary.loc[pan_gene_id, 'pangenome_class'] = 'core'
+        elif no_isolates >= softcore * total_genomes:
+            df_gene_summary.loc[pan_gene_id, 'pangenome_class'] = 'softcore'
+        elif no_isolates >= shell * total_genomes:
+            df_gene_summary.loc[pan_gene_id, 'pangenome_class'] = 'shell'
+        else:
+            df_gene_summary.loc[pan_gene_id, 'pangenome_class'] = 'cloud'
+    df_gene_summary.to_csv(gene_summary_out_interim)
+    df_gene_summary.to_csv(gene_summary_out_processed)
 
     # Copy other output files to processed directory
     copyfile(os.path.join(roary_interim_folder, 'conserved_vs_total_genes.png'),
@@ -171,7 +194,8 @@ def plot_core_pan_curve(roary_interim_folder, roary_processed_folder):
         fig_new_uniq.write_image(fig_new_uniq_path)
 
     return fig_pan_core.show(), fig_new_uniq.show()
-    
+
+
 def plot_pan_freq_plot(df_gene_presence_binary, roary_processed_folder):
     """
     Plots pangenome frequence plot for number of genes present in number of genomes
@@ -205,23 +229,25 @@ def plot_pan_freq_plot(df_gene_presence_binary, roary_processed_folder):
     return fig.show()
     
     
-def plot_pan_pie_chart(df_gene_presence_binary, roary_processed_folder, core=0.99, softcore=0.95, shell=0.15):
+def plot_pan_pie_chart(df_gene_summary, total_genomes, roary_processed_folder, core=0.99, softcore=0.95, shell=0.15):
     """
     Plots pangenome frequence plot for number of genes present in number of genomes
 
     Parameters
     ---------- 
-    1. df_gene_presence_binary : pd.DataFrame
-        Dataframe with presence absence matrix of genes in the pangenome
-    2. roary_processed_folder : str / path
+    1. df_gene_summary : pd.DataFrame
+        Dataframe with gene summary including pangenome_class 
+    2. total_genomes : int
+        Number of total genomes in the pangenome
+    3. roary_processed_folder : str / path
         Location of the processed output directory for Roary
-    3. core: int (0 to 1) 
+    4. core: int (0 to 1) 
         default = 0.99
         Fraction of genomes the gene must be present to be group in core (99% <= strains <= 100%)
-    4. softcore: int (0 to 1) 
+    5. softcore: int (0 to 1) 
         default = 0.95
         Fraction of genomes the gene must be present to be group in softcore (95% <= strains < 99%)
-    5. shell: int (0 to 1) 
+    6. shell: int (0 to 1) 
         default = 0.15
         Fraction of genomes the gene must be present to be group in softcore (15% <= strains < 95%)
         Remaining genes will be in cloud
@@ -232,34 +258,26 @@ def plot_pan_pie_chart(df_gene_presence_binary, roary_processed_folder, core=0.9
         Location of the processed output directory where pangenome pie chart plot will be saved
     """
 
-    roary = df_gene_presence_binary.copy()
-
     # Plot the pangenome pie chart
     plt.figure(figsize=(10, 10))
 
-    core = roary[roary.sum(axis=1) == roary.shape[1]].shape[0]
-    softcore = roary[(roary.sum(axis=1) < roary.shape[1]) &
-                     (roary.sum(axis=1) >= roary.shape[1]*0.85)].shape[0]
-    shell = roary[(roary.sum(axis=1) < roary.shape[1]*0.85) &
-                     (roary.sum(axis=1) >= roary.shape[1]*0.15)].shape[0]
-    cloud = roary[roary.sum(axis=1) < roary.shape[1]*0.15].shape[0]
-
-    total = roary.shape[0]
-    
+    core_genes = df_gene_summary[df_gene_summary['pangenome_class'] == 'core'].shape[0]
+    softcore_genes = df_gene_summary[df_gene_summary['pangenome_class'] == 'softcore'].shape[0]
+    shell_genes = df_gene_summary[df_gene_summary['pangenome_class'] == 'shell'].shape[0]
+    cloud_genes = df_gene_summary[df_gene_summary['pangenome_class'] == 'cloud'].shape[0]
+    total_genes = df_gene_summary.shape[0]
     def my_autopct(pct):
-        val=int(pct*total/100.0)
+        val=int(pct*total_genes/100.0)
         return '{v:d}'.format(v=val)
 
-    fig = plt.pie([core, softcore, shell, cloud],
-            labels=['core  (%d strains)'%roary.shape[1],
-              'soft-core  (%d <= strains < %d)'%(roary.shape[1]*.85,
-                                                 roary.shape[1]),
-              'shell\n(%d <= strains < %d)'%(roary.shape[1]*.15,
-                                             roary.shape[1]*.85),
-              'cloud\n(strains < %d)'%(roary.shape[1]*.15)],
+    fig = plt.pie([core_genes, softcore_genes, shell_genes, cloud_genes],
+            labels=['core  (<= %d strains)'%(total_genomes*core),
+              'soft-core  (%d <= strains < %d)'%(total_genomes*softcore, total_genomes*core),
+              'shell\n(%d <= strains < %d)'%(total_genomes*softcore, total_genomes*shell),
+              'cloud\n(strains < %d)'%(total_genomes*shell)],
             explode=[0.1, 0.05, 0.02, 0], radius=0.9,
-            colors=[(0, 0, 1, float(x)/total) for x in (core, softcore, shell, cloud)],
-            autopct=my_autopct, textprops={'fontsize': 20, 'fontweight': 'bold'})
+            colors=[(0, 0, 1, float(x)/total_genes) for x in (core_genes, softcore_genes, shell_genes, cloud_genes)],
+            autopct=my_autopct, textprops={'fontsize': 10, 'fontweight': 'bold'})
     
     fig_out_path = os.path.join(roary_processed_folder, 'pangenome_pie.jpeg')
     if not os.path.isfile(fig_out_path):
@@ -378,10 +396,11 @@ if __name__ == "__main__":
     roary_interim_folder = sys.argv[1]
     roary_processed_folder = sys.argv[2]
     automlst_interim_folder = sys.argv[3]
-    df_gene_presence, df_gene_presence_binary, df_gene_summary = get_roary_data(roary_interim_folder, roary_processed_folder)
+    df_gene_presence, df_gene_presence_binary, df_gene_summary = get_roary_data(roary_interim_folder, roary_processed_folder,core=0.99, softcore=0.95, shell=0.15)
     plot_core_pan_curve(roary_interim_folder, roary_processed_folder)
     plot_pan_freq_plot(df_gene_presence_binary, roary_processed_folder)
-    plot_pan_pie_chart(df_gene_presence_binary, roary_processed_folder, core=0.99, softcore=0.95, shell=0.15)
+    total_genomes = float(df_gene_presence_binary.shape[1])
+    plot_pan_pie_chart(df_gene_summary, total_genomes, roary_processed_folder, core=0.99, softcore=0.95, shell=0.15)
 
     # Read tree file
     newick_path = os.path.join(automlst_interim_folder,'final.newick')
