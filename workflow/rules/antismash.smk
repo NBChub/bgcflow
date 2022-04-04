@@ -25,9 +25,10 @@ rule antismash:
     log: "workflow/report/logs/antismash/antismash/antismash_{version}-{strains}.log"
     params:
         folder = directory("data/interim/antismash/{version}/{strains}/"),
+        genefinding = "none",
     shell:
         """
-        antismash --genefinding-tool prodigal --output-dir {params.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} --logfile {log} 2>> {log}
+        antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} --logfile {log} 2>> {log}
         """
 
 rule copy_antismash_zip:
