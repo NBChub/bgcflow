@@ -7,9 +7,9 @@ rule install_automlst_wrapper:
     log: "workflow/report/logs/automlst_wrapper/install_automlst_wrapper.log"
     shell:
         """
-        (cd resources && wget https://github.com/KatSteinke/automlst-simplified-wrapper/archive/main.zip)
-        (cd resources && unzip main.zip && rm main.zip)
-        (cd resources/automlst-simplified-wrapper-main && unzip reducedcore.zip) 
+        (cd resources && wget https://github.com/KatSteinke/automlst-simplified-wrapper/archive/main.zip) 2>> {log}
+        (cd resources && unzip main.zip && rm main.zip) 2>> {log}
+        (cd resources/automlst-simplified-wrapper-main && unzip reducedcore.zip)  2>> {log}
         """       
 
 rule prep_automlst_gbk:
@@ -22,7 +22,7 @@ rule prep_automlst_gbk:
     log: "workflow/report/logs/automlst_wrapper/prep_automlst_gbk/prep_automlst_gbk-{name}_{strains}.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/features/prep_automlst.py {input.gbk} {output.auto_gbk} {wildcards.strains}
+        python workflow/bgcflow/bgcflow/features/prep_automlst.py {input.gbk} {output.auto_gbk} {wildcards.strains} 2>> {log}
         """
 
 rule automlst_wrapper:
@@ -36,7 +36,7 @@ rule automlst_wrapper:
         "../envs/automlst_wrapper.yaml"
     shell:
         """
-        python resources/automlst-simplified-wrapper-main/simplified_wrapper.py data/interim/automlst_wrapper/{wildcards.name}
+        python resources/automlst-simplified-wrapper-main/simplified_wrapper.py data/interim/automlst_wrapper/{wildcards.name} 2>> {log}
         """
 
 rule automlst_wrapper_out:
@@ -49,10 +49,10 @@ rule automlst_wrapper_out:
         final_tree = "data/processed/{name}/automlst_wrapper/final.newick",
     log: "workflow/report/logs/automlst_wrapper/automlst_wrapper/automlst_wrapper_out-{name}.log"
     params:
-        automlst_interim = "data/interim/automlst_wrapper/{name}/",
+        automlst_interim = lambda wildcards: f"data/interim/automlst_wrapper/{wildcards.name}/",
     conda:
         "../envs/bgc_analytics.yaml"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/make_phylo_tree.py {params.automlst_interim} {output.automlst_processed} {input.prokka_interim} {input.gtdb_interim} 2> {log}
+        python workflow/bgcflow/bgcflow/data/make_phylo_tree.py {params.automlst_interim} {output.automlst_processed} {input.prokka_interim} {input.gtdb_interim} 2>> {log}
         """
