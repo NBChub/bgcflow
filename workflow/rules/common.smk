@@ -6,7 +6,7 @@ from snakemake.utils import validate
 from snakemake.utils import min_version
 
 min_version("6.15.1")
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 
 ##### TABLE OF CONTENTS #####
@@ -26,12 +26,12 @@ __version__ = "0.1.0"
 configfile: "config/config.yaml"
 validate(config, schema="../schemas/config.schema.yaml")
 
+sys.stderr.write(f"This is BGCflow version {__version__}.\n\n")
 
 ##### 2. Extract project information #####
 def extract_project_information():
     """
     Wrapper to extract variables from projects in config.yaml.
-    Under development to accomodate multiple projects running in one snakemake run.
     """
     class ConfigError(Exception):
         """Raised when config.yaml does not satisty requirements"""
@@ -42,9 +42,11 @@ def extract_project_information():
         return list(itertools.chain(*nested_list))
     
     # load information from config
+    sys.stderr.write(f"Step 1.1 Extracting information from config file...\n")
     projects = pd.DataFrame(config["projects"]).set_index('name', drop=False)
     
     # check validity of {sample}.csv Value should be unique
+    sys.stderr.write(f"Step 1.2 Checking validity of project names and samples...\n")
     check_duplicates = projects[projects.samples.duplicated()]
     if len(check_duplicates) > 0:
         raise ConfigError(f"Project: {check_duplicates.name.to_list()} \
@@ -53,20 +55,25 @@ def extract_project_information():
 
     samples = []
     for i in projects.index:
+        sys.stderr.write(f"Step 1.3 Getting ids for project: {i}\n")
         df1 = pd.read_csv(projects.loc[i, "samples"])
         df1["sample_paths"] = projects.loc[i, "samples"]
 
         # try to fetch user-provided custom reference for prokka
         try:
+            sys.stderr.write(f" - {i}: Getting custom reference genomes for Prokka protein database...\n")
             df1["prokka-db"] = projects.loc[i, "prokka-db"]
         except KeyError:
+            sys.stderr.write(f" - {i}: No references are provided to create custom Prokka protein database.\n")
             df1["prokka-db"] = np.nan
             pass
 
         # try to fetch user-defined gtdb classification
         try:
+            sys.stderr.write(f" - {i}: Getting user provided taxonomic information...\n")
             df1["gtdb_paths"] = projects.loc[i, "gtdb-tax"]
         except KeyError:
+            sys.stderr.write(f" - {i}: No taxonomic information provided.\n")
             df1["gtdb_paths"] = np.nan
             pass
 
@@ -77,6 +84,7 @@ def extract_project_information():
     validate(df_samples.fillna(""), schema="../schemas/samples.schema.yaml")
 
     # check validity of genome_ids. Value should be unique.
+    sys.stderr.write(f"Step 1.4 Checking validity of sample files using schemas...\n")
     check_duplicates = df_samples[df_samples.genome_id.duplicated()]
     if len(check_duplicates) > 0:
         raise ConfigError(f"Strain ids in: {check_duplicates.sample_paths.to_list()} \
@@ -94,6 +102,8 @@ def extract_project_information():
             df_prokka_db = pd.DataFrame(columns=["Accession", "name"])
             pass
     
+    sys.stderr.write(f"   Finished processing config information.\n\n")
+
     return projects, df_samples, df_prokka_db
 
 DF_PROJECTS, DF_SAMPLES, DF_PROKKA_DB = extract_project_information()
@@ -246,6 +256,7 @@ def get_final_output():
     """
     Generate final output for rule all given a TRUE value in config["rules"]
     """
+    sys.stderr.write(f"Step 3. Preparing list of final outputs...\n")
     # dictionary of rules and its output files
     rule_dict = {"mlst" : expand("data/interim/mlst/{strains}_ST.csv", strains = STRAINS),
                 "eggnog" : expand("data/interim/eggnog/{strains}/", strains = STRAINS),
@@ -282,7 +293,9 @@ def get_final_output():
         pass
     else:
         final_output.extend(expand("data/processed/{name}/tables/df_ncbi_meta.csv", name = PROJECT_IDS))
-     
+
+    sys.stderr.write(f"   Ready to generate outputs.\n\n")
+
     return final_output
 
 
@@ -292,7 +305,7 @@ def custom_resource_dir():
     Generate symlink for user defined resources location
     """
     resource_dbs = config["resources_path"]
-    sys.stderr.write(f"Checking for user-defined local resources...\n")
+    sys.stderr.write(f"Step 2. Checking for user-defined local resources...\n")
     for r in resource_dbs.keys():
         # check for default path
         path = Path(resource_dbs[r])
@@ -305,22 +318,23 @@ def custom_resource_dir():
                 existing_path = Path.readlink(slink)
                 # check if symlink for extrenal path is already generated
                 if existing_path == path:
-                    sys.stderr.write(f"- Symlink for {r} already exists at: {existing_path}\n")
+                    sys.stderr.write(f" - Symlink for {r} already generated from: {existing_path}\n")
                 # update symlink because new path is given
                 else:
                     slink.unlink()
                     slink.symlink_to( path )
                     updated_path = Path.readlink(Path(slink)) 
-                    sys.stderr.write(f"- Updating symlink for {r} from: {existing_path} to: {updated_path}\n")
+                    sys.stderr.write(f" - Updating symlink for {r} from: {existing_path} to: {updated_path}\n")
             # generate a new symlink
             except FileNotFoundError:
-                sys.stderr.write(f"- Generating symlink for {r} from: {path}\n")                    
+                sys.stderr.write(f" - Generating symlink for {r} from: {path}\n")                    
                 slink.symlink_to( path )
         # raise an Error if external path not found
         else:
             raise FileNotFoundError(f"Error: User-defined resource {r} at {path} does not exist. \
                                     Check the config.yaml and provide the right path for resource {r} \
                                     or change it to the default path: resources/{r}\n")
+    sys.stderr.write(f"   All resources set.\n\n")
     return 
 
 custom_resource_dir()

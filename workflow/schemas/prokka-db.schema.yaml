@@ -7,7 +7,7 @@ type: object
 # columns that the config/prokka-db.tsv file can have and which type they should be
 properties:
   Accesion:
-    type: string
+    type: [string, number]
     description: NCBI accession ID (genbank) of the reference genome of selected group of bacteria
   Strain Descripition:
     type: string
