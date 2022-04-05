@@ -58,6 +58,13 @@ rule extract_meta_prokka:
         python workflow/bgcflow/bgcflow/data/get_organism_info.py {wildcards.strains} \
             "{params.samples_path}" data/interim/assembly_report/ data/interim/prokka/ 2>> {log}
         """
+try:
+    if os.path.isfile(config["resources_path"]["pfam_for_prokka"]):
+        prokka_use_pfam = config["resources_path"]["pfam_for_prokka"]
+    else:
+        prokka_use_pfam = ""
+except KeyError:
+    prokka_use_pfam = ""
 
 rule prokka:
     input: 
@@ -75,7 +82,8 @@ rule prokka:
         increment = 10, 
         evalue = "1e-05",
         rna_detection = prokka_params_rna,
-        refgbff = lambda wildcards: get_prokka_refdb(wildcards, "params")
+        refgbff = lambda wildcards: get_prokka_refdb(wildcards, "params"),
+        use_pfam = prokka_use_pfam
     threads: 4
     shell:
         """
@@ -83,7 +91,7 @@ rule prokka:
             {params.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" \
             --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" \
             --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} \
-            --evalue {params.evalue} {input.fna} 2>> {log}
+            --hmms {params.use_pfam} --evalue {params.evalue} {input.fna} 2>> {log}
         """
 
 rule format_gbk:
