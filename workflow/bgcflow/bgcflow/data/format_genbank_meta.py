@@ -207,8 +207,8 @@ def modify_id(accession_id, original_id, locus_index, record_counts, id_collecti
     # example: NZAJABAQG010000001.1 --> c1|NZAJABAQG010000
     else:
         logging.info(f"{original_id}: Cannot determine source. Shortening locus name...")
-        digit = len(str(records_count))
-        contig_number = str(record_index+1)
+        digit = len(str(record_counts))
+        contig_number = str(locus_index+1)
 
         new_id = f"c{contig_number.zfill(digit)}_{original_id[:-(digit + 4)]}"
 
