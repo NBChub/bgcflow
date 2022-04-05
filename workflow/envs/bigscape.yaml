@@ -12,3 +12,4 @@ dependencies:
   - networkx
   - scikit-learn=0.19.1
   - decorator
+  - dataclasses
