@@ -60,7 +60,7 @@ rule extract_meta_prokka:
         """
 try:
     if os.path.isfile(config["resources_path"]["pfam_for_prokka"]):
-        prokka_use_pfam = config["resources_path"]["pfam_for_prokka"]
+        prokka_use_pfam = f'--hmms {config["resources_path"]["pfam_for_prokka"]}'
     else:
         prokka_use_pfam = ""
 except KeyError:
@@ -91,7 +91,7 @@ rule prokka:
             {params.refgbff} --prefix {wildcards.strains} --genus "`cut -d "," -f 1 {input.org_info}`" \
             --species "`cut -d "," -f 2 {input.org_info}`" --strain "`cut -d "," -f 3 {input.org_info}`" \
             --cdsrnaolap --cpus {threads} {params.rna_detection} --increment {params.increment} \
-            --hmms {params.use_pfam} --evalue {params.evalue} {input.fna} 2>> {log}
+            {params.use_pfam} --evalue {params.evalue} {input.fna} &> {log}
         """
 
 rule format_gbk:
