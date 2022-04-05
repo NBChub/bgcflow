@@ -173,9 +173,13 @@ def get_ncbi_taxon_GTDB(accession, release = "R202"):
     result["gtdb_url"] = api_url_tax
     result["gtdb_release"] = release
     try:
-        result["gtdb_taxonomy"] = [tax for tax in js_tax if tax['release'] == release][0]
-        result["gtdb_taxonomy"].pop('release', None)
-        result["gtdb_taxonomy"] = {level_dict[k] : result["gtdb_taxonomy"][k] for k in result["gtdb_taxonomy"].keys()}
+        if js_tax == []:
+            logging.warning(f"Genome id: {accession} is in GTDB but has no taxonomic placement. Returning empty values.")
+            result["gtdb_taxonomy"] = {level_dict[k] : f"{k}__" for k in level_dict.keys()}
+        else:
+            result["gtdb_taxonomy"] = [tax for tax in js_tax if tax['release'] == release][0]
+            result["gtdb_taxonomy"].pop('release', None)
+            result["gtdb_taxonomy"] = {level_dict[k] : result["gtdb_taxonomy"][k] for k in result["gtdb_taxonomy"].keys()}
     except KeyError as err:
         if err.args[0] == "gtdb_taxonomy":
             logging.critical(f"Malformed genome id: {accession}. Make sure to use the right NCBI genome accession format.")
