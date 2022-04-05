@@ -1,0 +1,19 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+
+description: a GTDB-tk output or something similar, representing list of genome_id and its taxonomic placement
+
+type: object
+
+# columns that the config/prokka-db.tsv file can have and which type they should be
+properties:
+  user_genome:
+    type: [string, number]
+    description: genome accession id that matches the 'genome_id' field in the given sample file
+  classification:
+    type: string
+    description: taxonomic placement result from GTDB-tk or similar format (green genes format)
+
+# columns that the config/prokka-db.tsv file must have to pass schema validation
+required:
+  - user_genome
+  - classification
