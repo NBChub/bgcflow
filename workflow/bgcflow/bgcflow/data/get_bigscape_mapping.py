@@ -10,11 +10,11 @@ def get_bigscape_mapping(path, outfile):
     container = {}
     for x in Path(path).iterdir():
         if x.is_dir():
-            genome_id = (x.stem)
+            genome_id = (x.parts[-1])
             bgcs = {item.stem : genome_id for item in list(x.glob('*.region*.gbk'))}
             container.update(bgcs)
     df = pd.DataFrame.from_dict(container, orient="index", columns=['genome_id'])
-    df.index.name = 'BGC'
+    df.index.name = 'bgc_id'
     df.to_csv(outfile)
     return None
 
