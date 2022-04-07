@@ -25,7 +25,7 @@ rule bigscape:
         label = "{name}_antismash_{version}",
         antismash_dir = "data/interim/bgcs/{name}/{version}/"
     log: "workflow/report/logs/bigscape/{name}_antismash_{version}/bigscape.log"
-    threads: 16
+    threads: 32
     shell:
         """
         python {input.bigscape}/bigscape.py -i {params.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose > {log}
@@ -45,4 +45,21 @@ rule copy_bigscape_zip:
         topdir=$PWD
         (cd data/interim/bigscape && zip -r $topdir/{output.zip} {wildcards.name}_antismash_{wildcards.version}.csv \
             {wildcards.name}_antismash_{wildcards.version} -x {wildcards.name}_antismash_{wildcards.version}/cache/**\* &>> $topdir/{log})
+        """
+
+rule bigscape_to_cytoscape:
+    input:
+        zip = "data/processed/{name}/bigscape/{name}_bigscape_as{version}.zip",
+        as_dir = 'data/interim/bgcs/{name}/{version}',
+        df_genomes_path = 'data/processed/{name}/tables/df_antismash_{version}_summary.csv'
+    output:
+        output_dir = directory("data/processed/{name}/bigscape/for_cytoscape_as-{version}")
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log: "workflow/report/logs/bigscape/bigscape_to_cytoscape/bigscape_to_cytoscape-{name}-{version}.log"
+    params:
+        bigscape_directory = "data/interim/bigscape/{name}_antismash_{version}/"
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/make_bigscape_to_cytoscape.py {params.bigscape_directory} {input.as_dir} {input.df_genomes_path} {output.output_dir} 2>> {log}
         """
