@@ -266,8 +266,6 @@ def get_final_output():
                                             name=PROJECT_IDS),
                 "roary" : expand("data/processed/{name}/roary/df_gene_presence_binary.csv", name=PROJECT_IDS),
                 "eggnog-roary" : expand("data/interim/eggnog_roary/{name}/", name=PROJECT_IDS),
-                "bigscape" : expand("data/processed/{name}/bigscape/{name}_bigscape_as{version}.zip", \
-                                    version=dependency_version["antismash"], name=PROJECT_IDS),
                 "seqfu" : expand("data/processed/{name}/tables/df_seqfu_stats.csv", name=PROJECT_IDS),
                 "rnammer": "resources/rnammer_test.txt",
                 "bigslice": expand("data/interim/bigslice/{name}_antismash_{version}/", \
@@ -280,7 +278,9 @@ def get_final_output():
                                             name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "antismash-zip": [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/antismash/{dependency_version['antismash']}/{strains}.zip" for strains in STRAINS],
                 "arts": expand("data/interim/arts/antismash-{version}/{strains}/", \
-                                version=dependency_version["antismash"], strains = STRAINS)
+                                version=dependency_version["antismash"], strains = STRAINS),
+                "bigscape" : expand("data/processed/{name}/bigscape/for_cytoscape_as-{version}", \
+                                     name = PROJECT_IDS, version=dependency_version["antismash"])
                 }
     
     # get keys from config
