@@ -250,7 +250,6 @@ dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
 
 dependency_version = get_dependencies(dependencies)
 
-
 ##### 7. Customize final output based on config["rule"] values #####
 def get_final_output():
     """
@@ -279,7 +278,7 @@ def get_final_output():
                 "antismash-zip": [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/antismash/{dependency_version['antismash']}/{strains}.zip" for strains in STRAINS],
                 "arts": expand("data/interim/arts/antismash-{version}/{strains}/", \
                                 version=dependency_version["antismash"], strains = STRAINS),
-                "bigscape" : expand("data/processed/{name}/bigscape/for_cytoscape_as-{version}", \
+                "bigscape" : expand("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}", \
                                      name = PROJECT_IDS, version=dependency_version["antismash"])
                 }
     
