@@ -49,13 +49,11 @@ rule copy_bigscape_zip:
 
 rule bigscape_to_cytoscape:
     input:
-        bgc_mapping = "data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
         zip = "data/processed/{name}/bigscape/{name}_bigscape_as{version}.zip",
         as_dir = 'data/interim/bgcs/{name}/{version}',
         df_genomes_path = 'data/processed/{name}/tables/df_antismash_{version}_summary.csv'
     output:
-        output_dir = directory("data/processed/{name}/bigscape/for_cytoscape_as-{version}"),
-        bgc_mapping = "data/processed/{name}/bigscape/for_cytoscape_as-{version}/df_bgc_mapping.csv"
+        output_dir = directory("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}")
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/bigscape/bigscape_to_cytoscape/bigscape_to_cytoscape-{name}-{version}.log"
@@ -64,5 +62,4 @@ rule bigscape_to_cytoscape:
     shell:
         """
         python workflow/bgcflow/bgcflow/data/make_bigscape_to_cytoscape.py {params.bigscape_directory} {input.as_dir} {input.df_genomes_path} {output.output_dir} 2>> {log}
-        cp {input.bgc_mapping} {output.bgc_mapping}
         """

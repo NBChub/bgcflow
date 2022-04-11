@@ -1,8 +1,7 @@
 
 rule antismash_summary:
     input: 
-        _all_ = lambda wildcards: get_antismash_inputs(wildcards.name, wildcards.version),
-        antismash_dir = "data/interim/antismash/",
+        antismash_dir = "data/interim/bgcs/{name}/{version}",
         fna_dir = "data/interim/fasta/",
     output:
         df_antismash_summary = report("data/processed/{name}/tables/df_antismash_{version}_summary.csv", caption="../report/table-antismash.rst", category="BGC Prediction", subcategory="Summary")
@@ -13,7 +12,7 @@ rule antismash_summary:
         df_samples = SAMPLE_PATHS,
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/make_genome_dataset.py {input.fna_dir} {input.antismash_dir}/{wildcards.version} '{params.df_samples}' {output.df_antismash_summary} 2> {log}
+        python workflow/bgcflow/bgcflow/data/make_genome_dataset.py {input.fna_dir} {input.antismash_dir} '{params.df_samples}' {output.df_antismash_summary} 2> {log}
         """
 
 rule write_dependency_versions:

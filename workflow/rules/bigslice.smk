@@ -14,7 +14,7 @@ rule install_bigslice:
 rule bigslice:
     input: 
         resource = "resources/bigslice/install_note.txt",
-        tmp_dir = "data/interim/bigslice/bgcs/{name}/{version}/",
+        tmp_dir = "data/interim/bgcs/{name}/{version}/",
         taxonomy = "data/interim/bgcs/taxonomy/taxonomy_{name}_antismash_{version}.tsv",
     output:
         folder = directory("data/interim/bigslice/{name}_antismash_{version}/")

@@ -89,24 +89,12 @@ def extract_project_information():
     if len(check_duplicates) > 0:
         raise ConfigError(f"Strain ids in: {check_duplicates.sample_paths.to_list()} \
                             are not unique. Check your config.yaml configuration.")
-
-    prokka_db = []
-    for i in projects.index:
-        try:
-            df2 = pd.read_csv(projects.loc[i, "prokka-db"])
-            df2["name"] = projects.loc[i, "name"]
-            df2 = df2.set_index('Accession', drop=False)
-            prokka_db.append(df2)
-            df_prokka_db = pd.concat(prokka_db, axis=0).reset_index(drop=True)
-        except (ValueError, KeyError) as e:
-            df_prokka_db = pd.DataFrame(columns=["Accession", "name"])
-            pass
-    
+ 
     sys.stderr.write(f"   Finished processing config information.\n\n")
 
-    return projects, df_samples, df_prokka_db
+    return projects, df_samples
 
-DF_PROJECTS, DF_SAMPLES, DF_PROKKA_DB = extract_project_information()
+DF_PROJECTS, DF_SAMPLES = extract_project_information()
 
 
 ##### 3. Generate wildcard constants #####
@@ -115,7 +103,6 @@ STRAINS = DF_SAMPLES.genome_id.to_list()
 CUSTOM = DF_SAMPLES[DF_SAMPLES.source.eq("custom")].genome_id.to_list()
 NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
 PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
-PROKKA_DB = DF_PROKKA_DB.Accession.to_list()
 SAMPLE_PATHS = list(DF_SAMPLES.sample_paths.unique())
 GTDB_PATHS = list(DF_SAMPLES.gtdb_paths.unique())
 
@@ -250,7 +237,6 @@ dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
 
 dependency_version = get_dependencies(dependencies)
 
-
 ##### 7. Customize final output based on config["rule"] values #####
 def get_final_output():
     """
@@ -279,7 +265,7 @@ def get_final_output():
                 "antismash-zip": [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/antismash/{dependency_version['antismash']}/{strains}.zip" for strains in STRAINS],
                 "arts": expand("data/interim/arts/antismash-{version}/{strains}/", \
                                 version=dependency_version["antismash"], strains = STRAINS),
-                "bigscape" : expand("data/processed/{name}/bigscape/for_cytoscape_as-{version}", \
+                "bigscape" : expand("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}", \
                                      name = PROJECT_IDS, version=dependency_version["antismash"])
                 }
     
