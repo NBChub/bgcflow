@@ -34,6 +34,8 @@ rule automlst_wrapper:
     log: "workflow/report/logs/automlst_wrapper/automlst_wrapper/automlst_wrapper-{name}.log"
     conda: 
         "../envs/automlst_wrapper.yaml"
+    resources:
+        tmpdir= "resources"
     shell:
         """
         python resources/automlst-simplified-wrapper-main/simplified_wrapper.py data/interim/automlst_wrapper/{wildcards.name} 2>> {log}
