@@ -1,18 +1,22 @@
-if config["rules"]["rnammer"] == True:
-    prokka_params_rna = "--rnammer"
-    rule rnammer_setup:
-        output: 
-            "resources/rnammer_test.txt" 
-        priority: 50
-        conda:
-            "../envs/prokka.yaml"
-        log: "workflow/report/logs/prokka/rnammer_setup.log"
-        shell:
-            """
-            ln -s $PWD/resources/RNAmmer/rnammer $CONDA_PREFIX/bin/rnammer 2>> {log}
-            rnammer -S bac -m lsu,ssu,tsu -gff - resources/RNAmmer/example/ecoli.fsa >> {output}
-            """
-else:
+try:
+    if Path(config["resources_path"]["RNAmmer"]).is_file():
+        prokka_params_rna = "--rnammer"
+        rule rnammer_setup:
+            output:
+                "resources/rnammer_test.txt"
+            priority: 50
+            conda:
+                "../envs/prokka.yaml"
+            log: "workflow/report/logs/prokka/rnammer_setup.log"
+            shell:
+                """
+                ln -s $PWD/resources/RNAmmer/rnammer $CONDA_PREFIX/bin/rnammer 2>> {log}
+                rnammer -S bac -m lsu,ssu,tsu -gff - resources/RNAmmer/example/ecoli.fsa >> {output}
+                """
+    else:
+        prokka_params_rna = ""
+        pass
+except KeyError:
     prokka_params_rna = ""
     pass
 
