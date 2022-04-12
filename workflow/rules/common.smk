@@ -256,9 +256,9 @@ def get_project_outputs(config, PROJECT_IDS, df_samples=DF_SAMPLES):
     # dictionary of rules and its output files
     rule_dict = {"mlst" : expand("data/interim/mlst/{strains}_ST.csv", strains = selection),
                 "eggnog" : expand("data/interim/eggnog/{strains}/", strains = selection),
-                "refseq_masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", \
+                "refseq-masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", \
                                          strains = selection),
-                "automlst_wrapper" : expand("data/processed/{name}/automlst_wrapper/final.newick", \
+                "automlst-wrapper" : expand("data/processed/{name}/automlst_wrapper/final.newick", \
                                             name=PROJECT_IDS),
                 "roary" : expand("data/processed/{name}/roary/df_gene_presence_binary.csv", name=PROJECT_IDS),
                 "eggnog-roary" : expand("data/interim/eggnog_roary/{name}/", name=PROJECT_IDS),
@@ -266,7 +266,7 @@ def get_project_outputs(config, PROJECT_IDS, df_samples=DF_SAMPLES):
                 "rnammer": "resources/rnammer_test.txt",
                 "bigslice": expand("data/interim/bigslice/{name}_antismash_{version}/", \
                                     name = PROJECT_IDS, version=dependency_version["antismash"]),
-                "query_bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}/", \
+                "query-bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}/", \
                                          name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "checkm" : expand("data/interim/checkm/json/{strains}.json", strains=selection),
                 "prokka-gbk" : [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/genbank/{strains}.gbk" for strains in selection],
@@ -300,8 +300,13 @@ def get_final_output():
     final_output = []
     for p in config["projects"]:
         sys.stderr.write(f" - Getting outputs for project: {p['name']}\n")
-        final_output.extend(get_project_outputs(p['rules'], p['name']))
-    sys.stderr.write(f"   Ready to generate all outputs.\n\n")
+        try:
+            final_output.extend(get_project_outputs(p['rules'], p['name']))
+            sys.stderr.write(f"   {p['name']}: Using project rule configuration.\n")
+        except KeyError:
+            final_output.extend(get_project_outputs(config, p['name']))
+            sys.stderr.write(f"   {p['name']}: Using global rule configuration.\n")
+    sys.stderr.write(f" - Ready to generate all outputs.\n\n")
     return final_output
 
 ##### 8. Set up custom resource directory provided in config["resources_path"] #####

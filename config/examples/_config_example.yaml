@@ -6,8 +6,8 @@
 # A project must contain the variable "name" and "samples".
 # - name : name of your project
 # - samples : a csv file containing a list of genome ids for analysis with multiple sources mentioned. Genome ids must be unique.
-# - rules: a yaml file containing rule configurations
-# - prokka-db (optional): list of the custom accessions to use as prokka reference database
+# - rules: a yaml file containing project rule configurations. This will override global rule configuration.
+# - prokka-db (optional): list of the custom accessions to use as prokka reference database.
 # - gtdb-tax (optional): output summary file of GTDB-tk with "user_genome" and "classification" as the two minimum columns
 
 projects:
@@ -22,6 +22,27 @@ projects:
 #  - name: example_2
 #    samples: config/project_example2/samples.csv
 #    rules: config/project_example2/project_config.yaml
+
+#### GLOBAL RULE CONFIGURATION ####
+# This section configures the rules to run globally.
+# Use project specific rule configurations if you want to run different rules for each projects.
+# rules: set value to TRUE if you want to run the analysis or FALSE if you don't
+rules:
+  seqfu: FALSE
+  mlst: FALSE
+  refseq-masher: FALSE
+  checkm: FALSE
+  prokka-gbk: FALSE
+  antismash-summary: TRUE
+  antismash-zip: FALSE
+  query-bigslice: FALSE
+  bigscape: FALSE
+  bigslice: FALSE
+  automlst-wrapper: FALSE
+  arts: FALSE
+  roary: FALSE
+  eggnog: FALSE
+  eggnog-roary: FALSE
 
 #### RESOURCES CONFIGURATION ####
 # resources : the location of the resources to run the rule.
