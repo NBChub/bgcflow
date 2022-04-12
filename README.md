@@ -197,3 +197,22 @@ Here you can find rules keyword that you can run within BGCflow.
 | automlst_wrapper | Build a phylogenomic tree with autoMLST wrapper | [autoMLST-wrapper](https://github.com/KatSteinke/automlst-simplified-wrapper), [autoMLST](https://bitbucket.org/ziemertlab/automlst/src/master/) |
 | roary | Build Pangenome | [Roary](https://github.com/sanger-pathogens/Roary) |
 | eggnog | Functional annotation with EggNOG-mapper | [EggNOG-mapper](https://github.com/eggnogdb/eggnog-mapper) |
+
+## Using snakemake profiles for further configurations
+When using different machines, you can, for example, adapt the number of threads required for each rules using a snakemake profile. An example is given in [`config/examples/_profile_example/config.yaml`](config/examples/_profile_example/config.yaml):
+```yaml
+set-threads:
+  - antismash=4
+  - arts=4
+  - bigscape=32
+  - bigslice=16
+```
+
+You can use run a snakemake jobs with the above profile with:
+```bash
+snakemake --profile config/examples/_profile_example/ --use-conda -c $N -n # remove the dry-run parameters "-n" for actual run
+```
+Or also with a defined `config` file:
+```bash
+snakemake --configfile config/examples/_config_example.yaml --profile config/examples/_profile_example/ --use-conda -c $N -n # remove the dry-run parameters "-n" for actual run
+```
