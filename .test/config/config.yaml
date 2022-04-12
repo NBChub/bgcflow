@@ -9,22 +9,32 @@
 # - prokka-db : list of the custom accessions to use as prokka reference database
 projects:
   - name: test1
-    samples: config/samples.csv
-    prokka-db: config/prokka-db.csv
-  
+    samples: config/test1/samples.csv
+    rules: config/test1/project_config.yaml
+    prokka-db: config/test1/prokka-db.csv
+    gtdb-tax: config/test1/gtdbtk.bac120.summary.tsv
   - name: test2
-    samples: config/samples_test.csv
+    samples: config/test2/samples.csv
+    rules: config/test2/project_config.yaml
 
 #### RULE CONFIGURATION ####
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
 rules:
-  bigscape: TRUE
-  mlst: TRUE
-  refseq_masher: TRUE
-  seqfu: TRUE
-  eggnog: TRUE
-  #automlst_wrapper: FALSE # unstable
-  rnammer: FALSE
+  seqfu: FALSE
+  mlst: FALSE
+  refseq_masher: FALSE
+  checkm: FALSE
+  prokka-gbk: FALSE
+  antismash-summary: TRUE
+  antismash-zip: FALSE
+  query_bigslice: FALSE
+  bigscape: FALSE
+  bigslice: FALSE
+  automlst_wrapper: FALSE
+  arts: FALSE
+  roary: FALSE
+  eggnog: FALSE
+  eggnog-roary: FALSE
 
 #### RESOURCES CONFIGURATION ####
 # resources : the location of the resources to run the rule. The default location is at "resources/{resource_name}".

@@ -1,0 +1,11 @@
+set-threads:
+  - antismash=4
+  - arts=4
+  - bigscape=32
+  - bigslice=16
+  - checkm=8
+  - eggnog=4
+  - eggnog_roary=4
+  - prokka=2
+  - query_bigslice=8
+  - roary=32
