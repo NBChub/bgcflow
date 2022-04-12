@@ -16,17 +16,26 @@ Snakemake workflow to systematically analyze Biosynthetic Gene Clusters from a c
 
 ### Step 2: Configure the workflow
 #### 2.1 Setting Up Your Project Information
-Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure your `project` and the workflow execution.
+Configure the workflow according to your needs via editing the files in the `config/` folder. An example of the configuration files are provided in the `config/example` folder. [NOTE: don't change the files in the `config/example` folder]. 
 
-In the `config.yaml`, each `project` starts with "`-`" and must contain the name of your project (`name`) and the location of the sample file (`samples.csv`):
+You can copy the necessary files to another location as needed:
+```shell
+cp config/examples/_config_example.yaml config/config.yaml
+```
+
+The above command will create a new file in `config/config.yaml`. You can adjust the `config.yaml` to configure your `project` and the workflow execution.
+
+In the `config.yaml`, each `project` starts with "`-`" and must contain the name of your project (`name`), the location of the sample file (`samples.csv`) and a rule configuration file (`project_config.csv`):
 
 ```yaml
 projects:
   - name: example
-    samples: config/samples.csv
+    samples: config/examples/_genome_project_example/samples.csv
+    rules: config/examples/_genome_project_example/project_config.yaml
 ```
+Note that the location of the the sample file and the rule configuration file is relative to your `bgcflow` directory.
 
-Ideally, a project is a set of genomes of certain clade (pangenome) and can be annotated using a set of well-known reference genomes.
+Ideally, you can organize a project as a set of genomes from a certain clade (pangenome).
 
 See [further configuration](#further-configuration) for more details.
 
@@ -55,6 +64,17 @@ Columns description:
 
 Further formatting rules are defined in the `workflow/schemas/` folder.
 
+#### 2.3 Rules: Choosing which analysis to run
+In each projects, you can choose which analysis to run by setting the parameter value in the [`project_config.yaml`](config/examples/_genome_project_example/project_config.yaml) to `TRUE` or `FALSE`:
+```yaml
+rules:
+  bigscape: TRUE
+  mlst: TRUE
+  refseq_masher: TRUE
+  seqfu: TRUE
+  eggnog: FALSE
+  ```
+See [List of Configurable Features](##List-of-Configurable-Features) for more details.
 ### Step 3: Install Snakemake
 
 Installing Snakemake using [Mamba](https://github.com/mamba-org/mamba) is advised. In case you don’t use [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge) you can always install [Mamba](https://github.com/mamba-org/mamba) into any other Conda-based Python distribution with:
@@ -148,16 +168,7 @@ projects:
     samples: config/samples_2.csv
 ```
 Note that each `project` must have unique `name` and `samples` value.
-### Choosing which analysis to run
-You can choose which analysis to run by setting the parameter value to `TRUE` or `FALSE`:
-```yaml
-rules:
-  bigscape: TRUE
-  mlst: TRUE
-  refseq_masher: TRUE
-  seqfu: TRUE
-  eggnog: FALSE
-  ```
+
 ### Setting custom resources/databases folder
 By default, the resources folder containing software and database dependencies are stored in the `resources/` directory. 
 

@@ -6,41 +6,22 @@
 # A project must contain the variable "name" and "samples".
 # - name : name of your project
 # - samples : a csv file containing a list of genome ids for analysis with multiple sources mentioned. Genome ids must be unique.
+# - rules: a yaml file containing rule configurations
 # - prokka-db (optional): list of the custom accessions to use as prokka reference database
 # - gtdb-tax (optional): output summary file of GTDB-tk with "user_genome" and "classification" as the two minimum columns
 
 projects:
 # Project 1
   - name: example
-    samples: config/samples.csv
-    prokka-db: config/prokka-db.csv
-    gtdb-tax: config/gtdbtk.bac120.summary.tsv
+    samples: config/examples/_genome_project_example/samples.csv
+    rules: config/examples/_genome_project_example/project_config.yaml
+    prokka-db: config/examples/_genome_project_example/prokka-db.csv
+    gtdb-tax: config/examples/_genome_project_example/gtdbtk.bac120.summary.tsv
+
 # Project 2
 #  - name: example_2
-#    samples: config/samples_2.csv
-
-
-#### RULE CONFIGURATION ####
-# rules: set value to TRUE if you want to run the analysis or FALSE if you don't
-rules:
-  seqfu: TRUE
-  mlst: FALSE
-  refseq_masher: FALSE
-  checkm: FALSE
-  prokka-gbk: FALSE
-  antismash-summary: TRUE
-  antismash-zip: FALSE
-  query_bigslice: FALSE
-  bigscape: TRUE
-  bigslice: FALSE
-  automlst_wrapper: FALSE
-  arts: FALSE
-  roary: FALSE
-  eggnog: FALSE
-  eggnog-roary: FALSE
-  # other parameter settings
-  rnammer: FALSE
-
+#    samples: config/project_example2/samples.csv
+#    rules: config/project_example2/project_config.yaml
 
 #### RESOURCES CONFIGURATION ####
 # resources : the location of the resources to run the rule.
@@ -51,4 +32,4 @@ resources_path:
   BiG-SCAPE: resources/BiG-SCAPE
   bigslice: resources/bigslice
   checkm: resources/checkm
-  #RNAmmer: resources/RNAmmer # Path must be specified if rule configuration "rnammer" is TRUE
+  #RNAmmer: resources/RNAmmer # If specified, will override Barnapp in Prokka

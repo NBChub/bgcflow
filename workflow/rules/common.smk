@@ -4,9 +4,10 @@ import pandas as pd
 import yaml, json, sys, itertools
 from snakemake.utils import validate
 from snakemake.utils import min_version
+from pathlib import Path
 
 min_version("6.15.1")
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 
 ##### TABLE OF CONTENTS #####
@@ -238,16 +239,25 @@ dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
 dependency_version = get_dependencies(dependencies)
 
 ##### 7. Customize final output based on config["rule"] values #####
-def get_final_output():
+def get_project_outputs(config, PROJECT_IDS, df_samples=DF_SAMPLES):
     """
-    Generate final output for rule all given a TRUE value in config["rules"]
+    Generate outputs of a project given a TRUE value in config["rules"]
     """
-    sys.stderr.write(f"Step 3. Preparing list of final outputs...\n")
+
+    # read rule configs
+    if type(config) == dict:
+        pass
+    else:
+        with open(config, 'r') as file:
+            config = yaml.safe_load(file)
+
+    selection = df_samples[df_samples["name"] == PROJECT_IDS].genome_id.values
+
     # dictionary of rules and its output files
-    rule_dict = {"mlst" : expand("data/interim/mlst/{strains}_ST.csv", strains = STRAINS),
-                "eggnog" : expand("data/interim/eggnog/{strains}/", strains = STRAINS),
+    rule_dict = {"mlst" : expand("data/interim/mlst/{strains}_ST.csv", strains = selection),
+                "eggnog" : expand("data/interim/eggnog/{strains}/", strains = selection),
                 "refseq_masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", \
-                                         strains = STRAINS),
+                                         strains = selection),
                 "automlst_wrapper" : expand("data/processed/{name}/automlst_wrapper/final.newick", \
                                             name=PROJECT_IDS),
                 "roary" : expand("data/processed/{name}/roary/df_gene_presence_binary.csv", name=PROJECT_IDS),
@@ -258,32 +268,41 @@ def get_final_output():
                                     name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "query_bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}/", \
                                          name = PROJECT_IDS, version=dependency_version["antismash"]),
-                "checkm" : expand("data/interim/checkm/json/{strains}.json", strains=STRAINS),
-                "prokka-gbk" : [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/genbank/{strains}.gbk" for strains in STRAINS],
+                "checkm" : expand("data/interim/checkm/json/{strains}.json", strains=selection),
+                "prokka-gbk" : [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/genbank/{strains}.gbk" for strains in selection],
                 "antismash-summary": expand("data/processed/{name}/tables/df_antismash_{version}_summary.csv", \
                                             name = PROJECT_IDS, version=dependency_version["antismash"]),
-                "antismash-zip": [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/antismash/{dependency_version['antismash']}/{strains}.zip" for strains in STRAINS],
+                "antismash-zip": [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/antismash/{dependency_version['antismash']}/{strains}.zip" for strains in selection],
                 "arts": expand("data/interim/arts/antismash-{version}/{strains}/", \
-                                version=dependency_version["antismash"], strains = STRAINS),
+                                version=dependency_version["antismash"], strains = selection),
                 "bigscape" : expand("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}", \
                                      name = PROJECT_IDS, version=dependency_version["antismash"])
                 }
     
     # get keys from config
-    opt_rules = config["rules"].keys()
+    opt_rules = config['rules'].keys()
 
     # if values are TRUE add output files to rule all
-    final_output = [rule_dict[r] for r in opt_rules if config["rules"][r]]
+    final_output = [rule_dict[r] for r in opt_rules if config['rules'][r]]
 
     if NCBI == []:
         pass
     else:
         final_output.extend(expand("data/processed/{name}/tables/df_ncbi_meta.csv", name = PROJECT_IDS))
 
-    sys.stderr.write(f"   Ready to generate outputs.\n\n")
-
     return final_output
 
+def get_final_output():
+    """
+    Generate outputs of for all projects
+    """
+    sys.stderr.write(f"Step 3. Preparing list of final outputs...\n")
+    final_output = []
+    for p in config["projects"]:
+        sys.stderr.write(f" - Getting outputs for project: {p['name']}\n")
+        final_output.extend(get_project_outputs(p['rules'], p['name']))
+    sys.stderr.write(f"   Ready to generate all outputs.\n\n")
+    return final_output
 
 ##### 8. Set up custom resource directory provided in config["resources_path"] #####
 def custom_resource_dir():
