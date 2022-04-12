@@ -16,5 +16,3 @@ rules:
   roary: TRUE
   eggnog: TRUE
   eggnog-roary: TRUE
-  # other parameter settings
-  rnammer: FALSE
