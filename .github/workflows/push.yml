@@ -42,4 +42,4 @@ jobs:
       with:
         directory: .test
         snakefile: workflow/Snakefile
-        args: "--use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache -n"
+        args: "--configfile config/config.yaml --profile config/profile --use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache -n"
