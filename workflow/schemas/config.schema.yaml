@@ -24,7 +24,39 @@ properties:
       - name
       - samples
       - rules
-  
+
+  rules:
+    type: object
+    properties:
+      seqfu:
+        type: boolean
+      mlst:
+        type: boolean
+      refseq-masher:
+        type: boolean
+      checkm:
+        type: boolean
+      prokka-gbk:
+        type: boolean
+      antismash-summary:
+        type: boolean
+      antismash-zip:
+        type: boolean
+      query-bigslice:
+        type: boolean
+      bigslice:
+        type: boolean
+      automlst-wrapper:
+        type: boolean
+      arts:
+        type: boolean
+      roary:
+        type: boolean
+      eggnog:
+        type: boolean
+      eggnog-roary:
+        type: boolean
+
   resources_path:
     type: object
     properties:

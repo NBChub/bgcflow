@@ -3,15 +3,15 @@
 rules:
   seqfu: TRUE
   mlst: TRUE
-  refseq_masher: TRUE
+  refseq-masher: TRUE
   checkm: TRUE
   prokka-gbk: TRUE
   antismash-summary: TRUE
   antismash-zip: TRUE
-  query_bigslice: TRUE
+  query-bigslice: TRUE
   bigscape: TRUE
   bigslice: TRUE
-  automlst_wrapper: TRUE
+  automlst-wrapper: TRUE
   arts: TRUE
   roary: TRUE
   eggnog: TRUE
