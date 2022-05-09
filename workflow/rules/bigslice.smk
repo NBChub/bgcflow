@@ -40,7 +40,7 @@ rule fetch_bigslice_db:
     shell:
         """
         (cd resources/bigslice && wget -c -nc http://bioinformatics.nl/~kauts001/ltr/bigslice/paper_data/data/full_run_result.zip && unzip full_run_result.zip) 2>> {log}
-        rm resources/bigslice/full_run_result.zip
+        rm resources/bigslice/full_run_result.zip 2>> {log}
         """
 
 rule query_bigslice:
@@ -56,9 +56,10 @@ rule query_bigslice:
         "workflow/report/logs/bigslice/query_bigslice/query_bigslice_{name}-antismash-{version}.log"
     params:
         n_ranks = 10,
-        query_name = "{name}"
+        query_name = "{name}",
+        run_id = 6
     shell:
         """
-        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} --query_name {params.query_name} 2>> {log}
+        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} --query_name {params.query_name} --run_id {params.run_id} 2>> {log}
         python workflow/bgcflow/bgcflow/data/get_bigslice_query_result.py {params.query_name} {output.folder} {input.bigslice_dir} 2>> {log}
         """
