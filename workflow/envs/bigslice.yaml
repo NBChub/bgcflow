@@ -7,6 +7,8 @@ dependencies:
   - hmmer>=3.2b1
   - flask=>2.0.2
   - pysqlite3=>0.4.6
+  - wget
+  - unzip
   - pip
   - pip:
     - bigslice
