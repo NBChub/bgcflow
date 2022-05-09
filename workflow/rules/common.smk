@@ -6,8 +6,8 @@ from snakemake.utils import validate
 from snakemake.utils import min_version
 from pathlib import Path
 
-min_version("6.15.1")
-__version__ = "0.3.0"
+min_version("7.6.1")
+__version__ = "0.3.1"
 
 
 ##### TABLE OF CONTENTS #####
@@ -268,7 +268,7 @@ def get_project_outputs(config, PROJECT_IDS, df_samples=DF_SAMPLES):
                                     name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "query-bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}/", \
                                          name = PROJECT_IDS, version=dependency_version["antismash"]),
-                "checkm" : expand("data/interim/checkm/json/{strains}.json", strains=selection),
+                "checkm" : expand("data/processed/{name}/tables/df_checkm_stats.csv", name = PROJECT_IDS),
                 "prokka-gbk" : [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/genbank/{strains}.gbk" for strains in selection],
                 "antismash-summary": expand("data/processed/{name}/tables/df_antismash_{version}_summary.csv", \
                                             name = PROJECT_IDS, version=dependency_version["antismash"]),

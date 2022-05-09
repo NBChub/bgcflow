@@ -30,4 +30,6 @@ dependencies:
   - prodigal=2.6.3
   - mash=2.2.1
   - raxml=8.2.12
+  - wget
+  - unzip
   - biopython
