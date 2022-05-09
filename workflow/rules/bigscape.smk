@@ -4,12 +4,14 @@ rule install_bigscape:
     conda:
         "../envs/bigscape.yaml"
     log: "workflow/report/logs/bigscape/bigscape-install_bigscape.log"
+    params:
+        release = "1.1.4"
     shell:
         """
-        (cd resources && wget https://git.wageningenur.nl/medema-group/BiG-SCAPE/-/archive/master/BiG-SCAPE-master.zip) 2>> {log}
-        (cd resources && unzip BiG-SCAPE-master.zip && mv BiG-SCAPE-master/ BiG-SCAPE/ && rm BiG-SCAPE-master.zip) 2>> {log}
-        (cd resources/BiG-SCAPE && wget ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.hmm.gz && gunzip Pfam-A.hmm.gz) 2>> {log}
-        (cd resources/BiG-SCAPE && hmmpress Pfam-A.hmm) 2>> {log}
+        (cd resources && wget https://github.com/medema-group/BiG-SCAPE/archive/refs/tags/v{params.release}.zip) &>> {log}
+        (cd resources && unzip -o v{params.release}.zip && mv BiG-SCAPE-{params.release}/ BiG-SCAPE/ && rm v{params.release}.zip) &>> {log}
+        (cd resources/BiG-SCAPE && wget ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.hmm.gz && gunzip Pfam-A.hmm.gz) &>> {log}
+        (cd resources/BiG-SCAPE && hmmpress Pfam-A.hmm) &>> {log}
         """
 
 rule bigscape:
