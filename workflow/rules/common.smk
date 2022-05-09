@@ -6,8 +6,8 @@ from snakemake.utils import validate
 from snakemake.utils import min_version
 from pathlib import Path
 
-min_version("6.15.1")
-__version__ = "0.3.0"
+min_version("7.6.1")
+__version__ = "0.3.1"
 
 
 ##### TABLE OF CONTENTS #####
