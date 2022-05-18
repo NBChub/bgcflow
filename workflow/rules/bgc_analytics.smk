@@ -9,7 +9,7 @@ rule antismash_summary:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/bgc_analytics/antismash_summary-{version}-{name}.log"
     params:
-        df_samples = SAMPLE_PATHS,
+        df_samples = lambda wildcards: [p["samples"] for p in config["projects"] if p["name"] == wildcards.name]
     shell:
         """
         python workflow/bgcflow/bgcflow/data/make_genome_dataset.py {input.fna_dir} {input.antismash_dir} '{params.df_samples}' {output.df_antismash_summary} 2> {log}
