@@ -7,8 +7,8 @@ rule install_bigslice:
         "workflow/report/logs/bigslice/install_bigslice.log"
     shell:
         """
-        (cd resources && download_bigslice_hmmdb && rm bigslice_models.tar.gz) 2>> {log}
-        bigslice --version . > {output} 2>> {log}
+        (cd resources && download_bigslice_hmmdb && rm bigslice_models.tar.gz) &>> {log}
+        bigslice --version . > {output} &>> {log}
         """
 
 rule bigslice:
@@ -25,7 +25,7 @@ rule bigslice:
         "workflow/report/logs/bigslice/bigslice/bigslice_{name}-antismash-{version}.log"
     shell:
         """
-        bigslice -i data/interim/bigslice/tmp/ {output.folder} -t {threads} > {log} 2>> {log}
+        bigslice -i data/interim/bigslice/tmp/ {output.folder} -t {threads} > {log} &>> {log}
         """
 
 rule fetch_bigslice_db:
@@ -39,8 +39,8 @@ rule fetch_bigslice_db:
         "workflow/report/logs/bigslice/fetch_bigslice_db.log"
     shell:
         """
-        (cd resources/bigslice && wget -c -nc http://bioinformatics.nl/~kauts001/ltr/bigslice/paper_data/data/full_run_result.zip && unzip full_run_result.zip) 2>> {log}
-        rm resources/bigslice/full_run_result.zip 2>> {log}
+        (cd resources/bigslice && wget -c -nc http://bioinformatics.nl/~kauts001/ltr/bigslice/paper_data/data/full_run_result.zip && unzip full_run_result.zip) &>> {log}
+        rm resources/bigslice/full_run_result.zip &>> {log}
         """
 
 rule query_bigslice:
@@ -60,6 +60,6 @@ rule query_bigslice:
         run_id = 6
     shell:
         """
-        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} --query_name {params.query_name} --run_id {params.run_id} 2>> {log}
-        python workflow/bgcflow/bgcflow/data/get_bigslice_query_result.py {params.query_name} {output.folder} {input.bigslice_dir} 2>> {log}
+        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} --query_name {params.query_name} --run_id {params.run_id} &>> {log}
+        python workflow/bgcflow/bgcflow/data/get_bigslice_query_result.py {params.query_name} {output.folder} {input.bigslice_dir} &>> {log}
         """
