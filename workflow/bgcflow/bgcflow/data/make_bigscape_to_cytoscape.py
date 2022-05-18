@@ -143,9 +143,10 @@ def run_family_analysis(cutoff, net_data_path, df_clusters, df_genomes, df_known
     df_unknown_families = df_families[df_families.fam_type == 'unknown_family']
     logging.debug(f'Some of the common unknown BGCs:{chr(10)}{chr(10)}{df_unknown_families.iloc[:20,1:3]}{chr(10)}')
     # Save all the dataframes
-    df_network.to_csv(f'{output_dir}/{query_name}_df_network_' + cutoff + '.csv') ####
-    df_known.to_csv(f'{output_dir}/{query_name}_df_known_all_' + cutoff + '.csv') #####
-    df_families.to_csv(f'{output_dir}/{query_name}_df_families_' + cutoff + '.csv') ####
+    df_network.to_csv(f'{output_dir}/{query_name}_df_network_' + cutoff + '.csv')
+    df_known.to_csv(f'{output_dir}/{query_name}_df_known_all_' + cutoff + '.csv')
+    df_families.to_csv(f'{output_dir}/{query_name}_df_families_' + cutoff + '.csv')
+    df_clusters.to_csv(f'{output_dir}/{query_name}_df_clusters_' + cutoff + '.csv')
     
     return df_clusters, df_families, df_network
 
