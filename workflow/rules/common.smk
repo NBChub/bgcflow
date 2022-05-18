@@ -122,7 +122,7 @@ wildcard_constraints:
 # seqfu.smk #
 def get_fasta_inputs(name, df_samples=DF_SAMPLES):
     """
-    Given a project name, list all corresponding strains (genome_id)
+    Given a project name, list all corresponding strains (genome_id) fasta file
     """
     selection = df_samples[df_samples["name"] == name].genome_id.values
     output = [f"data/interim/fasta/{s}.fna" for s in selection]
@@ -165,12 +165,12 @@ def get_antismash_inputs(name, version, df_samples=DF_SAMPLES):
     return output
 
 # roary.smk #
-def get_roary_inputs(name, df_samples=DF_SAMPLES):
+def get_prokka_outputs(name, df_samples=DF_SAMPLES, ext="gff"):
     """
     Given a project name, find the corresponding sample file to use
     """
     selection = df_samples[df_samples["name"] == name].genome_id.values
-    output = [f"data/interim/prokka/{s}/{s}.gff" for s in selection]
+    output = [f"data/interim/prokka/{s}/{s}.{ext}" for s in selection]
     return output
 
 # automlst_wrapper.smk #
@@ -276,7 +276,8 @@ def get_project_outputs(config, PROJECT_IDS, df_samples=DF_SAMPLES):
                 "arts": expand("data/interim/arts/antismash-{version}/{strains}/", \
                                 version=dependency_version["antismash"], strains = selection),
                 "bigscape" : expand("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}", \
-                                     name = PROJECT_IDS, version=dependency_version["antismash"])
+                                     name = PROJECT_IDS, version=dependency_version["antismash"]),
+                "diamond" : expand("data/processed/{name}/diamond/{name}.dmnd", name = PROJECT_IDS)
                 }
     
     # get keys from config
