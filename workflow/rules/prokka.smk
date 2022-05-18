@@ -39,7 +39,7 @@ rule prokka_db_setup:
     output:
         refgbff = "resources/prokka_db/reference_{name}.gbff"
     conda:
-        "../envs/ncbi_utilities.yaml"
+        "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/prokka/prokka_db_setup/prokka_db_setup-{name}.log"
     shell:
         """
@@ -105,7 +105,7 @@ rule format_gbk:
     output:
         gbk_processed = "data/interim/processed-genbank/{strains}.gbk"
     conda:
-        "../envs/prokka.yaml"
+        "../envs/bgc_analytics.yaml"
     params:
         version = __version__,
     log: "workflow/report/logs/prokka/format_gbk/format_gbk-{strains}.log"
@@ -122,7 +122,7 @@ rule copy_prokka_gbk:
         gbk = report("data/processed/{name}/genbank/{strains}.gbk", \
             caption="../report/file-genbank.rst", category="{name}", subcategory="Annotated Genbanks")
     conda:
-        "../envs/antismash.yaml"
+        "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/prokka/copy_prokka_gbk/copy_prokka_gbk_-{strains}-{name}.log"
     shell:
         """
