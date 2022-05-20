@@ -35,15 +35,16 @@ rule copy_custom_fasta:
 
 rule prokka_db_setup:
     input:
-        table = lambda wildcards: DF_PROJECTS.loc[wildcards, "prokka-db"]
+        table = "resources/prokka_db/{prokka_db}.json"
     output:
-        refgbff = "resources/prokka_db/reference_{name}.gbff"
+        refgbff = "resources/prokka_db/{prokka_db}.gbff",
+        ncbi_tempdir = temp(directory("resources/prokka_db/{prokka_db}")),
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/prokka/prokka_db_setup/prokka_db_setup-{name}.log"
+    log: "workflow/report/logs/prokka/prokka_db_setup/prokka_db_setup-{prokka_db}.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/make_prokka_db.py {wildcards.name} \
+        python workflow/bgcflow/bgcflow/data/make_prokka_db.py {wildcards.prokka_db} \
             {input.table} {output.refgbff} 2>> {log}
         """
 

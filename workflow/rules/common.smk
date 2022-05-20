@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
-import yaml, json, sys, itertools
+import yaml, json, sys, itertools, hashlib
 from snakemake.utils import validate
 from snakemake.utils import min_version
 from pathlib import Path
@@ -41,7 +41,43 @@ def extract_project_information():
     def merge_nested_list(nested_list):
         """Merge nested list or dict values / keys"""
         return list(itertools.chain(*nested_list))
-    
+
+    def hash_prokka_db(prokka_db_path):
+        """
+        Read a csv containing a list of accession ids and generate a hash identifier.
+        The list must have "Accession" as the column name.
+        """
+        df = pd.read_csv(Path(prokka_db_path))
+        assert "Accession" in df.columns
+        column = df.loc[:, "Accession"].sort_values().reset_index(drop=True)
+        hash_value = hashlib.sha1(pd.util.hash_pandas_object(column).values).hexdigest()
+
+        # Dictionary
+        hash_object = {hash_value : column.to_list()}
+
+        # File mapping
+        file_map = {str(prokka_db_path) : hash_value}
+        return hash_object, file_map
+
+    def create_prokka_db_tables(prokka_databases):
+        """
+        Build a json dictionaries of prokka references and files from config information
+        """
+        prokka_db_table = {}
+        prokka_db_map = {}
+
+        for i in prokka_databases:
+            if Path(i).suffix == ".csv":
+                prokka_db_path = i
+                hash_value, hash_map = hash_prokka_db(prokka_db_path)
+                prokka_db_table.update(hash_value)
+                prokka_db_map.update(hash_map)
+            elif Path(i).suffix == ".gbff":
+                prokka_db_map.update(i)
+            else:
+                raise ValueError('Prokka-db should be a csv table containing valid genome accession ids or a collection of annotated genomes in .gbff format')
+        return prokka_db_table, prokka_db_map
+
     # load information from config
     sys.stderr.write(f"Step 1.1 Extracting information from config file...\n")
     projects = pd.DataFrame(config["projects"]).set_index('name', drop=False)
@@ -88,14 +124,34 @@ def extract_project_information():
     sys.stderr.write(f"Step 1.4 Checking validity of sample files using schemas...\n")
     check_duplicates = df_samples[df_samples.genome_id.duplicated()]
     if len(check_duplicates) > 0:
-        raise ConfigError(f"Strain ids in: {check_duplicates.sample_paths.to_list()} \
-                            are not unique. Check your config.yaml configuration.")
- 
+        raise ConfigError(f"Strain ids in: {check_duplicates.sample_paths.to_list()} are not unique. Check your config.yaml configuration.")
+
+    # Building metadata for prokka reference database creations
+    prokka_db_table = {}
+    prokka_db_map = {}
+
+    if not df_samples.loc[:, "prokka-db"].isnull().all():
+        sys.stderr.write(f"Step 1.5 Preparing information to build Prokka reference databases...\n")
+        prokka_db_table, prokka_db_map = create_prokka_db_tables(df_samples.loc[:, "prokka-db"].dropna().unique())
+
+        # Default resource path
+        output_path = Path("resources/prokka_db/")
+        output_path.mkdir(parents=True, exist_ok=True)
+
+        for h in prokka_db_table.keys():
+            outfile = output_path / f"{h}.json"
+            if outfile.is_file():
+                pass
+            else:
+                sys.stderr.write(f" - Generating reference file: {h}\n")
+                with open(outfile, "w") as f:
+                    json.dump({"Accession":prokka_db_table[h]}, f, indent = 4)
+
     sys.stderr.write(f"   Finished processing config information.\n\n")
 
-    return projects, df_samples
+    return projects, df_samples, prokka_db_table, prokka_db_map
 
-DF_PROJECTS, DF_SAMPLES = extract_project_information()
+DF_PROJECTS, DF_SAMPLES, PROKKA_DB_TABLE, PROKKA_DB_MAP = extract_project_information()
 
 
 ##### 3. Generate wildcard constants #####
@@ -106,7 +162,7 @@ NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
 PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
 SAMPLE_PATHS = list(DF_SAMPLES.sample_paths.unique())
 GTDB_PATHS = list(DF_SAMPLES.gtdb_paths.unique())
-
+PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
 
 ##### 4. Wildcard constraints #####
 wildcard_constraints:
@@ -115,6 +171,7 @@ wildcard_constraints:
     custom="|".join(CUSTOM),
     patric="|".join(PATRIC),
     name="|".join(PROJECT_IDS),
+    prokka_db="|".join(PROKKA_GBFF),
 
 
 ##### 5. Helper lambda functions for calling rules I/O #####
@@ -129,7 +186,7 @@ def get_fasta_inputs(name, df_samples=DF_SAMPLES):
     return output
 
 # prokka.smk #
-def get_prokka_refdb(genome_id, params, df_samples=DF_SAMPLES):
+def get_prokka_refdb(genome_id, params, df_samples=DF_SAMPLES, config=config, mapping_file=PROKKA_DB_MAP):
     """
     Given a genome id, find which prokka-db input to use.
     params:
@@ -137,8 +194,10 @@ def get_prokka_refdb(genome_id, params, df_samples=DF_SAMPLES):
         - "file" - will return the corresponding reference gbks
         - "params" - will return prokka protein params and the corresponding file
     """
+
     prokka_db = df_samples.loc[genome_id, "prokka-db"][0]
     name = df_samples.loc[genome_id, "name"][0]
+
     if not os.path.isfile(str(prokka_db)):
         if params == "file":
             output = []
@@ -147,9 +206,9 @@ def get_prokka_refdb(genome_id, params, df_samples=DF_SAMPLES):
     elif params == "table":
         output = prokka_db
     elif params == "file":
-        output = f"resources/prokka_db/reference_{name}.gbff"
+        output = f"resources/prokka_db/{mapping_file[prokka_db]}.gbff"
     elif params == "params":
-        output = f"--proteins resources/prokka_db/reference_{name}.gbff"
+        output = f"--proteins resources/prokka_db/{mapping_file[prokka_db]}.gbff"
     else:
         sys.stderr.write(f"Second argument should be: table, file, or params.\n")
         raise
