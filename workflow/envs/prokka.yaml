@@ -6,7 +6,6 @@ channels:
 dependencies:
   - prokka=1.14.6
   - perl-bioperl=1.7.2
-  - ncbi-genome-download=0.3.1
   - pandas
   - biopython
   - wget
