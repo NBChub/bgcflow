@@ -5,7 +5,7 @@ else:
         output:
             fna = "data/interim/fasta/{patric}.fna",
         conda: 
-            "../envs/prokka.yaml"
+            "../envs/bgc_analytics.yaml"
         log: "workflow/report/logs/patric/patric_genome_download-{patric}.log"
         shell:
             """
