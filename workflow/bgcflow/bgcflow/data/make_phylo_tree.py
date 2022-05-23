@@ -83,7 +83,7 @@ def get_genome_tree_table(automlst_processed_folder, prokka_interim_folder, gtdb
     mdist = max([t.distance(t.root, x) for x in t.get_terminals()])
     
     # Sort the matrix according to tip labels in the tree
-    genome_ids_list = [x.name[:-1] + '.' + x.name[-1] for x in t.get_terminals()]
+    genome_ids_list = [x.name if x.name in os.listdir(prokka_interim_folder) else x.name[:-1] + '.' + x.name[-1] for x in t.get_terminals()]
     # The above is required in the default version of autmlst_wrapper 
     # To be fixed in the orginal repo
     
