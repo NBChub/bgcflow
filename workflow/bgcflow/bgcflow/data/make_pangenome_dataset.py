@@ -336,10 +336,18 @@ def plot_tree_presence_map(t, df_gene_presence_binary, df_genomes_tree, df_roary
 
     ax1.set_title('Roary matrix\n(%d gene clusters)'%df_roary_sorted.shape[0])
 
+    strain_dict = dict()
+    for x in t.get_terminals():
+        if x.name in df_genomes_tree.index:
+            strain_dict[x.name] = df_genomes_tree.loc[x.name, 'strain']
+        else:
+            genome_id = x.name[:-1] + '.' + x.name[-1]
+            strain_dict[x.name] = df_genomes_tree.loc[genome_id, 'strain']
+    
     # Tree labels are extracted from the column 'strain' of df_genmomes_tree
     Phylo.draw(t, axes=ax,
                show_confidence=False,
-               label_func=lambda x: df_genomes_tree.loc[x.name[:-1] + '.' + x.name[-1], 'strain'] if x.is_terminal() else '',
+               label_func=lambda x: strain_dict[x.name] if x.is_terminal() else '',
                xticks=([],), yticks=([],),
                ylabel=('',), xlabel=('',),
                xlim=(-0.01,mdist+0.01),
