@@ -292,7 +292,7 @@ dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
                 "roary" : r"workflow/envs/roary.yaml",
                 "refseq_masher" : r"workflow/envs/refseq_masher.yaml",
                 "seqfu" : r"workflow/envs/seqfu.yaml",
-                'checkm' : r"workflow/envs/checkm.yaml",
+                "checkm" : r"workflow/envs/checkm.yaml",
                 }
 
 dependency_version = get_dependencies(dependencies)
@@ -336,7 +336,8 @@ def get_project_outputs(config, PROJECT_IDS, df_samples=DF_SAMPLES):
                                 version=dependency_version["antismash"], strains = selection),
                 "bigscape" : expand("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}", \
                                      name = PROJECT_IDS, version=dependency_version["antismash"]),
-                "diamond" : expand("data/processed/{name}/diamond/{name}.dmnd", name = PROJECT_IDS)
+                "diamond" : expand("data/processed/{name}/diamond/{name}.dmnd", name = PROJECT_IDS),
+                "deeptfactor" : expand("data/interim/deeptfactor/{strains}/", strains = selection),
                 }
     
     # get keys from config
