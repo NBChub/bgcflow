@@ -13,7 +13,7 @@ rule deeptfactor_setup:
 rule deeptfactor:
     input: 
         fasta = "data/interim/prokka/{strains}/{strains}.faa",
-        folder = directory("resources/deeptfactor/"),
+        folder = "resources/deeptfactor/",
     output:
         folder = directory("data/interim/deeptfactor/{strains}/"),
     conda:
