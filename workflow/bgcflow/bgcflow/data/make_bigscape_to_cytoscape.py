@@ -10,13 +10,13 @@ log_format = '%(levelname)-8s %(asctime)s   %(message)s'
 date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
+
 def get_cluster_dataframes(df_genomes, df_nodes, as_dir = '../data/antismash/'):
     '''
     Returns two dataframes of clusters with information from genomes and MIBIG
     '''
-    df_clusters = pd.DataFrame(columns=['product', 'bigscape_class', 'genome_id', 'genome_name', 'genus',  'accn_id'])
-    df_known = pd.DataFrame(columns=['product', 'bigscape_class', 'genome_id', 'genome_name', 'genus',  'accn_id', 'compound'])
-    genus_list = df_genomes.genus.unique().tolist()
+    df_clusters = pd.DataFrame(columns=['product', 'bigscape_class', 'genome_id', 'accn_id'])
+    df_known = pd.DataFrame(columns=['product', 'bigscape_class', 'accn_id', 'compound'])
     
     # Generate bgcs dataframe with metadata from df_nodes and df_genomes
     logging.info('Generating bgcs dataframe with metadata from df_nodes and df_genomes...')
@@ -32,10 +32,6 @@ def get_cluster_dataframes(df_genomes, df_nodes, as_dir = '../data/antismash/'):
                         df_clusters.loc[bgc_id, 'product'] = df_nodes.loc[bgc_id, 'Product Prediction']
                         df_clusters.loc[bgc_id, 'bigscape_class'] = df_nodes.loc[bgc_id, 'BiG-SCAPE class']
                         df_clusters.loc[bgc_id, 'accn_id'] = df_nodes.loc[bgc_id, 'Accession ID']
-                        #df_clusters.loc[bgc_id, 'genome_name'] = df_genomes.loc[genome_id, 'genome_name']
-                        df_clusters.loc[bgc_id, 'genus'] = df_genomes.loc[genome_id, 'genus']
-                        df_clusters.loc[bgc_id, 'genome_len'] = df_genomes.loc[genome_id, 'genome_len']
-                        df_clusters.loc[bgc_id, 'bgcs_count'] = df_genomes.loc[genome_id, 'bgcs_count']
                     else:
                         logging.debug(f'{bgc_id} not in df_nodes')
             else:
@@ -49,18 +45,13 @@ def get_cluster_dataframes(df_genomes, df_nodes, as_dir = '../data/antismash/'):
             if 'BGC0' in bgc_id:
                 df_known.loc[bgc_id, 'product'] = df_nodes.loc[bgc_id, 'Product Prediction']
                 df_known.loc[bgc_id, 'bigscape_class'] = df_nodes.loc[bgc_id, 'BiG-SCAPE class']
-                #df_known.loc[bgc_id, 'genome_id'] = df_nodes.loc[bgc_id, 'Accesion ID']
-                genome_name = df_nodes.loc[bgc_id, 'Organism']
-                df_known.loc[bgc_id, 'genome_name'] = genome_name
-                genus = genome_name.split(' ')[0]
-                df_known.loc[bgc_id, 'genus'] = genus
-                #df_known.loc[bgc_id, 'accn_id'] = df_nodes.loc[bgc_id, 'Accesion ID']
                 desc = df_nodes.loc[bgc_id, 'Description']
                 compound_name = desc.split('biosynthetic gene cluster')[0].strip()
                 df_known.loc[bgc_id, 'compound'] = compound_name
             bar()
         
     return df_known, df_clusters
+
 
 def add_bigscape_families(df_clusters, df_known, net_data_path):
     '''
@@ -90,6 +81,7 @@ def add_bigscape_families(df_clusters, df_known, net_data_path):
             
     return df_clusters, df_known
 
+
 def read_gcf_df(df_clusters, gcf_path, cutoff):
     '''
     Adds GCF (Gene Cluster Family) number for each BGC
@@ -105,6 +97,7 @@ def read_gcf_df(df_clusters, gcf_path, cutoff):
              
     return df_clusters
 
+
 def read_gcc_df(df_clusters, clan_path):
     '''
     Adds GCC (Gene Cluster Clan) number for each BGC
@@ -119,36 +112,6 @@ def read_gcc_df(df_clusters, clan_path):
             
     return df_clusters
 
-def run_family_analysis(cutoff, net_data_path, df_clusters, df_genomes, df_known_all, output_dir, query_name):
-    logging.info(f'Processing data from BiG-SCAPE with cutoff {cutoff}')
-    df_network = get_bigscape_network(net_data_path, cutoff = cutoff)
-    G_clusters, family_nodes = get_network_graph(df_network, weight = 'Raw distance')
-    df_network, df_known = remove_single_mibig(df_network, df_known_all, family_nodes)
-    G_clusters, family_nodes = get_network_graph(df_network, weight = 'Raw distance')
-    singleton_bgc = [list(fam)[0] for fam in family_nodes if len(fam) == 1]
-    family_graphs = get_family_graph(G_clusters)
-    df_clusters, df_known, df_families = update_cluster_family(df_clusters, df_known, family_nodes, cutoff = cutoff)
-    logging.debug(f'Number of genomes: {df_genomes.shape[0]}')
-    logging.debug(f'Number of BGCs: {df_clusters.shape[0]}')
-    logging.debug(f'Number of edges in the network: {df_network.shape[0]}')
-    logging.debug(f'Number of total families: {len(family_nodes)}')
-    logging.debug(f'Number of total non-single families: {len(family_nodes) - len(singleton_bgc)}')
-    logging.debug(f'Number of singleton families in the network: {len(singleton_bgc)}')
-    logging.debug(f"Number of families with known BGCs: {df_families[df_families.fam_type == 'known_family'].shape[0]}")
-    logging.debug(f'Number of known BGCs in the network: {df_known.shape[0]}')
-    # print('BGCs in largest families:', family_size)
-    logging.debug(f'Number of BGCs in top 10 families {[len(fam) for fam in family_graphs[:10]]}')
-    df_known_families = df_families[df_families.fam_type == 'known_family']
-    logging.debug(f'Some of the common known BGCs{chr(10)}{chr(10)}{df_known_families.iloc[:20,1:3]}{chr(10)}')
-    df_unknown_families = df_families[df_families.fam_type == 'unknown_family']
-    logging.debug(f'Some of the common unknown BGCs:{chr(10)}{chr(10)}{df_unknown_families.iloc[:20,1:3]}{chr(10)}')
-    # Save all the dataframes
-    df_network.to_csv(f'{output_dir}/{query_name}_df_network_' + cutoff + '.csv')
-    df_known.to_csv(f'{output_dir}/{query_name}_df_known_all_' + cutoff + '.csv')
-    df_families.to_csv(f'{output_dir}/{query_name}_df_families_' + cutoff + '.csv')
-    df_clusters.to_csv(f'{output_dir}/{query_name}_df_clusters_' + cutoff + '.csv')
-    
-    return df_clusters, df_families, df_network
 
 def get_bigscape_network(net_data_path, cutoff = '0.30'):
     '''
@@ -168,6 +131,7 @@ def get_bigscape_network(net_data_path, cutoff = '0.30'):
     
     return df_network
 
+
 def get_network_graph(df_network, weight = 'Raw distance'):
     '''
     Returns networkX graph for a given network
@@ -178,6 +142,7 @@ def get_network_graph(df_network, weight = 'Raw distance'):
     family_nodes = [c for c in sorted(G_families, key=len, reverse=True)]
     
     return G_clusters, family_nodes
+
 
 def remove_single_mibig(df_network, df_known, family_nodes):
     '''
@@ -206,6 +171,7 @@ def remove_single_mibig(df_network, df_known, family_nodes):
 
     return df_network, df_known
 
+
 def get_family_graph(G_clusters):
     '''
     Returns families list as networkx graph 
@@ -228,6 +194,7 @@ def get_family_graph(G_clusters):
     family_graphs = [Families_list[new_orig_index_dict[fam_id]] for fam_id in range(len(Families_list))]
 
     return family_graphs
+
 
 def update_cluster_family(df_clusters, df_known, family_nodes, cutoff = '0.30'):
     '''
@@ -263,15 +230,50 @@ def update_cluster_family(df_clusters, df_known, family_nodes, cutoff = '0.30'):
                     df_clusters.loc[bgc, 'fam_known_compounds_' + cutoff] = 'u_' + bgc_class + '_' + str(fam_id)
                     
             elif bgc in df_known.index:
-                df_known.loc[bgc, 'fam_id'] = str(fam_id)
+                df_known.loc[bgc, 'fam_id_' + cutoff] = str(fam_id)
+                df_known.loc[bgc, 'fam_type_' + cutoff] = 'known_family'
+                known_compounds = ', '.join(df_known.loc[known_bgcs, 'compound'].tolist())
+                df_known.loc[bgc, 'fam_known_compounds_' + cutoff] = known_compounds
     
     return df_clusters, df_known, df_families
+
+
+def run_family_analysis(cutoff, net_data_path, df_clusters, df_genomes, df_known_all, output_dir, query_name):
+    logging.info(f'Processing data from BiG-SCAPE with cutoff {cutoff}')
+    df_network = get_bigscape_network(net_data_path, cutoff = cutoff)
+    G_clusters, family_nodes = get_network_graph(df_network, weight = 'Raw distance')
+    df_network, df_known = remove_single_mibig(df_network, df_known_all, family_nodes)
+    G_clusters, family_nodes = get_network_graph(df_network, weight = 'Raw distance')
+    singleton_bgc = [list(fam)[0] for fam in family_nodes if len(fam) == 1]
+    family_graphs = get_family_graph(G_clusters)
+    df_clusters, df_known, df_families = update_cluster_family(df_clusters, df_known, family_nodes, cutoff = cutoff)
+    logging.debug(f'Number of genomes: {df_genomes.shape[0]}')
+    logging.debug(f'Number of BGCs: {df_clusters.shape[0]}')
+    logging.debug(f'Number of edges in the network: {df_network.shape[0]}')
+    logging.debug(f'Number of total families: {len(family_nodes)}')
+    logging.debug(f'Number of total non-single families: {len(family_nodes) - len(singleton_bgc)}')
+    logging.debug(f'Number of singleton families in the network: {len(singleton_bgc)}')
+    logging.debug(f"Number of families with known BGCs: {df_families[df_families.fam_type == 'known_family'].shape[0]}")
+    logging.debug(f'Number of known BGCs in the network: {df_known.shape[0]}')
+    logging.debug(f'Number of BGCs in top 10 families {[len(fam) for fam in family_graphs[:10]]}')
+    df_known_families = df_families[df_families.fam_type == 'known_family']
+    logging.debug(f'Some of the common known BGCs{chr(10)}{chr(10)}{df_known_families.iloc[:20,1:3]}{chr(10)}')
+    df_unknown_families = df_families[df_families.fam_type == 'unknown_family']
+    logging.debug(f'Some of the common unknown BGCs:{chr(10)}{chr(10)}{df_unknown_families.iloc[:20,1:3]}{chr(10)}')
+    # Save all the dataframes
+    df_network.to_csv(f'{output_dir}/{query_name}_df_network_' + cutoff + '.csv')
+    df_known.to_csv(f'{output_dir}/{query_name}_df_known_' + cutoff + '.csv') 
+    df_families.to_csv(f'{output_dir}/{query_name}_df_families_' + cutoff + '.csv') 
+    df_clusters.to_csv(f'{output_dir}/{query_name}_df_clusters_' + cutoff + '.csv')
+    
+    return df_clusters, df_families, df_network
+
 
 def process_bigscape_output(bigscape_directory, as_dir, df_genomes_path, output_dir):
     bigscape_directory = Path(bigscape_directory)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    for net_data_path in bigscape_directory.glob("network_files/*glocal*"):
+    for net_data_path in bigscape_directory.glob("network_files/*"):
         selected_run = net_data_path.stem
         logging.info(f'Processing {selected_run}')
         node_annot_path = net_data_path / 'Network_Annotations_Full.tsv' # Read the BGC table
@@ -280,10 +282,11 @@ def process_bigscape_output(bigscape_directory, as_dir, df_genomes_path, output_
 
         # Generate df_clusters and df_known dataframe
         df_genomes = pd.read_csv(df_genomes_path, index_col=0)
-
+        df_genomes.to_csv(f'{output_dir}/df_genome_antismash_summary.csv') 
+    
         df_known_all, df_clusters = get_cluster_dataframes(df_genomes, df_nodes, as_dir)
         # Enrich dataframes with BiGSCAPE information on GCCs and GCFs with cutoffs
-        df_clusters, df_known = add_bigscape_families(df_clusters, df_known_all, net_data_path)
+        df_clusters, df_known_all = add_bigscape_families(df_clusters, df_known_all, net_data_path)
 
         # Get GCF data as per the cutoff
         for cutoff in  ['0.30', '0.40', '0.50']:
