@@ -1,7 +1,7 @@
 name: deeptfactor
 channels:
   - pytorch
-  - http://conda.anaconda.org/gurobi
+  - gurobi
   - defaults
   - conda-forge
   - bioconda
@@ -90,5 +90,4 @@ dependencies:
   - pip:
     - biopython==1.78
     - torch==1.2.0
-prefix: /data/user_home/gbkim/anaconda3/envs/deeptfactor
 
