@@ -317,6 +317,8 @@ def get_project_outputs(config, PROJECT_IDS, df_samples=DF_SAMPLES):
                 "eggnog" : expand("data/interim/eggnog/{strains}/", strains = selection),
                 "refseq-masher" : expand("data/interim/refseq_masher/{strains}_masher.csv", \
                                          strains = selection),
+                "mash" : expand("data/interim/mash/{name}/triangle_distance_matrix.tsv", \
+                                         name=PROJECT_IDS),
                 "automlst-wrapper" : expand("data/processed/{name}/automlst_wrapper/final.newick", \
                                             name=PROJECT_IDS),
                 "roary" : expand("data/processed/{name}/roary/df_gene_presence_binary.csv", name=PROJECT_IDS),

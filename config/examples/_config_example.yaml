@@ -31,6 +31,7 @@ rules:
   seqfu: FALSE
   mlst: FALSE
   refseq-masher: FALSE
+  mash: FALSE
   checkm: FALSE
   prokka-gbk: FALSE
   antismash-summary: TRUE

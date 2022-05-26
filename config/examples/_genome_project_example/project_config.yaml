@@ -4,6 +4,7 @@ rules:
   seqfu: TRUE
   mlst: TRUE
   refseq-masher: TRUE
+  mash: TRUE
   checkm: TRUE
   prokka-gbk: TRUE
   antismash-summary: TRUE
