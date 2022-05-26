@@ -1,20 +1,3 @@
-rule arts_setup:
-    output:
-        directory("resources/arts/"),
-    conda:
-        "../envs/arts.yaml"
-    log: "workflow/report/logs/arts/arts_setup.log"
-    shell:  
-        """
-        git clone https://bitbucket.org/ziemertlab/arts resources/arts/ 2>> {log}
-        mkdir data/interim/arts/tmp/
-        echo "ARTS_RESULTS=data/interim/arts/tmp/" > resources/arts/.env
-        echo "ARTS_UPLOAD=data/interim/arts/tmp/" >> resources/arts/.env
-        echo "ARTS_RUN=data/interim/arts/tmp/" >> resources/arts/.env
-        echo "ARTS_CPU=8" >> resources/arts/.env
-        echo "ARTS_WEBPORT=80" >> resources/arts/.env
-        """
-
 rule arts:
     input: 
         antismash = "data/interim/antismash/{version}/{strains}/{strains}.gbk",
