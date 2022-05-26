@@ -17,29 +17,37 @@ projects:
     samples: config/test2/samples.csv
     rules: config/test2/project_config.yaml
 
-#### RULE CONFIGURATION ####
+#### GLOBAL RULE CONFIGURATION ####
+# This section configures the rules to run globally.
+# Use project specific rule configurations if you want to run different rules for each projects.
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
 rules:
   seqfu: FALSE
   mlst: FALSE
-  refseq_masher: FALSE
+  refseq-masher: FALSE
+  mash: FALSE
   checkm: FALSE
   prokka-gbk: FALSE
   antismash-summary: TRUE
   antismash-zip: FALSE
-  query_bigslice: FALSE
+  query-bigslice: FALSE
   bigscape: FALSE
   bigslice: FALSE
-  automlst_wrapper: FALSE
+  automlst-wrapper: FALSE
   arts: FALSE
   roary: FALSE
   eggnog: FALSE
   eggnog-roary: FALSE
+  diamond: FALSE
+  deeptfactor: FALSE
 
 #### RESOURCES CONFIGURATION ####
-# resources : the location of the resources to run the rule. The default location is at "resources/{resource_name}".
+# resources : the location of the resources to run the rule.
+# The default location is at "resources/{resource_name}".
 resources_path: 
   antismash_db: resources/antismash_db
   eggnog_db: resources/eggnog_db
   BiG-SCAPE: resources/BiG-SCAPE
-  #RNAmmer: resources/RNAmmer # Path must be specified if rule configuration "rnammer" is TRUE
+  bigslice: resources/bigslice
+  checkm: resources/checkm
+  #RNAmmer: resources/RNAmmer # If specified, will override Barnapp in Prokka

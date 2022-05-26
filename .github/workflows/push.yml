@@ -21,10 +21,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Linting
-      uses: snakemake/snakemake-github-action@v1.22.0
+      uses: snakemake/snakemake-github-action@v1.24.0
       with:
         directory: .test
         snakefile: workflow/Snakefile
+        stagein: "conda config --set channel_priority strict"
         args: "--lint"
 
   dry-run:
@@ -38,8 +39,9 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: snakemake/snakemake-github-action@v1.22.0
+      uses: snakemake/snakemake-github-action@v1.24.0
       with:
         directory: .test
         snakefile: workflow/Snakefile
+        stagein: "conda config --set channel_priority strict"
         args: "--use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache -n"
