@@ -16,3 +16,5 @@ rules:
   roary: FALSE
   eggnog: FALSE
   eggnog-roary: FALSE
+  diamond: FALSE
+  deeptfactor: FALSE
