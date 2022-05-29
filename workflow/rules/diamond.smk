@@ -1,6 +1,6 @@
 rule create_diamond_db:
     input:
-        faa = lambda wildcards: get_prokka_outputs(wildcards.name, ext="faa")
+        faa = lambda wildcards: get_prokka_outputs(wildcards.name, DF_SAMPLES, ext="faa")
     output:
         faa_compiled = temp("data/interim/diamond/{name}.faa"),
         diamond_interim = "data/interim/diamond/{name}/{name}.dmnd",

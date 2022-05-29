@@ -1,6 +1,6 @@
 rule downstream_bgc_prep:
     input:
-        gbk = lambda wildcards: get_antismash_inputs(wildcards.name, wildcards.version),
+        gbk = lambda wildcards: get_antismash_inputs(wildcards.name, wildcards.version, DF_SAMPLES),
         table = "data/processed/{name}/tables/df_gtdb_meta.csv"
     output:
         taxonomy = "data/interim/bgcs/taxonomy/taxonomy_{name}_antismash_{version}.tsv",

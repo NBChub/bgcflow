@@ -13,7 +13,7 @@ rule install_checkm:
 
 rule checkm:
     input:
-        fna = lambda wildcards: get_fasta_inputs(wildcards.name),
+        fna = lambda wildcards: get_fasta_inputs(wildcards.name, DF_SAMPLES),
         checkm_db = "resources/checkm/",
     output:
         fna = temp(directory('data/interim/checkm/{name}_fna')),

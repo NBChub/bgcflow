@@ -1,11 +1,36 @@
 include: "rules/common.smk"
 
+##### 1. Extract information from config file
+DF_PROJECTS, DF_SAMPLES, PROKKA_DB_TABLE, PROKKA_DB_MAP = extract_project_information()
+
+##### 2. Generate wildcard constants #####
+PROJECT_IDS = DF_SAMPLES.name.unique()
+STRAINS = DF_SAMPLES.genome_id.to_list()
+CUSTOM = DF_SAMPLES[DF_SAMPLES.source.eq("custom")].genome_id.to_list()
+NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
+PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
+SAMPLE_PATHS = list(DF_SAMPLES.sample_paths.unique())
+GTDB_PATHS = list(DF_SAMPLES.gtdb_paths.unique())
+PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
+
+##### 3. Wildcard constraints #####
+wildcard_constraints:
+    strains="|".join(STRAINS),
+    ncbi="|".join(NCBI),
+    custom="|".join(CUSTOM),
+    patric="|".join(PATRIC),
+    name="|".join(PROJECT_IDS),
+    prokka_db="|".join(PROKKA_GBFF),
+
+##### 4. Generate user-defined local resources
+custom_resource_dir()
+
 ##### Target rules #####
 rule all:
     input:
         expand("data/processed/{name}/tables/df_gtdb_meta.csv", name = PROJECT_IDS),
         "workflow/report/dependency_versions.json",
-        get_final_output(),
+        get_final_output(DF_SAMPLES),
 
 ##### Modules #####
 include: "rules/ncbi.smk"

@@ -118,7 +118,7 @@ def extract_project_information():
         df1 = df1.set_index('genome_id', drop=False)
         samples.append(df1)
     df_samples = pd.concat(samples, axis=0)
-    validate(df_samples.fillna(""), schema="../schemas/samples.schema.yaml")
+    validate(df_samples.fillna(""), schema="schemas/samples.schema.yaml")
 
     # check validity of genome_ids. Value should be unique.
     sys.stderr.write(f"Step 1.4 Checking validity of sample files using schemas...\n")
@@ -151,33 +151,10 @@ def extract_project_information():
 
     return projects, df_samples, prokka_db_table, prokka_db_map
 
-DF_PROJECTS, DF_SAMPLES, PROKKA_DB_TABLE, PROKKA_DB_MAP = extract_project_information()
-
-
-##### 3. Generate wildcard constants #####
-PROJECT_IDS = DF_SAMPLES.name.unique()
-STRAINS = DF_SAMPLES.genome_id.to_list()
-CUSTOM = DF_SAMPLES[DF_SAMPLES.source.eq("custom")].genome_id.to_list()
-NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
-PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
-SAMPLE_PATHS = list(DF_SAMPLES.sample_paths.unique())
-GTDB_PATHS = list(DF_SAMPLES.gtdb_paths.unique())
-PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
-
-##### 4. Wildcard constraints #####
-wildcard_constraints:
-    strains="|".join(STRAINS),
-    ncbi="|".join(NCBI),
-    custom="|".join(CUSTOM),
-    patric="|".join(PATRIC),
-    name="|".join(PROJECT_IDS),
-    prokka_db="|".join(PROKKA_GBFF),
-
-
 ##### 5. Helper lambda functions for calling rules I/O #####
 
 # seqfu.smk #
-def get_fasta_inputs(name, df_samples=DF_SAMPLES):
+def get_fasta_inputs(name, df_samples):
     """
     Given a project name, list all corresponding strains (genome_id) fasta file
     """
@@ -186,7 +163,7 @@ def get_fasta_inputs(name, df_samples=DF_SAMPLES):
     return output
 
 # prokka.smk #
-def get_prokka_refdb(genome_id, params, df_samples=DF_SAMPLES, config=config, mapping_file=PROKKA_DB_MAP):
+def get_prokka_refdb(genome_id, params, df_samples, mapping_file, config=config):
     """
     Given a genome id, find which prokka-db input to use.
     params:
@@ -215,7 +192,7 @@ def get_prokka_refdb(genome_id, params, df_samples=DF_SAMPLES, config=config, ma
     return output
 
 # bigscape.smk, bigslice.smk, and bgc_analytics.smk #
-def get_antismash_inputs(name, version, df_samples=DF_SAMPLES):
+def get_antismash_inputs(name, version, df_samples):
     """
     Given a project name, find the corresponding sample file to use
     """
@@ -224,7 +201,7 @@ def get_antismash_inputs(name, version, df_samples=DF_SAMPLES):
     return output
 
 # roary.smk #
-def get_prokka_outputs(name, df_samples=DF_SAMPLES, ext="gff"):
+def get_prokka_outputs(name, df_samples, ext="gff"):
     """
     Given a project name, find the corresponding sample file to use
     """
@@ -233,7 +210,7 @@ def get_prokka_outputs(name, df_samples=DF_SAMPLES, ext="gff"):
     return output
 
 # automlst_wrapper.smk #
-def get_automlst_inputs(name, df_samples=DF_SAMPLES):
+def get_automlst_inputs(name, df_samples):
     """
     Given a project name, find the corresponding sample file to use
     """
@@ -242,7 +219,7 @@ def get_automlst_inputs(name, df_samples=DF_SAMPLES):
     return output
 
 # gtdb.smk #
-def get_json_inputs(name, df_samples=DF_SAMPLES):
+def get_json_inputs(name, df_samples):
     """
     Given a project name, find the corresponding sample file to use
     """
@@ -251,7 +228,7 @@ def get_json_inputs(name, df_samples=DF_SAMPLES):
     return output
 
 # ncbi.smk #
-def get_ncbi_assembly_inputs(name, df_samples=DF_SAMPLES):
+def get_ncbi_assembly_inputs(name, df_samples):
     """
     Given a project name, find the corresponding sample file to use
     """
@@ -298,7 +275,7 @@ dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
 dependency_version = get_dependencies(dependencies)
 
 ##### 7. Customize final output based on config["rule"] values #####
-def get_project_outputs(config, PROJECT_IDS, df_samples=DF_SAMPLES):
+def get_project_outputs(config, PROJECT_IDS, df_samples):
     """
     Generate outputs of a project given a TRUE value in config["rules"]
     """
@@ -359,7 +336,7 @@ def get_project_outputs(config, PROJECT_IDS, df_samples=DF_SAMPLES):
 
     return final_output
 
-def get_final_output():
+def get_final_output(df_samples):
     """
     Generate outputs of for all projects
     """
@@ -368,10 +345,10 @@ def get_final_output():
     for p in config["projects"]:
         sys.stderr.write(f" - Getting outputs for project: {p['name']}\n")
         try:
-            final_output.extend(get_project_outputs(p['rules'], p['name']))
+            final_output.extend(get_project_outputs(p['rules'], p['name'], df_samples))
             sys.stderr.write(f"   {p['name']}: Using project rule configuration.\n")
         except KeyError:
-            final_output.extend(get_project_outputs(config, p['name']))
+            final_output.extend(get_project_outputs(config, p['name'], df_samples))
             sys.stderr.write(f"   {p['name']}: Using global rule configuration.\n")
     sys.stderr.write(f" - Ready to generate all outputs.\n\n")
     return final_output
@@ -412,6 +389,4 @@ def custom_resource_dir():
                                     Check the config.yaml and provide the right path for resource {r} \
                                     or change it to the default path: resources/{r}\n")
     sys.stderr.write(f"   All resources set.\n\n")
-    return 
-
-custom_resource_dir()
+    return

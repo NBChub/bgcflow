@@ -27,7 +27,7 @@ rule prep_automlst_gbk:
 
 rule automlst_wrapper:
     input:
-        gbk = lambda wildcards: get_automlst_inputs(wildcards.name),
+        gbk = lambda wildcards: get_automlst_inputs(wildcards.name, DF_SAMPLES),
         reduced_core = "resources/automlst-simplified-wrapper-main/reducedcore.hmm",
     output:
         tree = "data/interim/automlst_wrapper/{name}/raxmlpart.txt.treefile",
