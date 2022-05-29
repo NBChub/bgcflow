@@ -1,6 +1,6 @@
 rule roary:
     input: 
-        gff = lambda wildcards: get_prokka_outputs(wildcards.name)
+        gff = lambda wildcards: get_prokka_outputs(wildcards.name, DF_SAMPLES)
     output:
         roary_dir = directory("data/interim/roary/{name}/"),
     conda:
