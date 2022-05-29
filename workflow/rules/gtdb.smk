@@ -15,7 +15,7 @@ rule gtdb_prep:
 
 rule fix_gtdb_taxonomy:
     input: 
-        json_list = lambda wildcards: get_json_inputs(wildcards.name)
+        json_list = lambda wildcards: get_json_inputs(wildcards.name, DF_SAMPLES)
     output:
         meta = report("data/processed/{name}/tables/df_gtdb_meta.csv", caption="../report/table-gtdb.rst", category="{name}", subcategory="Taxonomic Placement")
     conda:

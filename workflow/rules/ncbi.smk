@@ -29,7 +29,7 @@ else:
 
     rule extract_ncbi_information:
         input:
-            all_json = lambda wildcards: get_ncbi_assembly_inputs(wildcards.name)
+            all_json = lambda wildcards: get_ncbi_assembly_inputs(wildcards.name, DF_SAMPLES)
         output:
             ncbi_meta_path = report("data/processed/{name}/tables/df_ncbi_meta.csv", \
                 caption="../report/table-ncbi_meta.rst", \

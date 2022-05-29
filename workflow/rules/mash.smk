@@ -1,6 +1,6 @@
 rule mash:
     input: 
-        fna = lambda wildcards: get_fasta_inputs(wildcards.name),
+        fna = lambda wildcards: get_fasta_inputs(wildcards.name, DF_SAMPLES),
     output:
         mash_infile = "data/interim/mash/{name}/mash_in.txt",
         triangle_dist = "data/interim/mash/{name}/triangle_distance_matrix.tsv"
