@@ -5,6 +5,7 @@ import logging
 import networkx as nx 
 from collections import OrderedDict
 from alive_progress import alive_bar
+from datetime import datetime
 
 log_format = '%(levelname)-8s %(asctime)s   %(message)s'
 date_format = "%d/%m %H:%M:%S"
@@ -273,25 +274,36 @@ def process_bigscape_output(bigscape_directory, as_dir, df_genomes_path, output_
     bigscape_directory = Path(bigscape_directory)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    # get the latest run
+    bigscape_runs = {}
     for net_data_path in bigscape_directory.glob("network_files/*"):
-        selected_run = net_data_path.stem
-        logging.info(f'Processing {selected_run}')
-        node_annot_path = net_data_path / 'Network_Annotations_Full.tsv' # Read the BGC table
+        selected_run_folder = net_data_path.name
+        selected_run_time = selected_run_folder.split("_glocal")[0]
+        selected_run_time = datetime.strptime(selected_run_time, '%Y-%m-%d_%H-%M-%S')
+        bigscape_runs[selected_run_time] = net_data_path
+    run_times = list(bigscape_runs.keys())
+    run_times.sort(reverse=True)
+    selected_run = run_times[0]
+    net_data_path = bigscape_runs[selected_run]
 
-        df_nodes = pd.read_csv(node_annot_path, index_col='BGC', sep='\t')
+    logging.info(f'Processing {selected_run}')
+    node_annot_path = net_data_path / 'Network_Annotations_Full.tsv' # Read the BGC table
 
-        # Generate df_clusters and df_known dataframe
-        df_genomes = pd.read_csv(df_genomes_path, index_col=0)
-        df_genomes.to_csv(f'{output_dir}/df_genome_antismash_summary.csv') 
+    df_nodes = pd.read_csv(node_annot_path, index_col='BGC', sep='\t')
+
+    # Generate df_clusters and df_known dataframe
+    df_genomes = pd.read_csv(df_genomes_path, index_col=0)
+    df_genomes.to_csv(f'{output_dir}/df_genome_antismash_summary.csv')
     
-        df_known_all, df_clusters = get_cluster_dataframes(df_genomes, df_nodes, as_dir)
-        # Enrich dataframes with BiGSCAPE information on GCCs and GCFs with cutoffs
-        df_clusters, df_known_all = add_bigscape_families(df_clusters, df_known_all, net_data_path)
+    df_known_all, df_clusters = get_cluster_dataframes(df_genomes, df_nodes, as_dir)
+    # Enrich dataframes with BiGSCAPE information on GCCs and GCFs with cutoffs
+    df_clusters, df_known_all = add_bigscape_families(df_clusters, df_known_all, net_data_path)
 
-        # Get GCF data as per the cutoff
-        for cutoff in  ['0.30', '0.40', '0.50']:
-            df_clusters, df_families, df_network = run_family_analysis(cutoff, net_data_path, df_clusters, df_genomes, df_known_all, output_dir, selected_run)
-        return
+    # Get GCF data as per the cutoff
+    for cutoff in  ['0.30', '0.40', '0.50']:
+        df_clusters, df_families, df_network = run_family_analysis(cutoff, net_data_path, df_clusters, df_genomes, df_known_all, output_dir, selected_run)
+    return
 
 if __name__ == "__main__":
     process_bigscape_output(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
