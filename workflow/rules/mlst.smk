@@ -8,6 +8,5 @@ rule mlst:
     log: "workflow/report/logs/mlst/mlst-{strains}.log"
     shell:
         """
-        mlst --csv {input.fna} > {output.csv}
-        head {output.csv} >> {log}
+        mlst --csv {input.fna} > {output.csv} 2>> {log}
         """

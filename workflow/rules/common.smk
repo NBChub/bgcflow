@@ -385,8 +385,6 @@ def custom_resource_dir():
                 slink.symlink_to( path )
         # raise an Error if external path not found
         else:
-            raise FileNotFoundError(f"Error: User-defined resource {r} at {path} does not exist. \
-                                    Check the config.yaml and provide the right path for resource {r} \
-                                    or change it to the default path: resources/{r}\n")
+            raise FileNotFoundError(f"Error: User-defined resource {r} at {path} does not exist.\nCheck the config.yaml and provide the right path for resource {r} or\nchange it to the default path: resources/{r}\n")
     sys.stderr.write(f"   All resources set.\n\n")
     return
