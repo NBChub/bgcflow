@@ -16,7 +16,7 @@ rule prep_automlst_gbk:
     input:
         gbk = "data/interim/processed-genbank/{strains}.gbk"
     output:
-        auto_gbk = "data/interim/automlst_wrapper/{name}/{strains}.gbk",
+        auto_gbk = temp("data/interim/automlst_wrapper/{name}/{strains}.gbk"),
     conda:
         "../envs/automlst_wrapper.yaml"
     log: "workflow/report/logs/automlst_wrapper/prep_automlst_gbk/prep_automlst_gbk-{name}_{strains}.log"
