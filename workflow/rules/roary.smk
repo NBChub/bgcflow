@@ -53,6 +53,26 @@ rule deeptfactor_roary:
             -g cpu -cpu {threads}) 2>> {log}
         """
 
+rule diamond_roary:
+    input:
+        roary_dir = "data/interim/roary/{name}/",
+        resource = "resources/deeptfactor/",
+    output:
+        diamond_interim = "data/interim/diamond/{name}_pangenome.dmnd",
+        diamond_processed = "data/processed/{name}/diamond/{name}_pangenome.dmnd",
+    conda:
+        "../envs/antismash.yaml"
+    threads: 8
+    log: "workflow/report/logs/diamond-roary/diamond-roary-{name}.log"
+    params:
+        faa = "data/interim/roary/{name}/pan_genome_reference.fa",
+        diamond = "data/interim/diamond/{name}_pangenome.dmnd",
+    shell:
+        """
+        diamond makedb --in {params.faa} -d {params.diamond} -p {threads} 2>> {log}
+        cp {output.diamond_interim} {output.diamond_processed} 2>> {log}
+        """
+
 rule roary_out:
     input: 
         roary_interim_dir = "data/interim/roary/{name}/",
