@@ -186,8 +186,11 @@ Here you can find rules keyword that you can run within BGCflow.
 | seqfu | Returns contig statistics of the genomes | [SeqFu](https://github.com/telatin/seqfu2)|
 | mlst | Returns genome classification within multi-locus sequence types (STs) | [mlst](https://github.com/tseemann/mlst) |
 | refseq_masher | Identify the closest 10 NCBI Refseq genomes | [RefSeq Masher](https://github.com/phac-nml/refseq_masher) |
+| mash | Calculate genomic distance using MAST | [MASH](https://github.com/marbl/Mash) |
+| fastani | Calculate nucleotide distance using fastANI | [fastANI](https://github.com/ParBLiSS/FastANI) |
 | checkm | Assess genome quality | [CheckM](https://github.com/Ecogenomics/CheckM) |
-| prokka-gbk | Returns annotated `.gbk` files| [Prokka](https://github.com/tseemann/prokka) |
+| prokka-gbk | Returns annotated `.gbk` files | [Prokka](https://github.com/tseemann/prokka) |
+| diamond | Create diamond database for alignment | [DIAMOND](https://github.com/bbuchfink/diamond) |
 | antismash-summary | Summary of BGCs statistics | [antiSMASH](https://github.com/antismash/antismash) |
 | antismash-zip | Returns zipped antiSMASH result | [antiSMASH](https://github.com/antismash/antismash) |
 | query_bigslice | Query BGCs with BiG-FAM db* | [BiG-SLICE](https://github.com/medema-group/bigslice) |
@@ -196,6 +199,8 @@ Here you can find rules keyword that you can run within BGCflow.
 | automlst_wrapper | Build a phylogenomic tree with autoMLST wrapper | [autoMLST-wrapper](https://github.com/KatSteinke/automlst-simplified-wrapper), [autoMLST](https://bitbucket.org/ziemertlab/automlst/src/master/) |
 | roary | Build Pangenome | [Roary](https://github.com/sanger-pathogens/Roary) |
 | eggnog | Functional annotation with EggNOG-mapper | [EggNOG-mapper](https://github.com/eggnogdb/eggnog-mapper) |
+| deeptfactor | Prediction of transcription factors with DeepTFactor | [DeepTFactor](https://bitbucket.org/kaistsystemsbiology/deeptfactor) |
+| roary++ | Apply multiple tools together with Roary pangenome (diamond, automlst_wrapper, eggnog, deeptfactor) | [Roary](https://github.com/sanger-pathogens/Roary)  |
 
 ## Using snakemake profiles for further configurations
 When using different machines, you can, for example, adapt the number of threads required for each rules using a snakemake profile. An example is given in [`config/examples/_profile_example/config.yaml`](config/examples/_profile_example/config.yaml):
