@@ -13,18 +13,20 @@ rule deeptfactor_setup:
 rule deeptfactor:
     input: 
         fasta = "data/interim/prokka/{strains}/{strains}.faa",
-        folder = "resources/deeptfactor/",
+        resource = "resources/deeptfactor/",
     output:
-        folder = directory("data/interim/deeptfactor/{strains}/"),
+        deeptfactor_dir = directory("data/interim/deeptfactor/{strains}/"),
     conda:
         "../envs/deeptfactor.yaml"
     threads: 8
+    params:
+        faa = "../../data/interim/prokka/{strains}/{strains}.faa",
+        outdir = "../../data/interim/deeptfactor/{strains}/",
     log: "workflow/report/logs/deeptfactor/deeptfactor/deeptfactor-{strains}.log"
     shell:
         """
         mkdir -p data/interim/deeptfactor/{wildcards.strains} 2>> {log}
-        (cd {input.folder} && python tf_running.py \
-            -i "../../data/interim/prokka/{wildcards.strains}/{wildcards.strains}.faa" \
-            -o "../../data/interim/deeptfactor/{wildcards.strains}/" \
+        (cd {input.resource} && python tf_running.py \
+            -i {params.faa} -o {params.outdir} \
             -g cpu -cpu {threads}) 2>> {log}
         """

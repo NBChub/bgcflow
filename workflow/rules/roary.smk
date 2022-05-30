@@ -31,7 +31,27 @@ rule eggnog_roary:
         """
         mkdir -p {output.eggnog_dir}
         emapper.py -i {params.faa} --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} 2>> {log}
-        """ 
+        """
+
+rule deeptfactor_roary:
+    input:
+        roary_dir = "data/interim/roary/{name}/",
+        resource = "resources/deeptfactor/",
+    output:
+        deeptfactor_dir = directory("data/interim/deeptfactor_roary/{name}/")
+    conda:
+        "../envs/deeptfactor.yaml"
+    threads: 8
+    log: "workflow/report/logs/deeptfactor-roary/deeptfactor-roary-{name}.log"
+    params:
+        faa = "../../data/interim/roary/{name}/pan_genome_reference.fa",
+        outdir = "../../data/interim/deeptfactor_roary/{name}/",
+    shell:
+        """
+        (cd {input.resource} && python tf_running.py \
+            -i {params.faa} -o {params.outdir} \
+            -g cpu -cpu {threads}) 2>> {log}
+        """
 
 rule roary_out:
     input: 

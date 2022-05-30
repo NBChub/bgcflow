@@ -20,3 +20,4 @@ rules:
   eggnog-roary: TRUE
   diamond: TRUE
   deeptfactor: TRUE
+  deeptfactor-roary: TRUE
