@@ -32,6 +32,7 @@ rules:
   mlst: FALSE
   refseq-masher: FALSE
   mash: FALSE
+  fastani: FALSE
   checkm: FALSE
   prokka-gbk: FALSE
   antismash-summary: TRUE

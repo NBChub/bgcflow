@@ -319,6 +319,8 @@ def get_project_outputs(config, PROJECT_IDS, df_samples=DF_SAMPLES):
                                          strains = selection),
                 "mash" : expand("data/interim/mash/{name}/triangle_distance_matrix.tsv", \
                                          name=PROJECT_IDS),
+                "fastani" : expand("data/interim/fastani/{name}/fastani_out.tsv", \
+                                         name=PROJECT_IDS),
                 "automlst-wrapper" : expand("data/processed/{name}/automlst_wrapper/final.newick", \
                                             name=PROJECT_IDS),
                 "roary" : expand("data/processed/{name}/roary/df_gene_presence_binary.csv", name=PROJECT_IDS),
