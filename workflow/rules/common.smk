@@ -341,6 +341,7 @@ def get_project_outputs(config, PROJECT_IDS, df_samples=DF_SAMPLES):
                 "bigscape" : expand("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}", \
                                      name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "diamond" : expand("data/processed/{name}/diamond/{name}.dmnd", name = PROJECT_IDS),
+                "diamond-roary" : expand("data/processed/{name}/diamond/{name}_pangenome.dmnd", name=PROJECT_IDS),
                 "deeptfactor" : expand("data/interim/deeptfactor/{strains}/", strains = selection),
                 "deeptfactor-roary" : expand("data/interim/deeptfactor_roary/{name}/", name=PROJECT_IDS),
                 }

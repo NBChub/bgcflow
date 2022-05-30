@@ -46,6 +46,7 @@ rules:
   eggnog: FALSE
   eggnog-roary: FALSE
   diamond: FALSE
+  diamond-roary: FALSE
   deeptfactor: FALSE
   deeptfactor-roary: FALSE
 
