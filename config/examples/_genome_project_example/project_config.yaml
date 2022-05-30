@@ -5,6 +5,7 @@ rules:
   mlst: TRUE
   refseq-masher: TRUE
   mash: TRUE
+  fastani: TRUE
   checkm: TRUE
   prokka-gbk: TRUE
   antismash-summary: TRUE
