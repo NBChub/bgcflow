@@ -47,6 +47,7 @@ rules:
   eggnog-roary: FALSE
   diamond: FALSE
   deeptfactor: FALSE
+  deeptfactor-roary: FALSE
 
 #### RESOURCES CONFIGURATION ####
 # resources : the location of the resources to run the rule.
