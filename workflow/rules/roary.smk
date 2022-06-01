@@ -58,7 +58,7 @@ rule diamond_roary:
         roary_dir = "data/interim/roary/{name}/",
         resource = "resources/deeptfactor/",
     output:
-        diamond_interim = "data/interim/diamond/{name}_pangenome.dmnd",
+        diamond_interim = "data/interim/diamond/{name}/{name}_pangenome.dmnd",
         diamond_processed = "data/processed/{name}/diamond/{name}_pangenome.dmnd",
     conda:
         "../envs/antismash.yaml"
