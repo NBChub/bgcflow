@@ -149,6 +149,11 @@ def extract_project_information():
 
     return projects, df_samples, prokka_db_table, prokka_db_map
 
+##### 3. Generate wildcard constants
+##### 4. Wildcard constraints
+# The above function extract_project_information() returns objects necessary for steps 3 and 4
+# The function is called in Snakefile where wildcards are extracted and defined
+
 ##### 5. Helper lambda functions for calling rules I/O #####
 
 # seqfu.smk #
