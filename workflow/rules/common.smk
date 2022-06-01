@@ -86,9 +86,7 @@ def extract_project_information():
     sys.stderr.write(f"Step 1.2 Checking validity of project names and samples...\n")
     check_duplicates = projects[projects.samples.duplicated()]
     if len(check_duplicates) > 0:
-        raise ConfigError(f"Project: {check_duplicates.name.to_list()} \
-                            input file name: {check_duplicates.samples.to_list()} \
-                            is not unique. Check your config.yaml configuration.")
+        raise ConfigError(f"Project: {check_duplicates.name.to_list()} input file name: {check_duplicates.samples.to_list()} is not unique. Check your config.yaml configuration.")
 
     samples = []
     for i in projects.index:
