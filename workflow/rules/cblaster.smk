@@ -23,20 +23,20 @@ rule cblaster_genome_db:
 
 rule cblaster_bgc_db:
     input:
-        bgc_mapping = "data/interim/bgcs/{name}/{name}_antismash_6.0.1.csv",
+        bgc_mapping = "data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
     output:
-        folder_interim = directory("data/interim/cblaster/{name}/bgcs/"),
-        folder_processed = directory("data/processed/{name}/cblaster/bgcs/"),
-        sql = "data/interim/cblaster/{name}/bgcs/cblaster_bgc_db.sqlite3",
-        dmnd = "data/interim/cblaster/{name}/bgcs/cblaster_bgc_db.dmnd",
-        fasta = "data/interim/cblaster/{name}/bgcs/cblaster_bgc_db.fasta", 
+        folder_interim = directory("data/interim/cblaster/{name}/bgcs/{version}/"),
+        folder_processed = directory("data/processed/{name}/cblaster/bgcs/{version}/"),
+        sql = "data/interim/cblaster/{name}/bgcs/{version}/cblaster_bgc_db.sqlite3",
+        dmnd = "data/interim/cblaster/{name}/bgcs/{version}/cblaster_bgc_db.dmnd",
+        fasta = "data/interim/cblaster/{name}/bgcs/{version}/cblaster_bgc_db.fasta", 
     conda:
         "../envs/cblaster.yaml"
     params:
-        db_prefix = "data/interim/cblaster/{name}/bgcs/cblaster_bgc_db",
-        antismash_dir = "data/interim/bgcs/{name}/6.0.1/*/*region*.gbk",
+        db_prefix = "data/interim/cblaster/{name}/bgcs/{version}/cblaster_bgc_db",
+        antismash_dir = "data/interim/bgcs/{name}/{version}/*/*region*.gbk",
         batch_size = 50,
-    log: "workflow/report/logs/cblaster/cblaster_db_bgc_{name}.log"
+    log: "workflow/report/logs/cblaster/cblaster_db_bgc_{name}_{version}.log"
     threads: 32
     shell:
         """

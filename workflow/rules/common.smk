@@ -332,7 +332,8 @@ def get_project_outputs(config, PROJECT_IDS, df_samples):
                 "deeptfactor" : expand("data/interim/deeptfactor/{strains}/", strains = selection),
                 "deeptfactor-roary" : expand("data/interim/deeptfactor_roary/{name}/", name=PROJECT_IDS),
                 "cblaster-genome":  expand("data/processed/{name}/cblaster/genomes/", name = PROJECT_IDS),
-                "cblaster-bgc":  expand("data/processed/{name}/cblaster/bgcs/", name = PROJECT_IDS),
+                "cblaster-bgc":  expand("data/processed/{name}/cblaster/bgcs/{version}/", \
+                                name = PROJECT_IDS, version=dependency_version["antismash"]),
                 }
     
     # get keys from config
