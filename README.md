@@ -201,6 +201,8 @@ Here you can find rules keyword that you can run within BGCflow.
 | eggnog | Functional annotation with EggNOG-mapper | [EggNOG-mapper](https://github.com/eggnogdb/eggnog-mapper) |
 | deeptfactor | Prediction of transcription factors with DeepTFactor | [DeepTFactor](https://bitbucket.org/kaistsystemsbiology/deeptfactor) |
 | roary++ | Apply multiple tools together with Roary pangenome (diamond, automlst_wrapper, eggnog, deeptfactor) | [Roary](https://github.com/sanger-pathogens/Roary)  |
+| cblaster-genome | Generate cblaster databases for genomes in project | [cblaster](https://github.com/gamcil/cblaster)  |
+| cblaster-bgcs | Generate cblaster databases for bgcs in project | [cblaster](https://github.com/gamcil/cblaster)  |
 
 ## Using snakemake profiles for further configurations
 When using different machines, you can, for example, adapt the number of threads required for each rules using a snakemake profile. An example is given in [`config/examples/_profile_example/config.yaml`](config/examples/_profile_example/config.yaml):
