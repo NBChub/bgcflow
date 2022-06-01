@@ -331,6 +331,8 @@ def get_project_outputs(config, PROJECT_IDS, df_samples):
                 "diamond-roary" : expand("data/processed/{name}/diamond/{name}_pangenome.dmnd", name=PROJECT_IDS),
                 "deeptfactor" : expand("data/interim/deeptfactor/{strains}/", strains = selection),
                 "deeptfactor-roary" : expand("data/interim/deeptfactor_roary/{name}/", name=PROJECT_IDS),
+                "cblaster-genome":  expand("data/processed/{name}/cblaster/genomes/", name = PROJECT_IDS),
+                "cblaster-bgc":  expand("data/processed/{name}/cblaster/bgcs/", name = PROJECT_IDS),
                 }
     
     # get keys from config
