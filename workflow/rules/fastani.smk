@@ -1,6 +1,6 @@
 rule fastani:
     input: 
-        fna = lambda wildcards: get_fasta_inputs(wildcards.name),
+        fna = lambda wildcards: get_fasta_inputs(wildcards.name, DF_SAMPLES),
     output:
         fastani_infile = "data/interim/fastani/{name}/fastani_in.txt",
         fastani_out = "data/interim/fastani/{name}/fastani_out.tsv",
