@@ -22,3 +22,5 @@ rules:
   diamond-roary: TRUE
   deeptfactor: TRUE
   deeptfactor-roary: TRUE
+  cblaster-genome: TRUE
+  cblaster-bgc: TRUE
