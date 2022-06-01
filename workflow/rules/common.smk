@@ -12,15 +12,18 @@ __version__ = "0.3.2"
 
 ##### TABLE OF CONTENTS #####
 # This .smk file helps the rules interact with the user config and contains 
-# many helper scripts. The structure can be divided into these sections:
-#   1. Load config
-#   2. Extract project information
-#   3. Generate wildcard constants
-#   4. Wildcard constraints
-#   5. Helper lambda functions for rules I/O
+# many helper scripts and python functions. Execution of the functions should
+# be done in the Snakefile whenever possible. This will help in creating
+# custom sub-workflows (Snakefile) in the future.
+# In general, the structure of a workflow can be divided into these steps:
+#   1. Load config file
+#   2. Extract project information (called via Snakefile)
+#   3. Generate wildcard constants (via Snakefile)
+#   4. Constraints wildcards (via Snakefile)
+#   5. Helper lambda functions for rules I/O (called by specific rules (.smk))
 #   6. Get dependency versions
-#   7. Customize final output based on config["rule"] values
-#   8. Set up custom resource directory provided in config["resources_path"] 
+#   7. Customize final output based on config["rule"] values (called via Snakefile)
+#   8. Set up custom resource directory provided in config["resources_path"] (called via Snakefile)
 
 
 ##### 1. Load config #####
@@ -30,6 +33,9 @@ validate(config, schema="../schemas/config.schema.yaml")
 sys.stderr.write(f"This is BGCflow version {__version__}.\n\n")
 
 ##### 2. Extract project information #####
+# The function extract_project_information() returns objects necessary for steps 3 and 4
+# The function is called in Snakefile where wildcards are extracted and defined
+
 def extract_project_information():
     """
     Wrapper to extract variables from projects in config.yaml.
@@ -150,9 +156,10 @@ def extract_project_information():
     return projects, df_samples, prokka_db_table, prokka_db_map
 
 ##### 3. Generate wildcard constants
+# This step is done via Snakefile. Refer to comments on Step 2 for explanation.
+
 ##### 4. Wildcard constraints
-# The above function extract_project_information() returns objects necessary for steps 3 and 4
-# The function is called in Snakefile where wildcards are extracted and defined
+# This step is done via Snakefile. Refer to comments on Step 2 for explanation.
 
 ##### 5. Helper lambda functions for calling rules I/O #####
 
