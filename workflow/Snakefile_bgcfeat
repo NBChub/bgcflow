@@ -1,0 +1,90 @@
+include: "rules/common.smk"
+
+##### 1. Extract information from config file
+
+def extract_bgc_project_information():
+    df_projects = pd.DataFrame(config["projects"]).set_index('name', drop=False)
+
+    samples = []
+    for i in df_projects.index:
+        s = pd.read_csv(df_projects.loc[i, "samples"])
+        s["sample_paths"] = df_projects.loc[i, "samples"]
+        s["gtdb_paths"] = df_projects.loc[i, "gtdb-tax"]
+        s["name"] = df_projects.loc[i, "name"]
+        samples.append(s)
+
+    df_samples = pd.concat(samples, axis=0)
+    df_samples = df_samples.reset_index(drop="True")
+    return df_projects, df_samples
+
+# downstream_bgc_prep
+def get_bgc_inputs(name, version, df_samples, antismash_path="data/interim/antismash"):
+    """
+    Given a project name, find the corresponding sample bgcs file to use
+    """
+    selection = {df_samples.loc[i, "bgc_id"] : df_samples.loc[i, "genome_id"] for i in df_samples[df_samples["name"] == name].index}
+
+    output = []
+    for bgc in selection.keys():
+        genome_id = selection[bgc]
+        with open(Path(antismash_path) / f"{version}/{genome_id}.json") as f:
+            mapping = json.load(f)
+        try:
+            input_file_path = Path(mapping[genome_id][f"{bgc}.gbk"]['target_path'])
+        except KeyError:
+            query = bgc.split(".")[0]
+            for k in mapping[genome_id].keys():
+                target = k.split(".")
+                if query in target:
+                    input_file_path = Path(mapping[genome_id][k]['target_path'])
+            else:
+                pass
+        assert input_file_path.is_file()
+        output.append(input_file_path)
+    return output
+
+DF_PROJECTS, DF_SAMPLES = extract_bgc_project_information()
+
+##### 2. Generate wildcard constants #####
+PROJECT_IDS = DF_SAMPLES.name.unique()
+STRAINS = list(DF_SAMPLES.bgc_id.unique())
+CUSTOM = list(DF_SAMPLES[DF_SAMPLES.source.eq("custom")].bgc_id.unique())
+BGCFLOW = list(DF_SAMPLES[DF_SAMPLES.source.eq("bgcflow")].bgc_id.unique())
+SAMPLE_PATHS = list(DF_SAMPLES.sample_paths.unique())
+GTDB_PATHS = list(DF_SAMPLES.gtdb_paths.unique())
+
+##### 3. Wildcard constraints #####
+wildcard_constraints:
+    strains="|".join(STRAINS),
+    custom="|".join(CUSTOM),
+    bgcflow="|".join(BGCFLOW),
+    name="|".join(PROJECT_IDS),
+
+##### 4. Generate user-defined local resources
+custom_resource_dir()
+
+##### Target rules #####
+rule all:
+    input:
+        expand("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}", name = PROJECT_IDS, version=dependency_version["antismash"]),
+
+##### Modules #####
+include: "rules/prokka.smk"
+include: "rules/antismash.smk"
+include: "rules/roary.smk"
+include: "rules/bigscape.smk"
+include: "rules/bigslice.smk"
+include: "rules/gtdb.smk"
+include: "rules/mash.smk"
+include: "rules/fastani.smk"
+include: "rules/refseq_masher.smk"
+include: "rules/eggnog.smk"
+include: "rules/mlst.smk"
+include: "rules/automlst_wrapper.smk"
+include: "rules/seqfu.smk"
+include: "rules/checkm.smk"
+include: "rules/bgc_analytics.smk"
+include: "rules/arts.smk"
+include: "rules/bgc_compare.smk"
+include: "rules/diamond.smk"
+include: "rules/deeptfactor.smk"
