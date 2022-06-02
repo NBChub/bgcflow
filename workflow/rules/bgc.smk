@@ -5,9 +5,10 @@ rule downstream_bgc_prep:
     output:
         taxonomy = "data/interim/bgcs/taxonomy/taxonomy_{name}_antismash_{version}.tsv",
         outdir = directory("data/interim/bgcs/{name}/{version}"),
-        bgc_mapping = "data/interim/bgcs/{name}/{name}_antismash_{version}.csv"
+        bgc_mapping = "data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
     conda:
         "../envs/bgc_analytics.yaml"
+    threads: 4
     params:
         dataset = "data/interim/bgcs/datasets.tsv"
     log:
@@ -17,15 +18,11 @@ rule downstream_bgc_prep:
     shell:
         """
         echo "Preparing BGCs for {wildcards.name} downstream analysis..." 2>> {log.general}
-        #mkdir -p {output.outdir} 2>> {log.general}
-        # Generate symlink for each regions in genomes in dataset
-        for i in $(dirname {input.gbk})
-        do
-            echo $i
-            python workflow/bgcflow/bgcflow/data/bgc_downstream_prep.py $i {output.outdir} 2>> {log.symlink}
-        done
+        parallel -j {threads} python workflow/bgcflow/bgcflow/data/bgc_downstream_prep.py {{}} {output.outdir} 2>> {log.symlink} ::: $(dirname {input.gbk})
+
         # generate taxonomic information for dataset
         python workflow/bgcflow/bgcflow/data/bigslice_prep.py {input.table} {output.taxonomy} 2>> {log.taxonomy}
+
         # append new dataset information
         ## check if previous dataset exists
         if [[ -s {params.dataset} ]]
