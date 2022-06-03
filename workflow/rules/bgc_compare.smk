@@ -18,7 +18,7 @@ rule downstream_bgc_prep:
     shell:
         """
         echo "Preparing BGCs for {wildcards.name} downstream analysis..." 2>> {log.general}
-        parallel -j {threads} python workflow/bgcflow/bgcflow/data/bgc_compare_downstream_prep.py {{}} {output.outdir} 2>> {log.symlink} ::: {input.gbk}
+        parallel -j {threads} python workflow/bgcflow/bgcflow/data/bgc_downstream_prep.py {{}} {output.outdir} 2>> {log.symlink} ::: {input.gbk}
 
         # generate taxonomic information for dataset
         python workflow/bgcflow/bgcflow/data/bigslice_prep.py {input.table} {output.taxonomy} 2>> {log.taxonomy}
