@@ -319,6 +319,7 @@ def get_project_outputs(config, PROJECT_IDS, df_samples):
                 "query-bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}/", \
                                          name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "checkm" : expand("data/processed/{name}/tables/df_checkm_stats.csv", name = PROJECT_IDS),
+                "gtdbtk" : expand("data/processed/{name}/tables/gtdbtk.bac120.summary.tsv", name = PROJECT_IDS),
                 "prokka-gbk" : [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/genbank/{strains}.gbk" for strains in selection],
                 "antismash-summary": expand("data/processed/{name}/tables/df_antismash_{version}_summary.csv", \
                                             name = PROJECT_IDS, version=dependency_version["antismash"]),
