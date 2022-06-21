@@ -58,7 +58,7 @@ rule diamond_roary:
         roary_dir = "data/interim/roary/{name}/",
         resource = "resources/deeptfactor/",
     output:
-        diamond_interim = "data/interim/diamond/{name}/{name}_pangenome.dmnd",
+        diamond_interim = temp("data/interim/diamond/{name}/{name}_pangenome.dmnd"),
         diamond_processed = "data/processed/{name}/diamond/{name}_pangenome.dmnd",
     conda:
         "../envs/antismash.yaml"
@@ -66,11 +66,10 @@ rule diamond_roary:
     log: "workflow/report/logs/diamond-roary/diamond-roary-{name}.log"
     params:
         faa = "data/interim/roary/{name}/pan_genome_reference.fa",
-        diamond = "data/interim/diamond/{name}_pangenome.dmnd",
     shell:
         """
-        diamond makedb --in {params.faa} -d {params.diamond} -p {threads} 2>> {log}
-        cp {output.diamond_interim} {output.diamond_processed} 2>> {log}
+        diamond makedb --in {params.faa} -d {output.diamond_interim} -p {threads} &>> {log}
+        cp {output.diamond_interim} {output.diamond_processed} &>> {log}
         """
 
 rule roary_out:
