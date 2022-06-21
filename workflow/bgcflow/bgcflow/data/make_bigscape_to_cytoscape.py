@@ -302,7 +302,7 @@ def process_bigscape_output(bigscape_directory, as_dir, df_genomes_path, output_
 
     # Get GCF data as per the cutoff
     for cutoff in  ['0.30', '0.40', '0.50']:
-        df_clusters, df_families, df_network = run_family_analysis(cutoff, net_data_path, df_clusters, df_genomes, df_known_all, output_dir, selected_run)
+        df_clusters, df_families, df_network = run_family_analysis(cutoff, net_data_path, df_clusters, df_genomes, df_known_all, output_dir, str(selected_run).replace(":", "_"))
     return
 
 if __name__ == "__main__":
