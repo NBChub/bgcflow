@@ -44,6 +44,7 @@ rule query_bigslice:
         run_id = 6
     shell:
         """
-        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} --query_name {params.query_name} --run_id {params.run_id} &>> {log}
+        TIMESTAMP=$(date --iso-8601=hours)
+        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} --query_name {params.query_name}_$TIMESTAMP --run_id {params.run_id} &>> {log}
         python workflow/bgcflow/bgcflow/data/get_bigslice_query_result.py {params.query_name} {output.folder} {input.bigslice_dir} &>> {log}
         """
