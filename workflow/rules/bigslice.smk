@@ -1,19 +1,5 @@
-rule install_bigslice:
-    output:
-        "resources/bigslice/install_note.txt"
-    conda:
-        "../envs/bigslice.yaml"
-    log:
-        "workflow/report/logs/bigslice/install_bigslice.log"
-    shell:
-        """
-        (cd resources && download_bigslice_hmmdb && rm bigslice_models.tar.gz) &>> {log}
-        bigslice --version . > {output} &>> {log}
-        """
-
 rule bigslice:
     input: 
-        resource = "resources/bigslice/install_note.txt",
         tmp_dir = "data/interim/bgcs/{name}/{version}/",
         taxonomy = "data/interim/bgcs/taxonomy/taxonomy_{name}_antismash_{version}.tsv",
     output:
@@ -29,8 +15,6 @@ rule bigslice:
         """
 
 rule fetch_bigslice_db:
-    input:
-        resource = "resources/bigslice/install_note.txt",
     output:
         folder = directory("resources/bigslice/full_run_result/")
     conda:
