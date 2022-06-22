@@ -127,8 +127,9 @@ def get_bigscape_network(net_data_path, cutoff = '0.30'):
         class_dir = os.path.join(net_data_path, cluster_class)
         net_file = cluster_class + '_c' + cutoff + '.network'
         net_path = os.path.join(class_dir, net_file)
-        df_class_net = pd.read_csv(net_path, sep='\t')
-        df_network = pd.concat([df_network, df_class_net], ignore_index = True)
+        if os.path.isfile(net_path):
+            df_class_net = pd.read_csv(net_path, sep='\t')
+            df_network = pd.concat([df_network, df_class_net], ignore_index = True)
     
     return df_network
 
