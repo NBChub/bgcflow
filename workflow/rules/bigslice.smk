@@ -48,3 +48,20 @@ rule query_bigslice:
         bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} --query_name {params.query_name}_$TIMESTAMP --run_id {params.run_id} &>> {log}
         python workflow/bgcflow/bgcflow/data/get_bigslice_query_result.py {params.query_name} {output.folder} {input.bigslice_dir} &>> {log}
         """
+
+rule summarize_bigslice_query:
+    input:
+        query_dir = "data/interim/bigslice/query/{name}_antismash_{version}/",
+    output:
+        folder = directory("data/processed/{name}/bigslice/query_as_{version}/")
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log:
+        "workflow/report/logs/bigslice/summarize_bigslice_query/summarize_bigslice_query_{name}-antismash-{version}.log"
+    params:
+        bigfam_db_path = "resources/bigslice/full_run_result/result/data.db",
+        cutoff = 900,
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/summarize_bigslice_query.py {input.query_dir} {output.folder} {params.bigfam_db_path} {params.cutoff} 2>> {log}
+        """
