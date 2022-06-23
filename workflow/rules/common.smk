@@ -334,6 +334,8 @@ def get_project_outputs(config, PROJECT_IDS, df_samples):
                 "cblaster-genome":  expand("data/processed/{name}/cblaster/genomes/", name = PROJECT_IDS),
                 "cblaster-bgc":  expand("data/processed/{name}/cblaster/bgcs/{version}/", \
                                 name = PROJECT_IDS, version=dependency_version["antismash"]),
+                "summarize-bigslice-query" : expand("data/processed/{name}/bigslice/query_as_{version}/", \
+                                name = PROJECT_IDS, version=dependency_version["antismash"]),
                 }
     
     # get keys from config
