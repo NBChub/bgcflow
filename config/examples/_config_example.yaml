@@ -51,7 +51,6 @@ rules:
   deeptfactor-roary: FALSE
   cblaster-genome: FALSE
   cblaster-bgc: FALSE
-  summarize-bigslice-query: FALSE
 
 #### RESOURCES CONFIGURATION ####
 # resources : the location of the resources to run the rule.
