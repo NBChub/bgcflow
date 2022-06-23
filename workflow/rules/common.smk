@@ -316,8 +316,8 @@ def get_project_outputs(config, PROJECT_IDS, df_samples):
                 "rnammer": "resources/rnammer_test.txt",
                 "bigslice": expand("data/interim/bigslice/{name}_antismash_{version}/", \
                                     name = PROJECT_IDS, version=dependency_version["antismash"]),
-                "query-bigslice": expand("data/interim/bigslice/query/{name}_antismash_{version}/", \
-                                         name = PROJECT_IDS, version=dependency_version["antismash"]),
+                "query-bigslice":  expand("data/processed/{name}/bigslice/query_as_{version}/", \
+                                name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "checkm" : expand("data/processed/{name}/tables/df_checkm_stats.csv", name = PROJECT_IDS),
                 "gtdbtk" : expand("data/processed/{name}/tables/gtdbtk.bac120.summary.tsv", name = PROJECT_IDS),
                 "prokka-gbk" : [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/genbank/{strains}.gbk" for strains in selection],
@@ -334,8 +334,6 @@ def get_project_outputs(config, PROJECT_IDS, df_samples):
                 "deeptfactor-roary" : expand("data/interim/deeptfactor_roary/{name}/", name=PROJECT_IDS),
                 "cblaster-genome":  expand("data/processed/{name}/cblaster/genomes/", name = PROJECT_IDS),
                 "cblaster-bgc":  expand("data/processed/{name}/cblaster/bgcs/{version}/", \
-                                name = PROJECT_IDS, version=dependency_version["antismash"]),
-                "summarize-bigslice-query" : expand("data/processed/{name}/bigslice/query_as_{version}/", \
                                 name = PROJECT_IDS, version=dependency_version["antismash"]),
                 }
     

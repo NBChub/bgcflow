@@ -25,4 +25,3 @@ rules:
   deeptfactor-roary: TRUE
   cblaster-genome: TRUE
   cblaster-bgc: TRUE
-  summarize-bigslice-query: TRUE
