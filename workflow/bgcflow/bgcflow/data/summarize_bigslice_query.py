@@ -76,12 +76,14 @@ def grab_gcf_model_summary(gcf_query, database):
             values["core_member_mibig"] = q_core_mibig
             values["putative_member_mibig"] = q_putative_mibig
             values["core_member_mibig_count"] = len(q_core_mibig)
+            values["core_member_mibig_bool"] = len(q_core_mibig) > 0
             values["putative_member_mibig_count"] = len(q_putative_mibig)
+            values["putative_member_mibig_bool"] = len(q_putative_mibig) > 0
             values["link to BiG-FAM"] = f"https://bigfam.bioinformatics.nl/run/6/gcf/{g}"
             summary[str(g)] = values
             
             bar()
-    
+
     return summary
 
 def summarize_bigslice_query(bigslice_query_path, output_path, database_path="resources/bigslice/full_run_result/result/data.db", cutoff=900):
@@ -112,15 +114,20 @@ def summarize_bigslice_query(bigslice_query_path, output_path, database_path="re
     for i in data.index:
         bgc_id = data.loc[i, "bgc_id"]
         data.loc[i, "bgc_id"] = str(bgc_info.loc[bgc_id, "bgc_id"])
-    data.to_csv(output / "query_network.csv")
+    data.to_csv(output / "query_network.csv", index=False)
     
     # Summarizing GCF model hits
     logging.info("Summarizing GCF model hits...")
     gcf_query = list(data.gcf_id.unique())
     gcf_summary = grab_gcf_model_summary(gcf_query, database_path)
 
+    # outputting as json
     with open(output / "gcf_summary.json", "w") as outfile:
         json.dump(gcf_summary, outfile, indent=4)
+
+    # outputting as csv table
+    as_table = pd.DataFrame.from_dict(gcf_summary).T
+    as_table.to_csv(output / "gcf_summary.csv")
     
     logging.info("Job done")
     return
