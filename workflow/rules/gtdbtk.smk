@@ -17,8 +17,9 @@ rule gtdbtk:
         checkm_db = "resources/gtdbtk/",
     output:
         batchfile = "data/interim/gtdbtk/{name}/fasta_batch.tsv",
-        gtdbtk_dir = directory("data/interim/gtdbtk/{name}"),
-        tmpdir = temp(directory("data/interim/gtdbtk/{name}_tmp")),
+        gtdbtk_dir = directory("data/interim/gtdbtk/{name}/"),
+        tmpdir = temp(directory("data/interim/gtdbtk/{name}_tmp/")),
+        fnadir = temp(directory("data/interim/gtdbtk/{name}/fasta/")),
         summary_interim = "data/interim/gtdbtk/{name}/classify/gtdbtk.bac120.summary.tsv",
         summary_processed = "data/processed/{name}/tables/gtdbtk.bac120.summary.tsv",
     conda:
@@ -27,26 +28,12 @@ rule gtdbtk:
     threads: 32
     shell:
         """
+        mkdir -p {output.fnadir}
         for fna in {input.fna} 
         do
-            echo "$fna" >> {output.batchfile} 
+            cp {input.fna} {output.fnadir} 
         done
-        gtdbtk classify_wf --batchfile {output.batchfile} --out_dir {output.gtdbtk_dir} --cpus {threads} --pplacer_cpus 1 --tmpdir {output.tmpdir}
+        mkdir -p {output.tmpdir}
+        gtdbtk classify_wf --genome_dir {output.fnadir} --out_dir {output.gtdbtk_dir} --cpus {threads} --pplacer_cpus 1 --tmpdir {output.tmpdir}
         cp {output.summary_interim} {output.summary_processed}
         """
-
-# rule checkm_out:
-#     input:
-#         stat = "data/interim/checkm/{name}/storage/bin_stats_ext.tsv",
-#     output:
-#         stat_processed = report("data/processed/{name}/tables/df_checkm_stats.csv",  caption="../report/table-checkm.rst", category="Quality Control"),
-#     log: "workflow/report/logs/checkm/checkm_out_{name}.log"
-#     params:
-#         checkm_json = directory("data/interim/checkm/{name}/json/"),
-#     conda:
-#         "../envs/bgc_analytics.yaml"
-#     shell:
-#         """
-#         mkdir -p {params.checkm_json}
-#         python workflow/bgcflow/bgcflow/data/get_checkm_data.py {input.stat} {params.checkm_json} {output.stat_processed} 2>> {log}
-#         """
