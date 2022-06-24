@@ -240,7 +240,7 @@ def update_cluster_family(df_clusters, df_known, family_nodes, cutoff = '0.30'):
     return df_clusters, df_known, df_families
 
 
-def get_family_presence(df_clusters, df_genomes, df_families, cutoff = cutoff):
+def get_family_presence(df_clusters, df_genomes, df_families, cutoff):
     '''
     Returns BGC family presence absence matrix across genomes
     '''
@@ -249,8 +249,8 @@ def get_family_presence(df_clusters, df_genomes, df_families, cutoff = cutoff):
     for bgc_id in df_clusters.index:
         fam_id = df_clusters.loc[bgc_id, 'fam_id_' + cutoff]
         genome_id = df_clusters.loc[bgc_id, 'genome_id']
-        df_family_presence.loc[node_id, fam_name] = 1
-        
+        df_family_presence.loc[bgc_id, fam_id] = 1
+
     return df_family_presence
 
 
@@ -263,7 +263,7 @@ def run_family_analysis(cutoff, net_data_path, df_clusters, df_genomes, df_known
     singleton_bgc = [list(fam)[0] for fam in family_nodes if len(fam) == 1]
     family_graphs = get_family_graph(G_clusters)
     df_clusters, df_known, df_families = update_cluster_family(df_clusters, df_known, family_nodes, cutoff = cutoff)
-    df_family_presence = get_family_presence(df_clusters, df_genomes, cutoff = cutoff)
+    df_family_presence = get_family_presence(df_clusters, df_genomes, df_families, cutoff = cutoff)
     logging.debug(f'Number of genomes: {df_genomes.shape[0]}')
     logging.debug(f'Number of BGCs: {df_clusters.shape[0]}')
     logging.debug(f'Number of edges in the network: {df_network.shape[0]}')
