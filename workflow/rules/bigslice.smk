@@ -1,17 +1,35 @@
-rule bigslice:
+rule bigslice_prep:
     input: 
-        tmp_dir = "data/interim/bgcs/{name}/{version}/",
+        dir = "data/interim/bgcs/{name}/{version}/",
         taxonomy = "data/interim/bgcs/taxonomy/taxonomy_{name}_antismash_{version}.tsv",
     output:
-        folder = directory("data/interim/bigslice/{name}_antismash_{version}/")
+        folder = temp(directory("data/interim/bigslice/tmp/{name}_antismash_{version}/"))
+    log:
+        "workflow/report/logs/bigslice/bigslice_prep/bigslice_{name}-antismash-{version}.log"
+    conda:
+        "../envs/bgc_analytics.yaml"
+    params:
+        project_name = "{name}_antismash_{version}"
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/bigslice_prep_single_project.py {input.dir} {input.taxonomy} {params.project_name} {output.folder} 2>> {log}
+        """
+
+rule bigslice:
+    input:
+        dir = "data/interim/bigslice/tmp/{name}_antismash_{version}/",
+    output:
+        folder = directory("data/processed/{name}/bigslice/cluster_as_{version}/")
     conda:
         "../envs/bigslice.yaml"
     threads: 16
+    params:
+        threshold = 900
     log:
         "workflow/report/logs/bigslice/bigslice/bigslice_{name}-antismash-{version}.log"
     shell:
         """
-        bigslice -i data/interim/bigslice/tmp/ {output.folder} -t {threads} > {log} &>> {log}
+        bigslice -i {input.dir} {output.folder} --threshold {params.threshold} -t {threads} &>> {log}
         """
 
 rule fetch_bigslice_db:
