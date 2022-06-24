@@ -314,7 +314,7 @@ def get_project_outputs(config, PROJECT_IDS, df_samples):
                 "eggnog-roary" : expand("data/interim/eggnog_roary/{name}/", name=PROJECT_IDS),
                 "seqfu" : expand("data/processed/{name}/tables/df_seqfu_stats.csv", name=PROJECT_IDS),
                 "rnammer": "resources/rnammer_test.txt",
-                "bigslice": expand("data/interim/bigslice/{name}_antismash_{version}/", \
+                "bigslice": expand("data/processed/{name}/bigslice/cluster_as_{version}/", \
                                     name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "query-bigslice":  expand("data/processed/{name}/bigslice/query_as_{version}/", \
                                 name = PROJECT_IDS, version=dependency_version["antismash"]),
