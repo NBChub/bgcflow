@@ -1,6 +1,6 @@
 .git/
 .snakemake/
-data/*/*/*   
+data/*
 resources/
 config/
 workflow/report/*
