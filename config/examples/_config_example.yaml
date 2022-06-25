@@ -34,6 +34,7 @@ rules:
   mash: FALSE
   fastani: FALSE
   checkm: FALSE
+  gtdbtk: FALSE
   prokka-gbk: FALSE
   antismash-summary: TRUE
   antismash-zip: FALSE

@@ -189,6 +189,7 @@ Here you can find rules keyword that you can run within BGCflow.
 | mash | Calculate genomic distance using MAST | [MASH](https://github.com/marbl/Mash) |
 | fastani | Calculate nucleotide distance using fastANI | [fastANI](https://github.com/ParBLiSS/FastANI) |
 | checkm | Assess genome quality | [CheckM](https://github.com/Ecogenomics/CheckM) |
+| gtdbtk | Identify taxonomy of genomes using GTDB-toolkit | [GTDBTk](https://github.com/Ecogenomics/GTDBTk) |
 | prokka-gbk | Returns annotated `.gbk` files | [Prokka](https://github.com/tseemann/prokka) |
 | diamond | Create diamond database for alignment | [DIAMOND](https://github.com/bbuchfink/diamond) |
 | antismash-summary | Summary of BGCs statistics | [antiSMASH](https://github.com/antismash/antismash) |
