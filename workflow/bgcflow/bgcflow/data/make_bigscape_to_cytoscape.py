@@ -245,11 +245,11 @@ def get_family_presence(df_clusters, df_genomes, df_families, cutoff):
     Returns BGC family presence absence matrix across genomes
     '''
     
-    df_family_presence = pd.DataFrame(0, index=df_genomes.index, columns=df_families.index)
+    df_family_presence = pd.DataFrame(0, index=df_genomes.index, columns=df_families.index.astype(str))
     for bgc_id in df_clusters.index:
-        fam_id = df_clusters.loc[bgc_id, 'fam_id_' + cutoff]
+        fam_id = str(df_clusters.loc[bgc_id, 'fam_id_' + cutoff])
         genome_id = df_clusters.loc[bgc_id, 'genome_id']
-        df_family_presence.loc[bgc_id, fam_id] = 1
+        df_family_presence.loc[genome_id, fam_id] = 1
 
     return df_family_presence
 
