@@ -12,13 +12,15 @@ date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 
-def get_cluster_dataframes(df_genomes, df_nodes, as_dir = '../data/antismash/'):
+def get_cluster_dataframes(df_genomes, df_nodes, mibig_bgc_table, as_dir = '../data/antismash/'):
     '''
     Returns two dataframes of clusters with information from genomes and MIBIG
     '''
     df_clusters = pd.DataFrame(columns=['product', 'bigscape_class', 'genome_id', 'accn_id'])
-    df_known = pd.DataFrame(columns=['product', 'bigscape_class', 'accn_id', 'compound'])
-    
+    df_known = pd.DataFrame(columns=['product', 'bigscape_class', 'biosyn_class', 'compounds', 'chem_acts', 
+                    'accession', 'completeness', 'organism_name', 'ncbi_tax_id', 'publications', 'evidence'])
+    df_mibig_bgcs = pd.read_csv(mibig_bgc_table, index_col='mibig_id')
+
     # Generate bgcs dataframe with metadata from df_nodes and df_genomes
     logging.info('Generating bgcs dataframe with metadata from df_nodes and df_genomes...')
     with alive_bar(len(df_genomes.index)) as bar:
@@ -46,9 +48,16 @@ def get_cluster_dataframes(df_genomes, df_nodes, as_dir = '../data/antismash/'):
             if 'BGC0' in bgc_id:
                 df_known.loc[bgc_id, 'product'] = df_nodes.loc[bgc_id, 'Product Prediction']
                 df_known.loc[bgc_id, 'bigscape_class'] = df_nodes.loc[bgc_id, 'BiG-SCAPE class']
-                desc = df_nodes.loc[bgc_id, 'Description']
-                compound_name = desc.split('biosynthetic gene cluster')[0].strip()
-                df_known.loc[bgc_id, 'compound'] = compound_name
+                if '.' in bgc_id:
+                    mibig_id = bgc_id.split('.')[0]
+                else:
+                    mibig_id = bgc_id
+                
+                if mibig_id in df_mibig_bgcs.index:
+                    for col in df_mibig_bgcs.columns:
+                        df_known.loc[bgc_id, col] = df_mibig_bgcs.loc[mibig_id, col]
+                else:
+                    logging.debug(f'{bgc_id} not in df_mibig_bgcs dataframe index')
             bar()
         
     return df_known, df_clusters
@@ -203,7 +212,7 @@ def update_cluster_family(df_clusters, df_known, family_nodes, cutoff = '0.30'):
     Updates df_clusters with family ids (connected components)
     '''
     
-    df_families = pd.DataFrame(columns=['fam_type', 'fam_name', 'clusters_in_fam'])
+    df_families = pd.DataFrame(columns=['fam_type', 'fam_name', 'clusters_in_fam', 'mibig_ids'])
     for cntr in range(len(family_nodes)):
         fam_id = cntr + 1
         family = family_nodes[cntr]
@@ -211,9 +220,10 @@ def update_cluster_family(df_clusters, df_known, family_nodes, cutoff = '0.30'):
 
         if len(known_bgcs) > 0:
             df_families.loc[fam_id, 'fam_type'] = 'known_family'
-            known_compounds = ', '.join(df_known.loc[known_bgcs, 'compound'].tolist())
+            known_compounds = ';'.join(df_known.loc[known_bgcs, 'compounds'].tolist())
             df_families.loc[fam_id, 'fam_name'] = known_compounds
             df_families.loc[fam_id, 'clusters_in_fam'] = len(family)
+            df_families.loc[fam_id, 'mibig_ids'] = ';'.join(known_bgcs)
         else:
             df_families.loc[fam_id, 'fam_type'] = 'unknown_family'
             bgc_class = ','.join(df_clusters.loc[list(family), 'bigscape_class'].unique().tolist())
@@ -225,7 +235,7 @@ def update_cluster_family(df_clusters, df_known, family_nodes, cutoff = '0.30'):
                 df_clusters.loc[bgc, 'fam_id_' + cutoff] = str(fam_id)
                 if len(known_bgcs) > 0:
                     df_clusters.loc[bgc, 'fam_type_' + cutoff] = 'known_family'
-                    known_compounds = ', '.join(df_known.loc[known_bgcs, 'compound'].tolist())
+                    known_compounds = ';'.join(df_known.loc[known_bgcs, 'compounds'].tolist())
                     df_clusters.loc[bgc, 'fam_known_compounds_' + cutoff] = known_compounds
                 else:
                     df_clusters.loc[bgc, 'fam_type_' + cutoff] = 'unknown_family'
@@ -234,7 +244,7 @@ def update_cluster_family(df_clusters, df_known, family_nodes, cutoff = '0.30'):
             elif bgc in df_known.index:
                 df_known.loc[bgc, 'fam_id_' + cutoff] = str(fam_id)
                 df_known.loc[bgc, 'fam_type_' + cutoff] = 'known_family'
-                known_compounds = ', '.join(df_known.loc[known_bgcs, 'compound'].tolist())
+                known_compounds = ';'.join(df_known.loc[known_bgcs, 'compounds'].tolist())
                 df_known.loc[bgc, 'fam_known_compounds_' + cutoff] = known_compounds
     
     return df_clusters, df_known, df_families
@@ -287,7 +297,7 @@ def run_family_analysis(cutoff, net_data_path, df_clusters, df_genomes, df_known
     return df_clusters, df_families, df_network
 
 
-def process_bigscape_output(bigscape_directory, as_dir, df_genomes_path, output_dir):
+def process_bigscape_output(bigscape_directory, as_dir, df_genomes_path, mibig_bgc_table, output_dir):
     bigscape_directory = Path(bigscape_directory)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -313,7 +323,7 @@ def process_bigscape_output(bigscape_directory, as_dir, df_genomes_path, output_
     df_genomes = pd.read_csv(df_genomes_path, index_col=0)
     df_genomes.to_csv(f'{output_dir}/df_genome_antismash_summary.csv')
     
-    df_known_all, df_clusters = get_cluster_dataframes(df_genomes, df_nodes, as_dir)
+    df_known_all, df_clusters = get_cluster_dataframes(df_genomes, df_nodes, mibig_bgc_table, as_dir)
     # Enrich dataframes with BiGSCAPE information on GCCs and GCFs with cutoffs
     df_clusters, df_known_all = add_bigscape_families(df_clusters, df_known_all, net_data_path)
 
@@ -323,4 +333,4 @@ def process_bigscape_output(bigscape_directory, as_dir, df_genomes_path, output_
     return
 
 if __name__ == "__main__":
-    process_bigscape_output(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    process_bigscape_output(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
