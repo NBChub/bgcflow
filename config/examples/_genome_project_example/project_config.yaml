@@ -7,6 +7,7 @@ rules:
   mash: TRUE
   fastani: TRUE
   checkm: TRUE
+  gtdbtk: TRUE
   prokka-gbk: TRUE
   antismash-summary: TRUE
   antismash-zip: TRUE

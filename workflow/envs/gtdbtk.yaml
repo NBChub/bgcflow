@@ -1,0 +1,9 @@
+name: gtdbtk
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - gtdbtk=2.1.0
+  - wget
+  - tar
