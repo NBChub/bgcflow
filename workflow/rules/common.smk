@@ -7,7 +7,7 @@ from snakemake.utils import min_version
 from pathlib import Path
 
 min_version("7.6.1")
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 
 
 ##### TABLE OF CONTENTS #####
