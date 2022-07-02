@@ -220,7 +220,20 @@ def update_cluster_family(df_clusters, df_known, family_nodes, cutoff = '0.30'):
 
         if len(known_bgcs) > 0:
             df_families.loc[fam_id, 'fam_type'] = 'known_family'
-            known_compounds = ';'.join(df_known.loc[known_bgcs, 'compounds'].tolist())
+
+            # handle missing entry from MIBIG release
+            try:
+                known_compounds = ';'.join(df_known.loc[known_bgcs, 'compounds'].tolist())
+            except TypeError:
+                logging.warning(f"MIBIG entries {known_bgcs} returned no compounds: {df_known.loc[known_bgcs, 'compounds'].values}")
+                logging.warning(f"This is likely because of missing JSON entry in the downloaded MIBIG release.")
+                logging.warning(f"Check if this is the case in the resources/mibig/df_mibig_bgcs.csv folder")
+                logging.warning(f"Replacing compound value with link to MIBIG...")
+                for h in known_bgcs:
+                    link_mibig = f"https://mibig.secondarymetabolites.org/repository/{h.split('.')[0]}/index.html"
+                    logging.warning(f"{h}: Replacing compound {df_known.loc[h, 'compounds']} with {link_mibig}")
+                    df_known.loc[h, 'compounds'] = link_mibig
+
             df_families.loc[fam_id, 'fam_name'] = known_compounds
             df_families.loc[fam_id, 'clusters_in_fam'] = len(family)
             df_families.loc[fam_id, 'mibig_ids'] = ';'.join(known_bgcs)
