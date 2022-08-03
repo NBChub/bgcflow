@@ -16,7 +16,8 @@ rule cblaster_genome_db:
         batch_size = 50,
     shell:
         """
-        cblaster config --email dummy@cblaster.com
+        diamond --version >> {log}
+        cblaster config --email dummy@cblaster.com 2>> {log}
         cblaster makedb --cpus {threads} -b {params.batch_size} -n {params.db_prefix} {input.gbk} 2>> {log}
         cp -r {output.folder_interim} {output.folder_processed} 2>> {log}
         """
