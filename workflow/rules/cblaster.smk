@@ -7,6 +7,7 @@ rule cblaster_genome_db:
         sql = "data/interim/cblaster/{name}/genomes/cblaster_genome_db.sqlite3",
         dmnd = "data/interim/cblaster/{name}/genomes/cblaster_genome_db.dmnd",
         fasta = "data/interim/cblaster/{name}/genomes/cblaster_genome_db.fasta",
+        version = "data/interim/cblaster/{name}/genomes/cblaster_genome_db.log",
     conda:
         "../envs/cblaster.yaml"
     log: "workflow/report/logs/cblaster/cblaster_db_genomes_{name}.log"
@@ -16,7 +17,9 @@ rule cblaster_genome_db:
         batch_size = 50,
     shell:
         """
-        diamond --version >> {log}
+        cblaster --version >> {output.version}
+        diamond --version >> {output.version}
+        cat {output.version} >> {log}
         cblaster config --email dummy@cblaster.com 2>> {log}
         cblaster makedb --cpus {threads} -b {params.batch_size} -n {params.db_prefix} {input.gbk} 2>> {log}
         cp -r {output.folder_interim} {output.folder_processed} 2>> {log}
