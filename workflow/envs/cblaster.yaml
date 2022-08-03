@@ -4,7 +4,7 @@ channels:
   - default
   - bioconda
 dependencies:
-  - diamond 
+  - diamond==2.0.15
   - pip
   - pip:
     - cblaster==1.3.12
