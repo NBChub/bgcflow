@@ -1,13 +1,26 @@
+# Read release version from config
+try:
+    gtdbtk_release = config['rule_parameters']['install_gtdbtk']['release']
+    gtdbtk_release_version = config['rule_parameters']['install_gtdbtk']['release_version']
+except KeyError:
+    gtdbtk_release = '220'
+    gtdbtk_release_version = '220'
+
+sys.stderr.write(f'Using GTDB-tk release version: {gtdbtk_release_version}\n')
+
 rule install_gtdbtk:
     output:
         checkm_db = directory("resources/gtdbtk/")
     conda:
         "../envs/gtdbtk.yaml"
     log: "workflow/report/logs/gtdbtk/gtdbtk-install_gtdbtk.log"
+    params:
+        release = gtdbtk_release,
+        release_version = gtdbtk_release_version
     shell:
         """
-        (cd resources && wget https://data.gtdb.ecogenomic.org/releases/release207/207.0/auxillary_files/gtdbtk_r207_v2_data.tar.gz) 2>> {log}
-        (cd resources && mkdir -p gtdbtk && tar -xvzf gtdbtk_r207_v2_data.tar.gz -C "gtdbtk" --strip 1 && rm gtdbtk_r207_v2_data.tar.gz) 2>> {log}
+        (cd resources && wget https://data.gtdb.ecogenomic.org/releases/release{params.release}/{params.release}.0/auxillary_files/gtdbtk_r{params.release_version}_data.tar.gz) 2>> {log}
+        (cd resources && mkdir -p gtdbtk && tar -xvzf gtdbtk_r{params.release_version}_data.tar.gz -C "gtdbtk" --strip 1 && rm gtdbtk_{params.release_version}_data.tar.gz) 2>> {log}
         conda env config vars set GTDBTK_DATA_PATH="resources/gtdbtk" 2>> {log}
         """
 
