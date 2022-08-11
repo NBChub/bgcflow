@@ -1,3 +1,11 @@
+# Read release version from config
+try:
+    gtdbtk_release = config['rule_parameters']['install_gtdbtk']['release']
+    gtdbtk_release_version = config['rule_parameters']['install_gtdbtk']['release_version']
+except KeyError:
+    gtdbtk_release = '202'
+    gtdbtk_release_version = '202'
+
 rule gtdb_prep:
     output:
         gtdb_json = "data/interim/gtdb/{strains}.json",
@@ -7,7 +15,7 @@ rule gtdb_prep:
     params:
         samples_path = SAMPLE_PATHS,
         gtdb_paths = GTDB_PATHS,
-        version = 'R202'
+        version = f"R{gtdbtk_release}"
     shell: 
         """
         python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} '{params.samples_path}' '{params.gtdb_paths}' {params.version} 2> {log}
