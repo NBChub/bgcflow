@@ -112,6 +112,7 @@ def extract_project_information():
         # try to fetch user-defined gtdb classification
         try:
             sys.stderr.write(f" - {i}: Getting user provided taxonomic information...\n")
+            assert Path(projects.loc[i, "gtdb-tax"]).is_file()
             df1["gtdb_paths"] = projects.loc[i, "gtdb-tax"]
         except KeyError:
             sys.stderr.write(f" - {i}: No taxonomic information provided.\n")
