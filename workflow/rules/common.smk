@@ -53,7 +53,7 @@ def extract_project_information():
         Read a csv containing a list of accession ids and generate a hash identifier.
         The list must have "Accession" as the column name.
         """
-        df = pd.read_csv(Path(prokka_db_path))
+        df = pd.read_csv(Path(prokka_db_path), dtype=object)
         assert "Accession" in df.columns
         column = df.loc[:, "Accession"].sort_values().reset_index(drop=True)
         hash_value = hashlib.sha1(pd.util.hash_pandas_object(column).values).hexdigest()
@@ -97,7 +97,7 @@ def extract_project_information():
     samples = []
     for i in projects.index:
         sys.stderr.write(f"Step 1.3 Getting ids for project: {i}\n")
-        df1 = pd.read_csv(projects.loc[i, "samples"])
+        df1 = pd.read_csv(projects.loc[i, "samples"], dtype=object)
         df1["sample_paths"] = projects.loc[i, "samples"]
 
         # try to fetch user-provided custom reference for prokka

@@ -27,7 +27,7 @@ def extract_org_info(genome_id, samples_path, assembly_report_path, prokka_dir):
     '''
     # wrap single or multiple inputs & generate dataframe
     shell_input = samples_path.split()
-    dfList = [pd.read_csv(s).set_index('genome_id', drop=False) for s in shell_input]
+    dfList = [pd.read_csv(s, dtype=object).set_index('genome_id', drop=False) for s in shell_input]
     df_samples = pd.concat(dfList, axis=0).fillna("")
 
     if df_samples.loc[genome_id, "source"] == "ncbi":
