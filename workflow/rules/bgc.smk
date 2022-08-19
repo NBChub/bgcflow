@@ -16,12 +16,12 @@ rule downstream_bgc_prep:
         taxonomy = "workflow/report/logs/bgcs/downstream_bgc_prep/{name}/tax_downstream_bgc_prep-{version}.log",
     shell:
         """
-        echo "Preparing BGCs for {wildcards.name} downstream analysis..." 2>> {log.general}
+        echo "Preparing BGCs for {wildcards.name} downstream analysis..." >> {log.general}
         #mkdir -p {output.outdir} 2>> {log.general}
         # Generate symlink for each regions in genomes in dataset
         for i in $(dirname {input.gbk})
         do
-            echo $i
+            echo $i >> {log.general}
             python workflow/bgcflow/bgcflow/data/bgc_downstream_prep.py $i {output.outdir} 2>> {log.symlink}
         done
         # generate taxonomic information for dataset
@@ -30,11 +30,11 @@ rule downstream_bgc_prep:
         ## check if previous dataset exists
         if [[ -s {params.dataset} ]]
         then
-            echo "Previous dataset detected, appending dataset information for {wildcards.name}..."
+            echo "Previous dataset detected, appending dataset information for {wildcards.name}..." >> {log.general}
             sed -i 'a {wildcards.name}_antismash_{wildcards.version}\t{wildcards.name}_antismash_{wildcards.version}\ttaxonomy/taxonomy_{wildcards.name}_antismash_{wildcards.version}.tsv\t{wildcards.name}' {params.dataset} 2>> {log.general}
         else
-            echo "No previous dataset detected, generating dataset information for {wildcards.name}..."
-            echo -e '# Dataset name\tPath to folder\tPath to taxonomy\tDescription' > {params.dataset} 2>> {log.general}
+            echo "No previous dataset detected, generating dataset information for {wildcards.name}..." >> {log.general}
+            echo -e '# Dataset name\tPath to folder\tPath to taxonomy\tDescription' > {params.dataset} >> {log.general}
             sed -i 'a {wildcards.name}_antismash_{wildcards.version}\t{wildcards.name}_antismash_{wildcards.version}\ttaxonomy/taxonomy_{wildcards.name}_antismash_{wildcards.version}.tsv\t{wildcards.name}' {params.dataset} 2>> {log.general}
         fi
         # generate mapping for visualization

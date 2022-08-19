@@ -28,7 +28,7 @@ def bgc_downstream_prep(input_dir, output_dir):
         region = SeqIO.parse(str(gbk), 'genbank')
         for record in region:
             record_log = {}
-            if 'comment' in record.annotations:
+            if 'structured_comment' in record.annotations:
                 filename = gbk.name
                 try:
                     original_id = record.annotations['structured_comment']['antiSMASH-Data']['Original ID'].split()[0]
