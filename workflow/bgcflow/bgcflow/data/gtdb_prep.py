@@ -82,7 +82,7 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
 
     # get query by subsetting samples df with genome id
     shell_input = samples_table.split()
-    dfList = [pd.read_csv(s).set_index('genome_id', drop=False) for s in shell_input]
+    dfList = [pd.read_csv(s, dtype=object).set_index('genome_id', drop=False) for s in shell_input]
     df_samples = pd.concat(dfList, axis=0)
     query = df_samples[df_samples.loc[:, "genome_id"] == genome_id].fillna("")
 
@@ -117,7 +117,7 @@ def get_user_defined_classification(genome_id, tax_path):
     Get taxonomic information from user provided GTDB-like output
     """
     shell_input = tax_path.split()
-    dfList = [pd.read_csv(s, sep="\t").set_index('user_genome', drop=False) for s in shell_input]
+    dfList = [pd.read_csv(s, sep="\t", dtype=object).set_index('user_genome', drop=False) for s in shell_input]
     df_tax = pd.concat(dfList, axis=0)
 
     level_dict = {"d" :"domain",
