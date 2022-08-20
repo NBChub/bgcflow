@@ -23,8 +23,11 @@ def get_cluster_dataframes(df_genomes, df_nodes, mibig_bgc_table, as_dir = '../d
 
     # Generate bgcs dataframe with metadata from df_nodes and df_genomes
     logging.info('Generating bgcs dataframe with metadata from df_nodes and df_genomes...')
-    with alive_bar(len(df_genomes.index)) as bar:
-        for genome_id in df_genomes.index:
+
+    genome_ids = [str(g) for g in df_genomes.index] # force genome_ids to string
+
+    with alive_bar(len(genome_ids)) as bar:
+        for genome_id in genome_ids:
             logging.info(f'Processing BGCs in the genome: {genome_id}')
             if genome_id in os.listdir(as_dir):
                 genome_dir = os.path.join(as_dir, genome_id)

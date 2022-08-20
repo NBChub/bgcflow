@@ -12,7 +12,7 @@ def write_genome_table(fna_dir, antismash_dir, samples_table, genome_table):
     '''
     # Accomodate multiple inputs to generate dataframe
     shell_input = samples_table.split()
-    dfList = [pd.read_csv(s).set_index('genome_id', drop=False) for s in shell_input]
+    dfList = [pd.read_csv(s, dtype=object).set_index('genome_id', drop=False) for s in shell_input]
     df_samples = pd.concat(dfList, axis=0)
 
     # Generate dataframe
