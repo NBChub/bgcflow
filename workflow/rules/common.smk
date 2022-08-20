@@ -106,7 +106,7 @@ def extract_project_information():
             if df1["prokka-db"].isnull().values.any():
                 sys.stderr.write(f" - {i}: No custom references are provided for annotation.\n")
             else:
-                assert Path(projects.loc[i, "gtdb-tax"]).is_file()
+                assert Path(projects.loc[i, "prokka-db"]).is_file()
                 sys.stderr.write(f" - {i}: Custom references for annotation: {projects.loc[i, 'prokka-db']}.\n")
         except KeyError:
             sys.stderr.write(f" - {i}: No custom references are provided for annotation.\n")
