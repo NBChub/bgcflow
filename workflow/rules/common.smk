@@ -102,18 +102,25 @@ def extract_project_information():
 
         # try to fetch user-provided custom reference for prokka
         try:
-            sys.stderr.write(f" - {i}: Getting custom reference genomes for Prokka protein database...\n")
             df1["prokka-db"] = projects.loc[i, "prokka-db"]
+            if df1["prokka-db"].isnull().values.any():
+                sys.stderr.write(f" - {i}: No custom references are provided for annotation.\n")
+            else:
+                assert Path(projects.loc[i, "gtdb-tax"]).is_file()
+                sys.stderr.write(f" - {i}: Custom references for annotation: {projects.loc[i, 'prokka-db']}.\n")
         except KeyError:
-            sys.stderr.write(f" - {i}: No references are provided to create custom Prokka protein database.\n")
+            sys.stderr.write(f" - {i}: No custom references are provided for annotation.\n")
             df1["prokka-db"] = np.nan
             pass
 
         # try to fetch user-defined gtdb classification
         try:
-            sys.stderr.write(f" - {i}: Getting user provided taxonomic information...\n")
-            assert Path(projects.loc[i, "gtdb-tax"]).is_file()
             df1["gtdb_paths"] = projects.loc[i, "gtdb-tax"]
+            if df1["gtdb_paths"].isnull().values.any():
+                sys.stderr.write(f" - {i}: No taxonomic information provided.\n")
+            else:
+                assert Path(projects.loc[i, "gtdb-tax"]).is_file()
+                sys.stderr.write(f" - {i}: Taxonomic information: {projects.loc[i, 'gtdb-tax']}.\n")
         except KeyError:
             sys.stderr.write(f" - {i}: No taxonomic information provided.\n")
             df1["gtdb_paths"] = np.nan
