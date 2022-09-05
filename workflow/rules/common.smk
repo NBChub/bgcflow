@@ -313,6 +313,7 @@ def get_project_outputs(config, PROJECT_IDS, df_samples):
                 "roary" : expand("data/processed/{name}/roary/df_gene_presence_binary.csv", name=PROJECT_IDS),
                 "eggnog-roary" : expand("data/interim/eggnog_roary/{name}/", name=PROJECT_IDS),
                 "seqfu" : expand("data/processed/{name}/tables/df_seqfu_stats.csv", name=PROJECT_IDS),
+                "patric_meta" : expand("data/processed/{name}/tables/df_patric_meta.csv", name=PROJECT_IDS),
                 "rnammer": "resources/rnammer_test.txt",
                 "bigslice": expand("data/processed/{name}/bigslice/cluster_as_{version}/", \
                                     name = PROJECT_IDS, version=dependency_version["antismash"]),
