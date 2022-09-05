@@ -29,6 +29,7 @@ projects:
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
 rules:
   seqfu: FALSE
+  patric_meta: FALSE
   mlst: FALSE
   refseq-masher: FALSE
   mash: FALSE
