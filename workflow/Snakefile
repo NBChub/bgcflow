@@ -1,16 +1,16 @@
 include: "rules/common.smk"
 
 ##### 1. Extract information from config file
-DF_PROJECTS, DF_SAMPLES, PROKKA_DB_TABLE, PROKKA_DB_MAP = extract_project_information()
+DF_PROJECTS, DF_SAMPLES, PROKKA_DB_TABLE, PROKKA_DB_MAP = extract_project_information(config)
 
 ##### 2. Generate wildcard constants #####
-PROJECT_IDS = DF_SAMPLES.name.unique()
+PROJECT_IDS = list(DF_PROJECTS.name.unique())
 STRAINS = DF_SAMPLES.genome_id.to_list()
 CUSTOM = DF_SAMPLES[DF_SAMPLES.source.eq("custom")].genome_id.to_list()
 NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
 PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
-SAMPLE_PATHS = list(DF_SAMPLES.sample_paths.unique())
-GTDB_PATHS = list(DF_SAMPLES.gtdb_paths.unique())
+SAMPLE_PATHS = list(DF_PROJECTS.samples.unique())
+GTDB_PATHS = list(DF_PROJECTS["gtdb-tax"].unique())
 PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
 
 ##### 3. Wildcard constraints #####

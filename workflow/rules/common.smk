@@ -7,7 +7,7 @@ from snakemake.utils import min_version
 from pathlib import Path
 
 min_version("7.6.1")
-__version__ = "0.3.3"
+__version__ = "0.4.0"
 
 
 ##### TABLE OF CONTENTS #####
@@ -36,17 +36,15 @@ sys.stderr.write(f"This is BGCflow version {__version__}.\n\n")
 # The function extract_project_information() returns objects necessary for steps 3 and 4
 # The function is called in Snakefile where wildcards are extracted and defined
 
-def extract_project_information():
+def extract_project_information(config):
     """
     Wrapper to extract variables from projects in config.yaml.
     """
+
     class ConfigError(Exception):
         """Raised when config.yaml does not satisty requirements"""
         pass
 
-    def merge_nested_list(nested_list):
-        """Merge nested list or dict values / keys"""
-        return list(itertools.chain(*nested_list))
 
     def hash_prokka_db(prokka_db_path):
         """
@@ -65,95 +63,118 @@ def extract_project_information():
         file_map = {str(prokka_db_path) : hash_value}
         return hash_object, file_map
 
-    def create_prokka_db_tables(prokka_databases):
+
+    def create_prokka_db_tables(prokka_db_path):
         """
         Build a json dictionaries of prokka references and files from config information
         """
         prokka_db_table = {}
         prokka_db_map = {}
 
-        for i in prokka_databases:
-            if Path(i).suffix == ".csv":
-                prokka_db_path = i
-                hash_value, hash_map = hash_prokka_db(prokka_db_path)
-                prokka_db_table.update(hash_value)
-                prokka_db_map.update(hash_map)
-            elif Path(i).suffix == ".gbff":
-                prokka_db_map.update(i)
-            else:
-                raise ValueError('Prokka-db should be a csv table containing valid genome accession ids or a collection of annotated genomes in .gbff format')
+        if Path(prokka_db_path).suffix == ".csv":
+            hash_value, hash_map = hash_prokka_db(prokka_db_path)
+            prokka_db_table.update(hash_value)
+            prokka_db_map.update(hash_map)
+        elif Path(prokka_db_path).suffix == ".gbff":
+            prokka_db_map.update(prokka_db_path)
+        else:
+            raise ValueError('Prokka-db should be a csv table containing valid genome accession ids or a collection of annotated genomes in .gbff format')
         return prokka_db_table, prokka_db_map
 
+
+    def find_conflicting_samples(df_samples):
+        """
+        Prune identical genome_ids across projects
+        """
+        filtered_columns = ['sample_paths',
+                            'prokka-db',
+                            'gtdb_paths',
+                            'name']
+
+        df_filtered = df_samples.copy().drop(columns=filtered_columns)
+        dropped_ids = df_filtered[df_filtered.duplicated()].index
+        df_filtered = df_filtered.drop_duplicates()
+        if df_filtered.index.has_duplicates:
+            duplicates = df_filtered[df_filtered.index.duplicated()].index
+            duplicates = df_samples.loc[duplicates]
+            for genome_id in duplicates['genome_id'].unique():
+                print(f"WARNING: Samples {genome_id} in projects {duplicates.loc[genome_id, 'name'].to_list()} is not identical.", file=sys.stderr)
+            print("Each samples with the same genome_id should have identical annotation and taxonomy. Please use different ids.", file=sys.stderr)
+            print(duplicates, file=sys.stderr)
+            raise ConfigError
+
+        for ids in df_filtered.index:
+            for col in filtered_columns:
+                value = df_samples.loc[ids, col]
+                if type(value) == str:
+                    df_filtered.at[ids, col] = [value]
+                else:
+                    df_filtered.at[ids, col] = value.unique()
+
+        return df_filtered
+
     # load information from config
-    sys.stderr.write(f"Step 1.1 Extracting information from config file...\n")
-    projects = pd.DataFrame(config["projects"]).set_index('name', drop=False)
-    
-    # check validity of {sample}.csv Value should be unique
-    sys.stderr.write(f"Step 1.2 Checking validity of project names and samples...\n")
-    check_duplicates = projects[projects.samples.duplicated()]
-    if len(check_duplicates) > 0:
-        raise ConfigError(f"Project: {check_duplicates.name.to_list()} input file name: {check_duplicates.samples.to_list()} is not unique. Check your config.yaml configuration.")
+    print(f"Step 1. Extracting project information from config...\n", file=sys.stderr)
+    projects = config["projects"]
+    df_projects = pd.DataFrame(projects).set_index('name', drop=False)
 
-    samples = []
-    for i in projects.index:
-        sys.stderr.write(f"Step 1.3 Getting ids for project: {i}\n")
-        df1 = pd.read_csv(projects.loc[i, "samples"])
-        df1["sample_paths"] = projects.loc[i, "samples"]
-
-        # try to fetch user-provided custom reference for prokka
-        try:
-            sys.stderr.write(f" - {i}: Getting custom reference genomes for Prokka protein database...\n")
-            df1["prokka-db"] = projects.loc[i, "prokka-db"]
-        except KeyError:
-            sys.stderr.write(f" - {i}: No references are provided to create custom Prokka protein database.\n")
-            df1["prokka-db"] = np.nan
-            pass
-
-        # try to fetch user-defined gtdb classification
-        try:
-            sys.stderr.write(f" - {i}: Getting user provided taxonomic information...\n")
-            df1["gtdb_paths"] = projects.loc[i, "gtdb-tax"]
-        except KeyError:
-            sys.stderr.write(f" - {i}: No taxonomic information provided.\n")
-            df1["gtdb_paths"] = np.nan
-            pass
-
-        df1["name"] = projects.loc[i, "name"]
-        df1 = df1.set_index('genome_id', drop=False)
-        samples.append(df1)
-    df_samples = pd.concat(samples, axis=0)
-    validate(df_samples.fillna(""), schema="schemas/samples.schema.yaml")
-
-    # check validity of genome_ids. Value should be unique.
-    sys.stderr.write(f"Step 1.4 Checking validity of sample files using schemas...\n")
-    check_duplicates = df_samples[df_samples.genome_id.duplicated()]
-    if len(check_duplicates) > 0:
-        raise ConfigError(f"Strain ids in: {check_duplicates.sample_paths.to_list()} are not unique. Check your config.yaml configuration.")
-
-    # Building metadata for prokka reference database creations
+    df_samples = []
     prokka_db_table = {}
     prokka_db_map = {}
 
-    if not df_samples.loc[:, "prokka-db"].isnull().all():
-        sys.stderr.write(f"Step 1.5 Preparing information to build Prokka reference databases...\n")
-        prokka_db_table, prokka_db_map = create_prokka_db_tables(df_samples.loc[:, "prokka-db"].dropna().unique())
+    for num, p in enumerate(projects):
+        # load samples
+        print(f"Step 2.{num+1} Getting sample information for project: {p['name']}", file=sys.stderr)
+        df_sample = pd.read_csv(p['samples']).set_index("genome_id", drop=False)
+        df_sample.loc[:, 'name'] = p['name']
+        df_sample.loc[:, 'sample_paths'] = p['samples']
+        df_sample.loc[:, 'prokka-db'] = np.nan
+        df_sample.loc[:, 'gtdb_paths'] = np.nan
 
-        # Default resource path
-        output_path = Path("resources/prokka_db/")
-        output_path.mkdir(parents=True, exist_ok=True)
+        df_sample.loc[:, 'classification'] = np.nan
+        df_sample.loc[:, 'classification_source'] = np.nan
+        # load prokka_db
+        if 'prokka-db' in p.keys():
+            print(f" - Found user-provided reference genomes for Prokka annotation", file=sys.stderr)
+            prokka_db_path = p['prokka-db']
+            df_sample.loc[:, 'prokka-db'] = prokka_db_path
+            prokka_table, prokka_map = create_prokka_db_tables(prokka_db_path)
+            prokka_db_table.update(prokka_table)
+            prokka_db_map.update(prokka_map)
 
-        for h in prokka_db_table.keys():
-            outfile = output_path / f"{h}.json"
-            if outfile.is_file():
-                pass
-            else:
-                sys.stderr.write(f" - Generating reference file: {h}\n")
-                with open(outfile, "w") as f:
-                    json.dump({"Accession":prokka_db_table[h]}, f, indent = 4)
+            df_sample["ref_annotation"] = list(prokka_table.keys())[0]
+        if 'gtdb-tax' in p.keys():
+            print(f" - Found user-provided taxonomic information\n", file=sys.stderr)
+            df_sample.loc[:, 'gtdb_paths'] = p['gtdb-tax']
+            df_gtdb = pd.read_csv(p['gtdb-tax'], sep="\t").set_index("user_genome")
+        else:
+            df_gtdb = pd.DataFrame()
 
-    sys.stderr.write(f"   Finished processing config information.\n\n")
+        for i in df_sample.index:
+            if i in df_gtdb.index:
+                df_sample.loc[i, "classification"] = df_gtdb.loc[i, "classification"]
+                df_sample.loc[i, "classification_source"] = "user_provided"
+            elif not pd.isnull(df_sample.loc[i, "closest_placement_reference"]):
+                df_sample.loc[i, "classification"] = df_sample.loc[i, "closest_placement_reference"]
+                df_sample.loc[i, "classification_source"] = "ncbi"
+            elif not pd.isnull(df_sample.loc[i, "genus"]):
+                df_sample.loc[i, "classification"] = df_sample.loc[i, "closest_placement_reference"]
+                df_sample.loc[i, "classification_source"] = "user_provided_genus"
+        df_samples.append(df_sample)
 
-    return projects, df_samples, prokka_db_table, prokka_db_map
+    df_samples = pd.concat(df_samples)
+
+    print(f"Step 3. Merging genome_ids across projects...\n", file=sys.stderr)
+    df_samples = find_conflicting_samples(df_samples)
+
+    print(f"Step 4. Checking validity of samples using schemas..\n", file=sys.stderr)
+    filtered_columns = ['sample_paths',
+                        'prokka-db',
+                        'gtdb_paths',
+                        'name']
+    validate(df_samples.drop(columns=filtered_columns).fillna(""), schema="schemas/samples.schema.yaml")
+
+    return df_projects, df_samples, prokka_db_table, prokka_db_map
 
 ##### 3. Generate wildcard constants
 # This step is done via Snakefile. Refer to comments on Step 2 for explanation.
@@ -168,7 +189,7 @@ def get_fasta_inputs(name, df_samples):
     """
     Given a project name, list all corresponding strains (genome_id) fasta file
     """
-    selection = df_samples[df_samples["name"] == name].genome_id.values
+    selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     output = [f"data/interim/fasta/{s}.fna" for s in selection]
     return output
 
@@ -206,7 +227,7 @@ def get_antismash_inputs(name, version, df_samples):
     """
     Given a project name, find the corresponding sample file to use
     """
-    selection = df_samples[df_samples["name"] == name].genome_id.values
+    selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     output = [f"data/interim/antismash/{version}/{s}/{s}.gbk" for s in selection]
     return output
 
@@ -215,7 +236,7 @@ def get_prokka_outputs(name, df_samples, ext="gff"):
     """
     Given a project name, find the corresponding sample file to use
     """
-    selection = df_samples[df_samples["name"] == name].genome_id.values
+    selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     output = [f"data/interim/prokka/{s}/{s}.{ext}" for s in selection]
     return output
 
@@ -224,7 +245,7 @@ def get_automlst_inputs(name, df_samples):
     """
     Given a project name, find the corresponding sample file to use
     """
-    selection = df_samples[df_samples["name"] == name].genome_id.values
+    selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     output = [f"data/interim/automlst_wrapper/{name}/{s}.gbk" for s in selection]
     return output
 
@@ -233,7 +254,7 @@ def get_json_inputs(name, df_samples):
     """
     Given a project name, find the corresponding sample file to use
     """
-    selection = df_samples[df_samples["name"] == name].genome_id.values
+    selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     output = [f"data/interim/gtdb/{s}.json" for s in selection]
     return output
 
@@ -242,7 +263,7 @@ def get_ncbi_assembly_inputs(name, df_samples):
     """
     Given a project name, find the corresponding sample file to use
     """
-    selection = df_samples[df_samples["name"] == name].genome_id.values
+    selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     selection_ncbi = df_samples[df_samples["source"] == "ncbi"].genome_id.values
     output = [f"data/interim/assembly_report/{s}.json" for s in selection_ncbi]
     return output
@@ -297,7 +318,7 @@ def get_project_outputs(config, PROJECT_IDS, df_samples):
         with open(config, 'r') as file:
             config = yaml.safe_load(file)
 
-    selection = df_samples[df_samples["name"] == PROJECT_IDS].genome_id.values
+    selection = [i for i in df_samples.index if PROJECT_IDS in df_samples.loc[i, "name"]]
 
     # dictionary of rules and its output files
     rule_dict = {"mlst" : expand("data/interim/mlst/{strains}_ST.csv", strains = selection),
@@ -320,10 +341,12 @@ def get_project_outputs(config, PROJECT_IDS, df_samples):
                                 name = PROJECT_IDS, version=dependency_version["antismash"]),
                 "checkm" : expand("data/processed/{name}/tables/df_checkm_stats.csv", name = PROJECT_IDS),
                 "gtdbtk" : expand("data/processed/{name}/tables/gtdbtk.bac120.summary.tsv", name = PROJECT_IDS),
-                "prokka-gbk" : [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/genbank/{strains}.gbk" for strains in selection],
+                "prokka-gbk" : expand("data/processed/{name}/genbank/{strains}.gbk", strains=selection,
+                                        name = PROJECT_IDS),
                 "antismash-summary": expand("data/processed/{name}/tables/df_antismash_{version}_summary.csv", \
                                             name = PROJECT_IDS, version=dependency_version["antismash"]),
-                "antismash-zip": [f"data/processed/{DF_SAMPLES.loc[strains, 'name']}/antismash/{dependency_version['antismash']}/{strains}.zip" for strains in selection],
+                "antismash-zip": expand("data/processed/{name}/antismash/{version}/{strains}.zip",
+                                        name=PROJECT_IDS, strains=selection, version=dependency_version["antismash"]),
                 "arts": expand("data/interim/arts/antismash-{version}/{strains}/", \
                                 version=dependency_version["antismash"], strains = selection),
                 "bigscape" : expand("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}", \
@@ -347,14 +370,13 @@ def get_project_outputs(config, PROJECT_IDS, df_samples):
         pass
     else:
         final_output.extend(expand("data/processed/{name}/tables/df_ncbi_meta.csv", name = PROJECT_IDS))
-
     return final_output
 
 def get_final_output(df_samples):
     """
     Generate outputs of for all projects
     """
-    sys.stderr.write(f"Step 3. Preparing list of final outputs...\n")
+    sys.stderr.write(f"Step 6. Preparing list of final outputs...\n")
     final_output = []
     for p in config["projects"]:
         sys.stderr.write(f" - Getting outputs for project: {p['name']}\n")
@@ -373,7 +395,7 @@ def custom_resource_dir():
     Generate symlink for user defined resources location
     """
     resource_dbs = config["resources_path"]
-    sys.stderr.write(f"Step 2. Checking for user-defined local resources...\n")
+    sys.stderr.write(f"Step 5. Checking for user-defined local resources...\n")
     for r in resource_dbs.keys():
         # check for default path
         path = Path(resource_dbs[r])
