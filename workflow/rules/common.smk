@@ -109,7 +109,10 @@ def extract_project_information(config):
                 if type(value) == str:
                     df_filtered.at[ids, col] = [value]
                 else:
-                    df_filtered.at[ids, col] = value.unique()
+                    try:
+                        df_filtered.at[ids, col] = value.unique()
+                    except AttributeError as e:
+                        pass
 
         return df_filtered
 
@@ -160,6 +163,8 @@ def extract_project_information(config):
             elif not pd.isnull(df_sample.loc[i, "genus"]):
                 df_sample.loc[i, "classification"] = df_sample.loc[i, "closest_placement_reference"]
                 df_sample.loc[i, "classification_source"] = "user_provided_genus"
+            elif df_sample.loc[i, "source"] in ['ncbi', 'patric']:
+                df_sample.loc[i, "classification_source"] = df_sample.loc[i, "source"]
         df_samples.append(df_sample)
 
     df_samples = pd.concat(df_samples)
