@@ -23,34 +23,33 @@ def extract_ncbi_information(ncbi_meta_path, patric_genome_summary, patric_genom
     """
 
     df_ncbi = pd.read_csv(ncbi_meta_path, index_col="genome_id")
-    df_patric_genome_summary = pd.read_csv(patric_genome_summary, sep="\t", index_col="genome_id")
-    df_patric_genome_metadata = pd.read_csv(patric_genome_metadata, sep="\t", index_col="genome_id")
+    df_patric_genome_summary = pd.read_csv(patric_genome_summary, sep="\t", dtype={'genome_id':str, 'genome_name':str, 'taxon_id': str,'strain': str})
+    df_patric_genome_summary.set_index('genome_id', inplace=True)
+
+    df_patric_genome_metadata = pd.read_csv(patric_genome_metadata, sep="\t", dtype={'genome_id':str, 'genome_name':str, 'taxon_id': str})
+    df_patric_genome_metadata.set_index('genome_id', inplace=True)
 
     df_patric_genome_metadata = df_patric_genome_metadata[df_patric_genome_metadata["genome_status"] != 'Plasmid']
     
-    df_patric_meta = pd.DataFrame(index=df_ncbi.index)
+    df_patric_meta = pd.DataFrame()
 
     for genome_id in df_ncbi.index:
         refseq = df_ncbi.loc[genome_id, "refseq"]
         genbank = df_ncbi.loc[genome_id, "genbank"]
         if refseq in df_patric_genome_metadata["assembly_accession"].tolist():
             patric_genome_ids_list = df_patric_genome_metadata[df_patric_genome_metadata["assembly_accession"] == refseq].index.tolist()
-            for patric_genome_id in patric_genome_ids_list:
-                df_patric_meta.loc[genome_id, 'patric_genome_id'] = patric_genome_id
-                for col in df_patric_genome_metadata.columns:
-                    df_patric_meta.loc[genome_id, col] = df_patric_genome_metadata.loc[patric_genome_id, col]
-                if patric_genome_id in df_patric_genome_summary.index:
-                    for col in df_patric_genome_summary.columns:
-                        df_patric_meta.loc[genome_id, col] = df_patric_genome_summary.loc[patric_genome_id, col]
         elif genbank in df_patric_genome_metadata["assembly_accession"].tolist():
             patric_genome_ids_list = df_patric_genome_metadata[df_patric_genome_metadata["assembly_accession"] == genbank].index.tolist()
-            for patric_genome_id in patric_genome_ids_list:
-                df_patric_meta.loc[genome_id, 'patric_genome_id'] = patric_genome_id
-                df_patric_meta.loc[genome_id, :] = df_patric_genome_metadata.loc[patric_genome_id, :]
-                if patric_genome_id in df_patric_genome_summary.index:
-                    for col in df_patric_genome_summary.columns:
-                        df_patric_meta.loc[genome_id, col] = df_patric_genome_summary.loc[patric_genome_id, col]
-    df_patric_meta.index.name = 'genome_id'
+        
+        for patric_genome_id in patric_genome_ids_list:
+            df_patric_meta.loc[patric_genome_id, 'bgcflow_genome_id'] = genome_id
+            df_patric_meta.loc[patric_genome_id, df_patric_genome_metadata.columns] = df_patric_genome_metadata.loc[patric_genome_id, df_patric_genome_metadata.columns]
+            if patric_genome_id in df_patric_genome_summary.index:
+                for col in df_patric_genome_summary.columns:
+                    if col not in df_patric_genome_metadata.columns:
+                        df_patric_meta.loc[patric_genome_id, col] = df_patric_genome_summary.loc[patric_genome_id, col]
+
+    df_patric_meta.index.name = 'patric_genome_id'
     df_patric_meta.to_csv(patric_meta_path)
 
     return None
