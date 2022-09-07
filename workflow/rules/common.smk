@@ -6,9 +6,10 @@ from snakemake.utils import validate
 from snakemake.utils import min_version
 from pathlib import Path
 
-min_version("7.6.1")
+min_version("7.14.0")
 __version__ = "0.4.0"
 
+container: "docker://continuumio/miniconda3:4.12.0"
 
 ##### TABLE OF CONTENTS #####
 # This .smk file helps the rules interact with the user config and contains 

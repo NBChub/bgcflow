@@ -1,5 +1,5 @@
 # BGCflow
-[![Snakemake](https://img.shields.io/badge/snakemake-≥7.6.1-brightgreen.svg)](https://snakemake.bitbucket.io)
+[![Snakemake](https://img.shields.io/badge/snakemake-≥7.14.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 
 Snakemake workflow to systematically analyze Biosynthetic Gene Clusters from a collection of genomes (pangenomes) from internal &amp; public genome datasets.
 
@@ -80,13 +80,13 @@ Installing Snakemake using [Mamba](https://github.com/mamba-org/mamba) is advise
 
     conda install -n base -c conda-forge mamba
 
-Then install Snakemake (version 7.6.1) with:
+Then install Snakemake (version 7.14.0) with:
 
-    mamba create -c conda-forge -c bioconda -n snakemake snakemake=7.6.1
+    mamba create -c conda-forge -c bioconda -c panoptes-organization -n snakemake snakemake=7.14.0 singularity panoptes-ui
 
-If you already have Snakemake, then update it to version 7.6.1 that is supported by BGCflow with:
+If you already have Snakemake, then update it to version 7.14.0 that is supported by BGCflow with:
 
-    mamba update -c conda-forge -c bioconda -n snakemake snakemake=7.6.1
+    mamba update -c conda-forge -c bioconda -c panoptes-organization -n snakemake snakemake=7.14.0 singularity panoptes-ui
 
 For installation details, see the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
 
