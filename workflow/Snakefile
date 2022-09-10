@@ -1,7 +1,7 @@
 include: "rules/common.smk"
 
 ##### 1. Extract information from config file
-DF_PROJECTS, DF_SAMPLES, PROKKA_DB_TABLE, PROKKA_DB_MAP = extract_project_information(config)
+DF_PROJECTS, DF_SAMPLES, PROKKA_DB_TABLE, PROKKA_DB_MAP, PEP_PROJECTS = extract_project_information(config)
 
 ##### 2. Generate wildcard constants #####
 PROJECT_IDS = list(DF_PROJECTS.name.unique())
@@ -30,7 +30,7 @@ rule all:
     input:
         expand("data/processed/{name}/tables/df_gtdb_meta.csv", name = PROJECT_IDS),
         "workflow/report/dependency_versions.json",
-        get_final_output(DF_SAMPLES),
+        get_final_output(DF_SAMPLES, PEP_PROJECTS),
 
 ##### Modules #####
 include: "rules/ncbi.smk"
