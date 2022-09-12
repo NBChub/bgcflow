@@ -1,0 +1,7 @@
+name: test_pep
+pep_version: 2.0.0
+description: "test_project"
+sample_table: samples.csv
+prokka-db: prokka-db.csv
+gtdb-tax: gtdbtk.bac120.summary.tsv
+output_dir: "$HOME/test"

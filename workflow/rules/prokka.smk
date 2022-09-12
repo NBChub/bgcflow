@@ -57,7 +57,7 @@ rule extract_meta_prokka:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/prokka/extract_meta_prokka/extract_meta_prokka-{strains}.log"
     params:
-        samples_path = SAMPLE_PATHS,
+        samples_path = bgcflow_util_dir / "samples.csv",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/get_organism_info.py {wildcards.strains} \

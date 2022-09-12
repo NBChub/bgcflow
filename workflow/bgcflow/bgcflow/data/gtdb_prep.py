@@ -120,6 +120,9 @@ def get_user_defined_classification(genome_id, tax_path):
     dfList = [pd.read_csv(s, sep="\t").set_index('user_genome', drop=False) for s in shell_input]
     df_tax = pd.concat(dfList, axis=0)
 
+    # drop duplicates
+    df_tax = df_tax.drop_duplicates(subset=['classification'])
+
     level_dict = {"d" :"domain",
                   "p" : "phylum",
                   "c" : "class",
@@ -127,6 +130,7 @@ def get_user_defined_classification(genome_id, tax_path):
                   "f" : "family",
                   "g" : "genus",
                   "s" : "species"}
+
 
     query = df_tax.loc[genome_id, "classification"].split(";")
 
