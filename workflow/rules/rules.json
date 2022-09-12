@@ -23,5 +23,6 @@
 "deeptfactor" : "data/interim/deeptfactor/{strains}/",
 "deeptfactor-roary" : "data/interim/deeptfactor_roary/{name}/",
 "cblaster-genome":  "data/processed/{name}/cblaster/genomes/",
-"cblaster-bgc":  "data/processed/{name}/cblaster/bgcs/{version}/"
+"cblaster-bgc":  "data/processed/{name}/cblaster/bgcs/{version}/",
+"patric_meta" : "data/processed/{name}/tables/df_patric_meta.csv"
 }
