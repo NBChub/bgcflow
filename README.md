@@ -74,27 +74,23 @@ rules:
   eggnog: FALSE
   ```
 See [List of Configurable Features](##List-of-Configurable-Features) for more details.
-### Step 3: Install Snakemake
+### Step 3: Install Snakemake & BGCFlow environment
 
 Installing Snakemake using [Mamba](https://github.com/mamba-org/mamba) is advised. In case you don’t use [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge) you can always install [Mamba](https://github.com/mamba-org/mamba) into any other Conda-based Python distribution with:
 
     conda install -n base -c conda-forge mamba
 
-Then install Snakemake (version 7.14.0) with:
+Install BGCFlow environment which contain Snakemake (version 7.14.0) and other dependencies with:
 
-    mamba create -c conda-forge -c bioconda -c panoptes-organization -n snakemake snakemake=7.14.0 singularity panoptes-ui
+    mamba env create -f envs.yaml
 
-If you already have Snakemake, then update it to version 7.14.0 that is supported by BGCflow with:
-
-    mamba update -c conda-forge -c bioconda -c panoptes-organization -n snakemake snakemake=7.14.0 singularity panoptes-ui
-
-For installation details, see the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
+See the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) for installation details.
 
 ### Step 4: Execute workflow
 
 Activate the conda environment:
 
-    conda activate snakemake
+    conda activate bgcflow
 
 Test your configuration by performing a dry-run via:
 
