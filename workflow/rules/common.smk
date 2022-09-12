@@ -232,6 +232,11 @@ def extract_project_information(config):
         if i.endswith(".yaml"):
             df_projects = df_projects.drop(i)
 
+    # Fill missing df_projects columns
+    for item in ['prokka-db', 'gtdb-tax', 'rules']:
+        if not item in df_projects.columns.tolist():
+            df_projects = df_projects.reindex(columns = df_projects.columns.tolist() + [item])
+
     # generate containers to capture output
     df_samples = []
     prokka_db_table = {}
