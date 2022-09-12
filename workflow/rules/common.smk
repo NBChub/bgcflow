@@ -430,27 +430,35 @@ def get_project_outputs(config, PROJECT_IDS, df_samples, rule_dict_path="workflo
         # get all value within brackets
         wc = re.findall(r'\{.*?\}', rule_dict[k])
         wc = [i.replace("{","").replace("}","") for i in wc]
+        wc.sort()
 
         # find relevant wildcards
         if wc == ['strains']:
             value = expand(rule_dict[k], strains = selection)
         elif wc == ['name']:
             value = expand(rule_dict[k], name = PROJECT_IDS)
+        elif wc == ['name', 'name']:
+            value = expand(rule_dict[k], name = PROJECT_IDS)
         elif wc == ['name', 'version']:
             value = expand(rule_dict[k], name = PROJECT_IDS, version = dependency_version["antismash"])
         elif wc == ['name', 'strains']:
             value = expand(rule_dict[k], name = PROJECT_IDS, strains = selection)
+        elif wc == ['strains', 'version']:
+            value = expand(rule_dict[k], strains = selection, version = dependency_version["antismash"])
         elif wc == ['name', 'strains', 'version']:
             value = expand(rule_dict[k], name = PROJECT_IDS, strains = selection, version = dependency_version["antismash"])
+        elif k == 'rnammer':
+            pass
         else:
-            value = None
+            value = rule_dict[k]
+            print(f"WARNING: {k} is not in the rule dictionary", file=sys.stderr)
         project_dict[k] = value
-    
+
     # get keys from config
     opt_rules = config.keys()
 
     # if values are TRUE add output files to rule all
-    final_output = [project_dict[k] for r in opt_rules if config[r]]
+    final_output = [project_dict[r] for r in opt_rules if config[r]]
 
     if NCBI == []:
         pass

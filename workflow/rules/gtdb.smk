@@ -13,7 +13,7 @@ rule gtdb_prep:
     conda: 
         "../envs/bgc_analytics.yaml"
     params:
-        samples_path = SAMPLE_PATHS,
+        samples_path = bgcflow_util_dir / "samples.csv",
         gtdb_paths = GTDB_PATHS,
         version = f"R{gtdbtk_release}"
     shell: 
