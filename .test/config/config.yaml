@@ -60,10 +60,10 @@ rules:
 # resources : the location of the resources to run the rule.
 # The default location is at "resources/{resource_name}".
 resources_path: 
-  antismash_db: /datadrive/data/bgcflow/resources/antismash_db
+  antismash_db: resources/antismash_db
   eggnog_db: resources/eggnog_db
-  BiG-SCAPE: /datadrive/data/bgcflow/resources/BiG-SCAPE
-  bigslice: /datadrive/data/bgcflow/resources/bigslice
-  checkm: /datadrive/data/bgcflow/resources/checkm
-  gtdbtk: /datadrive/data/bgcflow/resources/gtdbtk
+  BiG-SCAPE: resources/BiG-SCAPE
+  bigslice: resources/bigslice
+  checkm: resources/checkm
+  gtdbtk: resources/gtdbtk
   #RNAmmer: resources/RNAmmer # If specified, will override Barnapp in Prokka

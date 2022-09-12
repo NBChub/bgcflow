@@ -260,6 +260,11 @@ def extract_project_information(config):
         df_sample, df_gtdb, prokka_db_table, prokka_db_map = read_pep_project(p, prokka_db_table, prokka_db_map)
         peppy_objects[p.name] = p
 
+        # Only to accommodate peppy<=0.34.0
+        for item in ['closest_placement_reference', 'genus']:
+            if not item in df_sample.columns.tolist():
+                df_sample = df_sample.reindex(columns = df_sample.columns.tolist() + [item])
+
         for i in df_sample.index:
                 if i in df_gtdb.index:
                     df_sample.loc[i, "classification"] = df_gtdb.loc[i, "classification"]
