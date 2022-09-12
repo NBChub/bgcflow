@@ -2,26 +2,27 @@
 
 #### PROJECT INFORMATION ####
 # This section control your project configuration. 
-# Each project are separated by "-". 
-# A project must contain the variable "name" and "samples".
-# - name : name of your project
-# - samples : a csv file containing a list of genome ids for analysis with multiple sources mentioned. Genome ids must be unique.
-# - rules: a yaml file containing project rule configurations. This will override global rule configuration.
-# - prokka-db (optional): list of the custom accessions to use as prokka reference database.
-# - gtdb-tax (optional): output summary file of GTDB-tk with "user_genome" and "classification" as the two minimum columns
+# Each project are separated by "-".
+# A project can be defined as (1) a yaml object or (2) a Portable Encapsulated Project (PEP) file.
+# (1) To define project as a yaml object, it must contain the variable "name" and "samples".
+#   - name : name of your project
+#   - samples : a csv file containing a list of genome ids for analysis with multiple sources mentioned. Genome ids must be unique.
+#   - rules: a yaml file containing project rule configurations. This will override global rule configuration.
+#   - prokka-db (optional): list of the custom accessions to use as prokka reference database.
+#   - gtdb-tax (optional): output summary file of GTDB-tk with "user_genome" and "classification" as the two minimum columns
+# (2) To define project using PEP file, only variable "name" should be given that points to the location of the PEP yaml file.
+#   - name: path to PEP .yaml file. See project example_pep for details.
 
 projects:
-# Project 1
+# Project 1 (yaml object)
   - name: example
     samples: config/examples/_genome_project_example/samples.csv
     rules: config/examples/_genome_project_example/project_config.yaml
     prokka-db: config/examples/_genome_project_example/prokka-db.csv
     gtdb-tax: config/examples/_genome_project_example/gtdbtk.bac120.summary.tsv
 
-# Project 2
-#  - name: example_2
-#    samples: config/project_example2/samples.csv
-#    rules: config/project_example2/project_config.yaml
+# Project 2 (PEP file)
+  - name: config/examples/_pep_example/project_config.yaml
 
 #### GLOBAL RULE CONFIGURATION ####
 # This section configures the rules to run globally.

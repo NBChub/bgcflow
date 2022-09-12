@@ -1,0 +1,11 @@
+name: bgcflow
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+  - panoptes-organization
+dependencies:
+  - snakemake>=7.14.0
+  - singularity
+  - panoptes-ui
+  - peppy>=0.34.0

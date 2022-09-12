@@ -11,10 +11,10 @@ rules:
   query-bigslice: FALSE
   bigscape: FALSE
   bigslice: FALSE
-  automlst-wrapper: FALSE
+  automlst-wrapper: TRUE
   arts: FALSE
-  roary: FALSE
+  roary: TRUE
   eggnog: FALSE
-  eggnog-roary: FALSE
+  eggnog-roary: TRUE
   diamond: FALSE
   deeptfactor: FALSE

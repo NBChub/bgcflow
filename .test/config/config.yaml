@@ -13,9 +13,18 @@ projects:
     rules: config/test1/project_config.yaml
     prokka-db: config/test1/prokka-db.csv
     gtdb-tax: config/test1/gtdbtk.bac120.summary.tsv
+
   - name: test2
     samples: config/test2/samples.csv
     rules: config/test2/project_config.yaml
+
+  - name: test3
+    samples: config/test3/samples.csv
+    rules: config/test3/project_config.yaml
+    prokka-db: config/test3/prokka-db.csv
+    gtdb-tax: config/test3/gtdbtk.bac120.summary.tsv
+
+  - name: config/test_pep/project_config.yaml
 
 #### GLOBAL RULE CONFIGURATION ####
 # This section configures the rules to run globally.
@@ -26,7 +35,9 @@ rules:
   mlst: FALSE
   refseq-masher: FALSE
   mash: FALSE
+  fastani: FALSE
   checkm: FALSE
+  gtdbtk: FALSE
   prokka-gbk: FALSE
   antismash-summary: TRUE
   antismash-zip: FALSE
@@ -39,7 +50,11 @@ rules:
   eggnog: FALSE
   eggnog-roary: FALSE
   diamond: FALSE
+  diamond-roary: FALSE
   deeptfactor: FALSE
+  deeptfactor-roary: FALSE
+  cblaster-genome: FALSE
+  cblaster-bgc: FALSE
 
 #### RESOURCES CONFIGURATION ####
 # resources : the location of the resources to run the rule.
@@ -50,4 +65,5 @@ resources_path:
   BiG-SCAPE: resources/BiG-SCAPE
   bigslice: resources/bigslice
   checkm: resources/checkm
+  gtdbtk: resources/gtdbtk
   #RNAmmer: resources/RNAmmer # If specified, will override Barnapp in Prokka
