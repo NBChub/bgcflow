@@ -8,7 +8,7 @@ from pathlib import Path
 import peppy
 
 min_version("7.14.0")
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 container: "docker://continuumio/miniconda3:4.12.0"
 
@@ -424,7 +424,7 @@ dependency_version = get_dependencies(dependencies)
 
 ##### 7. Customize final output based on config["rule"] values #####
 
-def get_project_outputs(config, PROJECT_IDS, df_samples, rule_dict_path="workflow/rules/rules.json"):
+def get_project_outputs(config, PROJECT_IDS, df_samples, rule_dict_path="workflow/rules/rules_main.json"):
     """
     Generate outputs of a project given a TRUE value in config["rules"]
     """
@@ -438,29 +438,29 @@ def get_project_outputs(config, PROJECT_IDS, df_samples, rule_dict_path="workflo
     # dictionary of rules and its output files
     for k in rule_dict.keys():
         # get all value within brackets
-        wc = re.findall(r'\{.*?\}', rule_dict[k])
+        wc = re.findall(r'\{.*?\}', rule_dict[k]['final_output'])
         wc = [i.replace("{","").replace("}","") for i in wc]
         wc.sort()
 
         # find relevant wildcards
         if wc == ['strains']:
-            value = expand(rule_dict[k], strains = selection)
+            value = expand(rule_dict[k]['final_output'], strains = selection)
         elif wc == ['name']:
-            value = expand(rule_dict[k], name = PROJECT_IDS)
+            value = expand(rule_dict[k]['final_output'], name = PROJECT_IDS)
         elif wc == ['name', 'name']:
-            value = expand(rule_dict[k], name = PROJECT_IDS)
+            value = expand(rule_dict[k]['final_output'], name = PROJECT_IDS)
         elif wc == ['name', 'version']:
-            value = expand(rule_dict[k], name = PROJECT_IDS, version = dependency_version["antismash"])
+            value = expand(rule_dict[k]['final_output'], name = PROJECT_IDS, version = dependency_version["antismash"])
         elif wc == ['name', 'strains']:
-            value = expand(rule_dict[k], name = PROJECT_IDS, strains = selection)
+            value = expand(rule_dict[k]['final_output'], name = PROJECT_IDS, strains = selection)
         elif wc == ['strains', 'version']:
-            value = expand(rule_dict[k], strains = selection, version = dependency_version["antismash"])
+            value = expand(rule_dict[k]['final_output'], strains = selection, version = dependency_version["antismash"])
         elif wc == ['name', 'strains', 'version']:
-            value = expand(rule_dict[k], name = PROJECT_IDS, strains = selection, version = dependency_version["antismash"])
+            value = expand(rule_dict[k]['final_output'], name = PROJECT_IDS, strains = selection, version = dependency_version["antismash"])
         elif k == 'rnammer':
             pass
         else:
-            value = rule_dict[k]
+            value = rule_dict[k]['final_output']
             print(f"WARNING: {k} is not in the rule dictionary", file=sys.stderr)
         project_dict[k] = value
 
