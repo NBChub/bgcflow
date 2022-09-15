@@ -16,13 +16,13 @@
 projects:
 # Project 1 (yaml object)
   - name: example
-    samples: config/examples/_genome_project_example/samples.csv
-    rules: config/examples/_genome_project_example/project_config.yaml
-    prokka-db: config/examples/_genome_project_example/prokka-db.csv
-    gtdb-tax: config/examples/_genome_project_example/gtdbtk.bac120.summary.tsv
+    samples: .examples/_genome_project_example/samples.csv
+    rules: .examples/_genome_project_example/project_config.yaml
+    prokka-db: .examples/_genome_project_example/prokka-db.csv
+    gtdb-tax: .examples/_genome_project_example/gtdbtk.bac120.summary.tsv
 
 # Project 2 (PEP file)
-  - name: config/examples/_pep_example/project_config.yaml
+  - name: .examples/_pep_example/project_config.yaml
 
 #### GLOBAL RULE CONFIGURATION ####
 # This section configures the rules to run globally.
