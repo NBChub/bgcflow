@@ -4,6 +4,27 @@
 
 Snakemake workflow to systematically analyze Biosynthetic Gene Clusters from a collection of genomes (pangenomes) from internal &amp; public genome datasets.
 
+## Quick Start
+A quick and easy way to use BGCFlow is by using [`bgcflow_wrapper`](https://github.com/matinnuhamunada/bgcflow_wrapper). It requires `git` and `conda`/`mamba` for installation.
+
+Install [`bgcflow_wrapper`](https://github.com/matinnuhamunada/bgcflow_wrapper) via:
+
+    # Install bgcflow_wrapper
+    git clone git@github.com:matinnuhamunada/bgcflow_wrapper.git
+    cd bgcflow_wrapper
+    mamba env create -f env.yaml
+    cd ..
+
+Then, BGCFlow can be deployed and run via:
+
+    # Deploy and run BGCFlow
+    conda activate bgcflow_wrapper
+    bgcflow_wrapper clone MY_PATH # clone BGCFlow to MY_PATH
+    bgcflow_wrapper init --bgcflow_dir MY_PATH # initiate BGCFlow config and examples from template
+    bgcflow_wrapper run -n --bgcflow_dir MY_PATH # do a dry run
+
+See [`README.md`](https://github.com/matinnuhamunada/bgcflow_wrapper) for more details on [`bgcflow_wrapper`](https://github.com/matinnuhamunada/bgcflow_wrapper).
+
 ## Workflow overview
 ![dag](workflow/report/images/rulegraph.svg)
 ## Usage
@@ -11,27 +32,58 @@ Snakemake workflow to systematically analyze Biosynthetic Gene Clusters from a c
 
 [Clone](https://help.github.com/en/articles/cloning-a-repository) this repository to your local system, into the place where you want to perform the data analysis. _Make sure to have the right access / SSH Key._
 
-    git clone git@github.com:NBChub/bgcflow.git
+    git clone git@github.com:NBChub/bgcflow.g
     cd bgcflow
 
-### Step 2: Configure the workflow
-#### 2.1 Setting Up Your Project Information
-Configure the workflow according to your needs via editing the files in the `config/` folder. An example of the configuration files are provided in the `config/example` folder. [NOTE: don't change the files in the `config/example` folder]. 
+> **TIPS** - **`bgcflow_wrapper`** equivalent:
+>
+> ```bash
+> bgcflow_wrapper clone bgcflow
+> ```
 
-You can copy the necessary files to another location as needed:
+### Step 2: Configure the workflow
+Configure the workflow according to your needs via editing the files in the `config/` folder.
+
+#### 2.1 Using template example
+An example of the configuration files are provided in the `.examples` folder.
+
+If you have a fresh copy of BGCFlow, you can initiate config and examples using by copying the necessary files to `config/` folder:
 ```shell
-cp config/examples/_config_example.yaml config/config.yaml
+cp .examples/_config_example.yaml config/config.yaml
 ```
 
 The above command will create a new file in `config/config.yaml`. You can adjust the `config.yaml` to configure your `project` and the workflow execution.
 
-In the `config.yaml`, each `project` starts with "`-`" and must contain the name of your project (`name`), the location of the sample file (`samples.csv`) and a rule configuration file (`project_config.csv`):
+> **TIPS** - **`bgcflow_wrapper`** equivalent
+>
+> ```bash
+> bgcflow_wrapper init --bgcflow_dir bgcflow
+> ```
+
+#### 2.2 Configure your project
+##### 2.2.1 PEP Format
+As of BGCFlow version `>=0.4.0`, projects are now configured as a [Portable Encapsulated Project (PEP)](http://pep.databio.org/en/latest/). In the main `config/config.yaml`, each `project` starts with "`-`" and the variable `name` which points to a PEP config file.
+
+```yaml
+projects:
+  - name: .examples/_pep_example/project_config.yaml
+```
+See [project_config.yaml](.examples/_pep_example/project_config.yaml) for an example of a PEP formatted project.
+
+> **TIPS** - Initiate a project using **`bgcflow_wrapper`**:
+>
+> ```bash
+> bgcflow_wrapper init --project MY_PROJECT --bgcflow_dir bgcflow
+> ```
+
+##### 2.2.1 BGCFlow Format
+A project can also be configured as previously described in BGCFlow version `<=0.3.3`. In the main `config/config.yaml`, each `project` starts with "`-`" and must contain the name of your project (`name`), the location of the sample file (`samples.csv`) and a rule configuration file (`project_config.csv`):
 
 ```yaml
 projects:
   - name: example
-    samples: config/examples/_genome_project_example/samples.csv
-    rules: config/examples/_genome_project_example/project_config.yaml
+    samples: .examples/_genome_project_example/samples.csv
+    rules: .examples/_genome_project_example/project_config.yaml
 ```
 Note that the location of the the sample file and the rule configuration file is relative to your `bgcflow` directory.
 
@@ -40,7 +92,7 @@ Ideally, you can organize a project as a set of genomes from a certain clade (pa
 See [further configuration](#further-configuration) for more details.
 
 #### 2.2 Setting Up Your Samples Information
-The parameter `samples` denote the location of your `.csv` file which specify the genomes to analyse. Note that you can name the file anything as long as you define it in the `config.yaml`.
+The variable `sample_table` (PEP) or `samples` denote the location of your `.csv` file which specify the genomes to analyse. Note that you can name the file anything as long as you define it in the `config.yaml`.
 
 Example : `samples.csv`
 
@@ -65,7 +117,7 @@ Columns description:
 Further formatting rules are defined in the `workflow/schemas/` folder.
 
 #### 2.3 Rules: Choosing which analysis to run
-In each projects, you can choose which analysis to run by setting the parameter value in the [`project_config.yaml`](config/examples/_genome_project_example/project_config.yaml) to `TRUE` or `FALSE`:
+In each projects, you can choose which analysis to run by setting the parameter value in the [`project_config.yaml`](.examples/_genome_project_example/project_config.yaml) to `TRUE` or `FALSE`:
 ```yaml
 rules:
   bigscape: TRUE
@@ -74,6 +126,18 @@ rules:
   seqfu: TRUE
   eggnog: FALSE
   ```
+> **TIPS** - Finding available rules with **`bgcflow_wrapper`**
+>
+> ```bash
+> bgcflow_wrapper rules --bgcflow_dir bgcflow
+> ```
+
+> **TIPS** - Find out rule description with **`bgcflow_wrapper`**
+>
+> ```bash
+> bgcflow_wrapper rules --describe bigscape --bgcflow_dir bgcflow
+> ```
+
 See [List of Configurable Features](##List-of-Configurable-Features) for more details.
 ### Step 3: Install Snakemake & BGCFlow environment
 
@@ -81,7 +145,7 @@ Installing Snakemake using [Mamba](https://github.com/mamba-org/mamba) is advise
 
     conda install -n base -c conda-forge mamba
 
-Install BGCFlow environment which contain Snakemake (version 7.14.0) and other dependencies with:
+You can use [`bgcflow_wrapper`](https://github.com/matinnuhamunada/bgcflow_wrapper) environment from [Quick Start](#Quick-Start) or install BGCFlow environment which contain Snakemake (`version 7.14.0`) and other dependencies with:
 
     mamba env create -f envs.yaml
 
