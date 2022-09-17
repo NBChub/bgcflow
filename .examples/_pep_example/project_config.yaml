@@ -5,6 +5,8 @@ pep_version: 2.1.0
 description: "An example of PEP formatted project"
 
 sample_table: samples.csv
+input_folder: "."
+
 prokka-db: prokka-db.csv
 gtdb-tax: gtdbtk.bac120.summary.tsv
 
