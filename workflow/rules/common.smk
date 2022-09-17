@@ -67,6 +67,52 @@ def hash_prokka_db(prokka_db_path):
         file_map = {str(prokka_db_path) : hash_value}
         return hash_object, file_map
 
+def get_input_location(p):
+    """
+    Get input file locations for custom samples
+    """
+    base_path = Path(p.config['sample_table']).parent
+    input_path = ""
+
+    print(f" - Custom input directory: {'input_folder' in list(p.config.keys())}", file=sys.stderr)
+    if 'input_folder' in list(p.config.keys()):
+        input_path = base_path / p.config['input_folder']
+        input_path = input_path.resolve()
+    else:
+        input_path = Path("data/raw/fasta")
+        input_path = input_path.resolve()
+
+    assert input_path.is_dir(), f"ERROR: Cannot find {input_path}"
+    print(f" - Getting input files from: {input_path}", file=sys.stderr)
+
+    print(f" - Custom input format: {'input_type' in list(p.config.keys())}", file=sys.stderr)
+    if 'input_type' in list(p.config.keys()):
+        extension = p.config['input_type']
+    else:
+        extension = "fna"
+    print(f" - Default input file type: {extension}", file=sys.stderr)
+
+    for i in p.sample_table.index:
+        if p.sample_table.loc[i, "source"] == 'custom':
+            print(f" - Found user provided sample: {i}")
+
+            # try if there is hardcoded path in "input_file"
+            try:
+                if (p.sample_table.loc[i, "input_file"] != "NaN" and pd.notnull(p.sample_table.loc[i, "input_file"])):
+                    input_file = input_path / p.sample_table.loc[i, "input_file"]
+                else:
+                    raise KeyError
+            except KeyError:
+                input_file = None
+                input_file = input_path / f"{i}.{extension}"
+                assert input_file.is_file(), f"ERROR: Cannot find {input_file}"
+
+            input_file = input_file.resolve()
+            assert input_file.is_file(), f"ERROR: Cannot find {input_file}"
+            p.sample_table.loc[i, "input_file"] = input_file
+
+    return p.sample_table
+
 def create_prokka_db_tables(prokka_db_path):
         """
         Build a json dictionaries of prokka references and files from config information
@@ -117,7 +163,7 @@ def find_conflicting_samples(df_samples):
             for genome_id in duplicates['genome_id'].unique():
                 print(f"WARNING: Samples {genome_id} in projects {duplicates.loc[genome_id, 'name'].to_list()} is not identical.", file=sys.stderr)
             print("Each samples with the same genome_id should have identical annotation and taxonomy. Please use different ids.", file=sys.stderr)
-            print(duplicates, file=sys.stderr)
+            print(duplicates.to_dict(orient='list'), file=sys.stderr)
             raise ConfigError
 
         for ids in df_filtered.index:
@@ -247,7 +293,13 @@ def extract_project_information(config):
         print(f"Step 2.{num+1} Getting sample information for project: {p['name']}", file=sys.stderr)
         # grab a bgcflow pep project
         if p['name'].endswith(".yaml"):
+            pep_file = p['name']
             p = peppy.Project(p['name'], sample_table_index="genome_id")
+            print(f" - Processing project [{p.name}]", file=sys.stderr)
+
+            # make sure each project has unique names
+            assert not p.name in df_projects['name'].unique(), f"Project name [{p.name}] in [{pep_file}] has been used. Please use different name for each project."
+
             df_projects.loc[p.name, "name"] = p.name
             df_projects.loc[p.name, "samples"] = p.config_file
             df_projects.loc[p.name, "rules"] = p.config_file
@@ -256,7 +308,11 @@ def extract_project_information(config):
         # exist for back compatibility with bgcflow=<0.3.3
         else:
             p_bgcflow = peppy.Project(p['samples'], sample_table_index="genome_id")
+            print(f" - Processing project [{p['name']}]", file=sys.stderr)
             p = refine_bgcflow_project(p_bgcflow, p)
+
+        # populate input files for custom samples
+        p.sample_tables = get_input_location(p)
 
         # grab global rule config if rule not presents
         if 'rules' not in p.config.keys():
@@ -285,8 +341,16 @@ def extract_project_information(config):
         df_samples.append(df_sample.replace("NaN", ""))
     df_samples = pd.concat(df_samples)
 
+    # Fill missing df_samples columns
+    for item in ['organism', 'genus', 'species', 'strain', 'closest_placement_reference', 'input_file']:
+        if not item in df_samples.columns.tolist():
+            df_samples = df_samples.reindex(columns = df_samples.columns.tolist() + [item])
+            print(df_samples['input_file'].to_dict(orient="list"))
+
     print(f"Step 3 Merging genome_ids across projects...\n", file=sys.stderr)
+    df_samples = df_samples.fillna("")
     df_samples = find_conflicting_samples(df_samples)
+
     #print(f"Step 4 Checking validity of samples using schemas..\n", file=sys.stderr)
     #validate(df_samples, schema="schemas/samples.schema.yaml")
 
@@ -410,7 +474,8 @@ def get_dependencies(dep):
 
 
 # list of the main dependecies used in the workflow
-dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
+dependencies = {
+                "antismash" : r"workflow/envs/antismash.yaml",
                 "prokka": r"workflow/envs/prokka.yaml",
                 "mlst" : r"workflow/envs/mlst.yaml",
                 "eggnog-mapper" : r"workflow/envs/eggnog.yaml",
@@ -428,6 +493,7 @@ def get_project_outputs(config, PROJECT_IDS, df_samples, rule_dict_path="workflo
     """
     Generate outputs of a project given a TRUE value in config["rules"]
     """
+
     with open(rule_dict_path, "r") as file:
         rule_dict = json.load(file)
 
@@ -474,6 +540,7 @@ def get_project_outputs(config, PROJECT_IDS, df_samples, rule_dict_path="workflo
         pass
     else:
         final_output.extend(expand("data/processed/{name}/tables/df_ncbi_meta.csv", name = PROJECT_IDS))
+
     return final_output
 
 def get_final_output(df_samples, peppy_objects):

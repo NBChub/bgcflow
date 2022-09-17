@@ -22,15 +22,21 @@ except KeyError:
 
 rule copy_custom_fasta:
     input:
-        "data/raw/fasta/{custom}.fna"
+        fna = lambda wildcards: DF_SAMPLES.loc[wildcards, "input_file"]
     output:
-        "data/interim/fasta/{custom}.fna" 
+        fna = "data/interim/fasta/{custom}.fna"
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/prokka/copy_custom_fasta/copy_custom_fasta-{custom}.log"
     shell:
         """
-        cp {input} {output} 2>> {log}
+        if [[ {input} == *.fna ]]
+        then
+            cp {input} {output} 2>> {log}
+        else
+            echo "ERROR: Wrong Extension:" {input} >> {log}
+            exit 1
+        fi
         """
 
 rule prokka_db_setup:
