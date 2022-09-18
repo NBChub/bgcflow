@@ -51,13 +51,13 @@ rule bigscape:
         python {input.bigscape}/bigscape.py -i {params.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose &>> {log}
         """
 
+## Unused rule, might be deleted
 rule copy_bigscape_zip:
     input: 
         bgc_mapping = "data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
         index = "data/interim/bigscape/{name}_antismash_{version}/index.html"
     output:
         zip = "data/processed/{name}/bigscape/{name}_bigscape_as{version}.zip",
-        bgc_mapping = "data/processed/{name}/bigscape/{name}_bigscape_as_{version}_mapping.csv",
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/bigscape/copy_bigscape_zip/copy_bigscape_zip-{name}-{version}.log"
@@ -66,18 +66,17 @@ rule copy_bigscape_zip:
         topdir=$PWD
         (cd data/interim/bigscape && zip -r $topdir/{output.zip} {wildcards.name}_antismash_{wildcards.version}.csv \
             {wildcards.name}_antismash_{wildcards.version} -x {wildcards.name}_antismash_{wildcards.version}/cache/**\* &>> $topdir/{log})
-        cp {input.bgc_mapping} {output.bgc_mapping}
         """
 
 rule bigscape_to_cytoscape:
     input:
+        bgc_mapping = "data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
         mibig_bgc_table = "resources/mibig/df_mibig_bgcs.csv/",
-        bgc_mapping = "data/processed/{name}/bigscape/{name}_bigscape_as_{version}_mapping.csv",
-        zip = "data/processed/{name}/bigscape/{name}_bigscape_as{version}.zip",
         as_dir = 'data/interim/bgcs/{name}/{version}',
         df_genomes_path = 'data/processed/{name}/tables/df_antismash_{version}_summary.csv'
     output:
-        output_dir = directory("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}")
+        output_dir = directory("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}"),
+        bgc_mapping = "data/processed/{name}/bigscape/{name}_bigscape_as_{version}_mapping.csv",
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/bigscape/bigscape_to_cytoscape/bigscape_to_cytoscape-{name}-{version}.log"
@@ -86,4 +85,21 @@ rule bigscape_to_cytoscape:
     shell:
         """
         python workflow/bgcflow/bgcflow/data/make_bigscape_to_cytoscape.py {params.bigscape_directory} {input.as_dir} {input.df_genomes_path} {input.mibig_bgc_table} {output.output_dir} 2>> {log}
+        cp {input.bgc_mapping} {output.bgc_mapping}
         """
+
+rule copy_bigscape:
+    input:
+        index = "data/interim/bigscape/{name}_antismash_{version}/index.html",
+        cytoscape = "data/processed/{name}/bigscape/for_cytoscape_antismash_{version}"
+    output:
+        main = report("data/processed/{name}/bigscape/result_as{version}/index.html", caption="report/bigscape.rst", patterns=["index.html"],
+                      category="{name}", subcategory="BiG-SCAPE")
+    log: "workflow/report/logs/bigscape/copy_bigscape_zip/copy_bigscape-{name}-{version}.log"
+    run:
+        input = Path(input.index)
+        output = Path(output.main)
+        output.mkdir(parents=True, exist_ok=True)
+        for item in input.parent.glob("*"):
+            target = output / item.name
+            target.symlink_to(item.resolve(), target_is_directory=True)

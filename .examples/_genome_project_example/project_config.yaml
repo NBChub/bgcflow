@@ -10,8 +10,7 @@ rules:
   checkm: TRUE
   gtdbtk: TRUE
   prokka-gbk: TRUE
-  antismash-summary: TRUE
-  antismash-zip: TRUE
+  antismash: TRUE
   query-bigslice: TRUE
   bigscape: TRUE
   bigslice: TRUE
