@@ -8,4 +8,6 @@ dependencies:
   - snakemake>=7.14.0
   - singularity
   - panoptes-ui
-  - peppy>=0.34.0
+  - pip
+  - pip:
+    - git+https://github.com/matinnuhamunada/peppy.git
