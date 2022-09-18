@@ -1,0 +1,1 @@
+Zipped AntiSMASH result.
