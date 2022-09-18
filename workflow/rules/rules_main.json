@@ -112,18 +112,11 @@
         "Seemann T. Prokka: rapid prokaryotic genome annotation. Bioinformatics 2014 Jul 15;30(14):2068-9. PMID:24642063"
       ]
     },
-    "antismash-summary": {
+    "antismash": {
       "final_output": "data/processed/{name}/tables/df_antismash_{version}_summary.csv",
       "description": "Summarizes antiSMASH result.",
       "references": [
         "TODO: BGCFlow Citation. GITHUB: https://github.com/NBChub/bgcflow",
-        "antiSMASH 6.0: improving cluster detection and comparison capabilities. Kai Blin, Simon Shaw, Alexander M Kloosterman, Zach Charlop-Powers, Gilles P van Weezel, Marnix H Medema, & Tilmann Weber. Nucleic Acids Research (2021) doi: 10.1093/nar/gkab335."
-      ]
-    },
-    "antismash-zip": {
-      "final_output": "data/processed/{name}/antismash/{version}/{strains}.zip",
-      "description": "Copy zipped antiSMASH result.",
-      "references": [
         "antiSMASH 6.0: improving cluster detection and comparison capabilities. Kai Blin, Simon Shaw, Alexander M Kloosterman, Zach Charlop-Powers, Gilles P van Weezel, Marnix H Medema, & Tilmann Weber. Nucleic Acids Research (2021) doi: 10.1093/nar/gkab335."
       ]
     },
@@ -133,13 +126,6 @@
       "references": [
         "Mungan,M.D., Alanjary,M., Blin,K., Weber,T., Medema,M.H. and Ziemert,N. (2020) ARTS 2.0: feature updates and expansion of the Antibiotic Resistant Target Seeker for comparative genome mining. Nucleic Acids Res.,10.1093/nar/gkaa374",
         "Alanjary,M., Kronmiller,B., Adamek,M., Blin,K., Weber,T., Huson,D., Philmus,B. and Ziemert,N. (2017) The Antibiotic Resistant Target Seeker (ARTS), an exploration engine for antibiotic cluster prioritization and novel drug target discovery. Nucleic Acids Res.,10.1093/nar/gkx360"
-      ]
-    },
-    "bigscape": {
-      "final_output": "data/processed/{name}/bigscape/for_cytoscape_antismash_{version}",
-      "description": "Cluster BGCs using BiG-SCAPE",
-      "references": [
-        "Navarro-Muñoz, J.C., Selem-Mojica, N., Mullowney, M.W. et al. A computational framework to explore large-scale biosynthetic diversity. Nat Chem Biol 16, 60–68 (2020). https://doi.org/10.1038/s41589-019-0400-9"
       ]
     },
     "diamond": {
@@ -192,5 +178,13 @@
       "references": [
         "Improvements to PATRIC, the all-bacterial Bioinformatics Database and Analysis Resource Center. Wattam AR, Davis JJ, Assaf R, Boisvert S, Brettin T, Bun C, Conrad N, Dietrich EM, Disz T, Gabbard JL, Gerdes S, Henry CS, Kenyon RW, Machi D, Mao C, Nordberg EK, Olsen GJ, Murphy-Olson DE, Olson R, Overbeek R, Parrello B, Pusch GD, Shukla M, Vonstein V, Warren A, Xia F, Yoo H, Stevens RL. Nucleic Acids Res. 2017 Jan 4;45(D1):D535-D542. doi: 10.1093/nar/gkw1017. PMID: 27899627; PMCID: PMC5210524."
       ]
+    },
+      "bigscape": {
+        "final_output": "data/processed/{name}/bigscape/result_as{version}/index.html",
+        "description": "Cluster BGCs using BiG-SCAPE",
+        "references": [
+          "Navarro-Muñoz, J.C., Selem-Mojica, N., Mullowney, M.W. et al. A computational framework to explore large-scale biosynthetic diversity. Nat Chem Biol 16, 60–68 (2020). https://doi.org/10.1038/s41589-019-0400-9"
+        ]
+
     }
   }

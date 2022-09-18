@@ -31,15 +31,17 @@ rule antismash:
         antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} --logfile {log} 2>> {log}
         """
 
-rule copy_antismash_zip:
+rule copy_antismash:
     input:
-        zip = "data/interim/antismash/{version}/{strains}/{strains}.zip",
+        dir = "data/interim/antismash/{version}/{strains}",
     output:
-        zip = report("data/processed/{name}/antismash/{version}/{strains}.zip", caption="../report/file-antismash.rst", category="BGC Prediction", subcategory="AntiSMASH Results")
+        dir = directory("data/processed/{name}/antismash/{version}/{strains}")
     conda:
         "../envs/antismash.yaml"
-    log: "workflow/report/logs/antismash/copy_antismash_zip/copy_antismash_zip_{version}-{strains}-{name}.log"
+    log: "workflow/report/logs/antismash/copy_antismash/copy_antismash_{version}-{strains}-{name}.log"
     shell:
         """
-        cp {input.zip} {output.zip} 2>> {log}
+        base_dir=$PWD
+        (cd data/processed/{wildcards.name}/antismash/{wildcards.version} && ln -s $base_dir/{input.dir} {wildcards.strains}) 2>> {log}
         """
+

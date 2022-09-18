@@ -38,8 +38,7 @@ rules:
   checkm: FALSE
   gtdbtk: FALSE
   prokka-gbk: FALSE
-  antismash-summary: TRUE
-  antismash-zip: FALSE
+  antismash: TRUE
   query-bigslice: FALSE
   bigscape: FALSE
   bigslice: FALSE
@@ -64,4 +63,5 @@ resources_path:
   BiG-SCAPE: resources/BiG-SCAPE
   bigslice: resources/bigslice
   checkm: resources/checkm
+  gtdbtk: resources/gtdbtk
   #RNAmmer: resources/RNAmmer # If specified, will override Barnapp in Prokka
