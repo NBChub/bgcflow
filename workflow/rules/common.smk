@@ -94,7 +94,6 @@ def get_input_location(p):
 
     for i in p.sample_table.index:
         if p.sample_table.loc[i, "source"] == 'custom':
-            print(f" - Found user provided sample: {i}")
 
             # try if there is hardcoded path in "input_file"
             try:
@@ -345,7 +344,6 @@ def extract_project_information(config):
     for item in ['organism', 'genus', 'species', 'strain', 'closest_placement_reference', 'input_file']:
         if not item in df_samples.columns.tolist():
             df_samples = df_samples.reindex(columns = df_samples.columns.tolist() + [item])
-            print(df_samples['input_file'].to_dict(orient="list"))
 
     print(f"Step 3 Merging genome_ids across projects...\n", file=sys.stderr)
     df_samples = df_samples.fillna("")
