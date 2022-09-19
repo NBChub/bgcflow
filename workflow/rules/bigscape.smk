@@ -95,11 +95,10 @@ rule copy_bigscape:
     output:
         main = report("data/processed/{name}/bigscape/result_as{version}/index.html", caption="../report/bigscape.rst", patterns=["index.html"],
                       category="{name}", subcategory="BiG-SCAPE")
+    conda:
+        "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/bigscape/copy_bigscape_zip/copy_bigscape-{name}-{version}.log"
-    run:
-        input = Path(input.index)
-        output = Path(output.main).parent
-        output.mkdir(parents=True, exist_ok=True)
-        for item in input.parent.glob("*"):
-            target = output / item.name
-            target.symlink_to(item.resolve(), target_is_directory=True)
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/bigscape_copy.py {input.index} {output.main}
+        """
