@@ -6,8 +6,7 @@ rules:
   refseq-masher: FALSE
   checkm: FALSE
   prokka-gbk: FALSE
-  antismash-summary: TRUE
-  antismash-zip: FALSE
+  antismash: TRUE
   query-bigslice: FALSE
   bigscape: FALSE
   bigslice: FALSE
