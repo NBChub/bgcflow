@@ -2,7 +2,9 @@
 rule antismash_summary:
     input: 
         antismash_dir = "data/interim/bgcs/{name}/{version}",
-        final_copy = "data/processed/{name}/antismash/{version}"
+        final_copy = lambda wildcards: expand("data/processed/{name}/antismash/{version}/{strains}",
+                                               name=wildcards.name, version=wildcards.version,
+                                               strains=[s for s in list(PEP_PROJECTS[wildcards.name].sample_table.index)])
     output:
         df_antismash_summary = report("data/processed/{name}/tables/df_antismash_{version}_summary.csv", caption="../report/table-antismash.rst", category="{name}", subcategory="AntiSMASH Summary Table")
     conda:
