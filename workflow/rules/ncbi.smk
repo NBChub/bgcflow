@@ -33,7 +33,7 @@ else:
         output:
             ncbi_meta_path = report("data/processed/{name}/tables/df_ncbi_meta.csv", \
                 caption="../report/table-ncbi_meta.rst", \
-                category="Genome Overview", subcategory="Metadata"),
+                category="{name}", subcategory="NCBI Genome Overview"),
         conda:
             "../envs/bgc_analytics.yaml"
         log: "workflow/report/logs/ncbi/extract_ncbi_information/extract_ncbi_information-{name}.log"
@@ -65,7 +65,7 @@ else:
         output:
             patric_meta_path = report("data/processed/{name}/tables/df_patric_meta.csv", \
                 caption="../report/table-patric_meta.rst", \
-                category="{name}", subcategory="NCBI/Patric Genome Overview"),
+                category="{name}", subcategory="Patric Genome Overview"),
         conda:
             "../envs/bgc_analytics.yaml"
         log: "workflow/report/logs/patric/extract_patric_information/extract_patric_information-{name}.log"
