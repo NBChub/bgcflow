@@ -1,6 +1,5 @@
-*****************
 `BGCFlow Report`_
-*****************
+_________________
 
 This is a report for BGCFlow: A snakemake workflow to systematically analyze Biosynthetic Gene Clusters from a collection of genomes (pangenomes) from internal & public genome datasets.
 
@@ -11,6 +10,7 @@ To explore the result, use `bgflow_wrapper <https://github.com/matinnuhamunada/b
 
     bgflow_wrapper serve --port 9999
 
-Explore the results `here <http://localhost:9999/processed/>`_
+`Explore the results here <http://localhost:9999/data/processed/>`_
+____________________________________________________________________
 
 .. _BGCFlow: https://github.com/NBChub/bgcflow
