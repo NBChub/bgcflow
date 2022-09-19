@@ -1,3 +1,4 @@
+report: "report/workflow.rst"
 include: "rules/common.smk"
 
 ##### 1. Extract information from config file
