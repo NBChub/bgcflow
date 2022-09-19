@@ -4,7 +4,7 @@ rule antismash_summary:
         antismash_dir = "data/interim/bgcs/{name}/{version}",
         final_copy = "data/processed/{name}/antismash/{version}"
     output:
-        df_antismash_summary = report("data/processed/{name}/tables/df_antismash_{version}_summary.csv", caption="../report/table-antismash.rst", category="BGC Prediction", subcategory="Summary")
+        df_antismash_summary = report("data/processed/{name}/tables/df_antismash_{version}_summary.csv", caption="../report/table-antismash.rst", category="{name}", subcategory="AntiSMASH Summary Table")
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/bgc_analytics/antismash_summary-{version}-{name}.log"
