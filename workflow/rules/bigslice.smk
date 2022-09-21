@@ -25,6 +25,8 @@ rule bigslice:
     threads: 16
     params:
         threshold = 900
+    resources:
+        tmpdir = 'data/interim/tempdir'
     log:
         "workflow/report/logs/bigslice/bigslice/bigslice_{name}-antismash-{version}.log"
     shell:
@@ -60,6 +62,8 @@ rule query_bigslice:
         n_ranks = 10,
         query_name = "{name}",
         run_id = 6
+    resources:
+        tmpdir = 'data/interim/tempdir'
     shell:
         """
         TIMESTAMP=$(date --iso-8601=hours)
