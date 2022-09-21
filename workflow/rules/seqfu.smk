@@ -6,7 +6,9 @@ rule seqfu_stats:
     conda:
         "../envs/seqfu.yaml"
     log: "workflow/report/logs/seqfu/seqfu-{name}.log"
+    params:
+        precision = 3,
     shell:
         """
-        seqfu stats {input.fna} --csv -b > {output.all_csv} 2>> {log}
+        seqfu stats {input.fna} --csv -b --gc --precision 3 > {output.all_csv} 2>> {log}
         """
