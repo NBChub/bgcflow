@@ -35,13 +35,14 @@ rule copy_antismash:
     input:
         dir = "data/interim/antismash/{version}/{strains}",
     output:
-        dir = directory("data/processed/{name}/antismash/{version}/{strains}")
+        dir = directory("data/processed/{name}/antismash/{version}/{strains}"),
     conda:
         "../envs/antismash.yaml"
     log: "workflow/report/logs/antismash/copy_antismash/copy_antismash_{version}-{strains}-{name}.log"
     shell:
         """
         base_dir=$PWD
-        (cd data/processed/{wildcards.name}/antismash/{wildcards.version} && ln -s $base_dir/{input.dir} {wildcards.strains}) 2>> {log}
+        mkdir {output.dir}
+        (cd {output.dir} && for item in $(ls $base_dir/{input.dir}); do ln -s $base_dir/$item $(basename $item); done) 2>> {log}
         """
 
