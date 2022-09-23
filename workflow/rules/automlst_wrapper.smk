@@ -35,9 +35,10 @@ rule automlst_wrapper:
     conda: 
         "../envs/automlst_wrapper.yaml"
     resources:
-        tmpdir= "resources"
+        tmpdir= "data/interim/automlst_wrapper/tmpdir/"
     shell:
         """
+        mkdir -p "data/interim/automlst_wrapper/{wildcards.name}/singles" 2>> {log}
         python resources/automlst-simplified-wrapper-main/simplified_wrapper.py data/interim/automlst_wrapper/{wildcards.name} 2>> {log}
         """
 
