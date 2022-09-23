@@ -1,13 +1,22 @@
 from pathlib import Path
 import sys
+import logging
+
+log_format = '%(levelname)-8s %(asctime)s   %(message)s'
+date_format = "%d/%m %H:%M:%S"
+logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 def bigscape_copy(input_index, output_main):
     input = Path(input_index)
-    output = Path(output_main).parent
+    output = Path(output_main)
     output.mkdir(parents=True, exist_ok=True)
     for item in input.parent.glob("*"):
         target = output / item.name
-        target.symlink_to(item.resolve(), target_is_directory=True)
+        logging.debug(f"Generating symlink for: {target} --> {item.resolve()}")
+        try:
+            target.symlink_to(item.resolve(), target_is_directory=True)
+        except FileExistsError as e:
+            logging.debug(f"Got error:\n{e}")
     return
 
 if __name__ == "__main__":

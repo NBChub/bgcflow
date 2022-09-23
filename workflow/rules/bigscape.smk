@@ -93,12 +93,11 @@ rule copy_bigscape:
         index = "data/interim/bigscape/{name}_antismash_{version}/index.html",
         cytoscape = "data/processed/{name}/bigscape/for_cytoscape_antismash_{version}"
     output:
-        main = report("data/processed/{name}/bigscape/result_as{version}/index.html", caption="../report/bigscape.rst", patterns=["index.html"],
-                      category="{name}", subcategory="BiG-SCAPE")
+        main = "data/processed/{name}/bigscape/result_as{version}/index.html"
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/bigscape/copy_bigscape_zip/copy_bigscape-{name}-{version}.log"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/bigscape_copy.py {input.index} {output.main}
+        python workflow/bgcflow/bgcflow/data/bigscape_copy.py {input.index} data/processed/{wildcards.name}/bigscape/result_as{wildcards.version} 2>> {log}
         """
