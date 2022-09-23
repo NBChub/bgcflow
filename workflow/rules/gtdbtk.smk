@@ -10,7 +10,7 @@ sys.stderr.write(f'Using GTDB-tk release version: {gtdbtk_release_version}\n')
 
 rule install_gtdbtk:
     output:
-        checkm_db = directory("resources/gtdbtk/")
+        gtdbtk = directory("resources/gtdbtk/")
     conda:
         "../envs/gtdbtk.yaml"
     log: "workflow/report/logs/gtdbtk/gtdbtk-install_gtdbtk.log"
@@ -21,7 +21,6 @@ rule install_gtdbtk:
         """
         (cd resources && wget https://data.gtdb.ecogenomic.org/releases/release{params.release}/{params.release}.0/auxillary_files/gtdbtk_r{params.release_version}_data.tar.gz -nc) 2>> {log}
         (cd resources && mkdir -p gtdbtk && tar -xvzf gtdbtk_r{params.release_version}_data.tar.gz -C "gtdbtk" --strip 1 && rm gtdbtk_r{params.release_version}_data.tar.gz) 2>> {log}
-        conda env config vars set GTDBTK_DATA_PATH="$PWD/resources/gtdbtk" 2>> {log}
         """
 
 rule prepare_gtdbtk_input:

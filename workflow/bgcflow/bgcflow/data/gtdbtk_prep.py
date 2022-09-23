@@ -18,16 +18,20 @@ def assess_gtdb_json_file(item):
     with open(item, 'r') as json_file:
         data = json.load(json_file)
         genome_id = data['genome_id']
-        gtdb_release = data['gtdb_release']
-        metadata = data['metadata']
         try:
-            if type(metadata['genome']['accession']) == str:
-                logging.debug(f"{genome_id} can be found via GTDB-API release {gtdb_release}")
-                return None
+            gtdb_release = data['gtdb_release']
+            metadata = data['metadata']
+            try:
+                if type(metadata['genome']['accession']) == str:
+                    logging.debug(f"{genome_id} can be found via GTDB-API release {gtdb_release}")
+                    return None
+            except KeyError:
+                if metadata['detail'] == 'Genome not found':
+                    logging.debug(f"{genome_id} : {metadata['detail']} in GTDB-API release {gtdb_release}")
+                    return genome_id
         except KeyError:
-            if metadata['detail'] == 'Genome not found':
-                logging.debug(f"{genome_id} : {metadata['detail']} in GTDB-API release {gtdb_release}")
-                return genome_id
+            logging.debug(f"{genome_id} does not have metadata")
+            return genome_id
 
 def generate_symlink_gtdbtk(input_fna, gtdb_json, outdir):
     """
