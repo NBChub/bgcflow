@@ -45,17 +45,17 @@ rule automlst_wrapper:
 rule automlst_wrapper_out:
     input:
         tree = "data/interim/automlst_wrapper/{name}/raxmlpart.txt.treefile",
-        prokka_interim = "data/interim/prokka",
-        gtdb_interim = "data/interim/gtdb",
     output:
         automlst_processed = directory("data/processed/{name}/automlst_wrapper/"),
         final_tree = "data/processed/{name}/automlst_wrapper/final.newick",
     log: "workflow/report/logs/automlst_wrapper/automlst_wrapper/automlst_wrapper_out-{name}.log"
     params:
         automlst_interim = lambda wildcards: f"data/interim/automlst_wrapper/{wildcards.name}/",
+        prokka_interim = "data/interim/prokka",
+        gtdb_interim = "data/interim/gtdb",
     conda:
         "../envs/bgc_analytics.yaml"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/make_phylo_tree.py {params.automlst_interim} {output.automlst_processed} {input.prokka_interim} {input.gtdb_interim} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/make_phylo_tree.py {params.automlst_interim} {output.automlst_processed} {params.prokka_interim} {params.gtdb_interim} 2>> {log}
         """
