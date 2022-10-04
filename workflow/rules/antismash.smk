@@ -43,6 +43,6 @@ rule copy_antismash:
         """
         base_dir=$PWD
         mkdir {output.dir}
-        (cd {output.dir} && for item in $(ls $base_dir/{input.dir}); do ln -s $base_dir/$item $(basename $item); done) 2>> {log}
+        (cd {output.dir} && for item in $(ls $base_dir/{input.dir}); do ln -s $base_dir/{input.dir}/$item $(basename $item); done) 2>> {log}
         """
 
