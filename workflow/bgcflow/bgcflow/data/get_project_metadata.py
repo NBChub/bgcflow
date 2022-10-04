@@ -69,7 +69,7 @@ def get_all_metadata(config, rules_dict, BGCFlow_path, bgcflow_version):
             # non peppy input
             project = peppy.Project(str(BGCFlow_path / p['samples']), sample_table_index="genome_id")
             p = refine_bgcflow_project(project, p)
-            project_metadata[name] = "No description provided."
+            project_metadata[p['name']] = "No description provided."
 
         # get what rules are being used
         rule_used = {}
