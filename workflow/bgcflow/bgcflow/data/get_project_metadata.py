@@ -51,7 +51,7 @@ def get_bgcflow_metadata(bgcflow_path="."):
     
     return BGCFlow_path, config, rules_dict
 
-def get_all_metadata(config, rules_dict, BGCFlow_path):
+def get_all_metadata(config, rules_dict, BGCFlow_path, bgcflow_version):
     
     # Get Metadata
     logging.info("Getting metadata from projects...")
@@ -72,14 +72,15 @@ def get_all_metadata(config, rules_dict, BGCFlow_path):
             project_metadata[name] = "No description provided."
 
         # get what rules are being used
-        rule_used = []
+        rule_used = {}
         if 'rules' in project.config.keys():
             rules = project.config["rules"]
         else:
             rules = config["rules"]
         for r in rules.keys():
             if rules[r]:
-                rule_used.append(r)
+                bgcflow_rules = rules_dict[r]
+                rule_used[r] = bgcflow_rules
         project_metadata[name].update({'rule_used' : rule_used})
         
         # get sample size
@@ -93,15 +94,18 @@ def get_all_metadata(config, rules_dict, BGCFlow_path):
         citation_all.sort()
         project_metadata[name].update({'references' : citation_all})
         project_metadata[name]['references'] = list(set(project_metadata[name]['references']))
+
+        # get bgcflow_version
+        project_metadata[name]['bgcflow_version'] = bgcflow_version
     return project_metadata
 
-def get_project_metadata(project_name, outfile, bgcflow_path="."):
+def get_project_metadata(project_name, outfile, bgcflow_path=".", bgcflow_version="unknown"):
     BGCFlow_path, config, rules_dict = get_bgcflow_metadata(bgcflow_path)
-    all_metadata = get_all_metadata(config, rules_dict, BGCFlow_path)
+    all_metadata = get_all_metadata(config, rules_dict, BGCFlow_path, bgcflow_version)
     logging.info(f"Extracting project {project_name} metadata to {outfile}")
     with open(outfile, "w") as f:
         json.dump({project_name : all_metadata[project_name]}, f, indent=2)
     return
 
 if __name__ == "__main__":
-    get_project_metadata(sys.argv[1], sys.argv[2])
+    get_project_metadata(sys.argv[1], sys.argv[2], bgcflow_version=sys.argv[3])
