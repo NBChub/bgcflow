@@ -11,16 +11,18 @@ dependencies:
   - seaborn
   - pandas
   - plotly
+  - python-kaleido
   - bokeh
   - openpyxl
   - nbconvert
   - ipykernel
-  - ete3 
+  - ete3
+  - peppy
   - xlrd >= 1.0.0
   - zip
   - pip
   - pip:
       - biopython
+      - jupyterlab-dash
       - networkx
       - alive_progress
-      - kaleido

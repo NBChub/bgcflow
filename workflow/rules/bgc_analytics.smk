@@ -49,7 +49,9 @@ rule get_project_metadata:
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/bgc_analytics/get_{name}_metadata.log"
+    params:
+        bgcflow_version = __version__
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/get_project_metadata.py {wildcards.name} {output} 2> {log}
+        python workflow/bgcflow/bgcflow/data/get_project_metadata.py {wildcards.name} {output} {params.bgcflow_version} 2> {log}
         """
