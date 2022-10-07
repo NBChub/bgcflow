@@ -34,14 +34,7 @@ custom_resource_dir()
 ##### Target rules #####
 rule all:
     input:
-        expand("data/processed/{name}/tables/df_gtdb_meta.csv", name = PROJECT_IDS),
-        "workflow/report/dependency_versions.json",
-        expand("data/processed/{name}/metadata/project_metadata.json", name = PROJECT_IDS),
-        get_final_output(DF_SAMPLES, PEP_PROJECTS),
-
-onsuccess:
-    shell('echo $PWD')
-    shell('snakemake --use-conda -c 2 --snakefile workflow/Report --rerun-trigger mtime')
+        expand("data/processed/{name}/docs/seqfu.md", name = PROJECT_IDS),
 
 ##### Modules #####
 include: "rules/ncbi.smk"

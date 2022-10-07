@@ -20,6 +20,7 @@ dependencies:
   - peppy
   - xlrd >= 1.0.0
   - zip
+  - altair
   - pip
   - pip:
       - biopython
