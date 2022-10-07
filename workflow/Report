@@ -35,6 +35,7 @@ custom_resource_dir()
 rule all:
     input:
         expand("data/processed/{name}/docs/seqfu.md", name = PROJECT_IDS),
+        expand("data/processed/{name}/docs/antismash_{version}.ipynb", name = PROJECT_IDS, version = dependency_version["antismash"]),
 
 ##### Modules #####
 include: "rules/ncbi.smk"
