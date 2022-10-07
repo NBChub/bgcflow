@@ -38,7 +38,6 @@ rule seqfu_report:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/seqfu/seqfu-report-{name}.log"
     params:
-        report_dir = "data/processed/{name}",
         notebook = "workflow/notebook/seqfu.py.ipynb"
     shell:
         """

@@ -21,6 +21,7 @@ dependencies:
   - xlrd >= 1.0.0
   - zip
   - altair
+  - itables
   - pip
   - pip:
       - biopython

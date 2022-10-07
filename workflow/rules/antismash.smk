@@ -46,3 +46,21 @@ rule copy_antismash:
         (cd {output.dir} && for item in $(ls $base_dir/{input.dir}); do ln -s $base_dir/{input.dir}/$item $(basename $item); done) 2>> {log}
         """
 
+rule antismash_report:
+    input:
+        antismash = "data/processed/{name}/tables/df_antismash_{version}_summary.csv",
+        gtdb = "data/processed/{name}/tables/df_gtdb_meta.csv"
+    output:
+        notebook = "data/processed/{name}/docs/antismash_{version}.ipynb",
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log: "workflow/report/logs/antismash/antismash-report-{name}_{version}.log"
+    params:
+        notebook = "workflow/notebook/antismash.py.ipynb"
+    shell:
+        """
+        cp {params.notebook} {output.notebook}
+        jupyter nbconvert --to notebook --execute {output.notebook} --output antismash_{wildcards.version}.ipynb 2>> {log}
+        jupyter nbconvert --to markdown {output.notebook} --no-input --output antismash.md 2>> {log}
+        """
+
