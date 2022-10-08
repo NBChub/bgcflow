@@ -26,22 +26,3 @@ rule seqfu_combine:
         """
         python workflow/bgcflow/bgcflow/data/make_seqfu_table.py '{input.json}' {output.all_csv} 2>> {log}
         """
-
-rule seqfu_report:
-    input:
-        seqfu = "data/processed/{name}/tables/df_seqfu_stats.csv",
-        gtdb = "data/processed/{name}/tables/df_gtdb_meta.csv"
-    output:
-        notebook = "data/processed/{name}/docs/seqfu.ipynb",
-        markdown = "data/processed/{name}/docs/seqfu.md",
-    conda:
-        "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/seqfu/seqfu-report-{name}.log"
-    params:
-        notebook = "workflow/notebook/seqfu.py.ipynb"
-    shell:
-        """
-        cp {params.notebook} {output.notebook}
-        jupyter nbconvert --to notebook --execute {output.notebook} --output seqfu.ipynb 2>> {log}
-        jupyter nbconvert --to markdown {output.notebook} --no-input --output seqfu.md 2>> {log}
-        """

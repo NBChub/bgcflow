@@ -1,63 +1,18 @@
-report: "report/workflow.rst"
 include: "rules/common.smk"
 
 ##### 1. Extract information from config file
 DF_PROJECTS, DF_SAMPLES, PROKKA_DB_TABLE, PROKKA_DB_MAP, PEP_PROJECTS = extract_project_information(config)
 
-# generate centralized sample datasets
-bgcflow_util_dir = Path("data/interim/bgcflow_utils")
-bgcflow_util_dir.mkdir(parents=True, exist_ok=True)
-DF_SAMPLES.to_csv(bgcflow_util_dir / "samples.csv")
-
-##### 2. Generate wildcard constants #####
-PROJECT_IDS = list(DF_PROJECTS.name.unique())
-STRAINS = DF_SAMPLES.genome_id.to_list()
-CUSTOM = DF_SAMPLES[DF_SAMPLES.source.eq("custom")].genome_id.to_list()
-NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
-PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
-SAMPLE_PATHS = list(DF_PROJECTS.samples.unique())
-GTDB_PATHS = list(DF_PROJECTS["gtdb-tax"].dropna().unique())
-PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
-
-##### 3. Wildcard constraints #####
-wildcard_constraints:
-    strains="|".join(STRAINS),
-    ncbi="|".join(NCBI),
-    custom="|".join(CUSTOM),
-    patric="|".join(PATRIC),
-    name="|".join(PROJECT_IDS),
-    prokka_db="|".join(PROKKA_GBFF),
-
-##### 4. Generate user-defined local resources
-custom_resource_dir()
-
 ##### Target rules #####
+markdown_reports = []
+for name in PEP_PROJECTS.keys():
+    bgcflow_rules = [r for r in PEP_PROJECTS[name].config['rules'].keys() if PEP_PROJECTS[name].config['rules'][r]]
+    for b in bgcflow_rules:
+        markdown_reports.append(f"data/processed/{name}/docs/{b}.md")
+
 rule all:
     input:
-        expand("data/processed/{name}/docs/seqfu.md", name = PROJECT_IDS),
-        expand("data/processed/{name}/docs/antismash_{version}.ipynb", name = PROJECT_IDS, version = dependency_version["antismash"]),
+        markdown_reports,
 
 ##### Modules #####
-include: "rules/ncbi.smk"
-include: "rules/prokka.smk"
-include: "rules/antismash.smk"
-include: "rules/roary.smk"
-include: "rules/bigscape.smk"
-include: "rules/bigslice.smk"
-include: "rules/gtdb.smk"
-include: "rules/gtdbtk.smk"
-include: "rules/mash.smk"
-include: "rules/fastani.smk"
-include: "rules/refseq_masher.smk"
-include: "rules/patric.smk"
-include: "rules/eggnog.smk"
-include: "rules/mlst.smk"
-include: "rules/automlst_wrapper.smk"
-include: "rules/seqfu.smk"
-include: "rules/checkm.smk"
-include: "rules/bgc_analytics.smk"
-include: "rules/arts.smk"
-include: "rules/bgc.smk"
-include: "rules/diamond.smk"
-include: "rules/deeptfactor.smk"
-include: "rules/cblaster.smk"
+include: "rules/report.smk"
