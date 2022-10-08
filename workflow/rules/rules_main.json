@@ -116,7 +116,7 @@
       "final_output": "data/processed/{name}/tables/df_antismash_{version}_summary.csv",
       "description": "Summarizes antiSMASH result.",
       "references": [
-        "TODO: BGCFlow Citation. GITHUB: https://github.com/NBChub/bgcflow",
+        "Nuhamunada, M., B.O. Palsson, O. S. Mohite, and T. Weber. 2022. BGCFlow. GITHUB: https://github.com/NBChub/bgcflow",
         "antiSMASH 6.0: improving cluster detection and comparison capabilities. Kai Blin, Simon Shaw, Alexander M Kloosterman, Zach Charlop-Powers, Gilles P van Weezel, Marnix H Medema, & Tilmann Weber. Nucleic Acids Research (2021) doi: 10.1093/nar/gkab335."
       ]
     },
