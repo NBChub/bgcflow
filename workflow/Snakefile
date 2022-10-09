@@ -40,8 +40,7 @@ rule all:
         get_final_output(DF_SAMPLES, PEP_PROJECTS),
 
 onsuccess:
-    shell('echo $PWD')
-    shell('snakemake --use-conda -c 2 --snakefile workflow/Report --rerun-trigger mtime')
+    shell('snakemake --use-conda -c 2 --snakefile workflow/Report --rerun-trigger mtime --keep-going')
 
 ##### Modules #####
 include: "rules/ncbi.smk"
