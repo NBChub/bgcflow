@@ -9,10 +9,13 @@ for name in PEP_PROJECTS.keys():
     bgcflow_rules = [r for r in PEP_PROJECTS[name].config['rules'].keys() if PEP_PROJECTS[name].config['rules'][r]]
     for b in bgcflow_rules:
         markdown_reports.append(f"data/processed/{name}/docs/{b}.md")
+        markdown_reports.append(f"data/processed/{name}/metadata/project_metadata.json")
 
 rule all:
     input:
+        "workflow/report/dependency_versions.json",
         markdown_reports,
 
 ##### Modules #####
 include: "rules/report.smk"
+include: "rules/bgc_analytics.smk"
