@@ -22,9 +22,11 @@ dependencies:
   - zip
   - altair
   - itables
+  - scikit-learn
   - pip
   - pip:
       - biopython
       - jupyterlab-dash
       - networkx
       - alive_progress
+      - python-louvain
