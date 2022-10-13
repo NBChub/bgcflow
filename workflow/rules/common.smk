@@ -487,13 +487,13 @@ dependency_version = get_dependencies(dependencies)
 
 ##### 7. Customize final output based on config["rule"] values #####
 
-def get_project_outputs(config, PROJECT_IDS, df_samples, rule_dict_path="workflow/rules/rules_main.json"):
+def get_project_outputs(config, PROJECT_IDS, df_samples, rule_dict_path="workflow/rules.yaml"):
     """
     Generate outputs of a project given a TRUE value in config["rules"]
     """
 
     with open(rule_dict_path, "r") as file:
-        rule_dict = json.load(file)
+        rule_dict = yaml.safe_load(file)
 
     selection = [i for i in df_samples.index if PROJECT_IDS in df_samples.loc[i, "name"]]
 
