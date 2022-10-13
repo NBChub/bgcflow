@@ -2,8 +2,6 @@
 # rules: set value to FALSE if you want to run the analysis or FALSE if you don't
 rules:
   seqfu: FALSE
-  mlst: FALSE
-  refseq-masher: FALSE
   checkm: FALSE
   prokka-gbk: FALSE
   antismash: TRUE
@@ -15,5 +13,4 @@ rules:
   roary: TRUE
   eggnog: FALSE
   eggnog-roary: TRUE
-  diamond: FALSE
   deeptfactor: FALSE
