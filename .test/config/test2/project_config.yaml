@@ -2,8 +2,6 @@
 # rules: set value to TRUE if you want to run the analysis or TRUE if you don't
 rules:
   seqfu: TRUE
-  mlst: TRUE
-  refseq-masher: TRUE
   mash: TRUE
   fastani: TRUE
   checkm: TRUE
@@ -17,9 +15,6 @@ rules:
   arts: TRUE
   roary: FALSE
   eggnog: TRUE
-  eggnog-roary: FALSE
-  diamond: TRUE
-  diamond-roary: FALSE
   deeptfactor: TRUE
   deeptfactor-roary: FALSE
   cblaster-genome: TRUE
