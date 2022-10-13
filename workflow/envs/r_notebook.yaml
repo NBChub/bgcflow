@@ -1,0 +1,23 @@
+name: r_notebook
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - jupyterlab>3
+  - ipywidgets>=7.6
+  - nbconvert
+  - pandas
+  - r-irkernel
+  - r-tidyverse 
+  - bioconductor-ggtree
+  - bioconductor-ggtreeextra
+  - r-plotly
+  - r-ggstar
+  - r-repr
+  - r-irdisplay
+  - r-pbdzmq
+  - r-devtools
+  - r-phytools
+  - pandoc
+  - rpy2
