@@ -45,9 +45,9 @@ def get_bgcflow_metadata(bgcflow_path="."):
     
     logging.info("Getting rules information...")
     # rules_dict
-    rules_dict_path = BGCFlow_path / "workflow/rules/rules_main.json"
+    rules_dict_path = BGCFlow_path / "workflow/rules.yaml"
     with open(rules_dict_path, "r") as f:
-        rules_dict = json.load(f)
+        rules_dict = yaml.safe_load(f)
     
     return BGCFlow_path, config, rules_dict
 
