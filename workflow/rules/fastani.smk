@@ -23,19 +23,10 @@ rule fastani_convert:
         fastani_matrix = "data/interim/fastani/{name}/fastani_out.tsv.matrix",
     output:
         df_fastani = "data/processed/{name}/fastani/df_fastani.csv"
-    run:
-        df_raw = pd.read_csv(input.fastani_matrix, index_col=0)
-        genome_id_list = []
-        for idx in df_raw.index:
-            genome_id = idx.split('\t')[0].split('/')[-1].split('.fna')[0]
-            genome_id_list.append(genome_id)
-
-        df = pd.DataFrame(0, index=genome_id_list, columns=genome_id_list)
-        for idx in df_raw.index:
-            genome_id = idx.split('\t')[0].split('/')[-1].split('.fna')[0]
-            for cntr in range(len(idx.split('\t'))):
-                if cntr > 0:
-                    df.loc[genome_id, genome_id_list[cntr-1]] = float(idx.split('\t')[cntr])
-                    df.loc[genome_id_list[cntr-1], genome_id] = float(idx.split('\t')[cntr])
-        df.index.name = 'genome_id'
-        df.to_csv(output.df_fastani)
+    log: "workflow/report/logs/fastani/fastani-convert-{name}.log"
+    conda:
+        "../envs/bgc_analytics.yaml"
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/convert_triangular_matrix.py {input.fastani_matrix} {output.df_fastani} 2>> {log}
+        """
