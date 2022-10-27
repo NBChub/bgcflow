@@ -35,7 +35,7 @@ def get_roary_data(roary_interim_folder, roary_processed_folder, core=0.99, soft
     '''
     
     gene_presence_path = os.path.join(roary_interim_folder, 'gene_presence_absence.csv')
-    df_gene_presence_summary = pd.read_csv(gene_presence_path, index_col='Gene')
+    df_gene_presence_summary = pd.read_csv(gene_presence_path, index_col='Gene', low_memory=False)
     
     # Extract gene annotation columns to separate dataframe
     gene_summary_columns = ['Non-unique Gene name', 'Annotation', 'No. isolates', 'No. sequences',
