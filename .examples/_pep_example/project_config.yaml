@@ -14,5 +14,21 @@ gtdb-tax: gtdbtk.bac120.summary.tsv
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
 rules:
   seqfu: TRUE
-  mlst: TRUE
-  refseq-masher: TRUE
+  mash: TRUE
+  fastani: TRUE
+  checkm: TRUE
+  gtdbtk: TRUE
+  prokka-gbk: TRUE
+  antismash: TRUE
+  query-bigslice: TRUE
+  bigscape: TRUE
+  bigslice: TRUE
+  automlst-wrapper: TRUE
+  arts: TRUE
+  roary: TRUE
+  eggnog: TRUE
+  eggnog-roary: TRUE
+  deeptfactor: TRUE
+  deeptfactor-roary: TRUE
+  cblaster-genome: TRUE
+  cblaster-bgc: TRUE
