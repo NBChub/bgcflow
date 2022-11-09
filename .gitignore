@@ -17,3 +17,4 @@ workflow/bgcflow/build*
 !data/raw/fasta/P8-2B-3.1.fna
 !data/*/*/.gitkeep
 !data/*/README.md
+.panoptes.db
