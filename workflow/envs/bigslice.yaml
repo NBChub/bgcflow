@@ -11,4 +11,4 @@ dependencies:
   - unzip
   - pip
   - pip:
-    - bigslice
+    - git+https://github.com/medema-group/bigslice.git@cd023daaf13ed24f533546de6d6204d1955f2b47
