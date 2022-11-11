@@ -6,9 +6,9 @@ rule install_checkm:
     log: "workflow/report/logs/checkm/checkm-install_checkm.log"
     shell:
         """
-        (cd resources && wget -O checkm_data_2015_01_16.tar.gz https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz) 2>> {log}
-        (cd resources && mkdir -p checkm && tar -xvf checkm_data_2015_01_16.tar.gz -C checkm && rm checkm_data_2015_01_16.tar.gz) 2>> {log}
-        checkm data setRoot resources/checkm 2>> {log}
+        (cd resources && wget -O checkm_data_2015_01_16.tar.gz https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz) &>> {log}
+        (cd resources && mkdir -p checkm && tar -xvf checkm_data_2015_01_16.tar.gz -C checkm && rm checkm_data_2015_01_16.tar.gz) &>> {log}
+        checkm data setRoot resources/checkm &>> {log}
         """
 
 rule checkm:
