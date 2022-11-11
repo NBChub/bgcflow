@@ -72,7 +72,10 @@ def gtdb_prep(genome_id, outfile, samples_table, tax_path, release='R202'): # wh
             logging.info("Inferring taxonomic placement from provided genus information....")
             gtdb_tax['genome_id'] = genome_id
             gtdb_tax.update(get_parent_taxon_GTDB(query.genus.values[0], "genus", release))
-            gtdb_tax['gtdb_taxonomy']["species"] = f"s__{gtdb_tax['gtdb_taxonomy']['genus'].split('__')[-1]} sp."
+            try:
+                gtdb_tax['gtdb_taxonomy']["species"] = f"s__{gtdb_tax['gtdb_taxonomy']['genus'].split('__')[-1]} sp."
+            except KeyError:
+                gtdb_tax = empty_result(genome_id)
 
         # If no information is found, return an empty dict
         else:
