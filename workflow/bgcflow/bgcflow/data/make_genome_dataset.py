@@ -51,7 +51,7 @@ def write_genome_table(input_json, samples_table, genome_table):
     # Save dataframes to csv tables
     genome_table = Path(genome_table)
     genome_table.parent.mkdir(parents=True, exist_ok=True)
-    df_genomes.to_csv(genome_table)
+    df_genomes.to_csv(genome_table, index=False)
     logging.info(f"Job done")
     return None
 

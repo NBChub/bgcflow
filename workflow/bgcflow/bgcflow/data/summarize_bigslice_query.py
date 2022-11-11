@@ -127,6 +127,7 @@ def summarize_bigslice_query(bigslice_query_path, output_path, database_path="re
 
     # outputting as csv table
     as_table = pd.DataFrame.from_dict(gcf_summary).T
+    as_table.index.name = "gcf_id"
     as_table.to_csv(output / "gcf_summary.csv")
     
     logging.info("Job done")
