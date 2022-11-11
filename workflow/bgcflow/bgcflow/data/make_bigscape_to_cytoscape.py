@@ -16,6 +16,7 @@ def get_cluster_dataframes(df_genomes, df_nodes, mibig_bgc_table, as_dir = '../d
     '''
     Returns two dataframes of clusters with information from genomes and MIBIG
     '''
+
     df_clusters = pd.DataFrame(columns=['product', 'bigscape_class', 'genome_id', 'accn_id'])
     df_known = pd.DataFrame(columns=['product', 'bigscape_class', 'biosyn_class', 'compounds', 'chem_acts', 
                     'accession', 'completeness', 'organism_name', 'ncbi_tax_id', 'publications', 'evidence'])
@@ -30,6 +31,7 @@ def get_cluster_dataframes(df_genomes, df_nodes, mibig_bgc_table, as_dir = '../d
                 genome_dir = os.path.join(as_dir, genome_id)
                 bgc_id_list = [region[:-4] for region in os.listdir(genome_dir) if 'region0' in region]
                 for bgc_id in bgc_id_list:
+                    logging.debug(f'Processing {bgc_id}')
                     if bgc_id in df_nodes.index:
                         df_clusters.loc[bgc_id, 'genome_id'] = genome_id
                         df_clusters.loc[bgc_id, 'product'] = df_nodes.loc[bgc_id, 'Product Prediction']
@@ -300,6 +302,14 @@ def run_family_analysis(cutoff, net_data_path, df_clusters, df_genomes, df_known
     logging.debug(f'Some of the common known BGCs{chr(10)}{chr(10)}{df_known_families.iloc[:20,1:3]}{chr(10)}')
     df_unknown_families = df_families[df_families.fam_type == 'unknown_family']
     logging.debug(f'Some of the common unknown BGCs:{chr(10)}{chr(10)}{df_unknown_families.iloc[:20,1:3]}{chr(10)}')
+
+    # Assign index name
+    df_network.index.name = 'bigscape_edge_id'
+    df_known.index.name = 'bgc_id'
+    df_families.index.name = f'fam_id_{cutoff}'
+    df_clusters.index.name = 'bgc_id'
+    df_family_presence.index.name = 'genome_id'
+
     # Save all the dataframes
     df_network.to_csv(f'{output_dir}/{query_name}_df_network_' + cutoff + '.csv')
     df_known.to_csv(f'{output_dir}/{query_name}_df_known_' + cutoff + '.csv') 
@@ -333,10 +343,11 @@ def process_bigscape_output(bigscape_directory, as_dir, df_genomes_path, mibig_b
     df_nodes = pd.read_csv(node_annot_path, index_col='BGC', sep='\t')
 
     # Generate df_clusters and df_known dataframe
-    df_genomes = pd.read_csv(df_genomes_path, index_col=0)
+    df_genomes = pd.read_csv(df_genomes_path).set_index("genome_id", drop=False)
     df_genomes.to_csv(f'{output_dir}/df_genome_antismash_summary.csv')
     
     df_known_all, df_clusters = get_cluster_dataframes(df_genomes, df_nodes, mibig_bgc_table, as_dir)
+    assert len(df_clusters) > 0, f"df_cluster is empty {df_clusters.shape}. Check folder data/interim/bgcs to have proper antismash region genbank files."
     # Enrich dataframes with BiGSCAPE information on GCCs and GCFs with cutoffs
     df_clusters, df_known_all = add_bigscape_families(df_clusters, df_known_all, net_data_path)
 
