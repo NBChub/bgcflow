@@ -1,5 +1,11 @@
 import pandas as pd
+import numpy as np
 import sys
+import logging
+
+log_format = '%(levelname)-8s %(asctime)s   %(message)s'
+date_format = "%d/%m %H:%M:%S"
+logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 def triangle_convert(matrix, outfile):
     df_raw = pd.read_csv(matrix, index_col=0)
@@ -13,8 +19,16 @@ def triangle_convert(matrix, outfile):
         genome_id = idx.split('\t')[0].split('/')[-1].split('.fna')[0]
         for cntr in range(len(idx.split('\t'))):
             if cntr > 0:
-                df.loc[genome_id, genome_id_list[cntr-1]] = float(idx.split('\t')[cntr])
-                df.loc[genome_id_list[cntr-1], genome_id] = float(idx.split('\t')[cntr])
+                value = idx.split('\t')[cntr]
+                
+                # if value is NA, replace with numpy null
+                if value == "NA":
+                    value = np.nan
+                else:
+                    value = float(value)
+                
+                df.loc[genome_id, genome_id_list[cntr-1]] = value
+                df.loc[genome_id_list[cntr-1], genome_id] = value
     df.index.name = 'genome_id'
     df.to_csv(outfile)
     return
