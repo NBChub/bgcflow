@@ -5,39 +5,38 @@ eggnog:
   references:
   - 'eggNOG-mapper v2: functional annotation, orthology assignments, and domain prediction
     at the metagenomic scale. Carlos P. Cantalapiedra, Ana Hernandez-Plaza, Ivica
-    Letunic, Peer Bork, Jaime Huerta-Cepas. 2021. Molecular Biology and Evolution,
-    msab293, https://doi.org/10.1093/molbev/msab293'
+    Letunic, Peer Bork, Jaime Huerta-Cepas. 2021. [Molecular Biology and Evolution,
+    msab293](https://doi.org/10.1093/molbev/msab293)'
   - 'eggNOG 5.0: a hierarchical, functionally and phylogenetically annotated orthology
     resource based on 5090 organisms and 2502 viruses. Jaime Huerta-Cepas, Damian
     Szklarczyk, Davide Heller, Ana Hernández-Plaza, Sofia K Forslund, Helen Cook,
     Daniel R Mende, Ivica Letunic, Thomas Rattei, Lars J Jensen, Christian von Mering,
-    Peer Bork Nucleic Acids Res. 2019 Jan 8; 47(Database issue): D309–D314. doi: 10.1093/nar/gky1085'
+    Peer Bork [Nucleic Acids Res. 2019 Jan 8; 47(Database issue): D309–D314. doi: 10.1093/nar/gky1085](https://academic.oup.com/nar/article/47/D1/D309/5173662)'
 mash:
   final_output: data/processed/{name}/mash/df_mash.csv
   description: Calculate distance estimation for all samples using MinHash.
   references:
   - 'Mash: fast genome and metagenome distance estimation using MinHash. Ondov BD,
-    Treangen TJ, Melsted P, Mallonee AB, Bergman NH, Koren S, Phillippy AM. Genome
-    Biol. 2016 Jun 20;17(1):132. doi: 10.1186/s13059-016-0997-x.'
+    Treangen TJ, Melsted P, Mallonee AB, Bergman NH, Koren S, Phillippy AM. [Genome
+    Biol. 2016 Jun 20;17(1):132. doi: 10.1186/s13059-016-0997-x.](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0997-x)'
   - 'Mash Screen: high-throughput sequence containment estimation for genome discovery.
     Ondov BD, Starrett GJ, Sappington A, Kostic A, Koren S, Buck CB, Phillippy AM.
-    Genome Biol. 2019 Nov 5;20(1):232. doi: 10.1186/s13059-019-1841-x.'
+    [Genome Biol. 2019 Nov 5;20(1):232. doi: 10.1186/s13059-019-1841-x.](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1841-x)'
 fastani:
   final_output: data/processed/{name}/fastani/df_fastani.csv
   description: Do pairwise Average Nucleotide Identity (ANI) calculation across all
     samples.
   references:
-  - Jain, C., Rodriguez-R, L.M., Phillippy, A.M. et al. High throughput ANI analysis
+  - 'Jain, C., Rodriguez-R, L.M., Phillippy, A.M. et al. High throughput ANI analysis
     of 90K prokaryotic genomes reveals clear species boundaries. Nat Commun 9, 5114
-    (2018). https://doi.org/10.1038/s41467-018-07641-9
+    (2018). [https://doi.org/10.1038/s41467-018-07641-9](https://doi.org/10.1038/s41467-018-07641-9)'
 automlst-wrapper:
   final_output: data/processed/{name}/automlst_wrapper/final.newick
-  description: Simplified Tree building using autoMLST (https://github.com/NBChub/automlst-simplified-wrapper)
+  description: Simplified Tree building using [autoMLST](https://github.com/NBChub/automlst-simplified-wrapper)
   references:
   - 'Mohammad Alanjary, Katharina Steinke, Nadine Ziemert, AutoMLST: an automated
     web server for generating multi-locus species trees highlighting natural product
-    potential, Nucleic Acids Research, Volume 47, Issue W1, 02 July 2019, Pages W276–W282,
-    https://doi.org/10.1093/nar/gkz282'
+    potential,[Nucleic Acids Research, Volume 47, Issue W1, 02 July 2019, Pages W276–W282](https://doi.org/10.1093/nar/gkz282)'
 roary:
   final_output: data/processed/{name}/roary/df_gene_presence_binary.csv
   description: Build pangenome using Roary.
@@ -45,7 +44,7 @@ roary:
   - 'Andrew J. Page, Carla A. Cummins, Martin Hunt, Vanessa K. Wong, Sandra Reuter,
     Matthew T. G. Holden, Maria Fookes, Daniel Falush, Jacqueline A. Keane, Julian
     Parkhill, ''Roary: Rapid large-scale prokaryote pan genome analysis'', Bioinformatics,
-    2015;31(22):3691-3693 doi:10.1093/bioinformatics/btv421'
+    2015;31(22):3691-3693 [doi:10.1093/bioinformatics/btv421](https://academic.oup.com/bioinformatics/article/31/22/3691/240757)'
 eggnog-roary:
   final_output: data/interim/eggnog_roary/{name}/
   description: Annotate Roary output using eggNOG mapper
@@ -53,21 +52,21 @@ eggnog-roary:
   - 'Andrew J. Page, Carla A. Cummins, Martin Hunt, Vanessa K. Wong, Sandra Reuter,
     Matthew T. G. Holden, Maria Fookes, Daniel Falush, Jacqueline A. Keane, Julian
     Parkhill, ''Roary: Rapid large-scale prokaryote pan genome analysis'', Bioinformatics,
-    2015;31(22):3691-3693 doi:10.1093/bioinformatics/btv421'
+    2015;31(22):3691-3693 [doi:10.1093/bioinformatics/btv421](https://academic.oup.com/bioinformatics/article/31/22/3691/240757)'
   - 'eggNOG-mapper v2: functional annotation, orthology assignments, and domain prediction
     at the metagenomic scale. Carlos P. Cantalapiedra, Ana Hernandez-Plaza, Ivica
-    Letunic, Peer Bork, Jaime Huerta-Cepas. 2021. Molecular Biology and Evolution,
-    msab293, https://doi.org/10.1093/molbev/msab293'
+    Letunic, Peer Bork, Jaime Huerta-Cepas. 2021. [Molecular Biology and Evolution,
+    msab293](https://doi.org/10.1093/molbev/msab293)'
   - 'eggNOG 5.0: a hierarchical, functionally and phylogenetically annotated orthology
     resource based on 5090 organisms and 2502 viruses. Jaime Huerta-Cepas, Damian
     Szklarczyk, Davide Heller, Ana Hernández-Plaza, Sofia K Forslund, Helen Cook,
     Daniel R Mende, Ivica Letunic, Thomas Rattei, Lars J Jensen, Christian von Mering,
-    Peer Bork Nucleic Acids Res. 2019 Jan 8; 47(Database issue): D309–D314. doi: 10.1093/nar/gky1085'
+    Peer Bork Nucleic Acids Res. 2019 Jan 8; 47(Database issue): D309–D314. [doi: 10.1093/nar/gky1085](https://academic.oup.com/nar/article/47/D1/D309/5173662)'
 seqfu:
   final_output: data/processed/{name}/tables/df_seqfu_stats.csv
   description: Calculate sequence statistics using SeqFu.
   references:
-  - 'Telatin, A., Birolo, G., & Fariselli, P. SeqFu [Computer software]. GITHUB: https://github.com/telatin/seqfu2'
+  - 'Telatin, A., Birolo, G., & Fariselli, P. SeqFu [Computer software]. GITHUB: [https://github.com/telatin/seqfu2](https://github.com/telatin/seqfu2)'
 rnammer:
   final_output: resources/rnammer_test.txt
   description: Annotate ribosoma RNA genes with RNAmmer.
@@ -81,24 +80,24 @@ bigslice:
   references:
   - 'Satria A Kautsar, Justin J J van der Hooft, Dick de Ridder, Marnix H Medema,
     BiG-SLiCE: A highly scalable tool maps the diversity of 1.2 million biosynthetic
-    gene clusters, GigaScience, Volume 10, Issue 1, January 2021, giaa154. https://doi.org/10.1093/gigascience/giaa154'
+    gene clusters, [GigaScience, Volume 10, Issue 1, January 2021, giaa154](https://doi.org/10.1093/gigascience/giaa154)'
 query-bigslice:
   final_output: data/processed/{name}/bigslice/query_as_{version}/
   description: Map BGCs to BiG-FAM database (https://bigfam.bioinformatics.nl/)
   references:
   - 'Satria A Kautsar, Kai Blin, Simon Shaw, Tilmann Weber, Marnix H Medema, BiG-FAM:
     the biosynthetic gene cluster families database, Nucleic Acids Research, gkaa812,
-    https://doi.org/10.1093/nar/gkaa812'
+    [https://doi.org/10.1093/nar/gkaa812](https://doi.org/10.1093/nar/gkaa812)'
   - 'Satria A Kautsar, Justin J J van der Hooft, Dick de Ridder, Marnix H Medema,
     BiG-SLiCE: A highly scalable tool maps the diversity of 1.2 million biosynthetic
-    gene clusters, GigaScience, Volume 10, Issue 1, January 2021, giaa154. https://doi.org/10.1093/gigascience/giaa154'
+    gene clusters, [GigaScience, Volume 10, Issue 1, January 2021, giaa154.](https://doi.org/10.1093/gigascience/giaa154)'
 checkm:
   final_output: data/processed/{name}/tables/df_checkm_stats.csv
   description: Assess genome quality with CheckM.
   references:
   - 'Parks DH, Imelfort M, Skennerton CT, Hugenholtz P, Tyson GW. 2014. Assessing
     the quality of microbial genomes recovered from isolates, single cells, and metagenomes.
-    Genome Research, 25: 1043-1055.'
+    [Genome Research, 25: 1043-1055.](https://genome.cshlp.org/content/25/7/1043.long)'
 gtdbtk:
   final_output: data/processed/{name}/tables/gtdbtk.bac120.summary.tsv
   description: Taxonomic placement with GTDB-Tk
@@ -106,35 +105,33 @@ gtdbtk:
   - 'Chaumeil PA, et al. 2019. GTDB-Tk: A toolkit to classify genomes with the Genome
     Taxonomy Database. Bioinformatics, btz848.'
   - Parks DH, et al. 2020. A complete domain-to-species taxonomy for Bacteria and
-    Archaea. Nature Biotechnology, https://doi.org/10.1038/s41587-020-0501-8.
+    Archaea. Nature Biotechnology, [https://doi.org/10.1038/s41587-020-0501-8]([https://doi.org/10.1038/s41587-020-0501-8).
   - Parks DH, et al. 2018. A standardized bacterial taxonomy based on genome phylogeny
-    substantially revises the tree of life. Nature Biotechnology, http://dx.doi.org/10.1038/nbt.4229.
+    substantially revises the tree of life. Nature Biotechnology, [http://dx.doi.org/10.1038/nbt.4229](http://dx.doi.org/10.1038/nbt.4229).
 prokka-gbk:
   final_output: data/processed/{name}/genbank/{strains}.gbk
   description: Copy annotated genbank results.
   references:
-  - 'Seemann T. Prokka: rapid prokaryotic genome annotation. Bioinformatics 2014 Jul
-    15;30(14):2068-9. PMID:24642063'
+  - 'Seemann T. Prokka: rapid prokaryotic genome annotation. [Bioinformatics 2014 Jul
+    15;30(14):2068-9. PMID:24642063](https://academic.oup.com/bioinformatics/article/30/14/2068/2390517?login=false)'
 antismash:
   final_output: data/processed/{name}/tables/df_antismash_{version}_summary.csv
   description: Summarizes antiSMASH result.
   references:
-  - 'Nuhamunada, M., B.O. Palsson, O. S. Mohite, and T. Weber. 2022. BGCFlow. GITHUB:
-    https://github.com/NBChub/bgcflow'
   - 'antiSMASH 6.0: improving cluster detection and comparison capabilities. Kai Blin,
     Simon Shaw, Alexander M Kloosterman, Zach Charlop-Powers, Gilles P van Weezel,
-    Marnix H Medema, & Tilmann Weber. Nucleic Acids Research (2021) doi: 10.1093/nar/gkab335.'
+    Marnix H Medema, & Tilmann Weber. Nucleic Acids Research (2021) [doi: 10.1093/nar/gkab335.](https://academic.oup.com/nar/article/49/W1/W29/6274535?login=false)'
 arts:
   final_output: data/interim/arts/antismash-{version}/{strains}/
   description: Run Antibiotic Resistant Target Seeker (ARTS) on samples.
   references:
   - 'Mungan,M.D., Alanjary,M., Blin,K., Weber,T., Medema,M.H. and Ziemert,N. (2020)
     ARTS 2.0: feature updates and expansion of the Antibiotic Resistant Target Seeker
-    for comparative genome mining. Nucleic Acids Res.,10.1093/nar/gkaa374'
-  - Alanjary,M., Kronmiller,B., Adamek,M., Blin,K., Weber,T., Huson,D., Philmus,B.
+    for comparative genome mining. [Nucleic Acids Res.,10.1093/nar/gkaa374](https://academic.oup.com/nar/article/48/W1/W546/5840579)'
+  - 'Alanjary,M., Kronmiller,B., Adamek,M., Blin,K., Weber,T., Huson,D., Philmus,B.
     and Ziemert,N. (2017) The Antibiotic Resistant Target Seeker (ARTS), an exploration
     engine for antibiotic cluster prioritization and novel drug target discovery.
-    Nucleic Acids Res.,10.1093/nar/gkx360
+    [Nucleic Acids Res.,10.1093/nar/gkx360](https://academic.oup.com/nar/article/45/W1/W42/3787867?login=false)'
 deeptfactor:
   final_output: data/interim/deeptfactor/{strains}/
   description: Use deep learning to find Transcription Factors.
@@ -172,5 +169,5 @@ bigscape:
   description: Cluster BGCs using BiG-SCAPE
   references:
   - Navarro-Muñoz, J.C., Selem-Mojica, N., Mullowney, M.W. et al. A computational
-    framework to explore large-scale biosynthetic diversity. Nat Chem Biol 16, 60–68
-    (2020). https://doi.org/10.1038/s41589-019-0400-9
+    framework to explore large-scale biosynthetic diversity. [Nat Chem Biol 16, 60–68
+    (2020)](https://doi.org/10.1038/s41589-019-0400-9)
