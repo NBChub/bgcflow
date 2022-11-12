@@ -203,6 +203,7 @@ def read_pep_project(p, prokka_db_table, prokka_db_map):
         df_sample.loc[:, 'sample_paths'] = p.config['sample_table']
         df_sample.loc[:, 'prokka-db'] = np.nan
         df_sample.loc[:, 'gtdb_paths'] = np.nan
+        df_sample.loc[:, 'ref_annotation'] = np.nan
 
         # load prokka_db
         if 'prokka-db' in p.config.keys():

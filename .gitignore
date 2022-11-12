@@ -18,3 +18,4 @@ workflow/bgcflow/build*
 !data/*/*/.gitkeep
 !data/*/README.md
 .panoptes.db
+notebooks/
