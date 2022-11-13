@@ -133,21 +133,21 @@ arts:
     engine for antibiotic cluster prioritization and novel drug target discovery.
     [Nucleic Acids Res.,10.1093/nar/gkx360](https://academic.oup.com/nar/article/45/W1/W42/3787867?login=false)'
 deeptfactor:
-  final_output: data/interim/deeptfactor/{strains}/
+  final_output: data/processed/{name}/tables/df_deeptfactor.csv
   description: Use deep learning to find Transcription Factors.
   references:
   - 'Kim G.B., Gao Y., Palsson B.O., Lee S.Y. 2020. DeepTFactor: A deep learning-based
-    tool for the prediction of transcription factors. PNAS. doi: 10.1073/pnas.2021171118'
+    tool for the prediction of transcription factors. [PNAS. doi: 10.1073/pnas.2021171118](https://www.pnas.org/doi/10.1073/pnas.2021171118)'
 deeptfactor-roary:
   final_output: data/interim/deeptfactor_roary/{name}/
   description: Use DeepTFactor on Roary outputs.
   references:
   - 'Kim G.B., Gao Y., Palsson B.O., Lee S.Y. 2020. DeepTFactor: A deep learning-based
-    tool for the prediction of transcription factors. PNAS. doi: 10.1073/pnas.2021171118'
+    tool for the prediction of transcription factors. [PNAS. doi: 10.1073/pnas.2021171118](https://www.pnas.org/doi/10.1073/pnas.2021171118)'
   - 'Andrew J. Page, Carla A. Cummins, Martin Hunt, Vanessa K. Wong, Sandra Reuter,
     Matthew T. G. Holden, Maria Fookes, Daniel Falush, Jacqueline A. Keane, Julian
-    Parkhill, ''Roary: Rapid large-scale prokaryote pan genome analysis'', Bioinformatics,
-    2015;31(22):3691-3693 doi:10.1093/bioinformatics/btv421'
+    Parkhill, ''Roary: Rapid large-scale prokaryote pan genome analysis'', [Bioinformatics,
+    2015;31(22):3691-3693 doi:10.1093/bioinformatics/btv421](https://academic.oup.com/bioinformatics/article/31/22/3691/240757)'
 cblaster-genome:
   final_output: data/processed/{name}/cblaster/genomes/
   description: Build diamond database of genomes for cblaster search.
@@ -155,7 +155,9 @@ cblaster-genome:
   - 'Gilchrist, C., Booth, T. J., van Wersch, B., van Grieken, L., Medema, M. H.,
     & Chooi, Y. (2021). cblaster: a remote search tool for rapid identification and
     visualisation of homologous gene clusters (Version 1.3.9) [Computer software].
-    https://doi.org/10.1101/2020.11.08.370601'
+    [https://doi.org/10.1101/2020.11.08.370601](https://doi.org/10.1101/2020.11.08.370601)'
+  - 'Buchfink, B., Xie, C. & Huson, D. H. Fast and sensitive protein alignment using DIAMOND. 
+    [Nat. Methods 12, 59–60 (2015)](https://www.nature.com/articles/nmeth.3176).'
 cblaster-bgc:
   final_output: data/processed/{name}/cblaster/bgcs/{version}/
   description: Build diamond database of BGCs for cblaster search.
@@ -163,7 +165,9 @@ cblaster-bgc:
   - 'Gilchrist, C., Booth, T. J., van Wersch, B., van Grieken, L., Medema, M. H.,
     & Chooi, Y. (2021). cblaster: a remote search tool for rapid identification and
     visualisation of homologous gene clusters (Version 1.3.9) [Computer software].
-    https://doi.org/10.1101/2020.11.08.370601'
+    [https://doi.org/10.1101/2020.11.08.370601](https://doi.org/10.1101/2020.11.08.370601)'
+  - 'Buchfink, B., Xie, C. & Huson, D. H. Fast and sensitive protein alignment using DIAMOND. 
+    [Nat. Methods 12, 59–60 (2015)](https://www.nature.com/articles/nmeth.3176).'
 bigscape:
   final_output: data/processed/{name}/bigscape/result_as{version}/index.html
   description: Cluster BGCs using BiG-SCAPE
