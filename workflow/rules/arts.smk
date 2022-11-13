@@ -5,7 +5,7 @@ rule arts:
         folder = directory("data/interim/arts/antismash-{version}/{strains}/"),
     conda:
         "../envs/arts.yaml"
-    threads: 8
+    threads: 2
     log: "workflow/report/logs/arts/arts/arts-{version}-{strains}.log"
     params:
         ref = "resources/arts/reference/actinobacteria/",
