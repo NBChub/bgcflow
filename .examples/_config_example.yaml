@@ -30,9 +30,6 @@ projects:
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
 rules:
   seqfu: FALSE
-  patric_meta: FALSE
-  mlst: FALSE
-  refseq-masher: FALSE
   mash: FALSE
   fastani: FALSE
   checkm: FALSE
@@ -47,7 +44,6 @@ rules:
   roary: FALSE
   eggnog: FALSE
   eggnog-roary: FALSE
-  diamond: FALSE
   diamond-roary: FALSE
   deeptfactor: FALSE
   deeptfactor-roary: FALSE
