@@ -17,13 +17,5 @@ echo "ARTS_RUN=data/interim/arts/tmp/" >> resources/arts/.env
 echo "ARTS_CPU=8" >> resources/arts/.env
 echo "ARTS_WEBPORT=80" >> resources/arts/.env
 
-# get ranger-dtl binaries
-wget -P resources/arts http://compbio.mit.edu/ranger-dtl/ranger-dtl-linux.tar.gz 2>> workflow/report/logs/arts/arts_setup.log
-
-# extract & add executables to path
-(cd resources/arts && tar -xvzf ranger-dtl-linux.tar.gz && chmod +x ranger-dtl-*.linux) 2>> workflow/report/logs/arts/arts_setup.log
-ln resources/arts/ranger-dtl-U.linux $CONDA_PREFIX/bin/ranger-dtl-U.linux 2>> workflow/report/logs/arts/arts_setup.log
-ln resources/arts/ranger-dtl-D.linux $CONDA_PREFIX/bin/ranger-dtl-D.linux 2>> workflow/report/logs/arts/arts_setup.log
-
-# clean up
-rm resources/arts/ranger-dtl-linux.tar.gz resources/master.tar.gz
+# install binaries
+(cd resources/arts && tar -xzf linux64_bins.tar.gz -C  $CONDA_PREFIX/bin && hash -r) 2>> workflow/report/logs/arts/arts_setup.log
