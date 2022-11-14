@@ -18,6 +18,7 @@ rule antismash:
     output:
         folder = directory("data/interim/antismash/{version}/{strains}/"),
         gbk = "data/interim/antismash/{version}/{strains}/{strains}.gbk",
+        json = "data/interim/antismash/{version}/{strains}/{strains}.json",
         zip = "data/interim/antismash/{version}/{strains}/{strains}.zip",
     conda:
         "../envs/antismash.yaml"

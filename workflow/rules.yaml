@@ -175,3 +175,10 @@ bigscape:
   - Navarro-Muñoz, J.C., Selem-Mojica, N., Mullowney, M.W. et al. A computational
     framework to explore large-scale biosynthetic diversity. [Nat Chem Biol 16, 60–68
     (2020)](https://doi.org/10.1038/s41589-019-0400-9)
+build-database:
+  final_output: data/processed/{name}/tables/database_{version}.log
+  description: 'Build mini antiSMASH database using duckdb'
+  references:
+  - 'Nuhamunada, M., B.O. Palsson, O. S. Mohite, and T. Weber. 2022. BGCFlow [Computer software]. GITHUB: [https://github.com/NBChub/bgcflow](https://github.com/NBChub/bgcflow)'
+  - 'Mark Raasveldt and Hannes Mühleisen. 2019. DuckDB: an Embeddable Analytical Database. [In 2019 International Conference on
+    Management of Data (SIGMOD ’19), June 30-July 5, 2019, Amsterdam, Netherlands. ACM, New York, NY, USA, 4 pages. ](https://doi.org/10.1145/3299869.3320212)'
