@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you find this repository useful, please cite it as below."
+authors:
+- family-names: "Nuhamunada"
+  given-names: "Matin"
+  orcid: "https://orcid.org/0000-0003-3177-8299"
+- family-names: "Palsson"
+  given-names: "Bernhard"
+  orcid: "https://orcid.org/0000-0003-2357-6785"
+- family-names: "Mohite"
+  given-names: "Omkar"
+  orcid: "https://orcid.org/0000-0002-3240-1656"
+- family-names: "Weber"
+  given-names: "Tilmann"
+  orcid: "https://orcid.org/0000-0002-8260-5120"
+title: "Snakemake workflow to systematically analyze Biosynthetic Gene Clusters from a collection of genomes (pangenomes) from internal & public genome datasets"
+version: 0.4.1
+doi: "TBD"
+date-released: 2022-11-14
+url: "https://github.com/NBChub/bgcflow"
