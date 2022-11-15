@@ -176,7 +176,7 @@ bigscape:
     framework to explore large-scale biosynthetic diversity. [Nat Chem Biol 16, 60–68
     (2020)](https://doi.org/10.1038/s41589-019-0400-9)
 build-database:
-  final_output: data/processed/{name}/tables/database_{version}.log
+  final_output: "data/processed/{name}/data_warehouse/{version}/database.log"
   description: 'Build mini antiSMASH database using duckdb'
   references:
   - 'Nuhamunada, M., B.O. Palsson, O. S. Mohite, and T. Weber. 2022. BGCFlow [Computer software]. GITHUB: [https://github.com/NBChub/bgcflow](https://github.com/NBChub/bgcflow)'

@@ -17,6 +17,7 @@ dependencies:
   - nbconvert
   - ipykernel
   - ete3
+  - pyarrow
   - peppy
   - xlrd >= 1.0.0
   - zip

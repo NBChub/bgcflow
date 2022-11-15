@@ -21,13 +21,15 @@ rule build_dna_sequences_table:
                                          version=wildcards.version,
                                          strains=[s for s in list(PEP_PROJECTS[wildcards.name].sample_table.index)]),
     output:
-        dna_sequences = "data/processed/{name}/tables/df_dna_sequences_{version}.csv",
+        dna_sequences = "data/processed/{name}/data_warehouse/{version}/dna_sequences.parquet",
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/database/gather/as_{version}_dna_sequences_gather_{name}.log"
+    params:
+        index_key = "sequence_id"
     shell:  
         """
-        python workflow/bgcflow/bgcflow/database/create_cdss_table.py '{input.dna_sequences}' {output.dna_sequences} 2>> {log}
+        python workflow/bgcflow/bgcflow/database/gather_to_parquet.py '{input.dna_sequences}' {params.index_key} {output.dna_sequences} 2>> {log}
         """
 
 rule build_regions_table:
@@ -36,13 +38,15 @@ rule build_regions_table:
                                          version=wildcards.version,
                                          strains=[s for s in list(PEP_PROJECTS[wildcards.name].sample_table.index)]),
     output:
-        regions = "data/processed/{name}/tables/df_regions_{version}.csv",
+        regions = "data/processed/{name}/data_warehouse/{version}/regions.parquet",
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/database/gather/as_{version}_regions_gather_{name}.log"
+    params:
+        index_key = "region_id"
     shell:  
         """
-        python workflow/bgcflow/bgcflow/database/create_cdss_table.py '{input.regions}' {output.regions} 2>> {log}
+        python workflow/bgcflow/bgcflow/database/gather_to_parquet.py '{input.regions}' {params.index_key} {output.regions} 2>> {log}
         """
 
 rule build_cdss_table:
@@ -51,23 +55,25 @@ rule build_cdss_table:
                                          version=wildcards.version,
                                          strains=[s for s in list(PEP_PROJECTS[wildcards.name].sample_table.index)]),
     output:
-        cdss = "data/processed/{name}/tables/df_cdss_{version}.csv",
+        cdss = "data/processed/{name}/data_warehouse/{version}/cdss.parquet",
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/database/gather/as_{version}_cdss_gather_{name}.log"
+    params:
+        index_key = "cds_id"
     shell:  
         """
-        python workflow/bgcflow/bgcflow/database/create_cdss_table.py '{input.cdss}' {output.cdss} 2>> {log}
+        python workflow/bgcflow/bgcflow/database/gather_to_parquet.py '{input.cdss}' {params.index_key} {output.cdss} 2>> {log}
         """
 
 ### draft rule to build duckdb database
 rule build_database:
     input:
-        cdss = "data/processed/{name}/tables/df_cdss_{version}.csv",
-        regions = "data/processed/{name}/tables/df_regions_{version}.csv",
-        dna_sequences = "data/processed/{name}/tables/df_dna_sequences_{version}.csv",
+        cdss = "data/processed/{name}/data_warehouse/{version}/cdss.parquet",
+        regions = "data/processed/{name}/data_warehouse/{version}/regions.parquet",
+        dna_sequences = "data/processed/{name}/data_warehouse/{version}/dna_sequences.parquet",
     output:
-        log = "data/processed/{name}/tables/database_{version}.log",
+        log = "data/processed/{name}/data_warehouse/{version}/database.log",
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/database/report/database_{version}_{name}.log"
