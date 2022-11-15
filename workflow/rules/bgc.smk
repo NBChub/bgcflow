@@ -21,7 +21,7 @@ rule downstream_bgc_prep:
         # Generate symlink for each regions in genomes in dataset
         for i in $(dirname {input.gbk})
         do
-            echo $i
+            echo Processing $i 2>> {log.symlink}
             python workflow/bgcflow/bgcflow/data/bgc_downstream_prep.py $i {output.outdir} 2>> {log.symlink}
         done
         # generate taxonomic information for dataset
