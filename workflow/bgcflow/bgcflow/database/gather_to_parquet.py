@@ -9,40 +9,37 @@ log_format = '%(levelname)-8s %(asctime)s   %(message)s'
 date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
-def combine_json(input_json, filter_str='_cdss'):
+def combine_json(input_json):
     container = {}
     logging.info(f"Reading json files...")
     with alive_bar(len(input_json), title='Merging json:') as bar:
         for item in input_json:
             item = Path(item)
-            genome_id = item.stem
-            if filter_str in genome_id:
-                genome_id = genome_id.replace(filter_str, '')
-            logging.debug(f"Processing {genome_id}")
+            logging.debug(f"Processing {item.stem}")
             with open(item, "r") as f:
                 data = json.load(f)
                 container.update(data)
             bar()
     return container
 
-def write_table(input_json, deeptf_table):
+def write_parquet(input_json, index_key, table):
     '''
-    Write df_deeptfactor.csv table in processed data
+    Write .parquet table in processed data
     '''
     # Handle multiple json
     input_json = input_json.split()
     df = combine_json(input_json)
     df = pd.DataFrame.from_dict(df).T
-    df.index.name = "locus_tag"
+    df.index.name = index_key
 
-    logging.debug(f"Writing file to: {deeptf_table}")
+    logging.debug(f"Writing file to: {table}")
 
     # Save dataframes to csv tables
-    df_table = Path(deeptf_table)
+    df_table = Path(table)
     df_table.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(deeptf_table, index=True)
+    df.to_parquet(table)
     logging.info(f"Job done")
     return None
 
 if __name__ == "__main__":
-    write_table(sys.argv[1], sys.argv[2])
+    write_parquet(sys.argv[1], sys.argv[2], sys.argv[3])
