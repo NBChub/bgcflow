@@ -19,3 +19,4 @@ workflow/bgcflow/build*
 !data/*/README.md
 .panoptes.db
 notebooks/
+*.ipynb_checkpoints/
