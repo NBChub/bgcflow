@@ -11,7 +11,7 @@ rule cblaster_genome_db:
     conda:
         "../envs/cblaster.yaml"
     log: "workflow/report/logs/cblaster/cblaster_db_genomes_{name}.log"
-    threads: 32
+    threads: 8
     params:
         db_prefix = "data/interim/cblaster/{name}/genomes/cblaster_genome_db",
         batch_size = 50,
@@ -41,7 +41,7 @@ rule cblaster_bgc_db:
         antismash_dir = "data/interim/bgcs/{name}/{version}/*/*region*.gbk",
         batch_size = 50,
     log: "workflow/report/logs/cblaster/cblaster_db_bgc_{name}_{version}.log"
-    threads: 32
+    threads: 8
     shell:
         """
         cblaster config --email dummy@cblaster.com
