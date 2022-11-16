@@ -4,28 +4,20 @@ include: "rules/common.smk"
 DF_PROJECTS, DF_SAMPLES, PROKKA_DB_TABLE, PROKKA_DB_MAP, PEP_PROJECTS = extract_project_information(config)
 
 ##### Target rules #####
-py_wildcards = []
-rpy_wildcards = []
-markdown = []
+db = []
+
+version = dependency_version["antismash"]
 
 metadata = []
 for name in PEP_PROJECTS.keys():
     bgcflow_rules = [r for r in PEP_PROJECTS[name].config['rules'].keys() if PEP_PROJECTS[name].config['rules'][r]]
-    for b in bgcflow_rules:
-        if b in ['automlst-wrapper']:
-            markdown.append(f"data/processed/{name}/docs/{b}.md")
-            rpy_wildcards.append(b)
-        else:
-            markdown.append(f"data/processed/{name}/docs/{b}.md")
-            py_wildcards.append(b)
+    db.append(f"data/processed/{name}/dbt_as_{version}/dbt_bgcflow.duckdb")
     metadata.append(f"data/processed/{name}/metadata/project_metadata.json")
 
 rule all:
     input:
         "workflow/report/dependency_versions.json",
-        markdown,
-        metadata
+        db,
 
 ##### Modules #####
-include: "rules/report.smk"
-include: "rules/bgc_analytics.smk"
+include: "rules/build-database.smk"
