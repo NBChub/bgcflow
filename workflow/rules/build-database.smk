@@ -84,18 +84,12 @@ rule build_warehouse:
         echo {input.dna_sequences} >> {output.log}
         """
 
-rule build_database:
-    input:
-        cdss = "data/processed/{name}/data_warehouse/{version}/cdss.parquet",
-        regions = "data/processed/{name}/data_warehouse/{version}/regions.parquet",
-        dna_sequences = "data/processed/{name}/data_warehouse/{version}/dna_sequences.parquet",
+rule clone_dbt:
     output:
-        dbt = directory("data/processed/{name}/dbt_as_{version}"),
-        duckdb = "data/processed/{name}/dbt_as_{version}/dbt_bgcflow.duckdb"
+        dbt = directory("resources/bgcflow_dbt-duckdb"),
     conda:
         "../envs/dbt-duckdb.yaml"
-    log: "workflow/report/logs/database/report/database_{version}_{name}.log"
-    threads: 4
+    log: "workflow/report/logs/database/clone_dbt-duckdb.log"
     params:
         dbt_repo = "git@github.com:NBChub/bgcflow_dbt-duckdb.git"
     shell:
@@ -106,11 +100,30 @@ rule build_database:
             echo "{output.dbt} already exists!" >> {log}
         else
             rm -rf {output.dbt} 2>> {log}
-            (cd data/processed/{wildcards.name} \
+            (cd resources \
                 && git clone {params.dbt_repo} $(basename {output.dbt})
             ) &>> {log}
         fi
+        """
 
+rule build_database:
+    input:
+        repo = "resources/bgcflow_dbt-duckdb",
+        cdss = "data/processed/{name}/data_warehouse/{version}/cdss.parquet",
+        regions = "data/processed/{name}/data_warehouse/{version}/regions.parquet",
+        dna_sequences = "data/processed/{name}/data_warehouse/{version}/dna_sequences.parquet",
+    output:
+        dbt = directory("data/processed/{name}/dbt_as_{version}"),
+        duckdb = "data/processed/{name}/dbt_as_{version}/dbt_bgcflow.duckdb"
+    conda:
+        "../envs/dbt-duckdb.yaml"
+    log: "workflow/report/logs/database/report/database_{version}_{name}.log"
+    threads: 4
+    shell:
+        """
+        cp -r {input.repo}/* {output.dbt}/. 2>> {log}
+
+        # run dbt
         (cd {output.dbt} \
             && dbt debug --profiles-dir . \
             && dbt build --profiles-dir .
