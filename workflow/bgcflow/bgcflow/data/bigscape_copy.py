@@ -2,9 +2,10 @@ from pathlib import Path
 import sys
 import logging
 
-log_format = '%(levelname)-8s %(asctime)s   %(message)s'
+log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
+
 
 def bigscape_copy(input_index, output_main):
     input = Path(input_index)
@@ -18,6 +19,7 @@ def bigscape_copy(input_index, output_main):
         except FileExistsError as e:
             logging.debug(f"Got error:\n{e}")
     return
+
 
 if __name__ == "__main__":
     bigscape_copy(sys.argv[1], sys.argv[2])

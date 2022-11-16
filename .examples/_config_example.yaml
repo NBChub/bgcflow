@@ -1,7 +1,7 @@
 # This file should contain everything to configure the workflow on a global scale.
 
 #### PROJECT INFORMATION ####
-# This section control your project configuration. 
+# This section control your project configuration.
 # Each project are separated by "-".
 # A project can be defined as (1) a yaml object or (2) a Portable Encapsulated Project (PEP) file.
 # (1) To define project as a yaml object, it must contain the variable "name" and "samples".
@@ -52,7 +52,7 @@ rules:
 #### RESOURCES CONFIGURATION ####
 # resources : the location of the resources to run the rule.
 # The default location is at "resources/{resource_name}".
-resources_path: 
+resources_path:
   antismash_db: resources/antismash_db
   eggnog_db: resources/eggnog_db
   BiG-SCAPE: resources/BiG-SCAPE

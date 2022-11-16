@@ -9,7 +9,7 @@ import re
 import json
 import logging
 
-log_format = '%(levelname)-8s %(asctime)s   %(message)s'
+log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
@@ -18,21 +18,29 @@ def get_git_version():
     """
     Get the sha1 of the current git version
     """
-    
+
     git_version = ""
     try:
-        version_cmd = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],universal_newlines=True,
-                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        status_cmd = subprocess.run(['git', 'status', '--porcelain'],universal_newlines=True,
-                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        
+        version_cmd = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            universal_newlines=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        status_cmd = subprocess.run(
+            ["git", "status", "--porcelain"],
+            universal_newlines=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
         git_version = str(version_cmd.stdout.strip())
         changes = str(status_cmd.stdout).strip()
         if changes:
             git_version += "(changed)"
     except OSError:
         pass
-    
+
     return git_version
 
 
@@ -40,7 +48,7 @@ def get_version(version):
     """
     Get the current version string
     """
-    
+
     git_version = get_git_version()
     if git_version:
         version += "-%s" % git_version
@@ -48,7 +56,7 @@ def get_version(version):
 
 
 def add_bgcflow_comments(gbk_in_path, version, json_path, genome_id, gbk_out_path):
-    """ 
+    """
     Add bgcflow meta-annotation to genbank output
     """
 
@@ -58,71 +66,78 @@ def add_bgcflow_comments(gbk_in_path, version, json_path, genome_id, gbk_out_pat
 
     temp_gbk = Path(gbk_in_path).parent / f"{genome_id}-change_log.gbk"
     try:
-        test = [record for record in SeqIO.parse(gbk_in_path, 'genbank')]
+        test = [record for record in SeqIO.parse(gbk_in_path, "genbank")]
     except ValueError as e:
         logging.warning(f"Parsing fail: {e}")
         logging.info("Attempting to fix genbank file...")
         change_log_path = Path(gbk_in_path).parent / f"{genome_id}-change_log.json"
-        change_log = correct_collided_headers(gbk_in_path, genome_id, temp_gbk, json_dump=change_log_path)
+        change_log = correct_collided_headers(
+            gbk_in_path, genome_id, temp_gbk, json_dump=change_log_path
+        )
         logging.info(f"Retry parsing with Bio.SeqIO...")
 
     if temp_gbk.is_file():
-        records = SeqIO.parse(temp_gbk, 'genbank')
+        records = SeqIO.parse(temp_gbk, "genbank")
         temp_gbk.unlink()
     else:
-        records = SeqIO.parse(gbk_in_path, 'genbank')
+        records = SeqIO.parse(gbk_in_path, "genbank")
 
     df_gtdb_meta = pd.read_json(json_path, orient="index").T
-    df_gtdb_meta.fillna('Unclassified', inplace=True)
+    df_gtdb_meta.fillna("Unclassified", inplace=True)
     df_tax = pd.DataFrame([i for i in df_gtdb_meta.gtdb_taxonomy])
     for col in df_tax.columns:
-        df_tax[col] = df_tax[col].apply(lambda x: x.split('__')[1])
+        df_tax[col] = df_tax[col].apply(lambda x: x.split("__")[1])
     df_tax.columns = [c.title() for c in df_tax.columns]
-    tax_levels = ['Domain','Phylum','Class','Order','Family','Genus','Species']
+    tax_levels = ["Domain", "Phylum", "Class", "Order", "Family", "Genus", "Species"]
     taxonomy_str = df_tax.loc[0, tax_levels].tolist()
-    logging.debug(f'Taxonomy found: {taxonomy_str}')
+    logging.debug(f"Taxonomy found: {taxonomy_str}")
 
     bgcflow_comment = (
         "##BGCflow-Data-START##\n"
         "Version      :: {version}\n"
         "Run date     :: {date}\n"
-        ).format(
-            version=version,
-            date=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
-        )
+    ).format(
+        version=version,
+        date=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+    )
 
     new_records = []
     ctr = 0
     for record in records:
         logging.info(f"Formatting record {ctr}...")
         comment = bgcflow_comment
-        if 'comment' in record.annotations:
-            record.annotations['comment'] += '\n' + comment
+        if "comment" in record.annotations:
+            record.annotations["comment"] += "\n" + comment
         else:
-            record.annotations['comment'] = comment
+            record.annotations["comment"] = comment
 
         try:
             if not change_log[ctr]["accept_format"]:
-                record.annotations['comment'] += f"Original ID  :: {change_log[ctr]['original_id']}\n"
+                record.annotations[
+                    "comment"
+                ] += f"Original ID  :: {change_log[ctr]['original_id']}\n"
         except UnboundLocalError:
             pass
 
-        record.annotations['comment'] += "##BGCflow-Data-END##"
+        record.annotations["comment"] += "##BGCflow-Data-END##"
 
-        if 'organism' in record.annotations:
-            organism = record.annotations['organism']
-            if 'Unclassified' in organism:
-                record.annotations['organism'] = organism.split(' Unclassified')[0].strip()
-        
-        record.annotations['taxonomy'] = taxonomy_str
+        if "organism" in record.annotations:
+            organism = record.annotations["organism"]
+            if "Unclassified" in organism:
+                record.annotations["organism"] = organism.split(" Unclassified")[
+                    0
+                ].strip()
+
+        record.annotations["taxonomy"] = taxonomy_str
 
         new_records.append(record)
 
         ctr = ctr + 1
-    
+
     logging.info(f"Writing final output: {gbk_out_path}")
     with open(gbk_out_path, "w") as output_handle:
         SeqIO.write(new_records, output_handle, "genbank")
+
 
 ### Correcting IDs ###
 # 1. Traverse text, make a library of record header, length, and ids
@@ -131,24 +146,30 @@ def add_bgcflow_comments(gbk_in_path, version, json_path, genome_id, gbk_out_pat
 # 4. Make sure changes is unique
 # 5. Write a new genbank file and recorded changes as json file
 
-def correct_collided_headers(gbk_in_path, accession_id, outfile, json_dump="header.json"):
+
+def correct_collided_headers(
+    gbk_in_path, accession_id, outfile, json_dump="header.json"
+):
     record_headers = get_record_headers(gbk_in_path)
     record_headers = shorten_record_headers(record_headers, accession_id)
 
-    with open(json_dump, 'w', encoding ='utf8') as json_file:
+    with open(json_dump, "w", encoding="utf8") as json_file:
         json.dump(record_headers, json_file, indent=4)
 
     logging.info(f"Writing result to: {outfile}")
     with open(gbk_in_path) as f:
         s = f.read()
 
-    with open(outfile, 'w') as f:
+    with open(outfile, "w") as f:
         for k in record_headers.keys():
             if not record_headers[k]["accept_format"]:
-                s = s.replace(record_headers[k]["original_header"],
-                              record_headers[k]["new_header"])
+                s = s.replace(
+                    record_headers[k]["original_header"],
+                    record_headers[k]["new_header"],
+                )
         f.write(s)
     return record_headers
+
 
 def get_record_headers(gbk_in_path):
     """
@@ -159,19 +180,19 @@ def get_record_headers(gbk_in_path):
 
     # Find all headers
     with open(gbk_in_path, "r") as file:
-        logging.info(f'Reading file as text: {gbk_in_path}')
+        logging.info(f"Reading file as text: {gbk_in_path}")
         ctr = 0
         for line in file:
             if line.startswith("LOCUS"):
-                record_headers[ctr] = {"original_header" : line}
+                record_headers[ctr] = {"original_header": line}
             if "source" in line:
                 length = line.split()[-1].split("..")[-1]
                 record_headers[ctr]["length"] = length
                 ctr = ctr + 1
-    logging.debug(f'Found {len(record_headers)} records.')
+    logging.debug(f"Found {len(record_headers)} records.")
 
     # Check for collided headers
-    logging.info(f'Checking header format...')
+    logging.info(f"Checking header format...")
     for k in record_headers.keys():
         query = record_headers[k]["original_header"].split()
         if query != 7 and query[3] != "bp":
@@ -195,20 +216,26 @@ def modify_id(accession_id, original_id, locus_index, record_counts, id_collecti
 
     # For refseq record, remove the accession prefix (first two digits) from string
     if accession_id.startswith("GCF"):
-        logging.debug(f"{original_id}: Assuming locus came from Refseq. Removing refseq accession prefix.")
-        refseq_type, refseq_number, refseq_version = re.split('_|[.]', original_id)
+        logging.debug(
+            f"{original_id}: Assuming locus came from Refseq. Removing refseq accession prefix."
+        )
+        refseq_type, refseq_number, refseq_version = re.split("_|[.]", original_id)
         new_id = f"{refseq_number}.{refseq_version}"
 
     elif accession_id.startswith("GCA"):
-        logging.info(f"{original_id}: Assuming locus came from Genbank. Removing version from locus name...")
-        new_id, genbank_version = re.split('[.]', original_id)
+        logging.info(
+            f"{original_id}: Assuming locus came from Genbank. Removing version from locus name..."
+        )
+        new_id, genbank_version = re.split("[.]", original_id)
 
     # For unknown source remove last 4 digit, add the contig index in front.
     # example: NZAJABAQG010000001.1 --> c1|NZAJABAQG010000
     else:
-        logging.info(f"{original_id}: Cannot determine source. Shortening locus name...")
+        logging.info(
+            f"{original_id}: Cannot determine source. Shortening locus name..."
+        )
         digit = len(str(record_counts))
-        contig_number = str(locus_index+1)
+        contig_number = str(locus_index + 1)
 
         new_id = f"c{contig_number.zfill(digit)}_{original_id[:-(digit + 4)]}"
 
@@ -220,12 +247,13 @@ def modify_id(accession_id, original_id, locus_index, record_counts, id_collecti
         logging.debug(f"{original_id}: shortened to {new_id}")
     return new_id
 
+
 def shorten_record_headers(record_headers, accession_id):
     """
     Shorten record headers
     """
     record_counts = len(record_headers.keys())
-    id_collection = [record_headers[k]['original_id'] for k in record_headers.keys()]
+    id_collection = [record_headers[k]["original_id"] for k in record_headers.keys()]
 
     for k in record_headers.keys():
         if record_headers[k]["accept_format"]:
@@ -235,8 +263,12 @@ def shorten_record_headers(record_headers, accession_id):
             old_header = record_headers[k]["original_header"]
 
             # Correct header name
-            new_id = modify_id(accession_id, original_id, k, record_counts, id_collection)
-            new_id_replacement_value = f"{new_id}{(len(original_id) - len(new_id)) * ' '}"
+            new_id = modify_id(
+                accession_id, original_id, k, record_counts, id_collection
+            )
+            new_id_replacement_value = (
+                f"{new_id}{(len(original_id) - len(new_id)) * ' '}"
+            )
             new_header = old_header.replace(original_id, new_id_replacement_value)
 
             # Add value to dict
@@ -245,6 +277,8 @@ def shorten_record_headers(record_headers, accession_id):
 
     return record_headers
 
+
 if __name__ == "__main__":
-    add_bgcflow_comments(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
-    
+    add_bgcflow_comments(
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
+    )

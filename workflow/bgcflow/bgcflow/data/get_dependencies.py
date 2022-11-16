@@ -3,14 +3,16 @@ import sys
 import yaml, json, sys, itertools
 
 # list of the main dependecies used in the workflow
-dependencies = {"antismash" : r"workflow/envs/antismash.yaml",
-                "prokka": r"workflow/envs/prokka.yaml",
-                "mlst" : r"workflow/envs/mlst.yaml",
-                "eggnog-mapper" : r"workflow/envs/eggnog.yaml",
-                "roary" : r"workflow/envs/roary.yaml",
-                "refseq_masher" : r"workflow/envs/refseq_masher.yaml",
-                "seqfu" : r"workflow/envs/seqfu.yaml"
-                }
+dependencies = {
+    "antismash": r"workflow/envs/antismash.yaml",
+    "prokka": r"workflow/envs/prokka.yaml",
+    "mlst": r"workflow/envs/mlst.yaml",
+    "eggnog-mapper": r"workflow/envs/eggnog.yaml",
+    "roary": r"workflow/envs/roary.yaml",
+    "refseq_masher": r"workflow/envs/refseq_masher.yaml",
+    "seqfu": r"workflow/envs/seqfu.yaml",
+}
+
 
 def get_dependency_version(dep, dep_key):
     """
@@ -24,6 +26,7 @@ def get_dependency_version(dep, dep_key):
                 result = i.split("=")[-1]
     return str(result)
 
+
 def write_dependecies_to_json(outfile, dep=dependencies):
     """
     write dependency version to a json file
@@ -33,9 +36,14 @@ def write_dependecies_to_json(outfile, dep=dependencies):
         for ky in dep.keys():
             vr = get_dependency_version(dep, ky)
             dv[ky] = vr
-        json.dump(dv, file, indent=2,)
+        json.dump(
+            dv,
+            file,
+            indent=2,
+        )
         file.close()
     return dv
+
 
 if __name__ == "__main__":
     write_dependecies_to_json(sys.argv[1])

@@ -9,7 +9,7 @@ properties:
   genome_id:
     type: [string, number]
     description: genome id with genome version, same as fasta files stored in data/raw/fasta/ directory
-  
+
   source:
     type: string
     enum: [custom, ncbi, patric]
@@ -17,19 +17,19 @@ properties:
     # custom  : for provided in the data/raw/fasta directory with genome ids as filenames
     # ncbi : for list of public genome accession IDs that will be downloaded from the NCBI refseq (GCF...) or genbank (GCA...) database
     # patric: for list of public genome accession IDs that will be downloaded from the PATRIC database
-  
+
   organism:
     type: [string, null]
     description: name of the organism that is same as in the fasta header
-  
+
   genus:
     type: [string, null]
     description: genus of the organism. Ideally identified with GTDBtk.
-  
+
   species:
     type: [string, null]
     description: species epithet (the second word in a species name) of the organism. Ideally identified with GTDBtk.
-  
+
   strain:
     type: [string, number, null]
     description: strain id of the organism

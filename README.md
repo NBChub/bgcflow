@@ -105,9 +105,9 @@ Example : `samples.csv`
 Columns description:
 - **`genome_id`** _[required]_:  The genome accession ids (with genome version for `ncbi` and `patric` genomes). For `custom` fasta file provided by users, it should refer to the fasta file names stored in `data/raw/fasta/` directory with `.fna` extension. **Example:** genome id P8-2B-3.1 refers to the file `data/raw/fasta/P8-2B-3.1.fna`.
 - **`source`** _[required]_: Source of the genome to be analyzed choose one of the following: `custom`, `ncbi`, `patric`. Where:
-  - `custom` : for user provided genomes (`.fna`) in the `data/raw/fasta` directory with genome ids as filenames 
+  - `custom` : for user provided genomes (`.fna`) in the `data/raw/fasta` directory with genome ids as filenames
   - `ncbi` : for list of public genome accession IDs that will be downloaded from the NCBI refseq (GCF...) or genbank (GCA...) database
-  - `patric`: for list of public genome accession IDs that will be downloaded from the PATRIC database 
+  - `patric`: for list of public genome accession IDs that will be downloaded from the PATRIC database
 - `organism` _[optional]_ : name of the organism that is same as in the fasta header
 - `genus` _[optional]_ : genus of the organism. Ideally identified with GTDBtk.
 - `species` _[optional]_ : species epithet (the second word in a species name) of the organism. Ideally identified with GTDBtk.
@@ -189,7 +189,7 @@ projects:
     prokka-db: config/prokka-db.csv
 ```
 
-The file `prokka-db.csv` should contain a list of high quality annotated genomes that you would like to use to prioritise prokka annotations. 
+The file `prokka-db.csv` should contain a list of high quality annotated genomes that you would like to use to prioritise prokka annotations.
 
 `prokka-db.csv` example for Actinomycete group:
 
@@ -207,7 +207,7 @@ The workflow will prioritize user provided taxonomic placement by adding an opti
 |------------:|---------------------------------------------------------------------------------------------------------------------------------------:|
 | P8-2B-3.1   | d__Bacteria;p__Actinobacteriota;c__Actinomycetia;o__Streptomycetales;f__Streptomycetaceae;g__Streptomyces;s__Streptomyces albidoflavus |
 
-If these are not provided, the workflow will use the `closest_placement_reference` columns in the sample file (see above). Note that the value must be a valid genome accession in the latest GTDB release (currently R202), otherwise it will raise an error. 
+If these are not provided, the workflow will use the `closest_placement_reference` columns in the sample file (see above). Note that the value must be a valid genome accession in the latest GTDB release (currently R202), otherwise it will raise an error.
 
 If these information is not provided, then the workflow will guess the taxonomic placement by:
 1. If the `source` is `ncbi`, it will try to find the accession via GTDB API. If it doesn't find any information then,
@@ -230,12 +230,12 @@ projects:
 Note that each `project` must have unique `name` and `samples` value.
 
 ### Setting custom resources/databases folder
-By default, the resources folder containing software and database dependencies are stored in the `resources/` directory. 
+By default, the resources folder containing software and database dependencies are stored in the `resources/` directory.
 
 If you already have the resources folder somewhere else in your local machine, you can tell the workflow about their locations:
 
 ```yaml
-resources_path: 
+resources_path:
   antismash_db: $HOME/your_local_directory/antismash_db
   eggnog_db: $HOME/your_local_directory/eggnog_db
   BiG-SCAPE: $HOME/your_local_directory/BiG-SCAPE

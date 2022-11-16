@@ -4,4 +4,4 @@
 
 This data directory structure is still in progress and we look for further user casestudies to move files to `interim` directory.
 
-If you think some of the `interim` folder files shall be in the final `processed` directory please inform Omkar Mohite (omkmoh@biosustain.dtu.dk) or Matin Nuhamunada (matinnu@biosustain.dtu.dk). 
+If you think some of the `interim` folder files shall be in the final `processed` directory please inform Omkar Mohite (omkmoh@biosustain.dtu.dk) or Matin Nuhamunada (matinnu@biosustain.dtu.dk).

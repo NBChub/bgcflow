@@ -78,7 +78,7 @@ except KeyError:
     prokka_use_pfam = ""
 
 rule prokka:
-    input: 
+    input:
         fna = "data/interim/fasta/{strains}.fna",
         org_info = "data/interim/prokka/{strains}/organism_info.txt",
         refgbff = lambda wildcards: get_prokka_refdb(wildcards, "file", DF_SAMPLES, PROKKA_DB_MAP)
@@ -86,11 +86,11 @@ rule prokka:
         gff = "data/interim/prokka/{strains}/{strains}.gff",
         faa = "data/interim/prokka/{strains}/{strains}.faa",
         gbk = "data/interim/prokka/{strains}/{strains}.gbk",
-    conda: 
+    conda:
         "../envs/prokka.yaml"
     log: "workflow/report/logs/prokka/prokka/prokka-{strains}.log"
     params:
-        increment = 10, 
+        increment = 10,
         evalue = "1e-05",
         rna_detection = prokka_params_rna,
         refgbff = lambda wildcards: get_prokka_refdb(wildcards, "params", DF_SAMPLES, PROKKA_DB_MAP),
@@ -106,7 +106,7 @@ rule prokka:
         """
 
 rule format_gbk:
-    input: 
+    input:
         gbk_prokka = "data/interim/prokka/{strains}/{strains}.gbk",
         gtdb_json = "data/interim/gtdb/{strains}.json",
     output:

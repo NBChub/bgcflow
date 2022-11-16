@@ -1,6 +1,6 @@
 # Start your workflow at - *raw* data
 
-To start `bgcflow` analysis, drop the fasta files of all genomes from your project in the directory called `fasta`. 
+To start `bgcflow` analysis, drop the fasta files of all genomes from your project in the directory called `fasta`.
 
 ## Notes on formatting of fasta input files
 
