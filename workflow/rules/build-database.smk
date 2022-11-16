@@ -97,7 +97,6 @@ rule build_database:
     log: "workflow/report/logs/database/report/database_{version}_{name}.log"
     threads: 4
     params:
-        project_output = "data/processed/{name}",
         dbt_repo = "git@github.com:matinnuhamunada/dbt_bgcflow.git"
     shell:
         """
@@ -107,7 +106,7 @@ rule build_database:
             echo "{output.dbt} already exists!" >> {log}
         else
             rm -rf {output.dbt} 2>> {log}
-            (cd {params.project_output} \
+            (cd data/processed/{wildcards.name} \
                 && git clone {params.dbt_repo} $(basename {output.dbt})
             ) &>> {log}
         fi
