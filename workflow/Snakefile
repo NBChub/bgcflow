@@ -1,8 +1,17 @@
 report: "report/workflow.rst"
+
+
 include: "rules/common.smk"
 
+
 ##### 1. Extract information from config file
-DF_PROJECTS, DF_SAMPLES, PROKKA_DB_TABLE, PROKKA_DB_MAP, PEP_PROJECTS = extract_project_information(config)
+(
+    DF_PROJECTS,
+    DF_SAMPLES,
+    PROKKA_DB_TABLE,
+    PROKKA_DB_MAP,
+    PEP_PROJECTS,
+) = extract_project_information(config)
 
 # generate centralized sample datasets
 bgcflow_util_dir = Path("data/interim/bgcflow_utils")
@@ -16,8 +25,13 @@ CUSTOM = DF_SAMPLES[DF_SAMPLES.source.eq("custom")].genome_id.to_list()
 NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
 PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
 SAMPLE_PATHS = list(DF_PROJECTS.samples.unique())
-GTDB_PATHS = [str(PEP_PROJECTS[k].config['gtdb-tax']) for k in PEP_PROJECTS.keys() if 'gtdb-tax' in PEP_PROJECTS[k].config.keys()]
+GTDB_PATHS = [
+    str(PEP_PROJECTS[k].config["gtdb-tax"])
+    for k in PEP_PROJECTS.keys()
+    if "gtdb-tax" in PEP_PROJECTS[k].config.keys()
+]
 PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
+
 
 ##### 3. Wildcard constraints #####
 wildcard_constraints:
@@ -28,17 +42,23 @@ wildcard_constraints:
     name="|".join(PROJECT_IDS),
     prokka_db="|".join(PROKKA_GBFF),
 
+
 ##### 4. Generate user-defined local resources
 custom_resource_dir()
+
 
 ##### Target rules #####
 rule all:
     input:
-        expand("data/processed/{name}/tables/df_gtdb_meta.csv", name = PROJECT_IDS),
+        expand("data/processed/{name}/tables/df_gtdb_meta.csv", name=PROJECT_IDS),
         get_final_output(DF_SAMPLES, PEP_PROJECTS),
 
+
 onsuccess:
-    shell('snakemake --use-conda -c 2 --snakefile workflow/Report --rerun-trigger mtime --keep-going')
+    shell(
+        "snakemake --use-conda -c 2 --snakefile workflow/Report --rerun-trigger mtime --keep-going"
+    )
+
 
 ##### Modules #####
 include: "rules/ncbi.smk"

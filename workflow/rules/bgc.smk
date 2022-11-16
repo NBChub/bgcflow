@@ -1,19 +1,21 @@
 rule downstream_bgc_prep:
     input:
-        gbk = lambda wildcards: get_antismash_inputs(wildcards.name, wildcards.version, DF_SAMPLES),
-        table = "data/processed/{name}/tables/df_gtdb_meta.csv"
+        gbk=lambda wildcards: get_antismash_inputs(
+            wildcards.name, wildcards.version, DF_SAMPLES
+        ),
+        table="data/processed/{name}/tables/df_gtdb_meta.csv",
     output:
-        taxonomy = "data/interim/bgcs/taxonomy/taxonomy_{name}_antismash_{version}.tsv",
-        outdir = directory("data/interim/bgcs/{name}/{version}"),
-        bgc_mapping = "data/interim/bgcs/{name}/{name}_antismash_{version}.csv"
+        taxonomy="data/interim/bgcs/taxonomy/taxonomy_{name}_antismash_{version}.tsv",
+        outdir=directory("data/interim/bgcs/{name}/{version}"),
+        bgc_mapping="data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
     conda:
         "../envs/bgc_analytics.yaml"
     params:
-        dataset = "data/interim/bgcs/datasets.tsv"
+        dataset="data/interim/bgcs/datasets.tsv",
     log:
-        general = "workflow/report/logs/bgcs/downstream_bgc_prep/{name}/downstream_bgc_prep-{version}.log",
-        symlink = "workflow/report/logs/bgcs/downstream_bgc_prep/{name}/bgc_downstream_bgc_prep-{version}.log",
-        taxonomy = "workflow/report/logs/bgcs/downstream_bgc_prep/{name}/tax_downstream_bgc_prep-{version}.log",
+        general="workflow/report/logs/bgcs/downstream_bgc_prep/{name}/downstream_bgc_prep-{version}.log",
+        symlink="workflow/report/logs/bgcs/downstream_bgc_prep/{name}/bgc_downstream_bgc_prep-{version}.log",
+        taxonomy="workflow/report/logs/bgcs/downstream_bgc_prep/{name}/tax_downstream_bgc_prep-{version}.log",
     shell:
         """
         echo "Preparing BGCs for {wildcards.name} downstream analysis..." 2>> {log.general}
