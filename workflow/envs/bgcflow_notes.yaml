@@ -15,7 +15,7 @@ dependencies:
   - openpyxl
   - nbconvert
   - ipykernel
-  - ete3 
+  - ete3
   - xlrd >= 1.0.0
   - pip
   - pip:

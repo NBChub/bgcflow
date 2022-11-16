@@ -90,4 +90,3 @@ dependencies:
   - pip:
     - biopython==1.78
     - torch==1.2.0
-

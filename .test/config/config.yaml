@@ -1,7 +1,7 @@
 # This file should contain everything to configure the workflow on a global scale.
 
 #### PROJECT INFORMATION ####
-# This section control your project configuration. Each project are separated by "-". 
+# This section control your project configuration. Each project are separated by "-".
 # A project must contain the variable "name" and "samples".
 # Ideally, a project is a set of genomes of certain clade (pangenome) and can be annotated using a set of well-known reference genomes.
 # - name : name of your project
@@ -53,7 +53,7 @@ rules:
 #### RESOURCES CONFIGURATION ####
 # resources : the location of the resources to run the rule.
 # The default location is at "resources/{resource_name}".
-resources_path: 
+resources_path:
   antismash_db: resources/antismash_db
   eggnog_db: resources/eggnog_db
   BiG-SCAPE: resources/BiG-SCAPE

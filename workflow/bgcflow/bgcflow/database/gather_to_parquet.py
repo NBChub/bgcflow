@@ -5,14 +5,15 @@ from alive_progress import alive_bar
 import json
 import logging
 
-log_format = '%(levelname)-8s %(asctime)s   %(message)s'
+log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
+
 
 def combine_json(input_json):
     container = {}
     logging.info(f"Reading json files...")
-    with alive_bar(len(input_json), title='Merging json:') as bar:
+    with alive_bar(len(input_json), title="Merging json:") as bar:
         for item in input_json:
             item = Path(item)
             logging.debug(f"Processing {item.stem}")
@@ -22,10 +23,11 @@ def combine_json(input_json):
             bar()
     return container
 
+
 def write_parquet(input_json, index_key, table):
-    '''
+    """
     Write .parquet table in processed data
-    '''
+    """
     # Handle multiple json
     input_json = input_json.split()
     df = combine_json(input_json)
@@ -40,6 +42,7 @@ def write_parquet(input_json, index_key, table):
     df.to_parquet(table)
     logging.info(f"Job done")
     return None
+
 
 if __name__ == "__main__":
     write_parquet(sys.argv[1], sys.argv[2], sys.argv[3])

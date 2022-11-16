@@ -9,7 +9,7 @@ dependencies:
   - nbconvert
   - pandas
   - r-irkernel
-  - r-tidyverse 
+  - r-tidyverse
   - bioconductor-ggtree
   - bioconductor-ggtreeextra
   - r-plotly

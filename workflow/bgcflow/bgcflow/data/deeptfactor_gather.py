@@ -5,19 +5,20 @@ import json
 import sys
 import logging
 
-log_format = '%(levelname)-8s %(asctime)s   %(message)s'
+log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
-def combine_deeptfactor_prediction(input_json, filter_str='_deeptfactor'):
+
+def combine_deeptfactor_prediction(input_json, filter_str="_deeptfactor"):
     container = {}
     logging.info(f"Reading json files...")
-    with alive_bar(len(input_json), title='Merging DeepTFactor prediction:') as bar:
+    with alive_bar(len(input_json), title="Merging DeepTFactor prediction:") as bar:
         for item in input_json:
             item = Path(item)
             genome_id = item.stem
             if filter_str in genome_id:
-                genome_id = genome_id.replace(filter_str, '')
+                genome_id = genome_id.replace(filter_str, "")
             logging.debug(f"Processing {genome_id}")
             with open(item, "r") as f:
                 data = json.load(f)
@@ -25,10 +26,11 @@ def combine_deeptfactor_prediction(input_json, filter_str='_deeptfactor'):
             bar()
     return container
 
+
 def write_deeptf_table(input_json, deeptf_table):
-    '''
+    """
     Write df_deeptfactor.csv table in processed data
-    '''
+    """
     # Handle multiple json
     input_json = input_json.split()
     df = combine_deeptfactor_prediction(input_json)
@@ -43,6 +45,7 @@ def write_deeptf_table(input_json, deeptf_table):
     df.to_csv(deeptf_table, index=True)
     logging.info(f"Job done")
     return None
+
 
 if __name__ == "__main__":
     write_deeptf_table(sys.argv[1], sys.argv[2])
