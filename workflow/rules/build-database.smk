@@ -67,7 +67,7 @@ rule build_cdss_table:
         """
 
 ### draft rule to build duckdb database
-rule build_database:
+rule build_warehouse:
     input:
         cdss = "data/processed/{name}/data_warehouse/{version}/cdss.parquet",
         regions = "data/processed/{name}/data_warehouse/{version}/regions.parquet",
@@ -82,4 +82,38 @@ rule build_database:
         echo {input.cdss} >> {output.log}
         echo {input.regions} >> {output.log}
         echo {input.dna_sequences} >> {output.log}
+        """
+
+rule build_database:
+    input:
+        cdss = "data/processed/{name}/data_warehouse/{version}/cdss.parquet",
+        regions = "data/processed/{name}/data_warehouse/{version}/regions.parquet",
+        dna_sequences = "data/processed/{name}/data_warehouse/{version}/dna_sequences.parquet",
+    output:
+        dbt = directory("data/processed/{name}/dbt_as_{version}"),
+        duckdb = "data/processed/{name}/dbt_as_{version}/dbt_bgcflow.duckdb"
+    conda:
+        "../envs/dbt-duckdb.yaml"
+    log: "workflow/report/logs/database/report/database_{version}_{name}.log"
+    threads: 4
+    params:
+        project_output = "data/processed/{name}",
+        dbt_repo = "git@github.com:matinnuhamunada/dbt_bgcflow.git"
+    shell:
+        """
+        # clone dbt
+        if [ -f "{output.dbt}/profiles.yml" ]
+        then
+            echo "{output.dbt} already exists!" >> {log}
+        else
+            rm -rf {output.dbt} 2>> {log}
+            (cd {params.project_output} \
+                && git clone {params.dbt_repo} $(basename {output.dbt})
+            ) &>> {log}
+        fi
+
+        (cd {output.dbt} \
+            && dbt debug --profiles-dir . \
+            && dbt build --profiles-dir .
+        ) &>> {log}
         """
