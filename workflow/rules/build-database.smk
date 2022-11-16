@@ -97,7 +97,7 @@ rule build_database:
     log: "workflow/report/logs/database/report/database_{version}_{name}.log"
     threads: 4
     params:
-        dbt_repo = "git@github.com:matinnuhamunada/dbt_bgcflow.git"
+        dbt_repo = "git@github.com:NBChub/bgcflow_dbt-duckdb.git"
     shell:
         """
         # clone dbt
