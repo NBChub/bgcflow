@@ -44,7 +44,6 @@ rules:
   roary: FALSE
   eggnog: FALSE
   eggnog-roary: FALSE
-  diamond-roary: FALSE
   deeptfactor: FALSE
   deeptfactor-roary: FALSE
   cblaster-genome: FALSE
