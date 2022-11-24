@@ -66,7 +66,6 @@ rule build_cdss_table:
         python workflow/bgcflow/bgcflow/database/gather_to_parquet.py '{input.cdss}' {params.index_key} {output.cdss} 2>> {log}
         """
 
-### draft rule to build duckdb database
 rule build_warehouse:
     input:
         cdss = "data/processed/{name}/data_warehouse/{version}/cdss.parquet",
@@ -90,16 +89,14 @@ rule get_dbt_template:
         regions = "data/processed/{name}/data_warehouse/{version}/regions.parquet",
         dna_sequences = "data/processed/{name}/data_warehouse/{version}/dna_sequences.parquet",
     output:
-        #dbt = directory("data/processed/{name}/dbt_as_{version}"),
         profile = "data/processed/{name}/dbt_as_{version}/models/sources.yml"
-        # duckdb = "data/processed/{name}/dbt_as_{version}/dbt_bgcflow.duckdb"
     conda:
         "../envs/dbt-duckdb.yaml"
     log: "workflow/report/logs/database/report/get_dbt_template_{version}_{name}.log"
     threads: 4
     params:
         dbt = "data/processed/{name}/dbt_as_{version}",
-        dbt_repo = "git@github.com:matinnuhamunada/dbt_bgcflow.git",
+        dbt_repo = "git@github.com:NBChub/bgcflow_dbt-duckdb.git",
         cutoff = "0.30",
         as_version = "{version}"
     shell:
@@ -120,14 +117,13 @@ rule get_dbt_template:
 
 rule build_database:
     input:
-        #dbt = "data/processed/{name}/dbt_as_{version}",
         profile = "data/processed/{name}/dbt_as_{version}/models/sources.yml"
     output:
         duckdb = "data/processed/{name}/dbt_as_{version}/dbt_bgcflow.duckdb"
     conda:
         "../envs/dbt-duckdb.yaml"
     log: "workflow/report/logs/database/report/database_{version}_{name}.log"
-    threads: 4
+    threads: 16
     params:
         dbt = "data/processed/{name}/dbt_as_{version}"
     shell:
