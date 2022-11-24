@@ -11,7 +11,7 @@ logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 
 def gtdb_prep(
-    genome_id, outfile, samples_table, tax_path, release="R202"
+    genome_id, outfile, samples_table, tax_path, release="R207"
 ):  # what happen if it does not find?
     """
     Given a genome id and the samples Pandas dataframe, write  a JSON file containing taxonomic information from GTDB API. The script will first search using the closest taxonomic placement (NCBI accession id), then using the genus information provided by user. If no information is provided, return an empty taxonomic information.
@@ -154,10 +154,20 @@ def get_user_defined_classification(genome_id, tax_path):
         pd.read_csv(s, sep="\t").set_index("user_genome", drop=False)
         for s in shell_input
     ]
-    df_tax = pd.concat(dfList, axis=0)
+    df_tax_raw = pd.concat(dfList, axis=0)
 
     # drop duplicates! causes error
-    # df_tax = df_tax.drop_duplicates(subset=['classification'])
+    logging.debug(f"Checking user provided taxonomy table from: {shell_input}")
+    logging.info(f"Checking if user provided taxonomy table contains duplicated genome ids..")
+    df_tax_dup = df_tax_raw['user_genome'].duplicated()
+    if df_tax_dup.any():
+        logging.warning(f"Found duplicated genome ids: {list(df_tax_raw[df_tax_dup]['user_genome'].unique())}")
+        duplicates_mask = df_tax_raw.duplicated(keep="first")
+        df_tax = df_tax_raw[~duplicates_mask].copy()
+        logging.debug(f"Making sure duplicated genome ids values are identical...")
+        assert not df_tax.duplicated().any(), "Two or more genome ids have more than one taxonomic placement! Please check your taxonomy files!"
+    else:
+        df_tax = df_tax_raw.copy()
 
     level_dict = {
         "d": "domain",
@@ -180,7 +190,7 @@ def get_user_defined_classification(genome_id, tax_path):
     return result
 
 
-def get_ncbi_taxon_GTDB(accession, release="R202"):
+def get_ncbi_taxon_GTDB(accession, release="R207"):
     """
     Given an NCBI accession, return a json object of taxonomic information from GTDB API
     """
@@ -256,7 +266,7 @@ def get_ncbi_taxon_GTDB(accession, release="R202"):
     return result
 
 
-def get_parent_taxon_GTDB(taxon, level, release="R202"):
+def get_parent_taxon_GTDB(taxon, level, release="R207"):
     """
     Given a taxon and its level, return a json object of parent taxons from GTDB API
     """

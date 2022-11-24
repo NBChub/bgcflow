@@ -5,8 +5,8 @@ try:
         "release_version"
     ]
 except KeyError:
-    gtdbtk_release = "202"
-    gtdbtk_release_version = "202"
+    gtdbtk_release = "207"
+    gtdbtk_release_version = "207_v2"
 
 
 rule gtdb_prep:
