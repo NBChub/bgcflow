@@ -91,6 +91,8 @@ def get_input_location(p):
         input_path = input_path.resolve()
     else:
         input_path = Path("data/raw/fasta")
+        if not input_path.is_dir():
+            input_path.mkdir(parents=True, exist_ok=True)
         input_path = input_path.resolve()
 
     assert input_path.is_dir(), f"ERROR: Cannot find {input_path}"
