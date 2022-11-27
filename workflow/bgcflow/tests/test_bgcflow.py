@@ -5,7 +5,7 @@
 
 import unittest
 
-from bgcflow import bgcflow
+# from bgcflow import bgcflow
 
 
 class TestBgcflow(unittest.TestCase):
