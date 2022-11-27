@@ -5,15 +5,16 @@
 Snakemake workflow to systematically analyze Biosynthetic Gene Clusters from a collection of genomes (pangenomes) from internal &amp; public genome datasets.
 
 ## Quick Start
-A quick and easy way to use BGCFlow is by using [`bgcflow_wrapper`](https://github.com/matinnuhamunada/bgcflow_wrapper). It requires `git` and `conda`/`mamba` for installation.
+A quick and easy way to use BGCFlow is by using [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
 
-Install [`bgcflow_wrapper`](https://github.com/matinnuhamunada/bgcflow_wrapper) via:
+Install [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper) via:
 
-    # Install bgcflow_wrapper
-    git clone git@github.com:matinnuhamunada/bgcflow_wrapper.git
-    cd bgcflow_wrapper
-    mamba env create -f env.yaml
-    cd ..
+    # create a new virtual environment
+    python -m venv env
+    source env/bin/activate
+
+    # install BGCFlow wrapper
+    pip install git+https://github.com/NBChub/bgcflow_wrapper.git
 
 Then, BGCFlow can be deployed and run via:
 
@@ -23,7 +24,7 @@ Then, BGCFlow can be deployed and run via:
     bgcflow_wrapper init --bgcflow_dir MY_PATH # initiate BGCFlow config and examples from template
     bgcflow_wrapper run -n --bgcflow_dir MY_PATH # do a dry run
 
-See [`README.md`](https://github.com/matinnuhamunada/bgcflow_wrapper) for more details on [`bgcflow_wrapper`](https://github.com/matinnuhamunada/bgcflow_wrapper).
+See [`README.md`](https://github.com/NBChub/bgcflow_wrapper) for more details on [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
 
 ## Workflow overview
 ![dag](workflow/report/images/rulegraph.svg)
@@ -145,7 +146,7 @@ Installing Snakemake using [Mamba](https://github.com/mamba-org/mamba) is advise
 
     conda install -n base -c conda-forge mamba
 
-You can use [`bgcflow_wrapper`](https://github.com/matinnuhamunada/bgcflow_wrapper) environment from [Quick Start](#Quick-Start) or install BGCFlow environment which contain Snakemake (`version 7.14.0`) and other dependencies with:
+You can use [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper) environment from [Quick Start](#Quick-Start) or install BGCFlow environment which contain Snakemake (`version 7.14.0`) and other dependencies with:
 
     mamba env create -f envs.yaml
 
@@ -203,7 +204,7 @@ The workflow will prioritize user provided taxonomic placement by adding an opti
 
 `gtdbtk.bac120.summary.tsv` example:
 
-| user_genome | classification	                                                                                                                       |
+| user_genome | classification                                                                                                                           |
 |------------:|---------------------------------------------------------------------------------------------------------------------------------------:|
 | P8-2B-3.1   | d__Bacteria;p__Actinobacteriota;c__Actinomycetia;o__Streptomycetales;f__Streptomycetaceae;g__Streptomyces;s__Streptomyces albidoflavus |
 
