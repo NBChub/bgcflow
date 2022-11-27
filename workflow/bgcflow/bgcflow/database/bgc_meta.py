@@ -1,14 +1,12 @@
 import json
-import pandas as pd
-from pathlib import Path
-import numpy as np
-import sys
-
 import logging
+import sys
+from pathlib import Path
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.INFO)
+
 
 # regions
 def region_table_builder(f, accession):
@@ -131,26 +129,26 @@ def antismash_json_exporter(json_file, output_dir):
         # dna_sequences
         record_container = {}
 
-        ## print(record.keys())
-        ## print(2, record['seq']) # dna
+        # print(record.keys())
+        # print(2, record['seq']) # dna
         record_container["seq"] = record["seq"]["data"]
 
-        ## print(3, record['description']) # definition
+        # print(3, record['description']) # definition
         record_container["description"] = record["description"]
 
-        ## print(5, {'molecule_type' : record['annotations']['molecule_type']}) # contig type?
+        # print(5, {'molecule_type' : record['annotations']['molecule_type']}) # contig type?
         record_container["molecule_type"] = record["annotations"]["molecule_type"]
 
-        ## print(5, {'topology' : record['annotations']['topology']}) # chromosome type?
+        # print(5, {'topology' : record['annotations']['topology']}) # chromosome type?
         record_container["topology"] = record["annotations"]["topology"]
 
-        ## print(5, {'accessions' : record['annotations']['accessions']}) # acc
+        # print(5, {'accessions' : record['annotations']['accessions']}) # acc
         assert len(record["annotations"]["accessions"]) == 1
         record_container["accessions"] = record["annotations"]["accessions"][0]
 
         record_container["genome_id"] = genome_id
 
-        ## print(1, record['id']) # sequence_id
+        # print(1, record['id']) # sequence_id
         table_dna_sequences[sequence_id] = record_container
 
         # ---------------------------------------------------

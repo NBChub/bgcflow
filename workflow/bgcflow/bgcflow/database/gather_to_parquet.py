@@ -1,9 +1,10 @@
-from pathlib import Path
-import sys
-import pandas as pd
-from alive_progress import alive_bar
 import json
 import logging
+import sys
+from pathlib import Path
+
+import pandas as pd
+from alive_progress import alive_bar
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -12,7 +13,7 @@ logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 def combine_json(input_json):
     container = {}
-    logging.info(f"Reading json files...")
+    logging.info("Reading json files...")
     with alive_bar(len(input_json), title="Merging json:") as bar:
         for item in input_json:
             item = Path(item)
@@ -40,7 +41,7 @@ def write_parquet(input_json, index_key, table):
     df_table = Path(table)
     df_table.parent.mkdir(parents=True, exist_ok=True)
     df.to_parquet(table)
-    logging.info(f"Job done")
+    logging.info("Job done")
     return None
 
 

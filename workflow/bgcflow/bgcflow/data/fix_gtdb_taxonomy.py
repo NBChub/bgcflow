@@ -1,7 +1,8 @@
-import os, sys, json
-import pandas as pd
-
+import json
 import logging
+import sys
+
+import pandas as pd
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"

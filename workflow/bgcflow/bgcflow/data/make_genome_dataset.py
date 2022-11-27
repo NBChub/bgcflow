@@ -1,10 +1,10 @@
-from pathlib import Path
-from Bio import SeqIO
-import sys
-import pandas as pd
-from alive_progress import alive_bar
 import json
 import logging
+import sys
+from pathlib import Path
+
+import pandas as pd
+from alive_progress import alive_bar
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -13,7 +13,7 @@ logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 def combine_bgc_counts(input_json, filter_str="_bgc_counts"):
     container = {}
-    logging.info(f"Reading json files...")
+    logging.info("Reading json files...")
     with alive_bar(len(input_json), title="Merging BGC counts:") as bar:
         for item in input_json:
             item = Path(item)
@@ -54,7 +54,7 @@ def write_genome_table(input_json, samples_table, genome_table):
     genome_table = Path(genome_table)
     genome_table.parent.mkdir(parents=True, exist_ok=True)
     df_genomes.to_csv(genome_table, index=False)
-    logging.info(f"Job done")
+    logging.info("Job done")
     return None
 
 

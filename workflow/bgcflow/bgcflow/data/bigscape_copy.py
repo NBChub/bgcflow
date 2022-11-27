@@ -1,6 +1,6 @@
-from pathlib import Path
-import sys
 import logging
+import sys
+from pathlib import Path
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"

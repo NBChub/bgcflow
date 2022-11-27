@@ -1,8 +1,9 @@
-from pathlib import Path
-from Bio import SeqIO
-import logging
 import json
+import logging
 import sys
+from pathlib import Path
+
+from Bio import SeqIO
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -53,7 +54,7 @@ def bgc_downstream_prep(input_dir, output_dir):
                 logging.info(f"Generating symlink: {link}")
                 try:
                     link.symlink_to(target_path)
-                except FileExistsError as e:
+                except FileExistsError:
                     logging.warning(
                         f"Previous symlink exist, updating target: {link} -> {target_path}"
                     )

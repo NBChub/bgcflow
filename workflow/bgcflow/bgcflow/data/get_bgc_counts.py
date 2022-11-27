@@ -1,9 +1,9 @@
-from pathlib import Path
-from Bio import SeqIO
-import sys
-from alive_progress import alive_bar
 import json
 import logging
+import sys
+from pathlib import Path
+
+from Bio import SeqIO
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"

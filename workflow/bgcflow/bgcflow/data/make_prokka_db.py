@@ -1,8 +1,12 @@
+import glob
+import gzip
+import io
+import logging
+import sys
+from pathlib import Path
+
 import ncbi_genome_download as ngd
 import pandas as pd
-import os, sys, glob, gzip, io
-from pathlib import Path
-import logging
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"

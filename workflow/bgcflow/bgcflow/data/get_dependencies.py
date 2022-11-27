@@ -1,6 +1,7 @@
-import os
+import json
 import sys
-import yaml, json, sys, itertools
+
+import yaml
 
 # list of the main dependecies used in the workflow
 dependencies = {

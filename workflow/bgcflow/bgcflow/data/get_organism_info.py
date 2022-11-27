@@ -1,5 +1,6 @@
 import os
 import sys
+
 import pandas as pd
 
 
@@ -32,7 +33,7 @@ def extract_org_info(genome_id, samples_path, assembly_report_path, prokka_dir):
     df_samples = pd.concat(dfList, axis=0).fillna("")
 
     if df_samples.loc[genome_id, "source"] == "ncbi":
-        assembly_file = os.path.join(assembly_report_path, f"{genome_id}.txt")
+        # assembly_file = os.path.join(assembly_report_path, f"{genome_id}.txt")
         extract_ncbi_org_info(prokka_dir, genome_id, assembly_report_path)
     else:
         extract_samples_org_info(prokka_dir, genome_id, df_samples)

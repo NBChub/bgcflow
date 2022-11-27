@@ -1,8 +1,9 @@
+import json
 import os
 import sys
-import pandas as pd
-import json
 from shutil import copyfile
+
+import pandas as pd
 from Bio import Phylo
 
 
@@ -95,7 +96,7 @@ def get_genome_tree_table(
     t = Phylo.read(newick_path, "newick")
 
     # Max distance to create better plot
-    mdist = max([t.distance(t.root, x) for x in t.get_terminals()])
+    # mdist = max([t.distance(t.root, x) for x in t.get_terminals()])
 
     # Sort the matrix according to tip labels in the tree
     genome_ids_list = [

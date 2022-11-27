@@ -1,9 +1,7 @@
-import pandas as pd
-from pathlib import Path
 import json
-import shutil
 import logging
 import sys
+from pathlib import Path
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -51,7 +49,7 @@ def generate_symlink_gtdbtk(input_fna, gtdb_json, outdir):
     assert input_fna.is_file() and gtdb_json.is_file()
 
     genome_id = assess_gtdb_json_file(gtdb_json)
-    if genome_id != None:
+    if genome_id is not None:
         outfile = outdir / f"{genome_id}.fna"
         logging.info(f"Generating input files for GTDB-tk: {outfile}")
         outfile.symlink_to(input_fna)
