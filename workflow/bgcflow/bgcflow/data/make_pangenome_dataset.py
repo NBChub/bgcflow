@@ -1,11 +1,12 @@
 import os
 import sys
-import pandas as pd
 from shutil import copyfile
-from Bio import SeqIO, Phylo
-import plotly.graph_objects as go
-import plotly.express as px
+
 import matplotlib.pyplot as plt
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+from Bio import Phylo, SeqIO
 
 
 def get_roary_data(
