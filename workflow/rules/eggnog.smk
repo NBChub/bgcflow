@@ -22,11 +22,11 @@ rule eggnog:
         eggnog_dir=directory("data/interim/eggnog/{strains}/"),
     conda:
         "../envs/eggnog.yaml"
-    threads: 8
+    threads: 4
     log:
         "workflow/report/logs/eggnog/eggnog/eggnog-{strains}.log",
     shell:
         """
         mkdir -p {output.eggnog_dir}
-        emapper.py -i {input.faa} --decorate_gff "yes" --excel --cpu {threads} -o {wildcards.strains} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} 2>> {log}
+        emapper.py -i {input.faa} --decorate_gff "yes" --excel --cpu {threads} -o {wildcards.strains} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} &>> {log}
         """
