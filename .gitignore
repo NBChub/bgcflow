@@ -1,5 +1,7 @@
 .git/
 .snakemake/
+.examples/
+.test/
 data/*
 resources/
 config/
