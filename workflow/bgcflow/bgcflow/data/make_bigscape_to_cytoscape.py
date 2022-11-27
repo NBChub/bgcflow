@@ -1,11 +1,13 @@
-import pandas as pd
-import os, sys
-from pathlib import Path
 import logging
-import networkx as nx
+import os
+import sys
 from collections import OrderedDict
-from alive_progress import alive_bar
 from datetime import datetime
+from pathlib import Path
+
+import networkx as nx
+import pandas as pd
+from alive_progress import alive_bar
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -283,12 +285,12 @@ def update_cluster_family(df_clusters, df_known, family_nodes, cutoff="0.30"):
                     f"MIBIG entries {known_bgcs} returned no compounds: {df_known.loc[known_bgcs, 'compounds'].values}"
                 )
                 logging.warning(
-                    f"This is likely because of missing JSON entry in the downloaded MIBIG release."
+                    "This is likely because of missing JSON entry in the downloaded MIBIG release."
                 )
                 logging.warning(
-                    f"Check if this is the case in the resources/mibig/df_mibig_bgcs.csv folder"
+                    "Check if this is the case in the resources/mibig/df_mibig_bgcs.csv folder"
                 )
-                logging.warning(f"Replacing compound value with link to MIBIG...")
+                logging.warning("Replacing compound value with link to MIBIG...")
                 for h in known_bgcs:
                     link_mibig = f"https://mibig.secondarymetabolites.org/repository/{h.split('.')[0]}/index.html"
                     logging.warning(
