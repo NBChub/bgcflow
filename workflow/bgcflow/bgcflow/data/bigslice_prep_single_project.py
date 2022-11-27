@@ -1,6 +1,8 @@
+import logging
+import sys
 from pathlib import Path
+
 import pandas as pd
-import sys, logging
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"

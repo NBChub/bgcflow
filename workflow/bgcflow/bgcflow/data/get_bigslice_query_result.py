@@ -1,9 +1,10 @@
-import sqlite3
-import pandas as pd
-from pathlib import Path
-import shutil
-import sys
 import logging
+import shutil
+import sqlite3
+import sys
+from pathlib import Path
+
+import pandas as pd
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -28,7 +29,7 @@ def get_bigslice_query(
 def find_query_result(project_name, bigslice_full_run):
     logging.info("Connecting to BiG-SLICE SQL Reports...")
     conn = sqlite3.connect(bigslice_full_run / "reports/reports.db")
-    df = pd.read_sql_query(f"select * from reports;", conn)
+    df = pd.read_sql_query("select * from reports;", conn)
 
     # select only run result of the project
     match = []

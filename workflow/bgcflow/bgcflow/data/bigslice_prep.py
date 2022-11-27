@@ -1,5 +1,6 @@
-import pandas as pd
 import sys
+
+import pandas as pd
 
 
 def prep_bigslice(df_gtdb_output, df_bigslice_output):
