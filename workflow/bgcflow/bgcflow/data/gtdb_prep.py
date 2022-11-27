@@ -1,9 +1,10 @@
-import os, sys, json
-import numpy as nan
+import json
+import logging
+import os
+import sys
+
 import pandas as pd
 import requests
-
-import logging
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -133,7 +134,7 @@ def gtdb_prep(
 
     if gtdb_tax == {}:
         raise EmptyTaxError(
-            f"Oops, this shouldn't happen. It returns an empty dict. Something is wrong with the script."
+            "Oops, this shouldn't happen. It returns an empty dict. Something is wrong with the script."
         )
 
     logging.info(f"Writing results to {outfile}...")
@@ -141,7 +142,7 @@ def gtdb_prep(
         json.dump(gtdb_tax, file, indent=2)
         file.close
 
-    logging.info(f"Job finished!")
+    logging.info("Job finished!")
     return
 
 
@@ -158,14 +159,20 @@ def get_user_defined_classification(genome_id, tax_path):
 
     # drop duplicates! causes error
     logging.debug(f"Checking user provided taxonomy table from: {shell_input}")
-    logging.info(f"Checking if user provided taxonomy table contains duplicated genome ids..")
-    df_tax_dup = df_tax_raw['user_genome'].duplicated()
+    logging.info(
+        "Checking if user provided taxonomy table contains duplicated genome ids.."
+    )
+    df_tax_dup = df_tax_raw["user_genome"].duplicated()
     if df_tax_dup.any():
-        logging.warning(f"Found duplicated genome ids: {list(df_tax_raw[df_tax_dup]['user_genome'].unique())}")
+        logging.warning(
+            f"Found duplicated genome ids: {list(df_tax_raw[df_tax_dup]['user_genome'].unique())}"
+        )
         duplicates_mask = df_tax_raw.duplicated(keep="first")
         df_tax = df_tax_raw[~duplicates_mask].copy()
-        logging.debug(f"Making sure duplicated genome ids values are identical...")
-        assert not df_tax.duplicated().any(), "Two or more genome ids have more than one taxonomic placement! Please check your taxonomy files!"
+        logging.debug("Making sure duplicated genome ids values are identical...")
+        assert (
+            not df_tax.duplicated().any()
+        ), "Two or more genome ids have more than one taxonomic placement! Please check your taxonomy files!"
     else:
         df_tax = df_tax_raw.copy()
 
@@ -186,7 +193,7 @@ def get_user_defined_classification(genome_id, tax_path):
     result["gtdb_url"] = "user provided classification"
     result["gtdb_release"] = "unknown"
     result["gtdb_taxonomy"] = {level_dict[q.split("__")[0]]: q for q in query}
-    logging.info(f"Using user provided GTDB classification.")
+    logging.info("Using user provided GTDB classification.")
     return result
 
 
@@ -206,7 +213,7 @@ def get_ncbi_taxon_GTDB(accession, release="R207"):
 
         try:
             js = response.json()
-        except json.JSONDecodeError as e:
+        except json.JSONDecodeError:
             logging.critical(
                 f"Cannot decode response from GTDB API. Make sure this is a valid url: {api_url}"
             )

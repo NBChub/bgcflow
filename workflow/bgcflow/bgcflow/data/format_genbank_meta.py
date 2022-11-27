@@ -1,13 +1,13 @@
-import subprocess
-import sys
-import pandas as pd
-from Bio import SeqIO
-from datetime import datetime
-
-from pathlib import Path
-import re
 import json
 import logging
+import re
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
+from Bio import SeqIO
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -66,7 +66,7 @@ def add_bgcflow_comments(gbk_in_path, version, json_path, genome_id, gbk_out_pat
 
     temp_gbk = Path(gbk_in_path).parent / f"{genome_id}-change_log.gbk"
     try:
-        test = [record for record in SeqIO.parse(gbk_in_path, "genbank")]
+        [record for record in SeqIO.parse(gbk_in_path, "genbank")]
     except ValueError as e:
         logging.warning(f"Parsing fail: {e}")
         logging.info("Attempting to fix genbank file...")
@@ -74,7 +74,7 @@ def add_bgcflow_comments(gbk_in_path, version, json_path, genome_id, gbk_out_pat
         change_log = correct_collided_headers(
             gbk_in_path, genome_id, temp_gbk, json_dump=change_log_path
         )
-        logging.info(f"Retry parsing with Bio.SeqIO...")
+        logging.info("Retry parsing with Bio.SeqIO...")
 
     if temp_gbk.is_file():
         records = SeqIO.parse(temp_gbk, "genbank")
@@ -139,7 +139,7 @@ def add_bgcflow_comments(gbk_in_path, version, json_path, genome_id, gbk_out_pat
         SeqIO.write(new_records, output_handle, "genbank")
 
 
-### Correcting IDs ###
+# -- Correcting IDs --#
 # 1. Traverse text, make a library of record header, length, and ids
 # 2. Check the library for collided locus name and length
 # 3. Propose changes
@@ -192,11 +192,11 @@ def get_record_headers(gbk_in_path):
     logging.debug(f"Found {len(record_headers)} records.")
 
     # Check for collided headers
-    logging.info(f"Checking header format...")
+    logging.info("Checking header format...")
     for k in record_headers.keys():
         query = record_headers[k]["original_header"].split()
         if query != 7 and query[3] != "bp":
-            logging.warning(f"Record name and length collide in the LOCUS line")
+            logging.warning("Record name and length collide in the LOCUS line")
             query_length = record_headers[k]["length"]
             if query_length in query[1]:
                 original_id = query[1].replace(query_length, "")

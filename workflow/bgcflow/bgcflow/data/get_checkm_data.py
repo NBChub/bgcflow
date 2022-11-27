@@ -1,7 +1,8 @@
+import json
 import os
 import sys
+
 import pandas as pd
-import json
 
 
 def get_checkm_data(checkm_input_stats, checkm_json_folder, checkm_output_stats):

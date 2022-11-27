@@ -1,9 +1,10 @@
-import pandas as pd
-from pathlib import Path
-from alive_progress import alive_bar
 import json
-import sys
 import logging
+import sys
+from pathlib import Path
+
+import pandas as pd
+from alive_progress import alive_bar
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -12,7 +13,7 @@ logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 def combine_deeptfactor_prediction(input_json, filter_str="_deeptfactor"):
     container = {}
-    logging.info(f"Reading json files...")
+    logging.info("Reading json files...")
     with alive_bar(len(input_json), title="Merging DeepTFactor prediction:") as bar:
         for item in input_json:
             item = Path(item)
@@ -43,7 +44,7 @@ def write_deeptf_table(input_json, deeptf_table):
     df_table = Path(deeptf_table)
     df_table.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(deeptf_table, index=True)
-    logging.info(f"Job done")
+    logging.info("Job done")
     return None
 
 

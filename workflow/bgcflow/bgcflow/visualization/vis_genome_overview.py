@@ -160,7 +160,7 @@ def scatter_bgcs_len(df_genomes, to_path="../figures/scatter_bgcs_len.pdf"):
     ax_right.set(xlabel="No of genomes")
 
     # Annotate
-    from matplotlib.patches import Ellipse
+    # from matplotlib.patches import Ellipse
 
     for item in (
         [ax_main.xaxis.label, ax_main.yaxis.label]

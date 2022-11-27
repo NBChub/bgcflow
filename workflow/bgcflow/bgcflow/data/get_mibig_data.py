@@ -1,9 +1,9 @@
-import os
-from pathlib import Path
-import sys
-import pandas as pd
-import logging
 import json
+import logging
+import os
+import sys
+
+import pandas as pd
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -31,7 +31,7 @@ def extract_mibig_info(mibig_json_path, mibig_bgc_table):
         raise FileNotFoundError(f"No such file or directory: {mibig_json_path}")
 
     df_mibig_bgcs = pd.DataFrame(columns=["biosyn_class", "compounds"])
-    df_mibig_compounds = pd.DataFrame(columns=[])
+    # df_mibig_compounds = pd.DataFrame(columns=[])
 
     mibig_list = [
         mibig_file.split(".")[0]

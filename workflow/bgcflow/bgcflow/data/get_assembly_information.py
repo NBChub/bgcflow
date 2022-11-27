@@ -1,5 +1,6 @@
 import os
 import sys
+
 import pandas as pd
 
 
@@ -24,10 +25,10 @@ def get_ncbi_meta(assembly_report_path, outfile=None, genome_id=None):
         If genome_id is not provided, the script will determine the genome id from the file basename.
         If outfile is not defined, it will generate a json file in the current directory with this format: {genome_id}.json.
     """
-    if genome_id == None:
+    if genome_id is None:
         genome_id = os.path.splitext(os.path.basename(assembly_report_path))[0]
 
-    if outfile == None:
+    if outfile is None:
         outfile = f"{genome_id}.json"
 
     # List of columns in df_ncbi_meta
@@ -73,7 +74,7 @@ def get_ncbi_meta(assembly_report_path, outfile=None, genome_id=None):
                     df_ncbi_meta.loc[genome_id, "strain"] = strain.split("strain=")[1]
                     strain_found = True
             elif line.startswith("# Isolate:"):
-                if strain_found == False:
+                if strain_found is False:
                     strain = line.split("Isolate:")[1].strip()
                     df_ncbi_meta.loc[genome_id, "strain"] = strain
                     strain_found = True
@@ -123,7 +124,7 @@ def get_ncbi_meta(assembly_report_path, outfile=None, genome_id=None):
                     genome_id, "refseq_genbank_identity"
                 ] = refseq_genbank_identity
 
-        if strain_found == False:
+        if strain_found is False:
             df_ncbi_meta.loc[genome_id, "strain"] = genome_id
 
     df_ncbi_meta.to_json(outfile, orient="index", indent=4)

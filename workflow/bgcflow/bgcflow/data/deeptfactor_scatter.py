@@ -1,7 +1,7 @@
-import pandas as pd
-from pathlib import Path
-import json
 import sys
+from pathlib import Path
+
+import pandas as pd
 
 
 def deeptfactor_to_json(prediction, outfile, keep_false=True):
@@ -13,8 +13,10 @@ def deeptfactor_to_json(prediction, outfile, keep_false=True):
         columns={"prediction": "deeptfactor_prediction", "score": "deeptfactor_score"}
     )
     df = df.set_index("sequence_ID", drop=True)
-    if not keep_false:
-        df = df[df.deeptfactor_prediction == True]
+    if keep_false:
+        pass
+    else:
+        df = df[df.deeptfactor_prediction is True]
     df.T.to_json(outfile)
     return
 

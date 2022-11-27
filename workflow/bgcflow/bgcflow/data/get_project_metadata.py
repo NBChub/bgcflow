@@ -1,8 +1,10 @@
+import json
+import logging
 import sys
 from pathlib import Path
-import json, yaml
+
 import peppy
-import logging
+import yaml
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
