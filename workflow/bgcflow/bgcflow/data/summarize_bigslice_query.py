@@ -1,9 +1,11 @@
-import pandas as pd
-from pathlib import Path
-import sqlite3
+import json
 import logging
+import sqlite3
+import sys
+from pathlib import Path
+
+import pandas as pd
 from alive_progress import alive_bar
-import json, sys
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -44,10 +46,10 @@ def grab_gcf_model_summary(gcf_query, database):
     conn = sqlite3.connect(database)
 
     # load main tables
-    logging.info(f"Reading gcf_membership table...")
-    df_bigfam = pd.read_sql_query(f"select * from gcf_membership;", conn)
-    logging.info(f"Reading bgc table...")
-    df_bgc_bigfam = pd.read_sql_query(f"select * from bgc;", conn)
+    logging.info("Reading gcf_membership table...")
+    df_bigfam = pd.read_sql_query("select * from gcf_membership;", conn)
+    logging.info("Reading bgc table...")
+    df_bgc_bigfam = pd.read_sql_query("select * from bgc;", conn)
 
     # Load BiG-FAM dataset
     mibig_bigfam = df_bgc_bigfam[df_bgc_bigfam.loc[:, "type"] == "mibig"].set_index(
@@ -55,7 +57,7 @@ def grab_gcf_model_summary(gcf_query, database):
     )
 
     # Filter for hit queries
-    df_bigfam_query = df_bigfam[df_bigfam.loc[:, "gcf_id"].isin(gcf_query)]
+    # df_bigfam_query = df_bigfam[df_bigfam.loc[:, "gcf_id"].isin(gcf_query)]
 
     # return information of each model
     logging.info(f"Summarizing information for {len(gcf_query)} GCF models...")
@@ -111,7 +113,7 @@ def summarize_bigslice_query(
         2. JSON file summarizing GCF model hits
     """
     bigslice_query = Path(bigslice_query_path)
-    database = Path(database_path)
+    # database = Path(database_path)
     output = Path(output_path)
     output.mkdir(parents=True, exist_ok=True)
 
