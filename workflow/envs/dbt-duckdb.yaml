@@ -3,9 +3,10 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - python<=3.9
   - duckcli>=0.2.1
   - dbt-core>=1.3.0
   - sqlfluff~=1.2.1
   - pip
   - pip:
-    - git+https://github.com/jwills/dbt-duckdb.git
+    - dbt-duckdb>=1.3.1
