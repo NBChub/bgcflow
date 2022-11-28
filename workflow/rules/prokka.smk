@@ -86,6 +86,11 @@ rule prokka:
         gff = "data/interim/prokka/{strains}/{strains}.gff",
         faa = "data/interim/prokka/{strains}/{strains}.faa",
         gbk = "data/interim/prokka/{strains}/{strains}.gbk",
+        fnn = temp("data/interim/prokka/{strains}/{strains}.fnn"),
+        fna = temp("data/interim/prokka/{strains}/{strains}.fna"),
+        sqn = temp("data/interim/prokka/{strains}/{strains}.sqn"),
+        fsa = temp("data/interim/prokka/{strains}/{strains}.fsa"),
+        tbl = temp("data/interim/prokka/{strains}/{strains}.tbl"),
     conda:
         "../envs/prokka.yaml"
     log: "workflow/report/logs/prokka/prokka/prokka-{strains}.log"

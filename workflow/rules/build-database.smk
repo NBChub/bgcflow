@@ -2,9 +2,9 @@ rule antismash_json_extract:
     input:
         json = "data/interim/antismash/{version}/{strains}/{strains}.json",
     output:
-        cdss = "data/interim/database/as_{version}/{strains}/{strains}_cdss.json",
-        dna_sequences = "data/interim/database/as_{version}/{strains}/{strains}_dna_sequences.json",
-        regions = "data/interim/database/as_{version}/{strains}/{strains}_regions.json",
+        cdss = temp("data/interim/database/as_{version}/{strains}/{strains}_cdss.json"),
+        dna_sequences = temp("data/interim/database/as_{version}/{strains}/{strains}_dna_sequences.json"),
+        regions = temp("data/interim/database/as_{version}/{strains}/{strains}_regions.json"),
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/database/scatter/as_{version}_json_extract_{strains}.log"
