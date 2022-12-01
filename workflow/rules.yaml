@@ -2,6 +2,9 @@
 eggnog:
   final_output: data/interim/eggnog/{strains}/
   description: Annotate samples with eggNOG database (http://eggnog5.embl.de)
+  category: Functional Annotation
+  link:
+  - https://github.com/eggnogdb/eggnog-mapper
   references:
   - 'eggNOG-mapper v2: functional annotation, orthology assignments, and domain prediction
     at the metagenomic scale. Carlos P. Cantalapiedra, Ana Hernandez-Plaza, Ivica
@@ -15,6 +18,9 @@ eggnog:
 mash:
   final_output: data/processed/{name}/mash/df_mash.csv
   description: Calculate distance estimation for all samples using MinHash.
+  category: QC and Data Selection
+  link:
+  - https://github.com/marbl/Mash
   references:
   - 'Mash: fast genome and metagenome distance estimation using MinHash. Ondov BD,
     Treangen TJ, Melsted P, Mallonee AB, Bergman NH, Koren S, Phillippy AM. [Genome
@@ -26,6 +32,9 @@ fastani:
   final_output: data/processed/{name}/fastani/df_fastani.csv
   description: Do pairwise Average Nucleotide Identity (ANI) calculation across all
     samples.
+  category: QC and Data Selection
+  link:
+  - https://github.com/ParBLiSS/FastANI
   references:
   - 'Jain, C., Rodriguez-R, L.M., Phillippy, A.M. et al. High throughput ANI analysis
     of 90K prokaryotic genomes reveals clear species boundaries. Nat Commun 9, 5114
@@ -33,6 +42,9 @@ fastani:
 automlst-wrapper:
   final_output: data/processed/{name}/automlst_wrapper/final.newick
   description: Simplified Tree building using [autoMLST](https://github.com/NBChub/automlst-simplified-wrapper)
+  category: Phylogenomic Placement
+  link:
+  - https://github.com/KatSteinke/automlst-simplified-wrapper
   references:
   - 'Mohammad Alanjary, Katharina Steinke, Nadine Ziemert, AutoMLST: an automated
     web server for generating multi-locus species trees highlighting natural product
@@ -40,6 +52,9 @@ automlst-wrapper:
 roary:
   final_output: data/processed/{name}/roary/df_gene_presence_binary.csv
   description: Build pangenome using Roary.
+  category: Comparative Genomics
+  link:
+  - https://github.com/sanger-pathogens/Roary
   references:
   - 'Andrew J. Page, Carla A. Cummins, Martin Hunt, Vanessa K. Wong, Sandra Reuter,
     Matthew T. G. Holden, Maria Fookes, Daniel Falush, Jacqueline A. Keane, Julian
@@ -48,6 +63,10 @@ roary:
 eggnog-roary:
   final_output: data/interim/eggnog_roary/{name}/
   description: Annotate Roary output using eggNOG mapper
+  category: Comparative Genomics
+  link:
+  - https://github.com/sanger-pathogens/Roary
+  - https://github.com/eggnogdb/eggnog-mapper
   references:
   - 'Andrew J. Page, Carla A. Cummins, Martin Hunt, Vanessa K. Wong, Sandra Reuter,
     Matthew T. G. Holden, Maria Fookes, Daniel Falush, Jacqueline A. Keane, Julian
@@ -65,18 +84,17 @@ eggnog-roary:
 seqfu:
   final_output: data/processed/{name}/tables/df_seqfu_stats.csv
   description: Calculate sequence statistics using SeqFu.
+  category: QC and Data Selection
+  link:
+  - https://github.com/telatin/seqfu2
   references:
   - 'Telatin, A., Birolo, G., & Fariselli, P. SeqFu [Computer software]. GITHUB: [https://github.com/telatin/seqfu2](https://github.com/telatin/seqfu2)'
-rnammer:
-  final_output: resources/rnammer_test.txt
-  description: Annotate ribosoma RNA genes with RNAmmer.
-  references:
-  - 'Lagesen K, Hallin P, Rødland EA, Staerfeldt HH, Rognes T, Ussery DW. RNAmmer:
-    consistent and rapid annotation of ribosomal RNA genes. Nucleic Acids Res. 2007;35(9):3100-8.
-    doi: 10.1093/nar/gkm160. Epub 2007 Apr 22. PMID: 17452365; PMCID: PMC1888812.'
 bigslice:
   final_output: data/processed/{name}/bigslice/cluster_as_{version}/
   description: Cluster BGCs using BiG-SLiCE (https://github.com/medema-group/bigslice)
+  category: Genome Mining
+  link:
+  - https://github.com/medema-group/bigslice
   references:
   - 'Satria A Kautsar, Justin J J van der Hooft, Dick de Ridder, Marnix H Medema,
     BiG-SLiCE: A highly scalable tool maps the diversity of 1.2 million biosynthetic
@@ -84,6 +102,10 @@ bigslice:
 query-bigslice:
   final_output: data/processed/{name}/bigslice/query_as_{version}/
   description: Map BGCs to BiG-FAM database (https://bigfam.bioinformatics.nl/)
+  category: Genome Mining
+  link:
+  - https://github.com/medema-group/bigslice
+  - https://bigfam.bioinformatics.nl/
   references:
   - 'Satria A Kautsar, Kai Blin, Simon Shaw, Tilmann Weber, Marnix H Medema, BiG-FAM:
     the biosynthetic gene cluster families database, Nucleic Acids Research, gkaa812,
@@ -94,6 +116,9 @@ query-bigslice:
 checkm:
   final_output: data/processed/{name}/tables/df_checkm_stats.csv
   description: Assess genome quality with CheckM.
+  category: QC and Data Selection
+  link:
+  - https://github.com/Ecogenomics/CheckM
   references:
   - 'Parks DH, Imelfort M, Skennerton CT, Hugenholtz P, Tyson GW. 2014. Assessing
     the quality of microbial genomes recovered from isolates, single cells, and metagenomes.
@@ -101,6 +126,9 @@ checkm:
 gtdbtk:
   final_output: data/processed/{name}/tables/gtdbtk.bac120.summary.tsv
   description: Taxonomic placement with GTDB-Tk
+  category: Phylogenomic Placement
+  link:
+  - https://github.com/Ecogenomics/GTDBTk
   references:
   - 'Chaumeil PA, et al. 2019. GTDB-Tk: A toolkit to classify genomes with the Genome
     Taxonomy Database. Bioinformatics, btz848.'
@@ -111,19 +139,28 @@ gtdbtk:
 prokka-gbk:
   final_output: data/processed/{name}/genbank/{strains}.gbk
   description: Copy annotated genbank results.
+  category: Functional Annotation
+  link:
+  - https://github.com/tseemann/prokka
   references:
   - 'Seemann T. Prokka: rapid prokaryotic genome annotation. [Bioinformatics 2014 Jul
     15;30(14):2068-9. PMID:24642063](https://academic.oup.com/bioinformatics/article/30/14/2068/2390517?login=false)'
 antismash:
   final_output: data/processed/{name}/tables/df_antismash_{version}_summary.csv
   description: Summarizes antiSMASH result.
+  category: Genome Mining
+  link:
+  - https://github.com/antismash/antismash
   references:
   - 'antiSMASH 6.0: improving cluster detection and comparison capabilities. Kai Blin,
     Simon Shaw, Alexander M Kloosterman, Zach Charlop-Powers, Gilles P van Weezel,
     Marnix H Medema, & Tilmann Weber. Nucleic Acids Research (2021) [doi: 10.1093/nar/gkab335.](https://academic.oup.com/nar/article/49/W1/W29/6274535?login=false)'
 arts:
-  final_output: data/interim/arts/antismash-{version}/{strains}/
+  final_output: "data/processed/{name}/tables/df_arts_as-{version}.csv"
   description: Run Antibiotic Resistant Target Seeker (ARTS) on samples.
+  category: Genome Mining
+  link:
+  - https://bitbucket.org/ziemertlab/arts/src
   references:
   - 'Mungan,M.D., Alanjary,M., Blin,K., Weber,T., Medema,M.H. and Ziemert,N. (2020)
     ARTS 2.0: feature updates and expansion of the Antibiotic Resistant Target Seeker
@@ -135,12 +172,19 @@ arts:
 deeptfactor:
   final_output: data/processed/{name}/tables/df_deeptfactor.csv
   description: Use deep learning to find Transcription Factors.
+  category: Functional Annotation
+  link:
+  - https://bitbucket.org/kaistsystemsbiology/deeptfactor/src
   references:
   - 'Kim G.B., Gao Y., Palsson B.O., Lee S.Y. 2020. DeepTFactor: A deep learning-based
     tool for the prediction of transcription factors. [PNAS. doi: 10.1073/pnas.2021171118](https://www.pnas.org/doi/10.1073/pnas.2021171118)'
 deeptfactor-roary:
   final_output: data/interim/deeptfactor_roary/{name}/
   description: Use DeepTFactor on Roary outputs.
+  category: Comparative Genomics
+  link:
+  - https://bitbucket.org/kaistsystemsbiology/deeptfactor/src
+  - https://github.com/sanger-pathogens/Roary
   references:
   - 'Kim G.B., Gao Y., Palsson B.O., Lee S.Y. 2020. DeepTFactor: A deep learning-based
     tool for the prediction of transcription factors. [PNAS. doi: 10.1073/pnas.2021171118](https://www.pnas.org/doi/10.1073/pnas.2021171118)'
@@ -151,6 +195,9 @@ deeptfactor-roary:
 cblaster-genome:
   final_output: data/processed/{name}/cblaster/genomes/
   description: Build diamond database of genomes for cblaster search.
+  category: Genome Mining
+  link:
+  - https://github.com/gamcil/cblaster
   references:
   - 'Gilchrist, C., Booth, T. J., van Wersch, B., van Grieken, L., Medema, M. H.,
     & Chooi, Y. (2021). cblaster: a remote search tool for rapid identification and
@@ -161,6 +208,9 @@ cblaster-genome:
 cblaster-bgc:
   final_output: data/processed/{name}/cblaster/bgcs/{version}/
   description: Build diamond database of BGCs for cblaster search.
+  category: Genome Mining
+  link:
+  - https://github.com/gamcil/cblaster
   references:
   - 'Gilchrist, C., Booth, T. J., van Wersch, B., van Grieken, L., Medema, M. H.,
     & Chooi, Y. (2021). cblaster: a remote search tool for rapid identification and
@@ -171,6 +221,9 @@ cblaster-bgc:
 bigscape:
   final_output: data/processed/{name}/bigscape/result_as{version}/index.html
   description: Cluster BGCs using BiG-SCAPE
+  category: Genome Mining
+  link:
+  - https://github.com/medema-group/BiG-SCAPE
   references:
   - Navarro-Muñoz, J.C., Selem-Mojica, N., Mullowney, M.W. et al. A computational
     framework to explore large-scale biosynthetic diversity. [Nat Chem Biol 16, 60–68
