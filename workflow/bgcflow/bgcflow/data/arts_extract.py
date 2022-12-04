@@ -1,78 +1,112 @@
+import json
 import logging
 import sys
 from pathlib import Path
 
 import pandas as pd
-from alive_progress import alive_bar
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 
-def generate_bgc_id_mapping(changelog, genome_id, contig=1):
-    df_changelog = pd.read_csv(changelog)
-    df_mapping = df_changelog[df_changelog.genome_id == genome_id]
-    mapping = {}
-    region_ctr = 1
-    for bgc_id in df_mapping.bgc_id:
-        region = int(bgc_id.split("region")[-1])
-        if region == region_ctr:
-            mapping[f"cluster-{contig}_{region}"] = bgc_id
-            region_ctr = region_ctr + 1
-            pass
-        else:
-            region_ctr = 1  # reset
-            contig = contig + 1
-            mapping[f"cluster-{contig}_{region}"] = bgc_id
-            region_ctr = region_ctr + 1
-    return mapping
+def generate_arts_dict(df_arts):
+    """
+    Convert arts table to dictionary
+    """
+    arts_dict = {}
+    arts_scaffold_count = df_arts.Source.value_counts().to_dict()
+    for k in arts_scaffold_count.keys():
+        arts_dict[k] = {"counts": arts_scaffold_count[k]}
+        arts_dict[k]["regions"] = []
+        for i in df_arts[df_arts.loc[:, "Source"] == k].index:
+            regions = {
+                "cluster_id": df_arts.loc[i, "#Cluster"],
+                "products": df_arts.loc[i, "Type"],
+                "location": df_arts.loc[i, "Location"],
+            }
+            arts_dict[k]["regions"].append(regions)
+    return arts_dict
 
 
-def extract_arts2(input_folder, changelog, outfile):
-    # Output handler for aggregation
-    df_hits_container = []
+def generate_arts_mapping(df_arts, as_json):
+    arts_dict = generate_arts_dict(df_arts)
+    # container for final result
+    hit_mapper = {}
+    contig_mapper = {}
 
-    # Handle multiple folders
-    input_arts = {Path(i) for i in input_folder.split()}
+    # iterate antismash json records
+    for num, r in enumerate(as_json["records"]):
+        # count number of detected regions per record
+        region_count = len(r["areas"])
+        # if antismash detects region
+        if region_count > 0:
+            contig_id = r["id"]
+            logging.info(
+                f"Contig {contig_id} has {region_count} regions detected. Finding corresponding scaffold in ARTS2..."
+            )
+            # find arts scaffold with the same region number detected
+            arts_match = [
+                k
+                for k in arts_dict.keys()
+                if int(arts_dict[k]["counts"]) == int(region_count)
+            ]
+            logging.debug(f"Finding matches from: {arts_match}")
+            for n, a in enumerate(r["areas"]):
+                bgc_id = f"{contig_id}.region{str(n+1).zfill(3)}"
+                location = f"{a['start']} - {a['end']}"
+                products = ",".join(a["products"])
+                logging.debug(f"Finding match for: {bgc_id} | {location} | {products}")
+                for m in arts_match:
+                    bgc_match = arts_dict[m]["regions"][n]
+                    if (bgc_match["location"] == location) and (
+                        bgc_match["products"] == products
+                    ):
+                        logging.debug(
+                            f"Found match! {bgc_match['cluster_id']} | {bgc_match['location']} | {bgc_match['products']}"
+                        )
+                        # logging.debug(f"Found match! {contig_id} == ARTS2 {m}")
+                        hit_mapper[bgc_match["cluster_id"]] = bgc_id
+                        contig_mapper[bgc_match["cluster_id"]] = contig_id
+    return hit_mapper, arts_dict, contig_mapper
 
-    with alive_bar(len(input_arts), title="Extracting ARTS2:") as bar:
-        for arts in input_arts:
-            genome_id = arts.name
-            logging.info(f"Extracting ARTS2 result from {genome_id}")
-            tsv = arts / "tables/bgctable.tsv"
-            df_hits = pd.read_csv(tsv, sep="\t")
-            mapping = generate_bgc_id_mapping(changelog, genome_id)
-            df_hits = df_hits.rename(columns={"#Cluster": "bgc_id"})
-            df_hits["genome_id"] = genome_id
-            try:
-                for i in df_hits.index:
-                    c = df_hits.loc[i, "bgc_id"]
-                    logging.debug(f"{c}, {mapping[c]}")
-                    df_hits.loc[i, "bgc_id"] = mapping[c]
-            except KeyError:
-                logging.warning(f"{c} didn't found any matches")
-                logging.debug(f"Available keys: {list(mapping.keys())}")
-                assert len(df_hits.bgc_id) == len(mapping)
-                logging.debug(
-                    "ARTS2 ids and mapping has the same length. Adjusting mapping keys..."
-                )
-                starting_contig = int(c.strip("cluster-").split("_")[0])
-                new_mapping = generate_bgc_id_mapping(
-                    changelog, genome_id, contig=starting_contig
-                )
-                logging.debug("Rerunning extraction...")
-                for i in df_hits.index:
-                    c = df_hits.loc[i, "bgc_id"]
-                    logging.debug(f"{c}, {new_mapping[c]}")
-                    df_hits.loc[i, "bgc_id"] = new_mapping[c]
-            df_hits_container.append(df_hits)
-            bar()
 
-    logging.info(f"Merging all data into final output: {outfile}")
-    pd.concat(df_hits_container).set_index("bgc_id").to_csv(outfile)
+def extract_arts_table(input_table, input_as_json, outfile, genome_id=None):
+    """
+    Given an ARTS2 bgc table, map the corresponding cluster hits to antismash regions
+    """
+    df_arts = pd.read_csv(input_table, sep="\t")
+
+    with open(input_as_json, "r") as f:
+        as_json = json.load(f)
+
+    if genome_id is None:
+        logging.info("Assuming genome_id from ARTS2 input")
+        genome_id = Path(input_table).parents[1].stem
+
+    logging.info(f"Extracting ARTS2 BGC hits from: {genome_id}")
+
+    logging.info("Generating ARTS2 to antiSMASH region mapper...")
+    hit_mapper, arts_dict, contig_mapper = generate_arts_mapping(df_arts, as_json)
+
+    logging.info("Mapping ARTS2 cluster to antiSMASH regions...")
+    df = pd.DataFrame(columns=df_arts.columns)
+    for i in df_arts.index:
+        # only extract hits
+        if len(df_arts.loc[i, "Genelist"]) > 2:
+            cluster_id = df_arts.loc[i, "#Cluster"]
+            bgc_id = hit_mapper[cluster_id]
+            contig_id = contig_mapper[cluster_id]
+            df.loc[i, :] = df_arts.loc[i, :]
+            df.loc[i, "#Cluster"] = bgc_id
+            df.loc[i, "Source"] = contig_id
+            df.loc[i, "genome_id"] = genome_id
+    df = df.rename(columns={"#Cluster": "bgc_id"}).set_index("bgc_id")
+
+    logging.info(f"Writing results to {outfile}")
+    df.T.to_json(outfile)
     return
 
 
 if __name__ == "__main__":
-    extract_arts2(sys.argv[1], sys.argv[2], sys.argv[3])
+    extract_arts_table(sys.argv[1], sys.argv[2], sys.argv[3])
