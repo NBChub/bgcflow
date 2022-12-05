@@ -421,13 +421,18 @@ def process_bigscape_output(
 
     # get the latest run
     bigscape_runs = {}
+    logging.info("Getting BiG-SCAPE runs...")
     for net_data_path in bigscape_directory.glob("network_files/*"):
+        logging.debug(f"Found network data: {net_data_path}")
         selected_run_folder = net_data_path.name
         selected_run_time = selected_run_folder.split("_glocal")[0]
         selected_run_time = datetime.strptime(selected_run_time, "%Y-%m-%d_%H-%M-%S")
         bigscape_runs[selected_run_time] = net_data_path
     run_times = list(bigscape_runs.keys())
     run_times.sort(reverse=True)
+
+    # make sure run times has values
+    assert len(run_times) > 0
     selected_run = run_times[0]
     net_data_path = bigscape_runs[selected_run]
 

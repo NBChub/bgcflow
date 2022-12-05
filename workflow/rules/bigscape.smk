@@ -78,6 +78,7 @@ rule copy_bigscape_zip:
 
 rule bigscape_to_cytoscape:
     input:
+        index="data/interim/bigscape/{name}_antismash_{version}/index.html",
         bgc_mapping="data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
         mibig_bgc_table="resources/mibig/df_mibig_bgcs.csv/",
         as_dir="data/interim/bgcs/{name}/{version}",
