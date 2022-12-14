@@ -44,7 +44,7 @@ rule automlst_wrapper:
     shell:
         """
         mkdir -p "data/interim/automlst_wrapper/{wildcards.name}/singles" 2>> {log}
-        python resources/automlst-simplified-wrapper-main/simplified_wrapper.py data/interim/automlst_wrapper/{wildcards.name} 2>> {log}
+        python resources/automlst-simplified-wrapper-main/simplified_wrapper.py data/interim/automlst_wrapper/{wildcards.name} &>> {log}
         """
 
 
