@@ -40,6 +40,7 @@ rule bigscape:
     input:
         bigscape="resources/BiG-SCAPE",
         bgc_mapping="data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
+        antismash_dir="data/interim/bgcs/{name}/{version}/",
     output:
         index="data/interim/bigscape/{name}_antismash_{version}/index.html",
     conda:
@@ -47,13 +48,12 @@ rule bigscape:
     params:
         bigscape_dir="data/interim/bigscape/{name}_antismash_{version}/",
         label="{name}_antismash_{version}",
-        antismash_dir="data/interim/bgcs/{name}/{version}/",
     log:
         "workflow/report/logs/bigscape/{name}_antismash_{version}/bigscape.log",
     threads: 32
     shell:
         """
-        python {input.bigscape}/bigscape.py -i {params.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose &>> {log}
+        python {input.bigscape}/bigscape.py -i {input.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --mibig --verbose &>> {log}
         """
 
 
@@ -92,11 +92,9 @@ rule bigscape_to_cytoscape:
         "../envs/bgc_analytics.yaml"
     log:
         "workflow/report/logs/bigscape/bigscape_to_cytoscape/bigscape_to_cytoscape-{name}-{version}.log",
-    params:
-        bigscape_directory="data/interim/bigscape/{name}_antismash_{version}/",
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/make_bigscape_to_cytoscape.py {params.bigscape_directory} {input.as_dir} {input.df_genomes_path} {input.mibig_bgc_table} {output.output_dir} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/make_bigscape_to_cytoscape.py data/interim/bigscape/{wildcards.name}_antismash_{wildcards.version}/ {input.as_dir} {input.df_genomes_path} {input.mibig_bgc_table} {output.output_dir} 2>> {log}
         cp {input.bgc_mapping} {output.bgc_mapping}
         """
 
