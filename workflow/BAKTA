@@ -1,0 +1,25 @@
+include: "rules/common.smk"
+
+##### 1. Extract information from config file
+DF_PROJECTS, DF_SAMPLES, PROKKA_DB_TABLE, PROKKA_DB_MAP, PEP_PROJECTS = extract_project_information(config)
+
+# generate centralized sample datasets
+bgcflow_util_dir = Path("data/interim/bgcflow_utils")
+bgcflow_util_dir.mkdir(parents=True, exist_ok=True)
+DF_SAMPLES.to_csv(bgcflow_util_dir / "samples.csv", index=False)
+PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
+
+##### Target rules #####
+STRAINS = DF_SAMPLES.genome_id.to_list()
+NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
+
+rule all:
+    input:
+        expand("data/interim/prokka/{strains}/{strains}.gff", strains = STRAINS),
+        expand("data/interim/bakta/{strains}", strains = STRAINS)
+
+##### Modules #####
+include: "rules/prokka.smk"
+include: "rules/bakta.smk"
+include: "rules/ncbi.smk"
+include: "rules/bgc_analytics.smk"
