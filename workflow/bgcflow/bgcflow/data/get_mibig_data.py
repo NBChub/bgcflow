@@ -26,7 +26,7 @@ def extract_mibig_info(mibig_json_path, mibig_bgc_table):
     2. mibig_compound_table: str / path
         Dataframe with compounds information found at MIBIG
     """
-
+    logging.info("Reading MIBIG files...")
     if not os.path.isdir(mibig_json_path):
         raise FileNotFoundError(f"No such file or directory: {mibig_json_path}")
 
@@ -38,6 +38,7 @@ def extract_mibig_info(mibig_json_path, mibig_bgc_table):
         for mibig_file in os.listdir(mibig_json_path)
         if ".json" in mibig_file
     ]
+    logging.debug(f"MIBIG entry has {len(mibig_list)} BGCs")
     for mibig_id in mibig_list:
         mibig_id_file = os.path.join(mibig_json_path, mibig_id + ".json")
         with open(mibig_id_file, "r") as json_obj:
@@ -58,7 +59,20 @@ def extract_mibig_info(mibig_json_path, mibig_bgc_table):
                     for activity in chem_acts:
                         if activity not in chem_acts_list:
                             chem_acts_list.append(activity)
-            df_mibig_bgcs.loc[mibig_id, "chem_acts"] = ";".join(chem_acts_list)
+
+            # logging.debug(f"{chem_acts_list}")
+            # handle MIBIG 2.0 --> MIBIG 3.1 format difference
+            chem_acts_list_clean = []
+            for item in chem_acts_list:
+                if type(item) is dict:
+                    action = list(item.values())
+                    for a in action:
+                        chem_acts_list_clean.append(a)
+                elif type(item) is str:
+                    chem_acts_list_clean.append(item)
+
+            # logging.debug(f"{chem_acts_list_clean}")
+            df_mibig_bgcs.loc[mibig_id, "chem_acts"] = ";".join(chem_acts_list_clean)
 
             if "accession" in mibig_data.get("cluster").get("loci").keys():
                 df_mibig_bgcs.loc[mibig_id, "accession"] = (
