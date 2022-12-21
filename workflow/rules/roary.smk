@@ -12,7 +12,7 @@ rule roary:
         "workflow/report/logs/roary/roary-{name}.log",
     shell:
         """
-        roary -p {threads} -f {output.roary_dir} -i {params.i} -e -n -r -v {input.gff} 2>> {log}
+        roary -p {threads} -f {output.roary_dir} -i {params.i} -e -n -r -v {input.gff} &>> {log}
         """
 
 
@@ -33,7 +33,7 @@ rule eggnog_roary:
     shell:
         """
         mkdir -p {output.eggnog_dir}
-        emapper.py -i {params.faa} --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} 2>> {log}
+        emapper.py -i {params.faa} --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} &>> {log}
         """
 
 

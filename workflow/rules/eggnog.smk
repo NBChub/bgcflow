@@ -8,8 +8,8 @@ rule install_eggnog:
         "workflow/report/logs/eggnog/install_eggnog.log",
     shell:
         """
-        download_eggnog_data.py --data_dir {output.eggnog_db} -y 2>> {log}
-        create_dbs.py -m diamond --dbname bacteria --taxa Bacteria --data_dir {output.eggnog_db} -y 2>> {log}
+        download_eggnog_data.py --data_dir {output.eggnog_db} -y &>> {log}
+        create_dbs.py -m diamond --dbname bacteria --taxa Bacteria --data_dir {output.eggnog_db} -y &>> {log}
         """
 
 
