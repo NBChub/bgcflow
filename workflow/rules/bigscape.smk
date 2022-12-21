@@ -6,7 +6,7 @@ rule install_bigscape:
     log:
         "workflow/report/logs/bigscape/bigscape-install_bigscape.log",
     params:
-        release="1.1.4",
+        release="1.1.5",
     shell:
         """
         (cd resources && wget https://github.com/medema-group/BiG-SCAPE/archive/refs/tags/v{params.release}.zip) &>> {log}
@@ -27,7 +27,7 @@ rule get_mibig_table:
     log:
         "workflow/report/logs/bigscape/get_mibig_table.log",
     params:
-        mibig_version="2.0",
+        mibig_version="3.1",
     shell:
         """
         (cd resources && wget  https://dl.secondarymetabolites.org/mibig/mibig_json_{params.mibig_version}.tar.gz) &>> {log}
