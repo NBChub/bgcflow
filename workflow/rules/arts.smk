@@ -29,7 +29,7 @@ rule arts_extract:
         "workflow/report/logs/arts/arts_extract/arts_extract-{version}-{strains}.log",
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/arts_extract.py {input.arts}/tables/bgctable.tsv {input.json} {output.json} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/arts_extract.py {input.arts}/tables/bgctable.tsv {input.json} {output.json} {wildcards.strains} 2>> {log}
         """
 
 rule arts_combine:
@@ -45,9 +45,7 @@ rule arts_combine:
         "../envs/bgc_analytics.yaml"
     log:
         "workflow/report/logs/arts/arts_combine/arts_combine-{version}-{name}.log",
-    params:
-        index_key = "bgc_id"
     shell:
         """
-        python workflow/bgcflow/bgcflow/database/gather_to_csv.py '{input.json}' {params.index_key} {output.table} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/arts_gather.py '{input.json}' data/interim/bgcs/{wildcards.name}/{wildcards.version} {output.table} 2>> {log}
         """
