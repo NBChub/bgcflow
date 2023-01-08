@@ -109,4 +109,4 @@ def extract_arts_table(input_table, input_as_json, outfile, genome_id=None):
 
 
 if __name__ == "__main__":
-    extract_arts_table(sys.argv[1], sys.argv[2], sys.argv[3])
+    extract_arts_table(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
