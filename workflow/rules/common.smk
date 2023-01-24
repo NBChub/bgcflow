@@ -8,7 +8,7 @@ from pathlib import Path
 import peppy
 
 min_version("7.14.0")
-__version__ = "0.5.2"
+__version__ = "0.6.0"
 
 
 container: "docker://continuumio/miniconda3:4.12.0"
@@ -285,7 +285,7 @@ def refine_bgcflow_project(p_bgcflow, p):
     return p_bgcflow
 
 
-def extract_project_information(config):
+def extract_project_information(config, project_variable="projects"):
     """
     Wrapper to extract variables from projects in config.yaml.
     Returns all necessary objects required to run bgcflow.
@@ -303,7 +303,7 @@ def extract_project_information(config):
 
     # load information from config
     print(f"Step 1. Extracting project information from config...\n", file=sys.stderr)
-    projects = config["projects"]
+    projects = config[project_variable]
 
     # filter for pep projects
     df_projects = pd.DataFrame(projects).set_index("name", drop=False)
