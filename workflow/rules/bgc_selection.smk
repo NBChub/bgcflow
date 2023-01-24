@@ -11,12 +11,12 @@ def get_bgc_inputs(pep_object, antismash_version):
         # override with custom path
         assert 'gbk_path' in df.columns
         custom_path = df.loc[i, "gbk_path"]
-        print(custom_path, type(custom_path), custom_path != None, file=sys.stderr)
+        #print(custom_path, type(custom_path), custom_path != None, file=sys.stderr)
         if custom_path != None:
             gbk_path = custom_path
         else:
             gbk_path = antismash_path / genome_id / f"{bgc_id}.gbk"
-        print(bgc_id, gbk_path, file=sys.stderr)
+        #print(bgc_id, gbk_path, file=sys.stderr)
         gbk_list.append(gbk_path)
     return gbk_list
 
