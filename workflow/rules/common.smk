@@ -555,7 +555,7 @@ dependency_version = get_dependencies(dependencies)
 
 
 def get_project_outputs(
-    config, PROJECT_IDS, df_samples, rule_dict_path="workflow/rules.yaml"
+    config, PROJECT_IDS, df_samples, rule_dict_path
 ):
     """
     Generate outputs of a project given a TRUE value in config["rules"]
@@ -609,7 +609,15 @@ def get_project_outputs(
             )
         elif k == "rnammer":
             pass
+        elif wc == ["bgc", "name", "version"]:
+            value = expand(
+                rule_dict[k]["final_output"],
+                name=PROJECT_IDS,
+                bgc=BGCS,
+                version=dependency_version["antismash"],
+            )
         else:
+            print(rule_dict.keys(), file=sys.stderr)
             value = rule_dict[k]["final_output"]
             print(f"WARNING: {k} is not in the rule dictionary", file=sys.stderr)
         project_dict[k] = value
@@ -630,7 +638,7 @@ def get_project_outputs(
     return final_output
 
 
-def get_final_output(df_samples, peppy_objects):
+def get_final_output(df_samples, peppy_objects, rule_dict_path):
     """
     Generate outputs of for all projects
     """
@@ -638,7 +646,7 @@ def get_final_output(df_samples, peppy_objects):
     final_output = []
     for p in peppy_objects.values():
         sys.stderr.write(f" - Getting outputs for project: {p.name}\n")
-        final_output.extend(get_project_outputs(p.config["rules"], p.name, df_samples))
+        final_output.extend(get_project_outputs(p.config["rules"], p.name, df_samples, rule_dict_path))
     sys.stderr.write(f" - Ready to generate all outputs.\n\n")
     return final_output
 
