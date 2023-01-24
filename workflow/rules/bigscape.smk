@@ -63,7 +63,7 @@ rule copy_bigscape_zip:
         bgc_mapping="data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
         index="data/interim/bigscape/{name}_antismash_{version}/index.html",
     output:
-        zip="data/processed/{name}/bigscape/{name}_bigscape_as{version}.zip",
+        zip="data/processed/{name}/bigscape/bigscape_as{version}.zip",
     conda:
         "../envs/bgc_analytics.yaml"
     log:

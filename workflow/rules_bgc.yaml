@@ -1,0 +1,51 @@
+---
+bigslice:
+  final_output: data/processed/{name}/bigslice/cluster_as_{version}/
+  description: Cluster BGCs using BiG-SLiCE (https://github.com/medema-group/bigslice)
+  category: Genome Mining
+  link:
+  - https://github.com/medema-group/bigslice
+  references:
+  - 'Satria A Kautsar, Justin J J van der Hooft, Dick de Ridder, Marnix H Medema,
+    BiG-SLiCE: A highly scalable tool maps the diversity of 1.2 million biosynthetic
+    gene clusters, [GigaScience, Volume 10, Issue 1, January 2021, giaa154](https://doi.org/10.1093/gigascience/giaa154)'
+query-bigslice:
+  final_output: data/processed/{name}/bigslice/query_as_{version}/
+  description: Map BGCs to BiG-FAM database (https://bigfam.bioinformatics.nl/)
+  category: Genome Mining
+  link:
+  - https://github.com/medema-group/bigslice
+  - https://bigfam.bioinformatics.nl/
+  references:
+  - 'Satria A Kautsar, Kai Blin, Simon Shaw, Tilmann Weber, Marnix H Medema, BiG-FAM:
+    the biosynthetic gene cluster families database, Nucleic Acids Research, gkaa812,
+    [https://doi.org/10.1093/nar/gkaa812](https://doi.org/10.1093/nar/gkaa812)'
+  - 'Satria A Kautsar, Justin J J van der Hooft, Dick de Ridder, Marnix H Medema,
+    BiG-SLiCE: A highly scalable tool maps the diversity of 1.2 million biosynthetic
+    gene clusters, [GigaScience, Volume 10, Issue 1, January 2021, giaa154.](https://doi.org/10.1093/gigascience/giaa154)'
+bigscape:
+  final_output: data/processed/{name}/bigscape/bigscape_as{version}.zip
+  description: Cluster BGCs using BiG-SCAPE
+  category: Genome Mining
+  link:
+  - https://github.com/medema-group/BiG-SCAPE
+  references:
+  - 'Navarro-Muñoz, J.C., Selem-Mojica, N., Mullowney, M.W. et al. A computational
+    framework to explore large-scale biosynthetic diversity. [Nat Chem Biol 16, 60-68
+    (2020)](https://doi.org/10.1038/s41589-019-0400-9)'
+clinker:
+  final_output: "data/processed/{name}/clinker/{version}/clinker.html"
+  description: Generate gene cluster comparison figure
+  category: Genome Mining
+  link:
+  - https://github.com/gamcil/clinker
+  references:
+  - 'Gilchrist, C., & Chooi, Y. (2021). clinker & clustermap.js: automatic generation of gene cluster comparison figures (Version 0.0.21) [Computer software]. https://doi.org/10.1093/bioinformatics/btab007'
+interproscan:
+  final_output: "data/interim/interproscan/{bgc}_{name}_{version}.faa.tsv"
+  description: scanning algorithms from the InterPro database
+  category: Genome Mining
+  link:
+  - https://github.com/ebi-pf-team/interproscan
+  references:
+  - 'Philip Jones, David Binns, Hsin-Yu Chang, Matthew Fraser, Weizhong Li, Craig McAnulla, Hamish McWilliam, John Maslen, Alex Mitchell, Gift Nuka, Sebastien Pesseat, Antony F. Quinn, Amaia Sangrador-Vegas, Maxim Scheremetjew, Siew-Yit Yong, Rodrigo Lopez, Sarah Hunter Bioinformatics (2014) InterProScan 5: genome-scale protein function classification, PMID: 24451626'
