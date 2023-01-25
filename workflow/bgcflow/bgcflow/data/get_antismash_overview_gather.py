@@ -14,6 +14,7 @@ def correct_bgc_id_overview(overview_file, mapping_file, genome_id=False):
     """
     Use a mapping file to correct bgc_ids
     """
+    logging.info(f"Correcting shortened bgc ids for {genome_id}...")
     overview_path = Path(overview_file)
     mapping_path = Path(mapping_file)
 
@@ -28,7 +29,6 @@ def correct_bgc_id_overview(overview_file, mapping_file, genome_id=False):
     else:
         pass
 
-    logging.info(f"Correcting shortened bgc ids for {genome_id}...")
 
     new_dict = {}
 
@@ -54,7 +54,7 @@ def gather_bgc_overview(input_json, mapping_dir, table):
     merged_dict = {}
     for j in input_json:
         mapping_file = Path(j)
-        genome_id = mapping_file.stem.strip("_bgc_overview")
+        genome_id = mapping_file.name.replace('_bgc_overview.json', '')
         mapping_path = Path(mapping_dir) / f"{genome_id}/{genome_id}-change_log.json"
         corrected = correct_bgc_id_overview(mapping_file, mapping_path, genome_id)
         merged_dict.update(corrected)
