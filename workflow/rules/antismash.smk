@@ -7,7 +7,7 @@ rule antismash_db_setup:
         "workflow/report/logs/antismash/antismash_db_setup.log",
     shell:
         """
-        download-antismash-databases --database-dir resources/antismash_db
+        download-antismash-databases --database-dir resources/antismash_db 2>> {log}
         antismash --version >> {log}
         antismash --check-prereqs >> {log}
         """
