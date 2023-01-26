@@ -3,7 +3,7 @@ LABEL io.github.snakemake.containerized="true"
 LABEL io.github.snakemake.conda_env_hash="d9c34f75f4249d9c5bf03295059c6f6008db227e1418912c0c09cbbfbaa3007c"
 
 # install app dependencies
-RUN apt-get update && apt install build-essential
+RUN apt-get update && apt install build-essential -y
 
 # Step 1: Retrieve conda environments
 
