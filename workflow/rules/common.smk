@@ -11,7 +11,7 @@ min_version("7.14.0")
 __version__ = "0.6.0"
 
 
-container: "docker://continuumio/miniconda3:4.12.0"
+container: "docker://matinnu/bgcflow:latest"
 
 
 ##### TABLE OF CONTENTS #####
