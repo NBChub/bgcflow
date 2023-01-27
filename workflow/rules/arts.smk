@@ -39,6 +39,7 @@ rule arts_combine:
             strains=[s for s in list(PEP_PROJECTS[wildcards.name].sample_table.index)],
             version=wildcards.version
         ),
+        changelog="data/interim/bgcs/{name}/{version}",
     output:
         table="data/processed/{name}/tables/df_arts_as-{version}.csv"
     conda:
@@ -47,5 +48,5 @@ rule arts_combine:
         "workflow/report/logs/arts/arts_combine/arts_combine-{version}-{name}.log",
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/arts_gather.py '{input.json}' data/interim/bgcs/{wildcards.name}/{wildcards.version} {output.table} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/arts_gather.py '{input.json}' {input.changelog} {output.table} 2>> {log}
         """
