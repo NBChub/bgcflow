@@ -7,12 +7,13 @@ rule roary:
         "../envs/roary.yaml"
     params:
         i=80,
+        g=60000,
     threads: 8
     log:
         "workflow/report/logs/roary/roary-{name}.log",
     shell:
         """
-        roary -p {threads} -f {output.roary_dir} -i {params.i} -e -n -r -v {input.gff} &>> {log}
+        roary -p {threads} -f {output.roary_dir} -i {params.i} -g {params.g} -e -n -r -v {input.gff} &>> {log}
         """
 
 
