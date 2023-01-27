@@ -1,3 +1,122 @@
+def extract_bgc_project_information(config, project_variable="projects", sample_table_index="genome_id"):
+    """
+    Wrapper to extract variables from projects in config.yaml.
+    Returns all necessary objects required to run bgcflow.
+
+    Arguments:
+        config:
+
+    Returns:
+        df_projects:
+        df_samples:
+        prokka_db_table:
+        prokka_db_map:
+        peppy_objects:
+    """
+
+    # load information from config
+    print(f"Step 1. Extracting project information from config...\n", file=sys.stderr)
+    projects = config[project_variable]
+    print(f"   Available projects: {projects}", file=sys.stderr)
+
+    # filter for pep projects
+    df_projects = pd.DataFrame(projects).set_index("name", drop=False)
+    for i in df_projects.index:
+        if i.endswith(".yaml"):
+            df_projects = df_projects.drop(i)
+
+    # Fill missing df_projects columns
+    for item in ["prokka-db", "gtdb-tax", "rules"]:
+        if not item in df_projects.columns.tolist():
+            df_projects = df_projects.reindex(
+                columns=df_projects.columns.tolist() + [item]
+            )
+
+    # generate containers to capture output
+    df_samples = []
+    prokka_db_table = {}
+    prokka_db_map = {}
+    peppy_objects = {}
+
+    for num, p in enumerate(projects):
+        print(
+            f"Step 2.{num+1} Getting sample information for project: {p['name']}",
+            file=sys.stderr,
+        )
+        # grab a bgcflow pep project
+        if p["name"].endswith(".yaml"):
+            pep_file = p["name"]
+            print(pep_file)
+            print(f" - Processing project [{pep_file}]", file=sys.stderr)
+            p = peppy.Project(pep_file, sample_table_index=sample_table_index)
+
+
+            # make sure each project has unique names
+            assert (
+                not p.name in df_projects["name"].unique()
+            ), f"Project name [{p.name}] in [{pep_file}] has been used. Please use different name for each project."
+
+            df_projects.loc[p.name, "name"] = p.name
+            df_projects.loc[p.name, "samples"] = p.config_file
+            df_projects.loc[p.name, "rules"] = p.config_file
+
+        # grab a bgcflow project parameters from main config.yaml
+        # exist for back compatibility with bgcflow=<0.3.3
+        else:
+            p_bgcflow = peppy.Project(p["samples"], sample_table_index=sample_table_index)
+            print(f" - Processing project [{p['name']}]", file=sys.stderr)
+            p = refine_bgcflow_project(p_bgcflow, p)
+
+        # populate input files for custom samples
+        p.sample_tables = get_input_location(p)
+
+        # grab global rule config if rule not presents
+        if "rules" not in p.config.keys():
+            p.config["rules"] = config["rules"]
+
+        df_sample, df_gtdb, prokka_db_table, prokka_db_map = read_pep_project(
+            p, prokka_db_table, prokka_db_map
+        )
+        peppy_objects[p.name] = p
+
+        # Only to accommodate peppy<=0.34.0
+        for item in ["closest_placement_reference", "genus"]:
+            if not item in df_sample.columns.tolist():
+                df_sample = df_sample.reindex(
+                    columns=df_sample.columns.tolist() + [item]
+                )
+
+        df_samples.append(df_sample.replace("NaN", ""))
+    df_samples = pd.concat(df_samples)
+
+    # Fill missing df_samples columns
+    for item in [
+        "organism",
+        "genus",
+        "species",
+        "strain",
+        "closest_placement_reference",
+        "input_file",
+    ]:
+        if not item in df_samples.columns.tolist():
+            df_samples = df_samples.reindex(
+                columns=df_samples.columns.tolist() + [item]
+            )
+
+    #print(f"Step 3 Merging genome_ids across projects...\n", file=sys.stderr)
+    #df_samples = df_samples.fillna("")
+    #try:
+    #    if 'BGC' in [peppy_objects[k].config['schema'] for k in peppy_objects.keys()]:
+    #        pass
+    #    else:
+    #        df_samples = find_conflicting_samples(df_samples)
+    #except KeyError:
+    #    df_samples = find_conflicting_samples(df_samples)
+    # print(f"Step 4 Checking validity of samples using schemas..\n", file=sys.stderr)
+    # validate(df_samples, schema="schemas/samples.schema.yaml")
+
+    return df_projects, df_samples, prokka_db_table, prokka_db_map, peppy_objects
+
 report: "report/workflow.rst"
 
 
@@ -11,7 +130,7 @@ include: "rules/common.smk"
     PROKKA_DB_TABLE,
     PROKKA_DB_MAP,
     PEP_PROJECTS,
-) = extract_project_information(config, project_variable="bgc_projects") # specify project type
+) = extract_bgc_project_information(config, project_variable="bgc_projects", sample_table_index="bgc_id") # specify project type
 
 # generate centralized sample datasets
 bgcflow_util_dir = Path("data/interim/bgcflow_utils")
@@ -32,7 +151,6 @@ GTDB_PATHS = [
     if "gtdb-tax" in PEP_PROJECTS[k].config.keys()
 ]
 PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
-
 
 ##### 3. Wildcard constraints #####
 wildcard_constraints:
