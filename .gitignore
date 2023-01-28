@@ -22,3 +22,5 @@ workflow/bgcflow/build*
 .panoptes.db
 notebooks/
 *.ipynb_checkpoints/
+plugins/
+metabase.db*
