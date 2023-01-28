@@ -1,0 +1,30 @@
+name: Lactobacillus_delbrueckii
+
+pep_version: 2.1.0
+
+description: "Lactobacillus delbrueckii 27 01 2023"
+
+sample_table: samples.csv
+
+#### RULE CONFIGURATION ####
+# rules: set value to TRUE if you want to run the analysis or FALSE if you don't
+rules:
+  seqfu: TRUE
+  mash: TRUE
+  fastani: TRUE
+  checkm: FALSE
+  gtdbtk: FALSE
+  prokka-gbk: TRUE
+  antismash: TRUE
+  query-bigslice: TRUE
+  bigscape: TRUE
+  bigslice: TRUE
+  automlst-wrapper: TRUE
+  arts: TRUE
+  roary: TRUE
+  eggnog: TRUE
+  eggnog-roary: TRUE
+  deeptfactor: TRUE
+  deeptfactor-roary: TRUE
+  cblaster-genome: TRUE
+  cblaster-bgc: TRUE

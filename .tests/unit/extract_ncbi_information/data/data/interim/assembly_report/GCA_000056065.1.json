@@ -1,0 +1,22 @@
+{
+    "GCA_000056065.1":{
+        "assembly":"ASM5606v1",
+        "organism":"Lactobacillus delbrueckii subsp. bulgaricus ATCC 11842 = JCM 1002 (firmicutes)",
+        "genus":"Lactobacillus",
+        "species":"delbrueckii",
+        "strain":"ATCC 11842",
+        "tax_id":"390333",
+        "refseq_category":null,
+        "refseq":"GCF_000056065.1",
+        "genbank":"GCA_000056065.1",
+        "assembly_type":"na",
+        "release_type":"major",
+        "assembly_level":"Complete Genome",
+        "genome_representation":"full",
+        "refseq_genbank_identity":"yes",
+        "biosample":"SAMEA3138258",
+        "submitter":"Genoscope",
+        "date":"2006-05-26",
+        "BioProject":"PRJNA16871"
+    }
+}
