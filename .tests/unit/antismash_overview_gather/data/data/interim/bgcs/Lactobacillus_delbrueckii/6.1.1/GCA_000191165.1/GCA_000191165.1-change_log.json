@@ -1,0 +1,16 @@
+{
+    "GCA_000191165.1": {
+        "CP000156.1.region001.gbk": {
+            "record_id": "CP000156.1",
+            "original_id": "CP000156.1",
+            "target_path": "data/interim/antismash/6.1.1/GCA_000191165.1/CP000156.1.region001.gbk",
+            "symlink_path": "data/interim/bgcs/Lactobacillus_delbrueckii/6.1.1/GCA_000191165.1/CP000156.1.region001.gbk"
+        },
+        "GCA_000191165.1.gbk": {
+            "record_id": "CP000156.1",
+            "original_id": "CP000156.1",
+            "target_path": "data/interim/antismash/6.1.1/GCA_000191165.1/GCA_000191165.1.gbk",
+            "symlink_path": "data/interim/bgcs/Lactobacillus_delbrueckii/6.1.1/GCA_000191165.1/GCA_000191165.1.gbk"
+        }
+    }
+}
