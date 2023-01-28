@@ -23,7 +23,7 @@ jobs:
     - name: Linting
       uses: snakemake/snakemake-github-action@v1.24.0
       with:
-        directory: .test
+        directory: .tests
         snakefile: workflow/Snakefile
         stagein: "conda config --set channel_priority strict"
         args: "--lint"
@@ -41,7 +41,7 @@ jobs:
     - name: Dry-run workflow
       uses: snakemake/snakemake-github-action@v1.24.0
       with:
-        directory: .test
+        directory: .tests
         snakefile: workflow/Snakefile
         stagein: "conda config --set channel_priority strict"
         args: "--use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache -n"
