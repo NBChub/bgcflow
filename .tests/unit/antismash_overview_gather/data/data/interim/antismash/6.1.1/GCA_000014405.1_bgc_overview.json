@@ -1,0 +1,14 @@
+{
+  "CP000412.1.region001": {
+    "genome_id": "GCA_000014405.1",
+    "region": "1.1",
+    "accession": "CP000412.1",
+    "start_pos": "17283",
+    "end_pos": "39785",
+    "contig_edge": "False",
+    "product": [
+      "lanthipeptide-class-iii"
+    ],
+    "region_length": 22502
+  }
+}
