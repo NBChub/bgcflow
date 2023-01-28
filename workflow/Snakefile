@@ -54,11 +54,6 @@ rule all:
         get_final_output(DF_SAMPLES, PEP_PROJECTS, rule_dict_path="workflow/rules.yaml"),
 
 
-onsuccess:
-    shell(
-        "snakemake --use-conda -c 2 --snakefile workflow/Report --rerun-trigger mtime --keep-going"
-    )
-
 
 ##### Modules #####
 include: "rules/ncbi.smk"
