@@ -45,3 +45,15 @@ jobs:
         snakefile: workflow/Snakefile
         stagein: "conda config --set channel_priority strict"
         args: "--use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache -n"
+
+  unit-test:
+    runs-on: ubuntu-latest
+    needs:
+      - dry-run
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      - run: pip install git+https://github.com/NBChub/bgcflow_wrapper.git
+      - run: pytest .tests/
