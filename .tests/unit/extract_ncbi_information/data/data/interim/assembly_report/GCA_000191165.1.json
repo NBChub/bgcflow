@@ -1,0 +1,22 @@
+{
+    "GCA_000191165.1":{
+        "assembly":"ASM19116v1",
+        "organism":"Lactobacillus delbrueckii subsp. bulgaricus 2038 (firmicutes)",
+        "genus":"Lactobacillus",
+        "species":"delbrueckii",
+        "strain":"2038",
+        "tax_id":"353496",
+        "refseq_category":null,
+        "refseq":"GCF_000191165.1",
+        "genbank":"GCA_000191165.1",
+        "assembly_type":"na",
+        "release_type":"major",
+        "assembly_level":"Complete Genome",
+        "genome_representation":"full",
+        "refseq_genbank_identity":"yes",
+        "biosample":"SAMN02603124",
+        "submitter":"Chinese National HGC",
+        "date":"2011-03-03",
+        "BioProject":"PRJNA16120"
+    }
+}
