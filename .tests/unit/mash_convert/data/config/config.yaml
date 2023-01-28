@@ -1,0 +1,62 @@
+# This file should contain everything to configure the workflow on a global scale.
+
+#### PROJECT INFORMATION ####
+# This section control your project configuration.
+# Each project are separated by "-".
+# A project can be defined as (1) a yaml object or (2) a Portable Encapsulated Project (PEP) file.
+# (1) To define project as a yaml object, it must contain the variable "name" and "samples".
+#   - name : name of your project
+#   - samples : a csv file containing a list of genome ids for analysis with multiple sources mentioned. Genome ids must be unique.
+#   - rules: a yaml file containing project rule configurations. This will override global rule configuration.
+#   - prokka-db (optional): list of the custom accessions to use as prokka reference database.
+#   - gtdb-tax (optional): output summary file of GTDB-tk with "user_genome" and "classification" as the two minimum columns
+# (2) To define project using PEP file, only variable "name" should be given that points to the location of the PEP yaml file.
+#   - name: path to PEP .yaml file. See project example_pep for details.
+
+projects:
+# Project 1 (yaml object)
+#  - name: example
+#    samples: config/_genome_project_example/samples.csv
+#    rules: config/_genome_project_example/project_config.yaml
+#    prokka-db: config/_genome_project_example/prokka-db.csv
+#    gtdb-tax: config/_genome_project_example/gtdbtk.bac120.summary.tsv
+
+# Project 2 (PEP file)
+#  - name: config/_pep_example/project_config.yaml
+  - name: config/lactobacillus_delbruecki/project_config.yaml
+#### GLOBAL RULE CONFIGURATION ####
+# This section configures the rules to run globally.
+# Use project specific rule configurations if you want to run different rules for each projects.
+# rules: set value to TRUE if you want to run the analysis or FALSE if you don't
+rules:
+  seqfu: FALSE
+  mash: FALSE
+  fastani: FALSE
+  checkm: FALSE
+  gtdbtk: FALSE
+  prokka-gbk: FALSE
+  antismash: TRUE
+  query-bigslice: FALSE
+  bigscape: FALSE
+  bigslice: FALSE
+  automlst-wrapper: FALSE
+  arts: FALSE
+  roary: FALSE
+  eggnog: FALSE
+  eggnog-roary: FALSE
+  deeptfactor: FALSE
+  deeptfactor-roary: FALSE
+  cblaster-genome: FALSE
+  cblaster-bgc: FALSE
+
+#### RESOURCES CONFIGURATION ####
+# resources : the location of the resources to run the rule.
+# The default location is at "resources/{resource_name}".
+resources_path:
+  antismash_db: resources/antismash_db
+  eggnog_db: resources/eggnog_db
+  BiG-SCAPE: resources/BiG-SCAPE
+  bigslice: resources/bigslice
+  checkm: resources/checkm
+  gtdbtk: resources/gtdbtk
+  #RNAmmer: resources/RNAmmer # If specified, will override Barnapp in Prokka
