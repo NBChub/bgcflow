@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 from shutil import copyfile
@@ -8,12 +9,16 @@ import plotly.express as px
 import plotly.graph_objects as go
 from Bio import Phylo, SeqIO
 
+log_format = "%(levelname)-8s %(asctime)s   %(message)s"
+date_format = "%d/%m %H:%M:%S"
+logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
+
 
 def get_roary_data(
     roary_interim_folder, roary_processed_folder, core=0.99, softcore=0.95, shell=0.15
 ):
     """
-    Copy important files from Roary interim to proecessed directory
+    Copy important files from Roary interim to processed directory
 
     Parameters
     ----------
@@ -43,6 +48,7 @@ def get_roary_data(
     )
 
     # Extract gene annotation columns to separate dataframe
+    logging.info("Extract gene annotation columns to separate dataframe")
     gene_summary_columns = [
         "Non-unique Gene name",
         "Annotation",
@@ -68,6 +74,7 @@ def get_roary_data(
     df_gene_summary = df_gene_presence_summary[gene_summary_columns].fillna("")
 
     # Extract locus tags
+    logging.info("Extract locus tags")
     df_gene_presence = df_gene_presence_summary.drop(
         columns=gene_summary_columns
     ).fillna("")
@@ -81,6 +88,7 @@ def get_roary_data(
     df_gene_presence.to_csv(gene_presence_locustag_out_processed)
 
     # Save the gene presence absence binary matrix
+    logging.info("Save the gene presence absence binary matrix")
     gene_presence_binary_path = os.path.join(
         roary_interim_folder, "gene_presence_absence.Rtab"
     )
@@ -98,6 +106,7 @@ def get_roary_data(
     df_gene_presence_binary.to_csv(gene_presence_binary_out_processed)
 
     # Add locus_tag and pangenome_id from pan_genome_reference.fa file
+    logging.info("Add locus_tag and pangenome_id from pan_genome_reference.fa file")
     pan_fasta_path = os.path.join(roary_interim_folder, "pan_genome_reference.fa")
     records = SeqIO.parse(pan_fasta_path, format="fasta")
     for rec in records:
@@ -108,6 +117,7 @@ def get_roary_data(
             df_gene_summary.loc[pan_gene_id, "locus_tag"] = locus_tag
 
     # Add pangenome class and save gene summary table
+    logging.info("Add pangenome class and save gene summary table")
     total_genomes = df_gene_presence.shape[1]
     for pan_gene_id in df_gene_summary.index:
         no_isolates = df_gene_summary.loc[pan_gene_id, "No. isolates"]
@@ -123,6 +133,7 @@ def get_roary_data(
     df_gene_summary.to_csv(gene_summary_out_processed)
 
     # Copy other output files to processed directory
+    logging.info("Copy other output files to processed directory")
     copyfile(
         os.path.join(roary_interim_folder, "conserved_vs_total_genes.png"),
         os.path.join(roary_processed_folder, "conserved_vs_total_genes.png"),
@@ -152,7 +163,6 @@ def get_roary_data(
         os.path.join(roary_interim_folder, "number_of_genes_in_pan_genome.Rtab"),
         os.path.join(roary_processed_folder, "number_of_genes_in_pan_genome.Rtab"),
     )
-
     return df_gene_presence, df_gene_presence_binary, df_gene_summary
 
 
@@ -301,7 +311,7 @@ def plot_core_pan_curve(roary_interim_folder, roary_processed_folder):
     if not os.path.isfile(fig_new_uniq_path):
         fig_new_uniq.write_image(fig_new_uniq_path)
 
-    return fig_pan_core.show(), fig_new_uniq.show()
+    return
 
 
 def plot_pan_freq_plot(df_gene_presence_binary, roary_processed_folder):
@@ -337,7 +347,7 @@ def plot_pan_freq_plot(df_gene_presence_binary, roary_processed_folder):
     if not os.path.isfile(fig_out_path):
         fig.write_image(fig_out_path)
 
-    return fig.show()
+    return
 
 
 def plot_pan_pie_chart(
@@ -428,7 +438,7 @@ def plot_pan_pie_chart(
             pad_inches=0.1,
         )
 
-    return plt.show()
+    return
 
 
 def plot_tree_presence_map(
