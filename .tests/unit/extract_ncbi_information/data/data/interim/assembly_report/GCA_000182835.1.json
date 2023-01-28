@@ -1,0 +1,22 @@
+{
+    "GCA_000182835.1":{
+        "assembly":"ASM18283v1",
+        "organism":"Lactobacillus delbrueckii subsp. bulgaricus ND02 (firmicutes)",
+        "genus":"Lactobacillus",
+        "species":"delbrueckii",
+        "strain":"ND02",
+        "tax_id":"767455",
+        "refseq_category":null,
+        "refseq":"GCF_000182835.1",
+        "genbank":"GCA_000182835.1",
+        "assembly_type":"na",
+        "release_type":"major",
+        "assembly_level":"Complete Genome",
+        "genome_representation":"full",
+        "refseq_genbank_identity":"yes",
+        "biosample":"SAMN02603937",
+        "submitter":"The Key Laboratory of Dairy Biotechnology and Bioengineering, Education Ministry of P. R. China, Department of Food Science and Engineering, Inner Mongolia Agricultural University, China",
+        "date":"2010-11-19",
+        "BioProject":"PRJNA49147"
+    }
+}

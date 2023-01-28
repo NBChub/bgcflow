@@ -1,0 +1,22 @@
+{
+    "GCA_000014405.1":{
+        "assembly":"ASM1440v1",
+        "organism":"Lactobacillus delbrueckii subsp. bulgaricus ATCC BAA-365 (firmicutes)",
+        "genus":"Lactobacillus",
+        "species":"delbrueckii",
+        "strain":"ATCC BAA-365",
+        "tax_id":"321956",
+        "refseq_category":null,
+        "refseq":"GCF_000014405.1",
+        "genbank":"GCA_000014405.1",
+        "assembly_type":"na",
+        "release_type":"major",
+        "assembly_level":"Complete Genome",
+        "genome_representation":"full",
+        "refseq_genbank_identity":"yes",
+        "biosample":"SAMN02598530",
+        "submitter":"US DOE Joint Genome Institute (JGI), The Lactic Acid Bacteria Genome Consortium and Fidelity Systems Inc.",
+        "date":"2006-10-13",
+        "BioProject":"PRJNA403"
+    }
+}
