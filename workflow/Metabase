@@ -1,0 +1,12 @@
+rule all:
+    input:
+        "resources/metabase/metabase.jar",
+        "resources/metabase/plugins/duckdb.metabase-driver.jar",
+
+onsuccess:
+    shell(
+        "java -Xms2g -Xmx8g -jar resources/metabase/metabase.jar"
+    )
+
+##### Modules #####
+include: "rules/metabase.smk"
