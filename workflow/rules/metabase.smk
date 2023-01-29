@@ -3,6 +3,8 @@ rule metabase_install:
         jar="resources/metabase/metabase.jar",
     log:
         "workflow/report/logs/metabase_install.log",
+    conda:
+        "../envs/utilities.yaml"
     params:
         version="v0.45.2"
     shell:
