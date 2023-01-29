@@ -24,7 +24,7 @@ query-bigslice:
     BiG-SLiCE: A highly scalable tool maps the diversity of 1.2 million biosynthetic
     gene clusters, [GigaScience, Volume 10, Issue 1, January 2021, giaa154.](https://doi.org/10.1093/gigascience/giaa154)'
 bigscape:
-  final_output: data/processed/{name}/bigscape/bigscape_as{version}.zip
+  final_output: data/processed/{name}/bigscape/no_mibig_bigscape_as{version}.zip
   description: Cluster BGCs using BiG-SCAPE
   category: Genome Mining
   link:

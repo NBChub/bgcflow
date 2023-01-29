@@ -58,12 +58,32 @@ rule bigscape:
 
 
 ## Unused rule, might be deleted
+rule bigscape_no_mibig:
+    input:
+        bigscape="resources/BiG-SCAPE",
+        bgc_mapping="data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
+        antismash_dir="data/interim/bgcs/{name}/{version}/",
+    output:
+        index="data/interim/bigscape/no_mibig_{name}_antismash_{version}/index.html",
+    conda:
+        "../envs/bigscape.yaml"
+    params:
+        bigscape_dir="data/interim/bigscape/no_mibig_{name}_antismash_{version}/",
+        label="{name}_antismash_{version}",
+    log:
+        "workflow/report/logs/bigscape/{name}_antismash_{version}/bigscape.log",
+    threads: 32
+    shell:
+        """
+        python {input.bigscape}/bigscape.py -i {input.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --verbose &>> {log}
+        """
+
 rule copy_bigscape_zip:
     input:
         bgc_mapping="data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
-        index="data/interim/bigscape/{name}_antismash_{version}/index.html",
+        index="data/interim/bigscape/no_mibig_{name}_antismash_{version}/index.html",
     output:
-        zip="data/processed/{name}/bigscape/bigscape_as{version}.zip",
+        zip="data/processed/{name}/bigscape/no_mibig_bigscape_as{version}.zip",
     conda:
         "../envs/bgc_analytics.yaml"
     log:
