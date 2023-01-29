@@ -18,23 +18,28 @@ def get_single_bgc_input(pep_object, bgc_id, antismash_version):
     #print(bgc_id, gbk_path, file=sys.stderr)
     return gbk_path
 
+interproscan_version = "5.60-92.0"
+
 rule install_interproscan:
     output:
-        interproscan = "resources/interproscan/interproscan.sh"
+        interproscan = f"resources/interproscan/interproscan-{interproscan_version}"
     log:
         "workflow/report/logs/install_interproscan.log",
     conda:
-        "../envs/bgc_analytics.yaml"
+        "../envs/utilities.yaml"
+    params:
+        version = interproscan_version
     shell:
         """
+        java --version >> {log}
         #sudo apt-get install libpcre3-dev
-        wget -P resources https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.60-92.0/interproscan-5.60-92.0-64-bit.tar.gz -nc 2>> {log}
-        wget -P resources https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.60-92.0/interproscan-5.60-92.0-64-bit.tar.gz.md5 -nc 2>> {log}
-        (cd resources && md5sum -c interproscan-5.60-92.0-64-bit.tar.gz.md5) 2>> {log}
-        (cd resources && tar -pxvzf interproscan-5.60-92.0-64-bit.tar.gz && mv interproscan-5.60-92.0 interproscan) 2>> {log}
-        (cd resources/interproscan && python3 setup.py interproscan.properties) 2>> {log}
-        (cd resources/interproscan && ./interproscan.sh -i test_all_appl.fasta -f tsv -dp) 2>> {log}
-        (cd resources/interproscan && ./interproscan.sh -i test_all_appl.fasta -f tsv) 2>> {log}
+        wget -P resources https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/{params.version}/interproscan-{params.version}-64-bit.tar.gz -nc 2>> {log}
+        wget -P resources https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/{params.version}/interproscan-{params.version}-64-bit.tar.gz.md5 -nc 2>> {log}
+        (cd resources && md5sum -c interproscan-{params.version}-64-bit.tar.gz.md5) 2>> {log}
+        (cd resources && tar -pxvzf interproscan-{params.version}-64-bit.tar.gz && mv interproscan-{params.version} interproscan) 2>> {log}
+        (cd resources/interproscan/interproscan-{params.version} && python3 setup.py interproscan.properties) 2>> {log}
+        (cd resources/interproscan/interproscan-{params.version} && ./interproscan.sh -i test_all_appl.fasta -f tsv -dp) &>> {log}
+        (cd resources/interproscan/interproscan-{params.version} && ./interproscan.sh -i test_all_appl.fasta -f tsv) &>> {log}
         """
 
 rule prepare_aa_interproscan:
@@ -54,18 +59,18 @@ rule prepare_aa_interproscan:
 rule interproscan:
     input:
         fasta = "data/interim/interproscan/{bgc}_{name}_{version}.faa",
-        interpro_sh = "resources/interproscan/interproscan.sh"
+        interproscan = f"resources/interproscan/interproscan-{interproscan_version}"
     output:
         tsv = "data/interim/interproscan/{bgc}_{name}_{version}.faa.tsv",
         json = "data/interim/interproscan/{bgc}_{name}_{version}.faa.json",
     log:
         "workflow/report/logs/{bgc}_{name}_{version}.log",
     conda:
-        "../envs/bgc_analytics.yaml"
+        "../envs/utilities.yaml"
     threads: 4
     params:
         appl = "TIGRFAM,PFAM"
     shell:
         """
-        {input.interpro_sh} -appl {params.appl} -cpu {threads} -d data/interim/interproscan -f TSV,JSON -i {input.fasta} --verbose &>> {log}
+        {input.interproscan}/interproscan.sh -appl {params.appl} -cpu {threads} -d data/interim/interproscan -f TSV,JSON -i {input.fasta} --verbose &>> {log}
         """

@@ -1,0 +1,7 @@
+name: utilities
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - openjdk
+  - perl

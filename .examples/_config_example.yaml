@@ -24,6 +24,9 @@ projects:
 # Project 2 (PEP file)
   - name: .examples/_pep_example/project_config.yaml
 
+bgc_projects:
+  - name: config/lanthipeptide/project_config.yaml
+
 #### GLOBAL RULE CONFIGURATION ####
 # This section configures the rules to run globally.
 # Use project specific rule configurations if you want to run different rules for each projects.
