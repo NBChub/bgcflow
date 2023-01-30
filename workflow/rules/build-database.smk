@@ -97,7 +97,7 @@ rule get_dbt_template:
     params:
         dbt = "data/processed/{name}/dbt_as_{version}",
         dbt_repo = "git@github.com:NBChub/bgcflow_dbt-duckdb.git",
-        branch = "dev4",
+        branch = "v0.1.0",
         cutoff = "0.30",
         as_version = "{version}"
     shell:
