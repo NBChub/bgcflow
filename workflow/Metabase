@@ -5,7 +5,7 @@ rule all:
 
 onsuccess:
     shell(
-        "java -Xms2g -Xmx8g -jar resources/metabase/metabase.jar"
+        "(cd resources/metabase && java -Xms2g -Xmx8g -jar metabase.jar)"
     )
 
 ##### Modules #####
