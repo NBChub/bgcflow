@@ -37,6 +37,9 @@ def write_parquet(input_json, index_key, table):
 
     logging.debug(f"Writing file to: {table}")
 
+    # convert lists to flat string
+    df = df.applymap(str)
+
     # Save dataframes to csv tables
     df_table = Path(table)
     df_table.parent.mkdir(parents=True, exist_ok=True)
