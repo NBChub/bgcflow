@@ -8,7 +8,7 @@ from pathlib import Path
 import peppy
 
 min_version("7.14.0")
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 
 
 container: "docker://matinnu/bgcflow:latest"
