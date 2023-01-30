@@ -97,6 +97,7 @@ rule get_dbt_template:
     params:
         dbt = "data/processed/{name}/dbt_as_{version}",
         dbt_repo = "git@github.com:NBChub/bgcflow_dbt-duckdb.git",
+        branch = "dev4",
         cutoff = "0.30",
         as_version = "{version}"
     shell:
@@ -108,7 +109,7 @@ rule get_dbt_template:
         else
             rm -rf {params.dbt} 2>> {log}
             (cd data/processed/{wildcards.name} \
-                && git clone {params.dbt_repo} $(basename {params.dbt})
+                && git clone --branch {params.branch} {params.dbt_repo} $(basename {params.dbt})
             ) &>> {log}
         fi
 
