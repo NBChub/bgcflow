@@ -91,8 +91,8 @@ rule copy_bigscape_zip:
     shell:
         """
         topdir=$PWD
-        (cd data/interim/bigscape && zip -r $topdir/{output.zip} {wildcards.name}_antismash_{wildcards.version}.csv \
-            {wildcards.name}_antismash_{wildcards.version} -x {wildcards.name}_antismash_{wildcards.version}/cache/**\* &>> $topdir/{log})
+        (cd data/interim/bigscape && zip -r $topdir/{output.zip} no_mibig_{wildcards.name}_antismash_{wildcards.version} \
+            -x {wildcards.name}_antismash_{wildcards.version}/cache/**\* &>> $topdir/{log})
         """
 
 
