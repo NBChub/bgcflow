@@ -18,7 +18,7 @@ rule metabase_duckdb_plugin:
     log:
         "workflow/report/logs/metabase_duckdb_install.log",
     params:
-        release="0.1.5"
+        release="0.1.3"
     shell:
         """
         wget -O {output.plugin} https://github.com/AlexR2D2/metabase_duckdb_driver/releases/download/{params.release}/duckdb.metabase-driver.jar 2>> {log}
