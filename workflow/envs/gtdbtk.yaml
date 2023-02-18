@@ -7,3 +7,4 @@ dependencies:
   - gtdbtk=2.1.0
   - wget
   - tar
+  - numpy=1.23.1
