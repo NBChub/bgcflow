@@ -8,6 +8,7 @@ dependencies:
   - jupyterlab>3
   - ipywidgets>=7.6
   - jupyter-dash
+  - jupyter_contrib_nbextensions
   - seaborn
   - pandas
   - plotly
