@@ -21,3 +21,4 @@ dependencies:
   - r-phytools
   - pandoc
   - rpy2
+  - jupyter_contrib_nbextensions
