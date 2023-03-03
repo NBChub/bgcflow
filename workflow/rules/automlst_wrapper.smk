@@ -51,6 +51,9 @@ rule automlst_wrapper:
 rule automlst_wrapper_out:
     input:
         tree="data/interim/automlst_wrapper/{name}/raxmlpart.txt.treefile",
+        organism_info=lambda wildcards: expand("data/interim/prokka/{strains}/organism_info.txt",
+                    strains=[s for s in list(PEP_PROJECTS[wildcards.name].sample_table.index)],
+        ),
     output:
         automlst_processed=directory("data/processed/{name}/automlst_wrapper/"),
         final_tree="data/processed/{name}/automlst_wrapper/final.newick",
