@@ -10,4 +10,4 @@ dependencies:
   - pip
   - pip:
     - git+https://github.com/jwills/dbt-duckdb.git@v1.3.1
-
+    - dbt-metabase
