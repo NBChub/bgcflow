@@ -42,7 +42,7 @@ clinker:
   references:
   - 'Gilchrist, C., & Chooi, Y. (2021). clinker & clustermap.js: automatic generation of gene cluster comparison figures (Version 0.0.21) [Computer software]. https://doi.org/10.1093/bioinformatics/btab007'
 interproscan:
-  final_output: "data/interim/interproscan/{bgc}_{name}_{version}.faa.tsv"
+  final_output: "data/processed/{name}/tables/interproscan_as_{version}.tsv"
   description: scanning algorithms from the InterPro database
   category: Genome Mining
   link:
