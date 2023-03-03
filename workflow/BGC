@@ -140,7 +140,7 @@ DF_SAMPLES.to_csv(bgcflow_util_dir / "samples.csv", index=False)
 ##### 2. Generate wildcard constants #####
 PROJECT_IDS = list(DF_PROJECTS.name.unique())
 STRAINS = DF_SAMPLES.genome_id.to_list()
-BGCS = STRAINS = DF_SAMPLES.bgc_id.to_list()
+BGCS = DF_SAMPLES.bgc_id.to_list()
 CUSTOM = DF_SAMPLES[DF_SAMPLES.source.eq("custom")].genome_id.to_list()
 NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
 PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()

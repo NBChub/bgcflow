@@ -28,7 +28,7 @@ rule gtdb_prep:
 
 rule fix_gtdb_taxonomy:
     input:
-        json_list=lambda wildcards: get_json_inputs(wildcards.name, DF_SAMPLES),
+        json_list=lambda wildcards: [f"data/interim/gtdb/{strains}.json" for strains in PEP_PROJECTS[wildcards.name].sample_tables.genome_id.unique()],
     output:
         meta=report(
             "data/processed/{name}/tables/df_gtdb_meta.csv",

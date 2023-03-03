@@ -1,28 +1,8 @@
-def get_single_bgc_input(pep_object, bgc_id, antismash_version):
-    """
-    Given a PEP Object, get all genbank files based on the bgc_id column
-    """
-    antismash_path = Path(f"data/interim/antismash/{antismash_version}")
-    df = pep_object.sample_tables
-    df = df.set_index("bgc_id", drop=False)
-
-    genome_id = df.loc[bgc_id, "genome_id"]
-    # override with custom path
-    assert 'gbk_path' in df.columns
-    custom_path = df.loc[bgc_id, "gbk_path"]
-    #print(custom_path, type(custom_path), custom_path != None, file=sys.stderr)
-    if custom_path != None:
-        gbk_path = custom_path
-    else:
-        gbk_path = antismash_path / genome_id / f"{bgc_id}.gbk"
-    #print(bgc_id, gbk_path, file=sys.stderr)
-    return gbk_path
-
 interproscan_version = "5.60-92.0"
 
 rule install_interproscan:
     output:
-        interproscan = f"resources/interproscan/interproscan-{interproscan_version}"
+        interproscan = f"resources/interproscan-{interproscan_version}"
     log:
         "workflow/report/logs/interproscan/install_interproscan.log",
     conda:
@@ -44,27 +24,27 @@ rule install_interproscan:
 
 rule prepare_aa_interproscan:
     input:
-        gbk = lambda wildcards: get_single_bgc_input(PEP_PROJECTS[wildcards.name], wildcards.bgc, wildcards.version),
+        gbk = lambda wildcards: get_bgc_inputs(PEP_PROJECTS[wildcards.name], wildcards.version),
     output:
-        fasta = temp("data/interim/interproscan/{bgc}_{name}_{version}.faa"),
+        fasta = temp("data/interim/interproscan/{name}_{version}.faa"),
     log:
-        "workflow/report/logs/interproscan/create_aa_{bgc}_{name}_{version}.log",
+        "workflow/report/logs/interproscan/create_aa_{name}_{version}.log",
     conda:
         "../envs/bgc_analytics.yaml"
     shell:
         """
-        python workflow/bgcflow/bgcflow/misc/create_aa.py {input.gbk} {output.fasta} 2>> {log}
+        python workflow/bgcflow/bgcflow/misc/create_aa.py '{input.gbk}' {output.fasta} 2>> {log}
         """
 
 rule interproscan:
     input:
-        fasta = "data/interim/interproscan/{bgc}_{name}_{version}.faa",
-        interproscan = f"resources/interproscan/interproscan-{interproscan_version}"
+        fasta = "data/interim/interproscan/{name}_{version}.faa",
+        interproscan = f"resources/interproscan-{interproscan_version}"
     output:
-        tsv = "data/interim/interproscan/{bgc}_{name}_{version}.faa.tsv",
-        json = "data/interim/interproscan/{bgc}_{name}_{version}.faa.json",
+        tsv = "data/processed/{name}/tables/interproscan_as_{version}.tsv",
+        json = "data/processed/{name}/tables/interproscan_as_{version}.json",
     log:
-        "workflow/report/logs/interproscan/{bgc}_{name}_{version}.log",
+        "workflow/report/logs/interproscan/{name}_{version}.log",
     conda:
         "../envs/utilities.yaml"
     threads: 4
@@ -73,4 +53,6 @@ rule interproscan:
     shell:
         """
         {input.interproscan}/interproscan.sh -appl {params.appl} -cpu {threads} -d data/interim/interproscan -f TSV,JSON -i {input.fasta} --verbose &>> {log}
+        mv data/interim/interproscan/{wildcards.name}_{wildcards.version}.faa.tsv {output.tsv}
+        mv data/interim/interproscan/{wildcards.name}_{wildcards.version}.faa.json {output.json}
         """

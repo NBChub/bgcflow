@@ -10,7 +10,7 @@ date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 
-def bgc_downstream_prep(input_dir, output_dir):
+def bgc_downstream_prep(input_dir, output_dir, selected_bgcs=False):
     """
     Given an antiSMASH directory, check for changed name
     """
@@ -26,6 +26,7 @@ def bgc_downstream_prep(input_dir, output_dir):
     change_log = {genome_id: {}}
 
     for gbk in path.glob("*.gbk"):
+        logging.info(f"Parsing file: {selected_bgcs}")
         logging.info(f"Parsing file: {gbk.name}")
         region = SeqIO.parse(str(gbk), "genbank")
         for record in region:
