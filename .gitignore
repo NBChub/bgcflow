@@ -24,3 +24,5 @@ notebooks/
 *.ipynb_checkpoints/
 plugins/
 metabase.db*
+pytest-coverage.txt
+.coverage
