@@ -35,7 +35,7 @@ rule antismash_overview_gather:
         ),
         mapping_dir = "data/interim/bgcs/{name}/{version}",
     output:
-        df_bgc="data/processed/{name}/tables/df_antismash_{version}_bgc.csv",
+        df_bgc="data/processed/{name}/tables/df_regions_antismash_{version}.csv",
     conda:
         "../envs/bgc_analytics.yaml"
     log:
@@ -58,7 +58,7 @@ rule antismash_summary:
             version=wildcards.version,
             strains=[s for s in list(PEP_PROJECTS[wildcards.name].sample_table.index)],
         ),
-        bgc_overview="data/processed/{name}/tables/df_antismash_{version}_bgc.csv",
+        bgc_overview="data/processed/{name}/tables/df_regions_antismash_{version}.csv",
     output:
         df_antismash_summary=report(
             "data/processed/{name}/tables/df_antismash_{version}_summary.csv",
