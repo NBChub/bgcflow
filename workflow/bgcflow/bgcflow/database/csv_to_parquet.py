@@ -33,6 +33,8 @@ def csv_to_parquet(project_folder, output_folder="."):
             category = str(i).split("/")[3]
             output_subfolder = output_folder / category
             df = pd.read_csv(i)
+            # df = df.fillna("")
+            # df.columns = [c.replace(".", "_") for c in df.columns]
             output_parquet = output_subfolder / f"{i.stem}.parquet"
             logging.info(f"Converting {i} to {output_parquet}")
             output_subfolder.mkdir(parents=True, exist_ok=True)
