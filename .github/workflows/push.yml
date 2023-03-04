@@ -57,6 +57,8 @@ jobs:
           python-version: 3.x
       - run: pip install git+https://github.com/NBChub/bgcflow_wrapper.git
       - run: pip install pytest-cov
+      - name: Test coverage
+        run: pytest --cov=.tests/unit .tests/unit/
       - name: Build coverage file
         run: pytest --cov=.tests/unit .tests/unit/ > pytest-coverage.txt
       - name: Comment coverage
