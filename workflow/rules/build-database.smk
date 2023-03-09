@@ -26,7 +26,7 @@ rule build_dna_sequences_table:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/database/gather/as_{version}_dna_sequences_gather_{name}.log"
     params:
-        index_key = "sequence_id"
+        index_key = "sequence_id",
     shell:
         """
         python workflow/bgcflow/bgcflow/database/gather_to_parquet.py '{input.dna_sequences}' {params.index_key} {output.dna_sequences} 2>> {log}
@@ -37,16 +37,19 @@ rule build_regions_table:
         regions = lambda wildcards: expand("data/interim/database/as_{version}/{strains}/{strains}_regions.json",
                                          version=wildcards.version,
                                          strains=[s for s in list(PEP_PROJECTS[wildcards.name].sample_table.index)]),
+        mapping_dir = "data/interim/bgcs/{name}/{version}",
     output:
         regions = "data/processed/{name}/data_warehouse/{version}/regions.parquet",
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/database/gather/as_{version}_regions_gather_{name}.log"
     params:
-        index_key = "region_id"
+        index_key = "region_id",
+        exclude = "_regions.json"
     shell:
         """
-        python workflow/bgcflow/bgcflow/database/gather_to_parquet.py '{input.regions}' {params.index_key} {output.regions} 2>> {log}
+        python workflow/bgcflow/bgcflow/database/gather_to_parquet_with_correction.py '{input.regions}' {input.mapping_dir} {output.regions} {params.exclude} {params.index_key} 2>> {log}
+ 2>> {log}
         """
 
 rule build_cdss_table:
@@ -54,16 +57,19 @@ rule build_cdss_table:
         cdss = lambda wildcards: expand("data/interim/database/as_{version}/{strains}/{strains}_cdss.json",
                                          version=wildcards.version,
                                          strains=[s for s in list(PEP_PROJECTS[wildcards.name].sample_table.index)]),
+        mapping_dir = "data/interim/bgcs/{name}/{version}",
     output:
         cdss = "data/processed/{name}/data_warehouse/{version}/cdss.parquet",
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/database/gather/as_{version}_cdss_gather_{name}.log"
     params:
-        index_key = "cds_id"
+        index_key = "cds_id",
+        exclude = "_cdss.json"
     shell:
         """
-        python workflow/bgcflow/bgcflow/database/gather_to_parquet.py '{input.cdss}' {params.index_key} {output.cdss} 2>> {log}
+        python workflow/bgcflow/bgcflow/database/gather_to_parquet_with_correction.py '{input.cdss}' {input.mapping_dir} {output.cdss} {params.exclude} {params.index_key} 2>> {log}
+ 2>> {log}
         """
 
 rule build_warehouse:
