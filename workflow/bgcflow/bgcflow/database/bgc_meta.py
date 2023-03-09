@@ -109,78 +109,146 @@ def region_finder(cdss_id, location, regions_container):
     return hits
 
 
-def antismash_json_exporter(json_file, output_dir):
+def get_dna_sequences(record, genome_id):
+    """
+    Given a sequence record, return DNA sequences and information
+    """
+    sequence_id = record["id"]
+    logging.info(f"Getting dna_sequences information for {sequence_id}")
+    record_container = {}
+    record_container["seq"] = record["seq"]["data"]
+    record_container["description"] = record["description"]
+    record_container["molecule_type"] = record["annotations"]["molecule_type"]
+    record_container["topology"] = record["annotations"]["topology"]
+    assert len(record["annotations"]["accessions"]) == 1
+    record_container["accessions"] = record["annotations"]["accessions"][0]
+    record_container["genome_id"] = genome_id
+    return sequence_id, record_container
 
-    file = Path(json_file)
 
+def get_region_information(record, genome_id, r, table_regions, n_hits=1):
+    region_db = {}
+    region_feat = [i for i in record["features"] if i["type"] == "region"]
+    for f in region_feat:
+        region_db.update(region_table_builder(f, record["id"]))
+    for c, area in enumerate(record["areas"]):
+        cluster_id = f"{r+1}.{c+1}"
+        output_cluster = {}
+        logging.info(f"Grabbing information from region {cluster_id}")
+        knownclusterblast = record["modules"]["antismash.modules.clusterblast"][
+            "knowncluster"
+        ]["results"][c]
+
+        assert n_hits > 0
+
+        output_hits = []
+
+        for n, hits in enumerate(knownclusterblast["ranking"]):
+            if n + 1 <= (n_hits):
+                most_similar_mibig_id = hits[0]["accession"]
+                most_similar_mibig_description = hits[0]["description"]
+                most_similar_mibig_clustertype = hits[0]["cluster_type"]
+                n_genes_in_target = len(hits[0]["tags"])
+                n_genes_hits = hits[1]["hits"]
+                hit_similarity = n_genes_hits / n_genes_in_target
+                output_hits.append(
+                    {
+                        "most_similar_known_cluster_id": most_similar_mibig_id,
+                        "most_similar_known_cluster_description": most_similar_mibig_description,
+                        "most_similar_known_cluster_type": most_similar_mibig_clustertype,
+                        "similarity": hit_similarity,
+                    }
+                )
+            else:
+                pass
+
+        bgc_id = f"{record['id']}.region{str(c+1).zfill(3)}"
+        output_cluster = {
+            "genome_id": genome_id,
+            "region": cluster_id,
+        }
+
+        for column in [
+            "accession",
+            "start_pos",
+            "end_pos",
+            "contig_edge",
+            "product",
+        ]:
+            output_cluster[column] = region_db[bgc_id][column]
+
+        output_cluster["region_length"] = int(output_cluster["end_pos"]) - int(
+            output_cluster["start_pos"]
+        )
+
+        if len(output_hits) == 1:
+            for k in output_hits[0].keys():
+                output_cluster[k] = output_hits[0][k]
+
+        table_regions[bgc_id] = output_cluster
+
+    return
+
+
+def get_cdss_information(record, genome_id, table_regions, table_cdss, accession):
+    # cds_db = {}
+    cds_ctr = 1
+    cds_feat = [i for i in record["features"] if i["type"] == "CDS"]
+    logging.info(f"Grabbing feture information from {len(cds_feat)} CDS")
+    for feature in cds_feat:
+        cds_id = f"{accession}-cds_{cds_ctr}"
+        cdss_data = cdss_table_builder(feature, cds_id)
+        cdss_data[cds_id]["accessions"] = accession
+        cdss_data[cds_id]["genome_id"] = genome_id
+        region_hits = region_finder(
+            cds_id, cdss_data[cds_id]["location"], table_regions
+        )
+        if len(region_hits) > 0:
+            cdss_data[cds_id]["region_id"] = region_hits[0]
+        else:
+            cdss_data[cds_id]["region_id"] = None
+        cdss_data[cds_id]["genome_id"] = genome_id
+        table_cdss.update(cdss_data)
+        cds_ctr = cds_ctr + 1
+    return
+
+
+def antismash_json_exporter(json_path, output_dir, genome_id=False, n_hits=1):
+    """
+    Read antismash json output and get region, dna_sequences, and cdss information
+    """
+    # Create output containers
     table_dna_sequences = {}
     table_regions = {}
     table_cdss = {}
 
-    with open(str(file), "r") as f:
-        gbk = json.load(f)
+    # load json file
+    path = Path(json_path)
+    with open(path, "r") as f:
+        data = json.load(f)
 
-    genome_id = Path(gbk["input_file"]).stem
-    logging.info(f"Extracting information from {gbk['input_file']}")
-    for record in gbk["records"]:
-        sequence_id = record["id"]
-        logging.info(f"Getting dna_sequences information for {sequence_id}")
+    if not genome_id:
+        genome_id = data["input_file"].strip(".gbk")
+    else:
+        pass
 
-        # dna_sequences
-        record_container = {}
-
-        # print(record.keys())
-        # print(2, record['seq']) # dna
-        record_container["seq"] = record["seq"]["data"]
-
-        # print(3, record['description']) # definition
-        record_container["description"] = record["description"]
-
-        # print(5, {'molecule_type' : record['annotations']['molecule_type']}) # contig type?
-        record_container["molecule_type"] = record["annotations"]["molecule_type"]
-
-        # print(5, {'topology' : record['annotations']['topology']}) # chromosome type?
-        record_container["topology"] = record["annotations"]["topology"]
-
-        # print(5, {'accessions' : record['annotations']['accessions']}) # acc
-        assert len(record["annotations"]["accessions"]) == 1
-        record_container["accessions"] = record["annotations"]["accessions"][0]
-
-        record_container["genome_id"] = genome_id
-
-        # print(1, record['id']) # sequence_id
+    # Iterating over record
+    logging.info(f"Extracting information from {data['input_file']}")
+    for r, record in enumerate(data["records"]):
+        # Grab DNA information
+        sequence_id, record_container = get_dna_sequences(record, genome_id)
         table_dna_sequences[sequence_id] = record_container
-
         # ---------------------------------------------------
-        # GRAB REGIONS AND CDSS TABLE
+
+        # Grab region information
         logging.info(f"Extracting regions and cds information from {sequence_id}")
-        cds_ctr = 1
-        region_ctr = 1
-        accession = record_container["accessions"]
-        for f in record["features"]:
-            # Fill region table
-            if f["type"] == "region":
-                logging.info(f"Processing region: {region_ctr}")
-                table_regions.update(region_table_builder(f, accession))
-                region_ctr = region_ctr + 1
-
-            # fill cdss table
-            if f["type"] == "CDS":
-                cds_id = f"{accession}-cds_{cds_ctr}"
-                cdss_data = cdss_table_builder(f, cds_id)
-                region_hits = region_finder(
-                    cds_id, cdss_data[cds_id]["location"], table_regions
-                )
-                if len(region_hits) > 0:
-                    cdss_data[cds_id]["region_id"] = region_hits[0]
-                else:
-                    cdss_data[cds_id]["region_id"] = None
-                table_cdss.update(cdss_data)
-                cds_ctr = cds_ctr + 1
+        get_region_information(record, genome_id, r, table_regions)
         # ---------------------------------------------------
 
-        # print(7, record['areas']) # antismash regions
-        # print(8, record['modules'].keys()) # dna
+        # Grab cdss information
+        accession = record_container["accessions"]
+        get_cdss_information(record, genome_id, table_regions, table_cdss, accession)
+        # ---------------------------------------------------
 
     # write json files
     output_dir = Path(output_dir)
