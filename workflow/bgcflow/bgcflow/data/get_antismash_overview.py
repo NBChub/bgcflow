@@ -106,10 +106,24 @@ def get_antismash_overview(json_path, outfile, genome_id=False, n_hits=1):
                 "product",
             ]:
                 output_cluster[column] = region_db[bgc_id][column]
-
-            output_cluster["region_length"] = int(output_cluster["end_pos"]) - int(
-                output_cluster["start_pos"]
-            )
+            try:
+                output_cluster["region_length"] = int(output_cluster["end_pos"]) - int(
+                    output_cluster["start_pos"]
+                )
+            except ValueError:
+                logging.warning(
+                    f'Error calculating region length. Region might be incomplete: {output_cluster["start_pos"]}:{output_cluster["end_pos"]}'
+                )
+                start_pos = "".join(
+                    [s for s in output_cluster["start_pos"] if s.isdigit()]
+                )
+                logging.warning(
+                    f'Correcting start position from {output_cluster["start_pos"]} to {start_pos}'
+                )
+                output_cluster["start_pos"] = start_pos
+                output_cluster["region_length"] = int(output_cluster["end_pos"]) - int(
+                    output_cluster["start_pos"]
+                )
 
             if len(output_hits) == 1:
                 for k in output_hits[0].keys():
