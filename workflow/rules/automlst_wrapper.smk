@@ -1,16 +1,23 @@
 rule install_automlst_wrapper:
     output:
-        directory("resources/automlst-simplified-wrapper-main"),
+        folder=directory("resources/automlst-simplified-wrapper-main"),
         reduced_core="resources/automlst-simplified-wrapper-main/reducedcore.hmm",
     conda:
         "../envs/automlst_wrapper.yaml"
     log:
         "workflow/report/logs/automlst_wrapper/install_automlst_wrapper.log",
+    params:
+        source="https://github.com/matinnuhamunada/automlst-simplified-wrapper",
+        version="0.1.0"
     shell:
         """
-        (cd resources && wget https://github.com/KatSteinke/automlst-simplified-wrapper/archive/main.zip) 2>> {log}
-        (cd resources && unzip main.zip && rm main.zip) 2>> {log}
-        (cd resources/automlst-simplified-wrapper-main && unzip reducedcore.zip)  2>> {log}
+        set -e
+        mkdir -p resources 2>> {log}
+        wget {params.source}/archive/refs/tags/v{params.version}.zip -O resources/automlst-simplified-wrapper-v{params.version}.zip 2>> {log}
+        (cd resources && unzip -o automlst-simplified-wrapper-v{params.version}.zip && rm automlst-simplified-wrapper-v{params.version}.zip) &>> {log}
+        (cd resources/automlst-simplified-wrapper-{params.version} && unzip -o reducedcore.zip) &>> {log}
+        cp -r resources/automlst-simplified-wrapper-{params.version}/* {output.folder}/. 2>> {log}
+        rm -rf resources/automlst-simplified-wrapper-{params.version} 2>> {log}
         """
 
 
@@ -39,12 +46,13 @@ rule automlst_wrapper:
         "workflow/report/logs/automlst_wrapper/automlst_wrapper/automlst_wrapper-{name}.log",
     conda:
         "../envs/automlst_wrapper.yaml"
+    threads: 8
     resources:
         tmpdir="data/interim/automlst_wrapper/tmpdir/",
     shell:
         """
         mkdir -p "data/interim/automlst_wrapper/{wildcards.name}/singles" 2>> {log}
-        python resources/automlst-simplified-wrapper-main/simplified_wrapper.py data/interim/automlst_wrapper/{wildcards.name} &>> {log}
+        python resources/automlst-simplified-wrapper-main/simplified_wrapper.py data/interim/automlst_wrapper/{wildcards.name} {threads} &>> {log}
         """
 
 
