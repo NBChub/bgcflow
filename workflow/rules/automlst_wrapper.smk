@@ -8,7 +8,7 @@ rule install_automlst_wrapper:
         "workflow/report/logs/automlst_wrapper/install_automlst_wrapper.log",
     params:
         source="https://github.com/matinnuhamunada/automlst-simplified-wrapper",
-        version="0.1.0"
+        version="0.1.1"
     shell:
         """
         set -e
