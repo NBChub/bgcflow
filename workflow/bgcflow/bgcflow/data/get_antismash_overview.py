@@ -42,10 +42,14 @@ def get_antismash_overview(json_path, outfile, genome_id=False, n_hits=1):
     with open(path, "r") as f:
         data = json.load(f)
 
+    logging.info(f"Processing: {json_path}, custom genome_id: {genome_id}")
+
     if not genome_id:
         genome_id = data["input_file"].strip(".gbk")
     else:
         pass
+
+    logging.debug(f"Genome id: {genome_id}")
 
     # iterating over record
     output = {}
@@ -94,7 +98,7 @@ def get_antismash_overview(json_path, outfile, genome_id=False, n_hits=1):
 
             bgc_id = f"{record['id']}.region{str(c+1).zfill(3)}"
             output_cluster = {
-                "genome_id": data["input_file"].strip(".gbk"),
+                "genome_id": genome_id,
                 "region": cluster_id,
             }
 
