@@ -12,7 +12,7 @@ rule antismash_json_extract:
         outdir = "data/interim/database/as_{version}/{strains}",
     shell:
         """
-        python workflow/bgcflow/bgcflow/database/bgc_meta.py {input.json} {params.outdir} 2>> {log}
+        python workflow/bgcflow/bgcflow/database/bgc_meta.py {input.json} {params.outdir} {wildcards.strains} 2>> {log}
         """
 
 rule build_dna_sequences_table:
