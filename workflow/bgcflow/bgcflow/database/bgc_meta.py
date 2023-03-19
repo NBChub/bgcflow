@@ -8,6 +8,42 @@ date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.INFO)
 
 
+def handle_join_locus_location(raw_location):
+    """
+    Function to handle locus location with two or more possibilities (PGAP?).
+    Will go through all possible start and stop location, then select the range that covers all.
+    Example:
+        handle_join_locus_location("join{[282863:283224](-), [282406:282864](-)}")
+    Returns a string:
+        "[282406:283224](-)"
+    """
+    container = {"+": {"start": [], "stop": []}, "-": {"start": [], "stop": []}}
+
+    if raw_location.startswith("join"):
+        raw_location = raw_location.strip("join")
+
+    q = [
+        ("".join(c for c in s if c not in ")[]{}<>")).split("(")
+        for s in raw_location.split(", ")
+    ]
+    for item in q:
+        start, stop = item[0].split(":")
+        strand = item[1]
+        if strand == "+":
+            container["+"]["start"].append(int(start))
+            container["+"]["stop"].append(int(stop))
+        elif strand == "-":
+            container["-"]["start"].append(int(start))
+            container["-"]["stop"].append(int(stop))
+
+    for k, v in container.items():
+        if (len(v["start"]) == 0) or (len(v["stop"]) == 0):
+            pass
+        else:
+            location = f"[{min(v['start'])}:{max(v['stop'])}]({k})"
+    return location
+
+
 # regions
 def region_table_builder(f, accession):
     """
@@ -85,17 +121,38 @@ def cdss_table_builder(f, cds_id):
     return value
 
 
-def region_finder(cdss_id, location, regions_container):
-    location, strand = location.strip("[").strip(")").split("](")
-    q_start, q_stop = [int(i) for i in location.split(":")]
-    # print(cdss_id, q_start, q_stop, strand)
+def region_finder(cdss_id, location_raw, regions_container):
+    try:
+        location, strand = location_raw.strip("[").strip(")").split("](")
+    except ValueError:
+        logging.warning(f"Unusual location format: {location_raw}")
+        location_raw = handle_join_locus_location(location_raw)
+        location, strand = location_raw.strip("[").strip(")").split("](")
+
+    q_start, q_stop = [i for i in location.split(":")]
+    try:
+        q_start, q_stop = int(q_start), int(q_stop)
+    except ValueError:
+        logging.warning(
+            f"Unusual location format: {cdss_id} {q_start}:{q_stop} ({strand})"
+        )
+        q_start = int("".join([s for s in q_start if s.isdigit()]))
+        q_stop = int("".join([s for s in q_stop if s.isdigit()]))
+        logging.info(f"Keeping only digits: {cdss_id} {q_start}:{q_stop} ({strand})")
+
     query = range(q_start, q_stop)
 
     hits = []
 
     for region_id in regions_container.keys():
-        start_pos = int(regions_container[region_id]["start_pos"])
-        end_pos = int(regions_container[region_id]["end_pos"])
+        start_pos = int(
+            "".join(
+                [s for s in regions_container[region_id]["start_pos"] if s.isdigit()]
+            )
+        )
+        end_pos = int(
+            "".join([s for s in regions_container[region_id]["end_pos"] if s.isdigit()])
+        )
         target = range(start_pos, end_pos)
         try:
             value = range(max(query[0], target[0]), min(query[-1], target[-1]) + 1)
@@ -120,7 +177,13 @@ def get_dna_sequences(record, genome_id):
     record_container["description"] = record["description"]
     record_container["molecule_type"] = record["annotations"]["molecule_type"]
     record_container["topology"] = record["annotations"]["topology"]
-    assert len(record["annotations"]["accessions"]) == 1
+    if len(record["annotations"]["accessions"]) != 1:
+        logging.warning(
+            f'More than one accession in record: {record["annotations"]["accessions"]}'
+        )
+        logging.debug(
+            f'Grabbing only the first accession: {record["annotations"]["accessions"][0]}'
+        )
     record_container["accessions"] = record["annotations"]["accessions"][0]
     record_container["genome_id"] = genome_id
     return sequence_id, record_container
@@ -177,9 +240,15 @@ def get_region_information(record, genome_id, r, table_regions, n_hits=1):
         ]:
             output_cluster[column] = region_db[bgc_id][column]
 
-        output_cluster["region_length"] = int(output_cluster["end_pos"]) - int(
-            output_cluster["start_pos"]
-        )
+        q_start, q_stop = output_cluster["start_pos"], output_cluster["end_pos"]
+        try:
+            q_start, q_stop = int(q_start), int(q_stop)
+        except ValueError:
+            logging.warning(f"Unusual location format: {q_start}:{q_stop}")
+            q_start = int("".join([s for s in q_start if s.isdigit()]))
+            q_stop = int("".join([s for s in q_stop if s.isdigit()]))
+            logging.info(f"Keeping only digits: {q_start}:{q_stop}")
+        output_cluster["region_length"] = q_stop - q_start
 
         if len(output_hits) == 1:
             for k in output_hits[0].keys():
@@ -194,7 +263,7 @@ def get_cdss_information(record, genome_id, table_regions, table_cdss, accession
     # cds_db = {}
     cds_ctr = 1
     cds_feat = [i for i in record["features"] if i["type"] == "CDS"]
-    logging.info(f"Grabbing feture information from {len(cds_feat)} CDS")
+    logging.info(f"Grabbing feature information from {len(cds_feat)} CDS")
     for feature in cds_feat:
         cds_id = f"{accession}-cds_{cds_ctr}"
         cdss_data = cdss_table_builder(feature, cds_id)
@@ -259,10 +328,12 @@ def antismash_json_exporter(json_path, output_dir, genome_id=False, n_hits=1):
         "cdss": table_cdss,
     }
     for k in target_jsons.keys():
-        with open(output_dir / f"{genome_id}_{k}.json", "w") as output_file:
+        outfile_name = output_dir / f"{genome_id}_{k}.json"
+        with open(outfile_name, "w") as output_file:
+            logging.info(f"Writing {k} output to {outfile_name}")
             json.dump(target_jsons[k], output_file, indent=2)
     return
 
 
 if __name__ == "__main__":
-    antismash_json_exporter(sys.argv[1], sys.argv[2])
+    antismash_json_exporter(sys.argv[1], sys.argv[2], sys.argv[3])
