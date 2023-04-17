@@ -75,7 +75,7 @@ rule bigscape_no_mibig:
     threads: 32
     shell:
         """
-        python {input.bigscape}/bigscape.py -i {input.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --verbose --no_classify &>> {log}
+        python {input.bigscape}/bigscape.py -i {input.antismash_dir} -o {params.bigscape_dir} -c {threads} --cutoff 0.3 0.4 0.5 --include_singletons --label {params.label} --hybrids-off --verbose --no_classify --mix &>> {log}
         """
 
 rule copy_bigscape_zip:
