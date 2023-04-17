@@ -49,3 +49,11 @@ interproscan:
   - https://github.com/ebi-pf-team/interproscan
   references:
   - 'Philip Jones, David Binns, Hsin-Yu Chang, Matthew Fraser, Weizhong Li, Craig McAnulla, Hamish McWilliam, John Maslen, Alex Mitchell, Gift Nuka, Sebastien Pesseat, Antony F. Quinn, Amaia Sangrador-Vegas, Maxim Scheremetjew, Siew-Yit Yong, Rodrigo Lopez, Sarah Hunter Bioinformatics (2014) InterProScan 5: genome-scale protein function classification, PMID: 24451626'
+mmseqs2:
+  final_output: "data/processed/{name}/mmseqs2/{version}.tag"
+  description: ultra fast and sensitive search and clustering suite
+  category: Genome Mining
+  link:
+  - https://github.com/soedinglab/MMseqs2
+  references:
+  - 'Steinegger, M., Söding, J. MMseqs2 enables sensitive protein sequence searching for the analysis of massive data sets. Nat Biotechnol 35, 1026–1028 (2017). https://doi.org/10.1038/nbt.3988'
