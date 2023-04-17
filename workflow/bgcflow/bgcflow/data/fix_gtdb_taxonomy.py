@@ -44,6 +44,16 @@ def summarize_gtdb_json(accession_list, df_gtdb_output):
     # Getting other metadata
     try:
         logging.info("Getting metadata into table...")
+        if "metadata" not in df.columns:
+            logging.warning(
+                "metadata is not in the column information. Adding default values..."
+            )
+            df["metadata"] = [{"genome_id": genome_id} for genome_id in df.index]
+        if "gtdb_release" not in df.columns:
+            logging.warning(
+                "gtdb_release is not in the column information. Adding default values..."
+            )
+            df["gtdb_release"] = "unknown"
         metadata = pd.DataFrame.from_dict(
             {i: df.loc[i, "metadata"] for i in df.index}
         ).T
