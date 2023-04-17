@@ -86,7 +86,7 @@ dependencies:
   - xz=5.2.5=h7b6447c_0
   - zeromq=4.3.2=he6710b0_3
   - zlib=1.2.11=h7b6447c_3
-  - pytorch=1.2.0=py3.6_cuda10.0.130_cudnn7.6.2_0
+  - pytorch=1.2.0
   - pip:
     - biopython==1.78
     - torch==1.2.0
