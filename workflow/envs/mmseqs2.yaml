@@ -1,0 +1,9 @@
+name: mmseqs2
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - mmseqs2
+  - any2fasta
+  - minimap2
