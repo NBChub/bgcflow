@@ -11,10 +11,11 @@ rule arts:
     params:
         ref="resources/arts/reference/actinobacteria/",
         resources="resources/arts/",
+        khmms="resources/arts/reference/knownresistance.hmm",
     shell:
         """
         mkdir -p data/interim/arts/antismash-{wildcards.version}/{wildcards.strains}
-        python {params.resources}/artspipeline1.py {input.antismash} {params.ref} -rd data/interim/arts/antismash-{wildcards.version}/{wildcards.strains} -cpu {threads} -opt kres,phyl 2>> {log}
+        python {params.resources}/artspipeline1.py {input.antismash} {params.ref} -rd data/interim/arts/antismash-{wildcards.version}/{wildcards.strains} -cpu {threads} -opt kres,phyl,duf -khmms {params.khmms} 2>> {log}
         """
 
 rule arts_extract:
