@@ -10,7 +10,7 @@ rule arts:
         "workflow/report/logs/arts/arts/arts-{version}-{strains}.log",
     params:
         ref="resources/arts/reference/actinobacteria/",
-        resources="resources/arts/",
+        resources="resources/arts",
         khmms="resources/arts/reference/knownresistance.hmm",
     shell:
         """
