@@ -129,13 +129,19 @@ rule format_gbk:
 rule copy_prokka_gbk:
     input:
         gbk = "data/interim/processed-genbank/{strains}.gbk",
+        summary = "data/interim/prokka/{strains}/{strains}.txt",
+        tsv = "data/interim/prokka/{strains}/{strains}.tsv"
     output:
         gbk = report("data/processed/{name}/genbank/{strains}.gbk", \
-            caption="../report/file-genbank.rst", category="{name}", subcategory="Annotated Genbanks")
+            caption="../report/file-genbank.rst", category="{name}", subcategory="Annotated Genbanks"),
+        summary = "data/processed/{name}/genbank/{strains}.txt",
+        tsv = "data/processed/{name}/genbank/{strains}.tsv",
     conda:
         "../envs/bgc_analytics.yaml"
     log: "workflow/report/logs/prokka/copy_prokka_gbk/copy_prokka_gbk_-{strains}-{name}.log"
     shell:
         """
         cp {input.gbk} {output.gbk} 2>> {log}
+        cp {input.summary} {output.summary} 2>> {log}
+        cp {input.tsv} {output.tsv} 2>> {log}
         """
