@@ -19,6 +19,9 @@ for name in PEP_PROJECTS.keys():
             markdown.append(f"data/processed/{name}/docs/{b}.md")
             py_wildcards.append(b)
     metadata.append(f"data/processed/{name}/metadata/project_metadata.json")
+    metadata.append(f"data/processed/{name}/README.md",)
+
+print(metadata)
 
 rule all:
     input:

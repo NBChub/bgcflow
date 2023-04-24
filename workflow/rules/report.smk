@@ -1,3 +1,13 @@
+rule copy_readme:
+    output:
+        "data/processed/{name}/README.md",
+    log:
+        "workflow/report/logs/report/copy-readme-{name}.log",
+
+    shell:
+        """
+        cp workflow/notebook/README_template.md {output}
+        """
 if len(py_wildcards) > 0:
 
     rule copy_template_notebook:
@@ -29,8 +39,8 @@ if len(py_wildcards) > 0:
             bgcflow_rules_py="|".join(py_wildcards),
         shell:
             """
-            jupyter nbconvert --to notebook --execute {input.notebook} --output {wildcards.bgcflow_rules_py}.ipynb 2>> {log}
-            jupyter nbconvert --to markdown {input.notebook} --no-input --output {wildcards.bgcflow_rules_py}.md 2>> {log}
+            #jupyter nbconvert --to notebook --execute {input.notebook} --output {wildcards.bgcflow_rules_py}.ipynb 2>> {log}
+            jupyter nbconvert --to markdown --execute {input.notebook} --no-input --output {wildcards.bgcflow_rules_py}.md 2>> {log}
             """
 
 
@@ -65,6 +75,6 @@ if len(rpy_wildcards) > 0:
             bgcflow_rules_rpy="|".join(rpy_wildcards),
         shell:
             """
-            jupyter nbconvert --to notebook --execute {input.notebook} --output {wildcards.bgcflow_rules_rpy}.ipynb 2>> {log}
-            jupyter nbconvert --to markdown {input.notebook} --no-input --output {wildcards.bgcflow_rules_rpy}.md 2>> {log}
+            #jupyter nbconvert --to notebook --execute {input.notebook} --output {wildcards.bgcflow_rules_rpy}.ipynb 2>> {log}
+            jupyter nbconvert --to markdown --execute {input.notebook} --no-input --output {wildcards.bgcflow_rules_rpy}.md 2>> {log}
             """
