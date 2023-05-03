@@ -29,7 +29,6 @@ def correct_bgc_id_overview(overview_file, mapping_file, genome_id=False):
     else:
         pass
 
-
     new_dict = {}
 
     for bgc_id in overview.keys():
@@ -44,6 +43,8 @@ def correct_bgc_id_overview(overview_file, mapping_file, genome_id=False):
                 else:
                     new_dict[correct_bgc_id] = overview[bgc_id]
                     pass
+                new_dict[correct_bgc_id]["source"] = "bgcflow"
+                new_dict[correct_bgc_id]["gbk_path"] = log_change["target_path"]
     logging.info("Done!")
     return new_dict
 
@@ -54,7 +55,7 @@ def gather_bgc_overview(input_json, mapping_dir, table):
     merged_dict = {}
     for j in input_json:
         mapping_file = Path(j)
-        genome_id = mapping_file.name.replace('_bgc_overview.json', '')
+        genome_id = mapping_file.name.replace("_bgc_overview.json", "")
         mapping_path = Path(mapping_dir) / f"{genome_id}/{genome_id}-change_log.json"
         corrected = correct_bgc_id_overview(mapping_file, mapping_path, genome_id)
         merged_dict.update(corrected)
