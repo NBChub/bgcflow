@@ -64,9 +64,9 @@ def extract_ncbi_org_info(prokka_dir, genome_id, assembly_report_path):
     df_ncbi_meta = df_ncbi_meta.fillna("")
 
     for idx in df_ncbi_meta.index:
-        GENUS = df_ncbi_meta.loc[idx, "genus"]
-        SPECIES = df_ncbi_meta.loc[idx, "species"]
-        STRAIN_ID = df_ncbi_meta.loc[idx, "strain"]
+        GENUS = str(df_ncbi_meta.loc[idx, "genus"])
+        SPECIES = str(df_ncbi_meta.loc[idx, "species"])
+        STRAIN_ID = str(df_ncbi_meta.loc[idx, "strain"])
 
         if not os.path.isdir(os.path.join(prokka_dir, idx)):
             os.mkdir(os.path.join(prokka_dir, idx))
