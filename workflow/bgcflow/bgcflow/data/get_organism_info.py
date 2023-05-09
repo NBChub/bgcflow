@@ -97,9 +97,9 @@ def extract_samples_org_info(prokka_dir, genome_id, df_samples):
         A one lined text file with genus, species, and strain information of a given genome_id
     """
 
-    GENUS = df_samples.loc[genome_id, "genus"]
-    SPECIES = df_samples.loc[genome_id, "species"]
-    STRAIN_ID = df_samples.loc[genome_id, "strain"]
+    GENUS = str(df_samples.loc[genome_id, "genus"])
+    SPECIES = str(df_samples.loc[genome_id, "species"])
+    STRAIN_ID = str(df_samples.loc[genome_id, "strain"])
 
     if not os.path.isdir(os.path.join(prokka_dir, genome_id)):
         os.mkdir(os.path.join(prokka_dir, genome_id))
