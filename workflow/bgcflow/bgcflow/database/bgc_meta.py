@@ -260,25 +260,35 @@ def get_region_information(record, genome_id, r, table_regions, n_hits=1):
 
 
 def get_cdss_information(record, genome_id, table_regions, table_cdss, accession):
-    # cds_db = {}
-    cds_ctr = 1
+    starting_size = len(table_cdss)
+    cds_ctr = len(table_cdss)
+    logging.debug(f"Starting CDS counter from {cds_ctr}")
     cds_feat = [i for i in record["features"] if i["type"] == "CDS"]
     logging.info(f"Grabbing feature information from {len(cds_feat)} CDS")
     for feature in cds_feat:
         cds_id = f"{accession}-cds_{cds_ctr}"
+        assert (
+            cds_id not in table_cdss.keys()
+        ), f"CDS ID already exists! {cds_id}: {table_cdss[cds_id]}"
         cdss_data = cdss_table_builder(feature, cds_id)
         cdss_data[cds_id]["accessions"] = accession
         cdss_data[cds_id]["genome_id"] = genome_id
         region_hits = region_finder(
             cds_id, cdss_data[cds_id]["location"], table_regions
         )
-        if len(region_hits) > 0:
+        if len(region_hits) > 1:
+            raise ValueError(f"Unable to decide regions: {region_hits}")
+        elif len(region_hits) == 1:
             cdss_data[cds_id]["region_id"] = region_hits[0]
         else:
             cdss_data[cds_id]["region_id"] = None
         cdss_data[cds_id]["genome_id"] = genome_id
+        cdss_data = {v["locus_tag"]: v for k, v in cdss_data.items()}
         table_cdss.update(cdss_data)
         cds_ctr = cds_ctr + 1
+    logging.info(
+        f"Original table size: {starting_size}, cdss_data: {len(cds_feat)}, size after addition: {len(table_cdss)}"
+    )
     return
 
 
@@ -316,7 +326,10 @@ def antismash_json_exporter(json_path, output_dir, genome_id=False, n_hits=1):
 
         # Grab cdss information
         accession = record_container["accessions"]
-        get_cdss_information(record, genome_id, table_regions, table_cdss, accession)
+        region_map = {
+            k: v for k, v in table_regions.items() if v["accession"] == record["id"]
+        }
+        get_cdss_information(record, genome_id, region_map, table_cdss, accession)
         # ---------------------------------------------------
 
     # write json files
