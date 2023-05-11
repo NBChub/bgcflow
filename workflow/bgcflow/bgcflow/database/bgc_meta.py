@@ -143,6 +143,7 @@ def region_finder(cdss_id, location_raw, regions_container):
     query = range(q_start, q_stop)
 
     hits = []
+    hits_value = []
 
     for region_id in regions_container.keys():
         start_pos = int(
@@ -159,11 +160,12 @@ def region_finder(cdss_id, location_raw, regions_container):
             if len(value) > 1:
                 logging.debug(f"{cdss_id} overlaps with {region_id} at {value}")
                 hits.append(region_id)
+                hits_value.append(value)
             # else:
             #    hits.append(np.nan)
         except IndexError:
             pass
-    return hits
+    return hits, hits_value
 
 
 def get_dna_sequences(record, genome_id):
@@ -273,11 +275,19 @@ def get_cdss_information(record, genome_id, table_regions, table_cdss, accession
         cdss_data = cdss_table_builder(feature, cds_id)
         cdss_data[cds_id]["accessions"] = accession
         cdss_data[cds_id]["genome_id"] = genome_id
-        region_hits = region_finder(
+        region_hits, hits_value = region_finder(
             cds_id, cdss_data[cds_id]["location"], table_regions
         )
         if len(region_hits) > 1:
-            raise ValueError(f"Unable to decide regions: {region_hits}")
+            overlaps_dict = {i: hits_value[num] for num, i, in enumerate(region_hits)}
+            logging.warning(
+                f"Unable to decide regions for {cdss_data[cds_id]['locus_tag']}:{cdss_data[cds_id]['location']} | {overlaps_dict}"
+            )
+            region_hits = max(overlaps_dict, key=lambda k: len(overlaps_dict[k]))
+            logging.info(
+                f"Picking {region_hits} as it has bigger overlap size: {len(overlaps_dict[region_hits])} bp"
+            )
+            cdss_data[cds_id]["region_id"] = region_hits
         elif len(region_hits) == 1:
             cdss_data[cds_id]["region_id"] = region_hits[0]
         else:
