@@ -19,8 +19,15 @@ def gbk_to_faa(input_files, output_file):
                 for seq_feature in record.features:
                     if seq_feature.type == "CDS":
                         assert len(seq_feature.qualifiers["translation"]) == 1
+                        try:
+                            locus_tag = seq_feature.qualifiers["locus_tag"][0]
+                        except KeyError:
+                            logging.warning(
+                                f"Feature entry {seq_feature.qualifiers} does not have locus tag!"
+                            )
+                            locus_tag = seq_feature.qualifiers["protein_id"][0]
                         text = ">%s from %s\n%s\n" % (
-                            seq_feature.qualifiers["locus_tag"][0],
+                            locus_tag,
                             record.name,
                             seq_feature.qualifiers["translation"][0],
                         )
