@@ -45,8 +45,23 @@ rule antismash_overview_gather:
         python workflow/bgcflow/bgcflow/data/get_antismash_overview_gather.py '{input.bgc_overview}' {input.mapping_dir} {output.df_bgc} 2>> {log}
         """
 
+rule copy_log_changes:
+    input:
+        mapping_dir="data/interim/bgcs/{name}/{version}",
+    output:
+        mapping_dir=directory("data/processed/{name}/log_changes/{version}")
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log: "workflow/report/logs/bgcs/downstream_bgc_prep/{name}/copy_log_changes-{version}.log",
+    shell:
+        """
+        mkdir -p {output.mapping_dir} 2>> {log}
+        cp {input.mapping_dir}/*/*-change_log.json {output.mapping_dir}/. 2>> {log}
+        """
+
 rule antismash_summary:
     input:
+        mapping_dir="data/processed/{name}/log_changes/{version}",
         bgc_count=lambda wildcards: expand(
             "data/interim/antismash/{version}/{strains}_bgc_counts.json",
             version=wildcards.version,
@@ -77,7 +92,6 @@ rule antismash_summary:
         python workflow/bgcflow/bgcflow/data/make_genome_dataset.py '{input.bgc_count}' '{params.df_samples}' {output.df_antismash_summary} 2>> {log}
         """
 
-
 rule write_dependency_versions:
     output:
         "workflow/report/dependency_versions.json",
@@ -89,7 +103,6 @@ rule write_dependency_versions:
         """
         python workflow/bgcflow/bgcflow/data/get_dependencies.py {output} 2> {log}
         """
-
 
 rule get_project_metadata:
     output:
