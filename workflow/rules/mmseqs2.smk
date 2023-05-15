@@ -1,6 +1,20 @@
+rule prep_gbk_mmseqs2:
+    input:
+        gbk=lambda wildcards: get_bgc_inputs(PEP_PROJECTS[wildcards.name], wildcards.version),
+    output:
+        gbk_dir = directory("data/interim/mmseqs2/{name}/{version}/gbk_dir")
+    log:
+        "workflow/report/logs/mmseqs2/prep_gbk_mmseqs2_{name}_{version}.log",
+    conda:
+        "../envs/bgc_analytics.yaml"
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/features/prep_clinker.py '{input.gbk}' {output.gbk_dir} 2>> {log}
+        """
+
 rule prepare_aa_mmseqs2:
     input:
-        gbk = lambda wildcards: get_bgc_inputs(PEP_PROJECTS[wildcards.name], wildcards.version),
+        gbk_dir = "data/interim/mmseqs2/{name}/{version}/gbk_dir"
     output:
         fasta = "data/interim/mmseqs2/{name}/{name}_{version}.faa",
         gbk = "data/interim/minimap2/{name}/{name}_{version}.gbk",
@@ -10,8 +24,9 @@ rule prepare_aa_mmseqs2:
         "../envs/bgc_analytics.yaml"
     shell:
         """
-        python workflow/bgcflow/bgcflow/misc/create_aa.py '{input.gbk}' {output.fasta} 2>> {log}
-        python workflow/bgcflow/bgcflow/features/prep_mmseqs2.py '{input.gbk}' {output.gbk} 2>> {log}
+        GBKS=$(ls {input.gbk_dir}/*.gbk)
+        python workflow/bgcflow/bgcflow/misc/create_aa.py "$GBKS" {output.fasta} 2>> {log}
+        cat {input.gbk_dir}/*.gbk > {output.gbk} 2>> {log}
         """
 
 rule minimap2:
