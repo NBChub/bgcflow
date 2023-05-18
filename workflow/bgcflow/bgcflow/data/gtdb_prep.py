@@ -247,9 +247,19 @@ def get_ncbi_taxon_GTDB(accession, release="R207"):
                 level_dict[k]: f"{k}__" for k in level_dict.keys()
             }
         else:
-            result["gtdb_taxonomy"] = [
-                tax for tax in js_tax if tax["release"] == release
-            ][0]
+            logging.info(js_tax)
+            tax = [tax for tax in js_tax if tax["release"] == release]
+            if len(tax) == 1:
+                result["gtdb_taxonomy"] = tax[0]
+            elif len(tax) == 0:
+                logging.warning(
+                    f"Genome id: {accession} is in GTDB but has no taxonomic placement in release {release}. Returning empty values."
+                )
+                result["gtdb_taxonomy"] = {
+                    level_dict[k]: f"{k}__" for k in level_dict.keys()
+                }
+            else:
+                raise
             result["gtdb_taxonomy"].pop("release", None)
             result["gtdb_taxonomy"] = {
                 level_dict[k]: result["gtdb_taxonomy"][k]
