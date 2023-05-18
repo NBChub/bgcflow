@@ -36,7 +36,7 @@ configfile: "config/config.yaml"
 
 validate(config, schema="../schemas/config.schema.yaml")
 
-sys.stderr.write(f"This is BGCflow version {__version__}.\n\n")
+sys.stderr.write(f"\nThis is BGCflow version {__version__}.\n\n")
 
 ##### 2. Extract project information #####
 # The function extract_project_information() returns objects necessary for steps 3 and 4
@@ -642,7 +642,7 @@ def get_final_output(df_samples, peppy_objects, rule_dict_path):
     """
     Generate outputs of for all projects
     """
-    sys.stderr.write(f"Step 6. Preparing list of final outputs...\n")
+    sys.stderr.write(f"Step 5. Preparing list of final outputs...\n")
     final_output = []
     for p in peppy_objects.values():
         sys.stderr.write(f" - Getting outputs for project: {p.name}\n")
@@ -657,7 +657,7 @@ def custom_resource_dir():
     Generate symlink for user defined resources location
     """
     resource_dbs = config["resources_path"]
-    sys.stderr.write(f"Step 5. Checking for user-defined local resources...\n")
+    sys.stderr.write(f"Step 4. Checking for user-defined local resources...\n")
     for r in resource_dbs.keys():
         # check for default path
         path = Path(resource_dbs[r])
