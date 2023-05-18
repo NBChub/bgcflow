@@ -1,6 +1,6 @@
 {
-  "genome_id": "GCA_000056065.1",
-  "gtdb_url": "https://api.gtdb.ecogenomic.org/genome/GCA_000056065.1/taxon-history",
+  "genome_id": "GCA_000182835.1",
+  "gtdb_url": "https://api.gtdb.ecogenomic.org/genome/GCA_000182835.1/taxon-history",
   "gtdb_release": "R207",
   "gtdb_taxonomy": {
     "domain": "d__Bacteria",
@@ -11,58 +11,58 @@
     "genus": "g__Lactobacillus",
     "species": "s__Lactobacillus delbrueckii"
   },
-  "metadata_url": "https://api.gtdb.ecogenomic.org/genome/GCA_000056065.1/card",
+  "metadata_url": "https://api.gtdb.ecogenomic.org/genome/GCA_000182835.1/card",
   "metadata": {
     "genome": {
-      "accession": "GCA_000056065.1",
-      "name": "GCF_000056065.1"
+      "accession": "GCA_000182835.1",
+      "name": "GCF_000182835.1"
     },
     "metadata_nucleotide": {
       "trna_aa_count": 19,
-      "contig_count": 1,
-      "n50_contigs": 1864998,
-      "longest_contig": 1864998,
-      "scaffold_count": 1,
-      "n50_scaffolds": 1864998,
-      "longest_scaffold": 1864998,
-      "genome_size": 1864998,
-      "gc_percentage": 49.71903455124348,
+      "contig_count": 2,
+      "n50_contigs": 2125753,
+      "longest_contig": 2125753,
+      "scaffold_count": 2,
+      "n50_scaffolds": 2125753,
+      "longest_scaffold": 2125753,
+      "genome_size": 2131976,
+      "gc_percentage": 49.543428256228026,
       "ambiguous_bases": 0
     },
     "metadata_gene": {
-      "checkm_completeness": "98.38",
+      "checkm_completeness": "99.03",
       "checkm_contamination": "0.0",
       "checkm_strain_heterogeneity": "0.0",
       "lsu_5s_count": "9",
       "ssu_count": "9",
       "lsu_23s_count": "9",
-      "protein_count": "1916",
-      "coding_density": "84.01837428243891"
+      "protein_count": "2049",
+      "coding_density": "85.07450365294919"
     },
     "metadata_ncbi": {
-      "ncbi_genbank_assembly_accession": "GCA_000056065.1",
-      "ncbi_strain_identifiers": "ATCC 11842",
+      "ncbi_genbank_assembly_accession": "GCA_000182835.1",
+      "ncbi_strain_identifiers": "ND02",
       "ncbi_assembly_level": "Complete Genome",
-      "ncbi_assembly_name": "ASM5606v1",
+      "ncbi_assembly_name": "ASM18283v1",
       "ncbi_assembly_type": "na",
       "ncbi_bioproject": "PRJNA224116",
-      "ncbi_biosample": "SAMEA3138258",
+      "ncbi_biosample": "SAMN02603937",
       "ncbi_country": null,
-      "ncbi_date": "2006-05-26",
+      "ncbi_date": "2010-11-19",
       "ncbi_genome_category": null,
       "ncbi_genome_representation": "full",
       "ncbi_isolate": null,
       "ncbi_isolation_source": null,
       "ncbi_lat_lon": null,
-      "ncbi_molecule_count": "1",
+      "ncbi_molecule_count": "2",
       "ncbi_cds_count": null,
       "ncbi_refseq_category": "na",
-      "ncbi_seq_rel_date": "2006/05/26",
+      "ncbi_seq_rel_date": "2010/11/19",
       "ncbi_spanned_gaps": "0",
       "ncbi_species_taxid": "1584",
       "ncbi_ssu_count": null,
-      "ncbi_submitter": "Genoscope",
-      "ncbi_taxid": "390333",
+      "ncbi_submitter": "The Key Laboratory of Dairy Biotechnology and Bioengineering, Education Ministry of P. R. China, Department of Food Science and Engineering, Inner Mongolia Agricultural University, China",
+      "ncbi_taxid": "767455",
       "ncbi_total_gap_length": "0",
       "ncbi_translation_table": null,
       "ncbi_trna_count": null,
@@ -71,19 +71,19 @@
       "ncbi_wgs_master": null
     },
     "metadata_type_material": {
-      "gtdbTypeDesignation": "type strain of subspecies",
-      "gtdbTypeDesignationSources": "LPSN",
-      "lpsnTypeDesignation": "type strain of subspecies",
-      "dsmzTypeDesignation": "type strain of subspecies",
-      "lpsnPriorityYear": 1919,
+      "gtdbTypeDesignation": "not type material",
+      "gtdbTypeDesignationSources": null,
+      "lpsnTypeDesignation": "not type material",
+      "dsmzTypeDesignation": "not type material",
+      "lpsnPriorityYear": null,
       "gtdbTypeSpeciesOfGenus": false
     },
     "metadataTaxonomy": {
       "ncbi_taxonomy": "d__Bacteria;p__Firmicutes;c__Bacilli;o__Lactobacillales;f__Lactobacillaceae;g__Lactobacillus;s__Lactobacillus delbrueckii",
-      "ncbi_taxonomy_unfiltered": "d__Bacteria;x__Terrabacteria group;p__Firmicutes;c__Bacilli;o__Lactobacillales;f__Lactobacillaceae;g__Lactobacillus;s__Lactobacillus delbrueckii;sb__Lactobacillus delbrueckii subsp. bulgaricus;x__Lactobacillus delbrueckii subsp. bulgaricus ATCC 11842 = JCM 1002",
+      "ncbi_taxonomy_unfiltered": "d__Bacteria;x__Terrabacteria group;p__Firmicutes;c__Bacilli;o__Lactobacillales;f__Lactobacillaceae;g__Lactobacillus;s__Lactobacillus delbrueckii;sb__Lactobacillus delbrueckii subsp. bulgaricus;x__Lactobacillus delbrueckii subsp. bulgaricus ND02",
       "gtdb_representative": false,
       "gtdb_genome_representative": "RS_GCF_001433875.1",
-      "ncbi_type_material_designation": "assembly from type material",
+      "ncbi_type_material_designation": null,
       "gtdbDomain": "d__Bacteria",
       "gtdbPhylum": "p__Bacillota",
       "gtdbClass": "c__Bacilli",
@@ -92,13 +92,13 @@
       "gtdbGenus": "g__Lactobacillus",
       "gtdbSpecies": "s__Lactobacillus delbrueckii"
     },
-    "gtdbTypeDesignation": "type strain of subspecies",
+    "gtdbTypeDesignation": "not type material",
     "subunit_summary": "5S/16S/23S",
     "speciesRepName": "GCA_001433875.1",
     "speciesClusterCount": 255,
     "lpsnUrl": "https://lpsn.dsmz.de/species/lactobacillus-delbrueckii",
     "link_ncbi_taxonomy": "<a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/2/\">d__Bacteria</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1239/\">p__Firmicutes</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/91061/\">c__Bacilli</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/186826/\">o__Lactobacillales</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/33958/\">f__Lactobacillaceae</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1578/\">g__Lactobacillus</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1584/\">s__Lactobacillus delbrueckii</a>",
-    "link_ncbi_taxonomy_unfiltered": "<a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/2/\">d__Bacteria</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1783272/\">x__Terrabacteria group</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1239/\">p__Firmicutes</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/91061/\">c__Bacilli</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/186826/\">o__Lactobacillales</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/33958/\">f__Lactobacillaceae</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1578/\">g__Lactobacillus</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1584/\">s__Lactobacillus delbrueckii</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1585/\">sb__Lactobacillus delbrueckii subsp. bulgaricus</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/390333/\">x__Lactobacillus delbrueckii subsp. bulgaricus ATCC 11842 = JCM 1002</a>",
+    "link_ncbi_taxonomy_unfiltered": "<a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/2/\">d__Bacteria</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1783272/\">x__Terrabacteria group</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1239/\">p__Firmicutes</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/91061/\">c__Bacilli</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/186826/\">o__Lactobacillales</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/33958/\">f__Lactobacillaceae</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1578/\">g__Lactobacillus</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1584/\">s__Lactobacillus delbrueckii</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/1585/\">sb__Lactobacillus delbrueckii subsp. bulgaricus</a>; <a target=\"_blank\" href=\"https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/767455/\">x__Lactobacillus delbrueckii subsp. bulgaricus ND02</a>",
     "ncbiTaxonomyFiltered": [
       {
         "taxon": "d__Bacteria",
@@ -167,8 +167,8 @@
         "taxonId": "1585"
       },
       {
-        "taxon": "x__Lactobacillus delbrueckii subsp. bulgaricus ATCC 11842 = JCM 1002",
-        "taxonId": "390333"
+        "taxon": "x__Lactobacillus delbrueckii subsp. bulgaricus ND02",
+        "taxonId": "767455"
       }
     ],
     "detail": "Genome found"

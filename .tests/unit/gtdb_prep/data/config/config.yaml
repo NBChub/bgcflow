@@ -23,7 +23,7 @@ projects:
 
 # Project 2 (PEP file)
 #  - name: config/_pep_example/project_config.yaml
-  - name: config/lactobacillus_delbruecki/project_config.yaml
+  - name: config/gtdb_prep/project_config.yaml
 #### GLOBAL RULE CONFIGURATION ####
 # This section configures the rules to run globally.
 # Use project specific rule configurations if you want to run different rules for each projects.
