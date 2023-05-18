@@ -20,18 +20,17 @@ def assess_gtdb_json_file(item):
         try:
             gtdb_release = data["gtdb_release"]
             metadata = data["metadata"]
-            try:
-                if type(metadata["genome"]["accession"]) == str:
-                    logging.debug(
-                        f"{genome_id} can be found via GTDB-API release {gtdb_release}"
-                    )
-                    return None
-            except KeyError:
-                if metadata["detail"] == "Genome not found":
-                    logging.debug(
-                        f"{genome_id} : {metadata['detail']} in GTDB-API release {gtdb_release}"
-                    )
-                    return genome_id
+            if "Genome not found" in metadata["detail"]:
+                logging.debug(
+                    f"{genome_id} : {metadata['detail']} in GTDB-API release {gtdb_release}"
+                )
+                return genome_id
+            elif type(metadata["genome"]["accession"]) == str:
+                logging.debug(
+                    f"{genome_id} can be found via GTDB-API release {gtdb_release}"
+                )
+                return None
+
         except KeyError:
             logging.debug(f"{genome_id} does not have metadata")
             return genome_id

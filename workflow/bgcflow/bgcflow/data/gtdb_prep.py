@@ -238,6 +238,7 @@ def get_ncbi_taxon_GTDB(accession, release="R207"):
     result["genome_id"] = accession
     result["gtdb_url"] = api_url_tax
     result["gtdb_release"] = release
+    card_detail = "Genome found"
     try:
         if js_tax == []:
             logging.warning(
@@ -246,6 +247,9 @@ def get_ncbi_taxon_GTDB(accession, release="R207"):
             result["gtdb_taxonomy"] = {
                 level_dict[k]: f"{k}__" for k in level_dict.keys()
             }
+            card_detail = (
+                f"Genome not found - no taxonomic assignment in release {release}"
+            )
         else:
             logging.info(js_tax)
             tax = [tax for tax in js_tax if tax["release"] == release]
@@ -258,6 +262,9 @@ def get_ncbi_taxon_GTDB(accession, release="R207"):
                 result["gtdb_taxonomy"] = {
                     level_dict[k]: f"{k}__" for k in level_dict.keys()
                 }
+                card_detail = (
+                    f"Genome not found - no taxonomic assignment in release {release}"
+                )
             else:
                 raise
             result["gtdb_taxonomy"].pop("release", None)
@@ -279,6 +286,11 @@ def get_ncbi_taxon_GTDB(accession, release="R207"):
     js_sum, api_url_sum = gtdb_api_request(accession, "summary")
     result["metadata_url"] = api_url_sum
     result["metadata"] = js_sum
+
+    if "detail" in result["metadata"].keys():
+        pass
+    else:
+        result["metadata"]["detail"] = card_detail
 
     return result
 
