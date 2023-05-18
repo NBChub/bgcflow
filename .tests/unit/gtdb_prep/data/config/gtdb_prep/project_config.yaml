@@ -1,0 +1,30 @@
+name: gtdb_prep_test
+
+pep_version: 2.1.0
+
+description: "Lactobacillus delbrueckii 27 01 2023"
+
+sample_table: samples.csv
+
+#### RULE CONFIGURATION ####
+# rules: set value to TRUE if you want to run the analysis or FALSE if you don't
+rules:
+  seqfu: FALSE
+  mash: FALSE
+  fastani: FALSE
+  checkm: FALSE
+  gtdbtk: TRUE
+  prokka-gbk: FALSE
+  antismash: FALSE
+  query-bigslice: FALSE
+  bigscape: FALSE
+  bigslice: FALSE
+  automlst-wrapper: FALSE
+  arts: FALSE
+  roary: FALSE
+  eggnog: FALSE
+  eggnog-roary: FALSE
+  deeptfactor: FALSE
+  deeptfactor-roary: FALSE
+  cblaster-genome: FALSE
+  cblaster-bgc: FALSE

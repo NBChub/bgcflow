@@ -1,0 +1,18 @@
+{
+  "genome_id": "GCF_025643595.1",
+  "gtdb_url": "https://api.gtdb.ecogenomic.org/genome/GCF_025643595.1/taxon-history",
+  "gtdb_release": "R207",
+  "gtdb_taxonomy": {
+    "domain": "d__",
+    "phylum": "p__",
+    "class": "c__",
+    "order": "o__",
+    "family": "f__",
+    "genus": "g__",
+    "species": "s__"
+  },
+  "metadata_url": "https://api.gtdb.ecogenomic.org/genome/GCF_025643595.1/card",
+  "metadata": {
+    "detail": "Genome not found"
+  }
+}
