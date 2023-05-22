@@ -1,13 +1,14 @@
 # Read release version from config
 try:
-    gtdbtk_release = config["rule_parameters"]["install_gtdbtk"]["release"]
-    gtdbtk_release_version = config["rule_parameters"]["install_gtdbtk"][
+    gtdb_release = config["rule_parameters"]["install_gtdbtk"]["release"]
+    gtdb_release_version = config["rule_parameters"]["install_gtdbtk"][
         "release_version"
     ]
 except KeyError:
-    gtdbtk_release = "207"
-    gtdbtk_release_version = "207_v2"
+    gtdb_release = "207"
+    gtdb_release_version = "207_v2"
 
+sys.stderr.write(f"GTDB API | Grabbing metadata using GTDB release version: {gtdb_release_version}\n")
 
 rule gtdb_prep:
     output:
@@ -19,7 +20,7 @@ rule gtdb_prep:
     params:
         samples_path=bgcflow_util_dir / "samples.csv",
         gtdb_paths=GTDB_PATHS,
-        version=f"R{gtdbtk_release}",
+        version=f"R{gtdb_release}",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} '{params.samples_path}' '{params.gtdb_paths}' {params.version} 2> {log}

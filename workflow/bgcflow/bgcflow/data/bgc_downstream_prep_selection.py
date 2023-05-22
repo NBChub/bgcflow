@@ -30,6 +30,7 @@ def bgc_downstream_prep(input_dir, output_dir, selected_bgcs=False):
     for gbk in path.glob("*.gbk"):
         if gbk.stem in matches:
             logging.debug(f"MATCH: {gbk.stem}")
+            filename = gbk.name
             ctr = ctr + 1
             logging.info(f"Parsing file: {gbk.name}")
             region = SeqIO.parse(str(gbk), "genbank")
@@ -37,7 +38,6 @@ def bgc_downstream_prep(input_dir, output_dir, selected_bgcs=False):
                 logging.info(f"{gbk} {record.id}")
                 record_log = {}
                 if "comment" in record.annotations:
-                    filename = gbk.name
                     try:
                         original_id = record.annotations["structured_comment"][
                             "antiSMASH-Data"

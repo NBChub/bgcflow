@@ -1,14 +1,14 @@
 # Read release version from config
 try:
-    gtdbtk_release = config["rule_parameters"]["install_gtdbtk"]["release"]
-    gtdbtk_release_version = config["rule_parameters"]["install_gtdbtk"][
+    gtdb_release = config["rule_parameters"]["install_gtdbtk"]["release"]
+    gtdb_release_version = config["rule_parameters"]["install_gtdbtk"][
         "release_version"
     ]
 except KeyError:
-    gtdbtk_release = "207"
-    gtdbtk_release_version = "207_v2"
+    gtdb_release = "207"
+    gtdb_release_version = "207_v2"
 
-sys.stderr.write(f"Using GTDB-tk release version: {gtdbtk_release_version}\n")
+sys.stderr.write(f"GTDB-Tk  | Using GTDB release version: {gtdb_release_version}\n")
 
 
 rule install_gtdbtk:
@@ -19,8 +19,8 @@ rule install_gtdbtk:
     log:
         "workflow/report/logs/gtdbtk/gtdbtk-install_gtdbtk.log",
     params:
-        release=gtdbtk_release,
-        release_version=gtdbtk_release_version,
+        release=gtdb_release,
+        release_version=gtdb_release_version,
     shell:
         """
         (cd resources && wget https://data.gtdb.ecogenomic.org/releases/release{params.release}/{params.release}.0/auxillary_files/gtdbtk_r{params.release_version}_data.tar.gz -nc) 2>> {log}
