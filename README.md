@@ -32,7 +32,14 @@ See [`README.md`](https://github.com/NBChub/bgcflow_wrapper) for more details ab
 
 ## Workflow overview
 The main Snakefile workflow comprise of various pipelines for data selection, functional annotation, phylogenetic analysis, genome mining, and comparative genomics for Prokaryotic datasets.
+
 ![dag](workflow/report/images/rulegraph_annotated.svg)
+
+Available pipelines in the main Snakefile can be checked using:
+```
+bgcflow pipelines
+```
+
 ## Usage
 ### Step 1: Clone the workflow
 
