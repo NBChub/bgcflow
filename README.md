@@ -1,8 +1,8 @@
-# BGCflow
+# BGCFlow
 [![Snakemake](https://img.shields.io/badge/snakemake-≥7.14.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![PEP compatible](https://pepkit.github.io/img/PEP-compatible-green.svg)](https://pep.databio.org)
 
-BGCFlow is a systematic workflow for the analysis of biosynthetic gene clusters across large collection of genomes (pangenomes) from internal &amp; public datasets.
+BGCFlow is a systematic workflow for the analysis of biosynthetic gene clusters across large collections of genomes (pangenomes) from internal &amp; public datasets.
 
 ## Quick Start
 A quick and easy way to use BGCFlow using [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
@@ -10,7 +10,7 @@ A quick and easy way to use BGCFlow using [`bgcflow_wrapper`](https://github.com
 1. Create a conda environment and install the [BGCFlow python wrapper](https://github.com/NBChub/bgcflow_wrapper) :
 
 ```bash
-# create and activate new conda environment
+# create and activate a new conda environment
 conda create -n bgcflow pip -y
 conda activate bgcflow
 
@@ -31,11 +31,11 @@ bgcflow run -n # do a dry run, remove the flag "-n" to run the example dataset
 See [`README.md`](https://github.com/NBChub/bgcflow_wrapper) for more details about [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
 
 ## Workflow overview
-The main Snakefile workflow comprise of various pipelines for data selection, functional annotation, phylogenetic analysis, genome mining, and comparative genomics for Prokaryotic datasets.
+The main Snakefile workflow comprises various pipelines for data selection, functional annotation, phylogenetic analysis, genome mining, and comparative genomics for Prokaryotic datasets.
 
 ![dag](workflow/report/images/rulegraph_annotated.png)
 
-Available pipelines in the main Snakefile can be checked using:
+Available pipelines in the main Snakefile can be checked using the following command:
 ```
 bgcflow pipelines
 ```
@@ -55,10 +55,10 @@ bgcflow pipelines
 > ```
 
 ### Step 2: Configure the workflow
-Configure the workflow according to your needs via editing the files in the `config/` folder.
+Configure the workflow according to your needs by editing the files in the `config/` folder.
 
 #### 2.1 Using template example
-An example of the configuration files are provided in the `.examples` folder.
+An example of the configuration files is provided in the `.examples` folder.
 
 If you have a fresh copy of BGCFlow, you can initiate config and examples using by copying the necessary files to `config/` folder:
 ```shell
@@ -90,7 +90,7 @@ See [project_config.yaml](.examples/_pep_example/project_config.yaml) for an exa
 > ```
 
 ##### 2.2.1 BGCFlow Format
-A project can also be configured as previously described in BGCFlow version `<=0.3.3`. In the main `config/config.yaml`, each `project` starts with "`-`" and must contain the name of your project (`name`), the location of the sample file (`samples.csv`) and a rule configuration file (`project_config.csv`):
+A project can also be configured as previously described in BGCFlow version `<=0.3.3`. In the main `config/config.yaml`, each `project` starts with "`-`" and must contain the name of your project (`name`), the location of the sample file (`samples.csv`), and a rule configuration file (`project_config.csv`):
 
 ```yaml
 projects:
@@ -98,16 +98,16 @@ projects:
     samples: .examples/_genome_project_example/samples.csv
     rules: .examples/_genome_project_example/project_config.yaml
 ```
-Note that the location of the the sample file and the rule configuration file is relative to your `bgcflow` directory.
+Note that the location of the sample file and the rule configuration file is relative to your `bgcflow` directory.
 
 Ideally, you can organize a project as a set of genomes from a certain clade (pangenome).
 
 See [further configuration](#further-configuration) for more details.
 
 #### 2.2 Setting Up Your Samples Information
-The variable `sample_table` (PEP) or `samples` denote the location of your `.csv` file which specify the genomes to analyse. Note that you can name the file anything as long as you define it in the `config.yaml`.
+The variable `sample_table` (PEP) or `samples` denote the location of your `.csv` file which specifies the genomes to analyze. Note that you can name the file anything as long as you define it in the `config.yaml`.
 
-Example : `samples.csv`
+Example: `samples.csv`
 
 | genome_id       | source | organism                        | genus        | species | strain     |closest_placement_reference|
 |----------------:|-------:|--------------------------------:|-------------:|--------:| ----------:|--------------------------:|
@@ -116,14 +116,14 @@ Example : `samples.csv`
 | P8-2B-3.1       | custom | Streptomyces sp. P8-2B-3        | Streptomyces | sp.     | P8-2B-3    |                           |
 
 Columns description:
-- **`genome_id`** _[required]_:  The genome accession ids (with genome version for `ncbi` and `patric` genomes). For `custom` fasta file provided by users, it should refer to the fasta file names stored in `data/raw/fasta/` directory with `.fna` extension. **Example:** genome id P8-2B-3.1 refers to the file `data/raw/fasta/P8-2B-3.1.fna`.
+- **`genome_id`** _[required]_:  The genome accession ids (with genome version for `ncbi` and `patric` genomes). For `custom` fasta file provided by users, it should refer to the fasta file names stored in the `data/raw/fasta/` directory with `.fna` extension. **Example:** genome id P8-2B-3.1 refers to the file `data/raw/fasta/P8-2B-3.1.fna`.
 - **`source`** _[required]_: Source of the genome to be analyzed choose one of the following: `custom`, `ncbi`, `patric`. Where:
-  - `custom` : for user provided genomes (`.fna`) in the `data/raw/fasta` directory with genome ids as filenames
-  - `ncbi` : for list of public genome accession IDs that will be downloaded from the NCBI refseq (GCF...) or genbank (GCA...) database
+  - `custom`: for user-provided genomes (`.fna`) in the `data/raw/fasta` directory with genome ids as filenames
+  - `ncbi`: for list of public genome accession IDs that will be downloaded from the NCBI refseq (GCF...) or genbank (GCA...) database
   - `patric`: for list of public genome accession IDs that will be downloaded from the PATRIC database
-- `organism` _[optional]_ : name of the organism that is same as in the fasta header
+- `organism` _[optional]_: name of the organism that is the same as in the fasta header
 - `genus` _[optional]_ : genus of the organism. Ideally identified with GTDBtk.
-- `species` _[optional]_ : species epithet (the second word in a species name) of the organism. Ideally identified with GTDBtk.
+- `species` _[optional]_: species epithet (the second word in a species name) of the organism. Ideally identified with GTDBtk.
 - `strain` _[optional]_ : strain id of the organism
 - `closest_placement_reference` _[optional]_: if known, the closest NCBI genome to the organism. Ideally identified with GTDBtk.
 
@@ -161,7 +161,7 @@ Installing Snakemake using [Mamba](https://github.com/mamba-org/mamba) is advise
 You can use [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper) environment from [Quick Start](#Quick-Start) or install BGCFlow environment which contain Snakemake (`version 7.14.0`) and other dependencies with:
 
 ```bash
-# create and activate new conda environment
+# create and activate a new conda environment
 conda create -n bgcflow pip -y
 conda activate bgcflow
 
@@ -193,7 +193,7 @@ See the [Snakemake documentation](https://snakemake.readthedocs.io/en/stable/exe
 
 ## Further configuration
 ### Custom Prokka database
-You can add an optional parameters: `prokka-db`, which refer to the location of a `.csv` file containing a list of your custom reference genomes for [`prokka`](https://github.com/tseemann/prokka#option---proteins) annotation:
+You can add an optional parameter: `prokka-db`, which refers to the location of a `.csv` file containing a list of your custom reference genomes for [`prokka`](https://github.com/tseemann/prokka#option---proteins) annotation:
 ```yaml
 projects:
   - name: example
@@ -201,7 +201,7 @@ projects:
     prokka-db: config/prokka-db.csv
 ```
 
-The file `prokka-db.csv` should contain a list of high quality annotated genomes that you would like to use to prioritise prokka annotations.
+The file `prokka-db.csv` should contain a list of high-quality annotated genomes that you would like to use to prioritize prokka annotations.
 
 `prokka-db.csv` example for Actinomycete group:
 
@@ -211,7 +211,7 @@ The file `prokka-db.csv` should contain a list of high quality annotated genomes
 | GCA_000196835.1 | Amycolatopsis mediterranei U32 |
 
 ### Taxonomic Placement
-The workflow will prioritize user provided taxonomic placement by adding an optional parameters: `gtdb-tax`, which refer to a similar GTDB-tk summary file, but only the "user_genome" and "classification" columns are required.
+The workflow will prioritize user-provided taxonomic placement by adding an optional parameter: `gtdb-tax`, which refers to a similar GTDB-tk summary file, but only the "user_genome" and "classification" columns are required.
 
 `gtdbtk.bac120.summary.tsv` example:
 
@@ -219,9 +219,9 @@ The workflow will prioritize user provided taxonomic placement by adding an opti
 |------------:|---------------------------------------------------------------------------------------------------------------------------------------:|
 | P8-2B-3.1   | d__Bacteria;p__Actinobacteriota;c__Actinomycetia;o__Streptomycetales;f__Streptomycetaceae;g__Streptomyces;s__Streptomyces albidoflavus |
 
-If these are not provided, the workflow will use the `closest_placement_reference` columns in the sample file (see above). Note that the value must be a valid genome accession in the latest GTDB release (currently R202), otherwise it will raise an error.
+If these are not provided, the workflow will use the `closest_placement_reference` columns in the sample file (see above). Note that the value must be a valid genome accession in the latest GTDB release (currently R202), otherwise, it will raise an error.
 
-If these information is not provided, then the workflow will guess the taxonomic placement by:
+If this information is not provided, then the workflow will guess the taxonomic placement by:
 1. If the `source` is `ncbi`, it will try to find the accession via GTDB API. If it doesn't find any information then,
 2. It will use the `genus` table and find the parent taxonomy via GTDB API, which then results in `_genus_ sp.` preceded by the matching parent taxonomy.
 3. If both option does not find any taxonomic information, then it will return empty taxonomic values.
@@ -239,10 +239,10 @@ projects:
   - name: example_2
     samples: config/samples_2.csv
 ```
-Note that each `project` must have unique `name` and `samples` value.
+Note that each `project` must have a unique `name` and `samples` value.
 
 ### Setting custom resources/databases folder
-By default, the resources folder containing software and database dependencies are stored in the `resources/` directory.
+By default, the resources folder containing software and database dependencies is stored in the `resources/` directory.
 
 If you already have the resources folder somewhere else in your local machine, you can tell the workflow about their locations:
 
@@ -253,7 +253,7 @@ resources_path:
   BiG-SCAPE: $HOME/your_local_directory/BiG-SCAPE
 ```
 ## List of Configurable Features
-Here you can find rules keyword that you can run within BGCflow.
+Here you can find rules keywords that you can run within BGCflow.
 | Keywords | Description | Links |
 |:---------| :------------- | :------------------------- |
 | seqfu | Returns contig statistics of the genomes | [SeqFu](https://github.com/telatin/seqfu2)|
@@ -279,7 +279,7 @@ Here you can find rules keyword that you can run within BGCflow.
 | cblaster-bgcs | Generate cblaster databases for bgcs in project | [cblaster](https://github.com/gamcil/cblaster)  |
 
 ## Using snakemake profiles for further configurations
-When using different machines, you can, for example, adapt the number of threads required for each rules using a snakemake profile. An example is given in [`config/examples/_profile_example/config.yaml`](config/examples/_profile_example/config.yaml):
+When using different machines, you can, for example, adapt the number of threads required for each rule using a Snakemake profile. An example is given in [`config/examples/_profile_example/config.yaml`](config/examples/_profile_example/config.yaml):
 ```yaml
 set-threads:
   - antismash=4
@@ -288,11 +288,11 @@ set-threads:
   - bigslice=16
 ```
 
-You can use run a snakemake jobs with the above profile with:
+You can use run a snakemake job with the above profile with:
 ```bash
-snakemake --profile config/examples/_profile_example/ --use-conda -c $N -n # remove the dry-run parameters "-n" for actual run
+snakemake --profile config/examples/_profile_example/ --use-conda -c $N -n # remove the dry-run parameters "-n" for the actual run
 ```
 Or also with a defined `config` file:
 ```bash
-snakemake --configfile config/examples/_config_example.yaml --profile config/examples/_profile_example/ --use-conda -c $N -n # remove the dry-run parameters "-n" for actual run
+snakemake --configfile config/examples/_config_example.yaml --profile config/examples/_profile_example/ --use-conda -c $N -n # remove the dry-run parameters "-n" for the actual run
 ```
