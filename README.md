@@ -2,7 +2,7 @@
 [![Snakemake](https://img.shields.io/badge/snakemake-≥7.14.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![PEP compatible](https://pepkit.github.io/img/PEP-compatible-green.svg)](https://pep.databio.org)
 
-Snakemake workflow to systematically analyze Biosynthetic Gene Clusters on a collection of genomes (pangenomes) from internal &amp; public datasets.
+BGCFlow is a systematic workflow for the analysis of biosynthetic gene clusters across large collection of genomes (pangenomes) from internal &amp; public datasets.
 
 ## Quick Start
 A quick and easy way to use BGCFlow using [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
@@ -31,6 +31,7 @@ bgcflow run -n # do a dry run, remove the flag "-n" to run the example dataset
 See [`README.md`](https://github.com/NBChub/bgcflow_wrapper) for more details about [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
 
 ## Workflow overview
+The main Snakefile workflow comprise of various pipelines for data selection, functional annotation, phylogenetic analysis, genome mining, and comparative genomics for Prokaryotic datasets.
 ![dag](workflow/report/images/rulegraph_annotated.svg)
 ## Usage
 ### Step 1: Clone the workflow
