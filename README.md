@@ -2,44 +2,48 @@
 [![Snakemake](https://img.shields.io/badge/snakemake-≥7.14.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![PEP compatible](https://pepkit.github.io/img/PEP-compatible-green.svg)](https://pep.databio.org)
 
-Snakemake workflow to systematically analyze Biosynthetic Gene Clusters from a collection of genomes (pangenomes) from internal &amp; public genome datasets.
+Snakemake workflow to systematically analyze Biosynthetic Gene Clusters on a collection of genomes (pangenomes) from internal &amp; public datasets.
 
 ## Quick Start
-A quick and easy way to use BGCFlow is by using [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
+A quick and easy way to use BGCFlow using [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
 
-Install [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper) via:
+1. Create a conda environment and install the [BGCFlow python wrapper](https://github.com/NBChub/bgcflow_wrapper) :
 
-    # create a new virtual environment
-    python -m venv env
-    source env/bin/activate
+```bash
+# create and activate new conda environment
+conda create -n bgcflow pip -y
+conda activate bgcflow
 
-    # install BGCFlow wrapper
-    pip install git+https://github.com/NBChub/bgcflow_wrapper.git
+# install BGCFlow wrapper
+pip install git+https://github.com/NBChub/bgcflow_wrapper.git
+```
 
-Then, BGCFlow can be deployed and run via:
+2. Deploy and run BGCFlow:
+```bash
+# Deploy and run BGCFlow
+BGCFLOW_PATH="<change this to your desired path for BGCFlow>"
+bgcflow clone $BGCFLOW_PATH # clone BGCFlow to BGCFLOW_PATH
+cd $BGCFLOW_PATH # move to BGCFLOW_PATH
+bgcflow init # initiate BGCFlow config and examples from template
+bgcflow run -n # do a dry run, remove the flag "-n" to run the example dataset
+```
 
-    # Deploy and run BGCFlow
-    conda activate bgcflow_wrapper
-    bgcflow_wrapper clone MY_PATH # clone BGCFlow to MY_PATH
-    bgcflow_wrapper init --bgcflow_dir MY_PATH # initiate BGCFlow config and examples from template
-    bgcflow_wrapper run -n --bgcflow_dir MY_PATH # do a dry run
-
-See [`README.md`](https://github.com/NBChub/bgcflow_wrapper) for more details on [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
+See [`README.md`](https://github.com/NBChub/bgcflow_wrapper) for more details about [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
 
 ## Workflow overview
-![dag](workflow/report/images/rulegraph.svg)
+![dag](workflow/report/images/rulegraph_annotated.svg)
 ## Usage
 ### Step 1: Clone the workflow
 
 [Clone](https://help.github.com/en/articles/cloning-a-repository) this repository to your local system, into the place where you want to perform the data analysis. _Make sure to have the right access / SSH Key._
 
-    git clone git@github.com:NBChub/bgcflow.g
+    git clone git@github.com:NBChub/bgcflow.git
     cd bgcflow
 
 > **TIPS** - **`bgcflow_wrapper`** equivalent:
 >
 > ```bash
-> bgcflow_wrapper clone bgcflow
+> bgcflow clone bgcflow
 > ```
 
 ### Step 2: Configure the workflow
@@ -58,7 +62,7 @@ The above command will create a new file in `config/config.yaml`. You can adjust
 > **TIPS** - **`bgcflow_wrapper`** equivalent
 >
 > ```bash
-> bgcflow_wrapper init --bgcflow_dir bgcflow
+> bgcflow init --bgcflow_dir bgcflow
 > ```
 
 #### 2.2 Configure your project
@@ -74,7 +78,7 @@ See [project_config.yaml](.examples/_pep_example/project_config.yaml) for an exa
 > **TIPS** - Initiate a project using **`bgcflow_wrapper`**:
 >
 > ```bash
-> bgcflow_wrapper init --project MY_PROJECT --bgcflow_dir bgcflow
+> bgcflow init --project MY_PROJECT --bgcflow_dir bgcflow
 > ```
 
 ##### 2.2.1 BGCFlow Format
@@ -130,13 +134,13 @@ rules:
 > **TIPS** - Finding available rules with **`bgcflow_wrapper`**
 >
 > ```bash
-> bgcflow_wrapper rules --bgcflow_dir bgcflow
+> bgcflow pipelines --bgcflow_dir bgcflow
 > ```
 
 > **TIPS** - Find out rule description with **`bgcflow_wrapper`**
 >
 > ```bash
-> bgcflow_wrapper rules --describe bigscape --bgcflow_dir bgcflow
+> bgcflow pipelines --describe bigscape --bgcflow_dir bgcflow
 > ```
 
 See [List of Configurable Features](##List-of-Configurable-Features) for more details.
@@ -148,7 +152,14 @@ Installing Snakemake using [Mamba](https://github.com/mamba-org/mamba) is advise
 
 You can use [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper) environment from [Quick Start](#Quick-Start) or install BGCFlow environment which contain Snakemake (`version 7.14.0`) and other dependencies with:
 
-    mamba env create -f envs.yaml
+```bash
+# create and activate new conda environment
+conda create -n bgcflow pip -y
+conda activate bgcflow
+
+# install BGCFlow wrapper
+pip install git+https://github.com/NBChub/bgcflow_wrapper.git
+```
 
 See the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) for installation details.
 
@@ -171,14 +182,6 @@ Check you job DAG by executing:
     snakemake --dag | dot -Tsvg > workflow/report/images/dag.svg
 
 See the [Snakemake documentation](https://snakemake.readthedocs.io/en/stable/executable.html) for further details.
-
-### Step 5: Investigate results
-
-After successful execution, you can zip a self-contained interactive HTML report with all results via:
-
-    snakemake --report report.zip
-
-This report can, e.g., be forwarded to your collaborators.
 
 ## Further configuration
 ### Custom Prokka database
