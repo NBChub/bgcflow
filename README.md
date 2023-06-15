@@ -4,6 +4,9 @@
 
 BGCFlow is a systematic workflow for the analysis of biosynthetic gene clusters across large collections of genomes (pangenomes) from internal &amp; public datasets.
 
+## Publication
+> Matin Nuhamunada, Omkar S. Mohite, Patrick V. Phaneuf, Bernhard O. Palsson, and Tilmann Weber. (2023). BGCFlow: Systematic pangenome workflow for the analysis of biosynthetic gene clusters across large genomic datasets. bioRxiv 2023.06.14.545018; doi: [https://doi.org/10.1101/2023.06.14.545018](https://doi.org/10.1101/2023.06.14.545018)
+
 ## Quick Start
 A quick and easy way to use BGCFlow using [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
 
