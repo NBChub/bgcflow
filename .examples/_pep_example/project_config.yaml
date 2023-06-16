@@ -25,10 +25,10 @@ rules:
   bigslice: TRUE
   automlst-wrapper: TRUE
   arts: TRUE
-  roary: TRUE
-  eggnog: TRUE
-  eggnog-roary: TRUE
+  roary: FALSE
+  eggnog: FALSE
+  eggnog-roary: FALSE
   deeptfactor: TRUE
-  deeptfactor-roary: TRUE
+  deeptfactor-roary: FALSE
   cblaster-genome: TRUE
   cblaster-bgc: TRUE
