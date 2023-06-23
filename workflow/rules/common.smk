@@ -8,7 +8,7 @@ from pathlib import Path
 import peppy
 
 min_version("7.14.0")
-__version__ = "0.6.1"
+__version__ = "0.6.4"
 
 
 container: "docker://matinnu/bgcflow:latest"
@@ -372,7 +372,7 @@ def extract_project_information(config, project_variable="projects"):
 
         for i in df_sample.index:
             if i in df_gtdb.index:
-                df_sample.loc[i, "classification"] = df_gtdb.loc[i, "classification"]
+                df_sample.loc[i, "classification"] = str(df_gtdb.loc[i, "classification"])
                 df_sample.loc[i, "classification_source"] = "user_provided"
             elif not pd.isnull(df_sample.loc[i, "closest_placement_reference"]):
                 df_sample.loc[i, "classification"] = df_sample.loc[
