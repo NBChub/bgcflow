@@ -47,9 +47,8 @@ else:
             "workflow/report/logs/ncbi/extract_ncbi_information/extract_ncbi_information-{name}.log",
         shell:
             """
-            echo 1 2>> {log}
-            python workflow/bgcflow/bgcflow/data/extract_ncbi_information.py \
-                '{input.all_json}' {output.ncbi_meta_path} 2>> {log}
+            echo '{input.all_json}' | xargs -I CMD python workflow/bgcflow/bgcflow/data/extract_ncbi_information.py \
+                "CMD" {output.ncbi_meta_path} 2>> {log}
             """
 
     rule download_patric_tables:
