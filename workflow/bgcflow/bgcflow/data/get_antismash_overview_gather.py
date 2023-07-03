@@ -13,6 +13,22 @@ logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 def correct_bgc_id_overview(overview_file, mapping_file, genome_id=False):
     """
     Use a mapping file to correct bgc_ids
+
+    Parameters
+    ----------
+    overview_file : str / path
+        Path to the BGC overview file in JSON format
+
+    mapping_file : str / path
+        Path to the mapping file in JSON format
+
+    genome_id : str, optional
+        Genome ID to correct BGC IDs for, if not provided, it is extracted from the overview file name
+
+    Returns
+    -------
+    new_dict : dict
+        Corrected BGC overview dictionary with updated BGC IDs
     """
     logging.info(f"Correcting shortened bgc ids for {genome_id}...")
     overview_path = Path(overview_file)
@@ -50,10 +66,56 @@ def correct_bgc_id_overview(overview_file, mapping_file, genome_id=False):
 
 
 def gather_bgc_overview(input_json, mapping_dir, table):
-    input_json = input_json.split()
+    """
+    Gather BGC overview data from multiple JSON files and create a merged table
+
+    Parameters
+    ----------
+    input_json : str
+        Two different input types can be used:
+        - Space-separated paths to BGC overview JSON files (put the string inside '' in bash expression)
+        - A text file (.txt) containing the paths of the json files (one per line, or space-separated on a single line)
+    mapping_dir : str / path
+        Directory containing mapping files
+
+    table : str / path
+        Path to the output merged table
+
+    Returns
+    -------
+    None
+    """
+    input_json = Path(input_json)
+    logging.info(input_json)
+    if input_json.is_file() and input_json.suffix == ".json":
+        logging.info(f"Getting BGC overview from a single file: {input_json}")
+        input_json_files = input_json
+
+    elif input_json.is_file() and input_json.suffix == ".txt":
+        logging.info(f"Getting BGC overview  from a text file: {input_json}")
+        with open(input_json, "r") as file:
+            file_content = [i.strip("\n") for i in file.readlines()]
+            if len(file_content) == 1:
+                # Paths space-separated on a single line
+                paths = file_content[0].split()
+            else:
+                # Paths written on separate lines
+                paths = file_content
+            input_json_files = [
+                Path(path) for path in paths if Path(path).suffix == ".json"
+            ]
+    else:
+        input_json_files = [
+            Path(file)
+            for file in str(input_json).split()
+            if Path(file).suffix == ".json"
+        ]
+        logging.info(
+            f"Getting BGC overview from the given list of {len(input_json_files)} files..."
+        )
 
     merged_dict = {}
-    for j in input_json:
+    for j in input_json_files:
         mapping_file = Path(j)
         genome_id = mapping_file.name.replace("_bgc_overview.json", "")
         mapping_path = Path(mapping_dir) / f"{genome_id}/{genome_id}-change_log.json"

@@ -62,10 +62,10 @@ def extract_ncbi_information(assembly_report_path, outfile):
             ncbi_json_files = [
                 Path(path) for path in paths if Path(path).suffix == ".json"
             ]
-    elif isinstance(assembly_report_path, str):
+    else:
         ncbi_json_files = [
             Path(file)
-            for file in assembly_report_path.split()
+            for file in str(assembly_report_path).split()
             if Path(file).suffix == ".json"
         ]
         logging.info(
