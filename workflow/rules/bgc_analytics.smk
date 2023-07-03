@@ -42,7 +42,7 @@ rule antismash_overview_gather:
         "workflow/report/logs/bgc_analytics/antismash_overview_gather-{version}-{name}.log",
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/get_antismash_overview_gather.py '{input.bgc_overview}' {input.mapping_dir} {output.df_bgc} 2>> {log}
+        echo '{input.bgc_overview}' | xargs -I CMD python workflow/bgcflow/bgcflow/data/get_antismash_overview_gather.py "CMD" {input.mapping_dir} {output.df_bgc} 2>> {log}
         """
 
 rule copy_log_changes:
