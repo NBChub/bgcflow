@@ -42,7 +42,9 @@ rule antismash_overview_gather:
         "workflow/report/logs/bgc_analytics/antismash_overview_gather-{version}-{name}.log",
     shell:
         """
-        INPUT_JSON="data/interim/tmp/{wildcards.name}/{wildcards.version}/df_regions_antismash.txt"
+        TMPDIR="data/interim/tmp/{wildcards.name}/{wildcards.version}"
+        mkdir -p $TMPDIR
+        INPUT_JSON="$TMPDIR/df_regions_antismash.txt"
         echo '{input.bgc_overview}' > $INPUT_JSON
         python workflow/bgcflow/bgcflow/data/get_antismash_overview_gather.py \
             $INPUT_JSON {input.mapping_dir} {output.df_bgc} 2>> {log}

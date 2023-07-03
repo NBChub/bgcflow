@@ -47,7 +47,9 @@ else:
             "workflow/report/logs/ncbi/extract_ncbi_information/extract_ncbi_information-{name}.log",
         shell:
             """
-            INPUT_JSON="data/interim/tmp/{wildcards.name}/df_ncbi_meta_input.txt"
+            TMPDIR="data/interim/tmp/{wildcards.name}"
+            mkdir -p $TMPDIR
+            INPUT_JSON="$TMPDIR/df_ncbi_meta_input.txt"
             echo '{input.all_json}' > $INPUT_JSON
             python workflow/bgcflow/bgcflow/data/extract_ncbi_information.py \
                 $INPUT_JSON {output.ncbi_meta_path} 2>> {log}
