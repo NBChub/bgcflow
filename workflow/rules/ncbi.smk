@@ -35,6 +35,7 @@ else:
                 wildcards.name, DF_SAMPLES
             ),
         output:
+            input_json=temp("data/processed/{name}/tables/df_ncbi_meta_input.txt"),
             ncbi_meta_path=report(
                 "data/processed/{name}/tables/df_ncbi_meta.csv",
                 caption="../report/table-ncbi_meta.rst",
@@ -47,8 +48,9 @@ else:
             "workflow/report/logs/ncbi/extract_ncbi_information/extract_ncbi_information-{name}.log",
         shell:
             """
-            echo '{input.all_json}' | xargs -I CMD python workflow/bgcflow/bgcflow/data/extract_ncbi_information.py \
-                "CMD" {output.ncbi_meta_path} 2>> {log}
+            echo '{input.all_json}' > {output.input_json}
+            python workflow/bgcflow/bgcflow/data/extract_ncbi_information.py \
+                {output.input_json} {output.ncbi_meta_path} 2>> {log}
             """
 
     rule download_patric_tables:
