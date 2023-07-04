@@ -517,13 +517,35 @@ def get_dependency_version(dep, dep_key):
     """
     return dependency version tags given a dictionary (dep) and its key (dep_key)
     """
+    print(f"Getting {dep_key} version from: {dep[dep_key]}", file=sys.stderr)
     with open(dep[dep_key]) as file:
         result = []
         documents = yaml.full_load(file)
         for i in documents["dependencies"]:
-            if i.startswith(dep_key):
-                result = i.split("=")[-1]
-    return str(result)
+            if type(i) == str:
+                if i.startswith(dep_key):
+                    dep_name, dep_version = i.split("=")
+                    result.append(dep_version)
+            elif type(i) == dict:
+                assert len(i.keys()) == 1
+                for item in i['pip']:
+                    if dep_key in item:
+                        if item.startswith("git"):
+                            dep_name, dep_version = item.split("@")
+                            print(f" - {dep_key} will be installed from {dep_name}", file=sys.stderr)
+                            result.append(dep_version)
+                        else:
+                            dep_name, dep_version = item.split("=")
+                            print(f" - {dep_key} will be installed using pip", file=sys.stderr)
+                            result.append(dep_version)
+    assert len(result) == 1, f"Cannot determine {dep_key} version from {result}"
+
+    # beautify antismash version, changing "-" to "."
+    if dep_key == "antismash" and "-" in result[0]:
+        result[0] = result[0].replace("-",".")
+
+    print(f" - {dep_key} version is {result[0]}", file=sys.stderr)
+    return str(result[0])
 
 
 def get_dependencies(dep):
@@ -547,9 +569,12 @@ dependencies = {
     "refseq_masher": r"workflow/envs/refseq_masher.yaml",
     "seqfu": r"workflow/envs/seqfu.yaml",
     "checkm": r"workflow/envs/checkm.yaml",
+    "gtdbtk" : r"workflow/envs/gtdbtk.yaml"
 }
 
 dependency_version = get_dependencies(dependencies)
+print(f"", file=sys.stderr)
+
 
 ##### 7. Customize final output based on config["rule"] values #####
 

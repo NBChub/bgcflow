@@ -4,5 +4,40 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - antismash=6.1.1
-  - jinja2
+  - meme=5.5.2
+  - python>=3.9
+  - hmmer2
+  - hmmer
+  - diamond==2.0.15
+  - fasttree
+  - prodigal
+  - blast
+  - muscle
+  - glimmerhmm
+  - expat
+  - ghostscript
+  - icu
+  - libexpat
+  - libgcc-ng
+  - libxml2
+  - libxslt
+  - libzlib
+  - perl
+  - perl-cgi
+  - perl-file-which
+  - perl-html-parser
+  - perl-html-template
+  - perl-html-tree
+  - perl-json
+  - perl-log-log4perl
+  - perl-math-cdf
+  - perl-module-build
+  - perl-sys-info
+  - perl-xml-parser
+  - perl-xml-simple
+  - perl-yaml
+  - xz
+  - yaml
+  - pip
+  - pip:
+    - git+https://github.com/antismash/antismash.git@7-0-0
