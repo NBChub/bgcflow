@@ -305,6 +305,15 @@ def extract_project_information(config, project_variable="projects"):
     print(f"Step 1. Extracting project information from config...\n", file=sys.stderr)
     projects = config[project_variable]
 
+    # mask pep and name as alias
+    for item in projects:
+        if 'pep' in item:
+            item['name'] = item.pop('pep')
+
+    # mask rules and pipelines as alias
+    if 'pipelines' in config.keys():
+        config['rules'] = config.pop('pipelines')
+
     # filter for pep projects
     df_projects = pd.DataFrame(projects).set_index("name", drop=False)
     for i in df_projects.index:
@@ -326,13 +335,18 @@ def extract_project_information(config, project_variable="projects"):
 
     for num, p in enumerate(projects):
         print(
-            f"Step 2.{num+1} Getting sample information for project: {p['name']}",
+            f"Step 2.{num+1} Getting sample information from: {p['name']}",
             file=sys.stderr,
         )
         # grab a bgcflow pep project
         if p["name"].endswith(".yaml"):
             pep_file = p["name"]
             p = peppy.Project(p["name"], sample_table_index="genome_id")
+
+            # mask pipelines and rules as alias, use rules as default
+            if 'pipelines' in p.config.keys():
+                p.config['rules'] = p.config.pop("pipelines")
+
             print(f" - Processing project [{p.name}]", file=sys.stderr)
 
             # make sure each project has unique names
