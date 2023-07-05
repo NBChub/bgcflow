@@ -63,3 +63,8 @@ resources_path:
   checkm: resources/checkm
   gtdbtk: resources/gtdbtk
   #RNAmmer: resources/RNAmmer # If specified, will override Barnapp in Prokka
+
+rule_parameters:
+  install_gtdbtk:
+    release: 214
+    release_version: 214

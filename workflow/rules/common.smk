@@ -8,7 +8,7 @@ from pathlib import Path
 import peppy
 
 min_version("7.14.0")
-__version__ = "0.6.4"
+__version__ = "0.7.0-alpha"
 
 
 container: "docker://matinnu/bgcflow:latest"
@@ -517,7 +517,7 @@ def get_dependency_version(dep, dep_key):
     """
     return dependency version tags given a dictionary (dep) and its key (dep_key)
     """
-    print(f"Getting {dep_key} version from: {dep[dep_key]}", file=sys.stderr)
+    print(f"{dep_key} from: {dep[dep_key]}", file=sys.stderr)
     with open(dep[dep_key]) as file:
         result = []
         documents = yaml.full_load(file)
@@ -535,7 +535,7 @@ def get_dependency_version(dep, dep_key):
                             print(f" - {dep_key} will be installed from {dep_name}", file=sys.stderr)
                             result.append(dep_version)
                         else:
-                            dep_name, dep_version = item.split("=")
+                            dep_name, dep_version = [item.split("=")[i] for i in (0, -1)]
                             print(f" - {dep_key} will be installed using pip", file=sys.stderr)
                             result.append(dep_version)
     assert len(result) == 1, f"Cannot determine {dep_key} version from {result}"
@@ -544,7 +544,7 @@ def get_dependency_version(dep, dep_key):
     if dep_key == "antismash" and "-" in result[0]:
         result[0] = result[0].replace("-",".")
 
-    print(f" - {dep_key} version is {result[0]}", file=sys.stderr)
+    print(f" - {dep_key}=={result[0]}", file=sys.stderr)
     return str(result[0])
 
 
@@ -562,16 +562,17 @@ def get_dependencies(dep):
 # list of the main dependecies used in the workflow
 dependencies = {
     "antismash": r"workflow/envs/antismash.yaml",
+    "bigslice" : r"workflow/envs/bigslice.yaml",
+    "cblaster" : r"workflow/envs/cblaster.yaml",
     "prokka": r"workflow/envs/prokka.yaml",
-    "mlst": r"workflow/envs/mlst.yaml",
     "eggnog-mapper": r"workflow/envs/eggnog.yaml",
     "roary": r"workflow/envs/roary.yaml",
-    "refseq_masher": r"workflow/envs/refseq_masher.yaml",
     "seqfu": r"workflow/envs/seqfu.yaml",
     "checkm": r"workflow/envs/checkm.yaml",
     "gtdbtk" : r"workflow/envs/gtdbtk.yaml"
 }
 
+print(f"Checking dependencies...", file=sys.stderr)
 dependency_version = get_dependencies(dependencies)
 print(f"", file=sys.stderr)
 

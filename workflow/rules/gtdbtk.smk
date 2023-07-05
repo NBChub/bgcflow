@@ -8,8 +8,6 @@ except KeyError:
     gtdb_release = "207"
     gtdb_release_version = "207_v2"
 
-sys.stderr.write(f"GTDB-Tk  | Using GTDB release version: {gtdb_release_version}\n")
-
 
 rule install_gtdbtk:
     output:
@@ -26,7 +24,6 @@ rule install_gtdbtk:
         (cd resources && wget https://data.gtdb.ecogenomic.org/releases/release{params.release}/{params.release}.0/auxillary_files/gtdbtk_r{params.release_version}_data.tar.gz -nc) 2>> {log}
         (cd resources && mkdir -p gtdbtk && tar -xvzf gtdbtk_r{params.release_version}_data.tar.gz -C "gtdbtk" --strip 1 && rm gtdbtk_r{params.release_version}_data.tar.gz) &>> {log}
         """
-
 
 rule prepare_gtdbtk_input:
     input:
@@ -62,6 +59,6 @@ rule gtdbtk:
     shell:
         """
         mkdir -p {output.tmpdir}
-        gtdbtk classify_wf --genome_dir {input.fnadir} --out_dir {output.gtdbtk_dir} --cpus {threads} --pplacer_cpus 1 --tmpdir {output.tmpdir} &>> {log}
+        gtdbtk classify_wf --genome_dir {input.fnadir} --out_dir {output.gtdbtk_dir} --cpus {threads} --pplacer_cpus 1 --tmpdir {output.tmpdir} --skip_ani_screen &>> {log}
         cp {output.summary_interim} {output.summary_processed}
         """

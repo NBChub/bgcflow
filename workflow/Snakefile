@@ -59,13 +59,13 @@ rule all:
 
 
 ##### Modules #####
+include: "rules/gtdb.smk"
 include: "rules/ncbi.smk"
 include: "rules/prokka.smk"
 include: "rules/antismash.smk"
 include: "rules/roary.smk"
 include: "rules/bigscape.smk"
 include: "rules/bigslice.smk"
-include: "rules/gtdb.smk"
 include: "rules/gtdbtk.smk"
 include: "rules/mash.smk"
 include: "rules/fastani.smk"
