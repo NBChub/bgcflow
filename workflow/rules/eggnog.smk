@@ -5,7 +5,7 @@ rule install_eggnog:
     conda:
         "../envs/eggnog.yaml"
     log:
-        "workflow/report/logs/eggnog/install_eggnog.log",
+        "logs/eggnog/install_eggnog.log",
     shell:
         """
         download_eggnog_data.py --data_dir {output.eggnog_db} -y &>> {log}
@@ -24,7 +24,7 @@ rule eggnog:
         "../envs/eggnog.yaml"
     threads: 4
     log:
-        "workflow/report/logs/eggnog/eggnog/eggnog-{strains}.log",
+        "logs/eggnog/eggnog/eggnog-{strains}.log",
     shell:
         """
         mkdir -p {output.eggnog_dir}

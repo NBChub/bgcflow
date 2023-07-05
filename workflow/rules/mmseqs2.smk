@@ -4,7 +4,7 @@ rule prep_gbk_mmseqs2:
     output:
         gbk_dir = directory("data/interim/mmseqs2/{name}/{version}/gbk_dir")
     log:
-        "workflow/report/logs/mmseqs2/prep_gbk_mmseqs2_{name}_{version}.log",
+        "logs/mmseqs2/prep_gbk_mmseqs2_{name}_{version}.log",
     conda:
         "../envs/bgc_analytics.yaml"
     shell:
@@ -19,7 +19,7 @@ rule prepare_aa_mmseqs2:
         fasta = "data/interim/mmseqs2/{name}/{name}_{version}.faa",
         gbk = "data/interim/minimap2/{name}/{name}_{version}.gbk",
     log:
-        "workflow/report/logs/mmseqs2/create_aa_{name}_{version}.log",
+        "logs/mmseqs2/create_aa_{name}_{version}.log",
     conda:
         "../envs/bgc_analytics.yaml"
     shell:
@@ -38,7 +38,7 @@ rule minimap2:
     conda:
         "../envs/mmseqs2.yaml"
     log:
-        "workflow/report/logs/minimap2/{name}_{version}.log",
+        "logs/minimap2/{name}_{version}.log",
     shell:
         """
         any2fasta {input.gbk} > {output.fna} 2>> {log}
@@ -51,7 +51,7 @@ rule mmseqs2_easy_cluster:
     output:
         tsv = "data/interim/mmseqs2/{name}/{name}_{version}_cluster.tsv",
     log:
-        "workflow/report/logs/mmseqs2/build_{name}_{version}.log",
+        "logs/mmseqs2/build_{name}_{version}.log",
     conda:
         "../envs/mmseqs2.yaml"
     threads: 4
@@ -70,7 +70,7 @@ rule mmseqs2:
         clusterdb = "data/interim/mmseqs2/{name}/cluster_{name}_{version}.db.index",
         dbtype  = "data/interim/mmseqs2/{name}/cluster_{name}_{version}.db.dbtype"
     log:
-        "workflow/report/logs/mmseqs2/build_{name}_{version}.log",
+        "logs/mmseqs2/build_{name}_{version}.log",
     conda:
         "../envs/mmseqs2.yaml"
     threads: 4
@@ -91,7 +91,7 @@ rule mmseqs2_extract:
         seqdb = "data/interim/mmseqs2/{name}/seq_{name}_{version}.db.index",
         msa = "data/interim/mmseqs2/{name}/msa_{name}_{version}.db",
     log:
-        "workflow/report/logs/mmseqs2/extract_{name}_{version}.log",
+        "logs/mmseqs2/extract_{name}_{version}.log",
     conda:
         "../envs/mmseqs2.yaml"
     threads: 4

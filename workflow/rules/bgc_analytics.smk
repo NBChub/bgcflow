@@ -6,7 +6,7 @@ rule bgc_count:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/bgc_analytics/bgc_counts/as_{version}_{strains}.log",
+        "logs/bgc_analytics/bgc_counts/as_{version}_{strains}.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/get_bgc_counts.py {input.antismash} {wildcards.strains} {output.bgc_count} 2>> {log}
@@ -20,7 +20,7 @@ rule antismash_overview:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/bgc_analytics/bgc_overview/as_{version}_{strains}.log",
+        "logs/bgc_analytics/bgc_overview/as_{version}_{strains}.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/get_antismash_overview.py {input.antismash} {output.bgc_table} {wildcards.strains} 2>> {log}
@@ -39,7 +39,7 @@ rule antismash_overview_gather:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/bgc_analytics/antismash_overview_gather-{version}-{name}.log",
+        "logs/bgc_analytics/antismash_overview_gather-{version}-{name}.log",
     shell:
         """
         TMPDIR="data/interim/tmp/{wildcards.name}/{wildcards.version}"
@@ -58,7 +58,7 @@ rule copy_log_changes:
         mapping_dir=directory("data/processed/{name}/log_changes/{version}")
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/bgcs/downstream_bgc_prep/{name}/copy_log_changes-{version}.log",
+    log: "logs/bgcs/downstream_bgc_prep/{name}/copy_log_changes-{version}.log",
     shell:
         """
         mkdir -p {output.mapping_dir} 2>> {log}
@@ -90,7 +90,7 @@ rule antismash_summary:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/bgc_analytics/antismash_summary-{version}-{name}.log",
+        "logs/bgc_analytics/antismash_summary-{version}-{name}.log",
     params:
         df_samples=lambda wildcards: PEP_PROJECTS[wildcards.name].config["sample_table"],
     shell:
@@ -104,7 +104,7 @@ rule write_dependency_versions:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/bgc_analytics/write_dependency_versions.log",
+        "logs/bgc_analytics/write_dependency_versions.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/get_dependencies.py {output} 2> {log}
@@ -116,7 +116,7 @@ rule get_project_metadata:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/bgc_analytics/get_{name}_metadata.log",
+        "logs/bgc_analytics/get_{name}_metadata.log",
     params:
         bgcflow_version=__version__,
     shell:

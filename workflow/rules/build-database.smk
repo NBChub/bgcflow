@@ -7,7 +7,7 @@ rule antismash_json_extract:
         regions = temp("data/interim/database/as_{version}/{strains}/{strains}_regions.json"),
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/database/scatter/as_{version}_json_extract_{strains}.log"
+    log: "logs/database/scatter/as_{version}_json_extract_{strains}.log"
     params:
         outdir = "data/interim/database/as_{version}/{strains}",
     shell:
@@ -24,7 +24,7 @@ rule build_dna_sequences_table:
         dna_sequences = "data/processed/{name}/data_warehouse/{version}/dna_sequences.parquet",
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/database/gather/as_{version}_dna_sequences_gather_{name}.log"
+    log: "logs/database/gather/as_{version}_dna_sequences_gather_{name}.log"
     params:
         index_key = "sequence_id",
     shell:
@@ -42,7 +42,7 @@ rule build_regions_table:
         regions = "data/processed/{name}/data_warehouse/{version}/regions.parquet",
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/database/gather/as_{version}_regions_gather_{name}.log"
+    log: "logs/database/gather/as_{version}_regions_gather_{name}.log"
     params:
         index_key = "region_id",
         exclude = "_regions.json"
@@ -62,7 +62,7 @@ rule build_cdss_table:
         cdss = "data/processed/{name}/data_warehouse/{version}/cdss.parquet",
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/database/gather/as_{version}_cdss_gather_{name}.log"
+    log: "logs/database/gather/as_{version}_cdss_gather_{name}.log"
     params:
         index_key = "cds_id",
         exclude = "_cdss.json"
@@ -81,7 +81,7 @@ rule build_warehouse:
         log = "data/processed/{name}/data_warehouse/{version}/database.log",
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/database/report/database_{version}_{name}.log"
+    log: "logs/database/report/database_{version}_{name}.log"
     shell:
         """
         echo {input.cdss} >> {output.log}
@@ -98,7 +98,7 @@ rule get_dbt_template:
         profile = "data/processed/{name}/dbt_as_{version}/models/sources.yml"
     conda:
         "../envs/dbt-duckdb.yaml"
-    log: "workflow/report/logs/database/report/get_dbt_template_{version}_{name}.log"
+    log: "logs/database/report/get_dbt_template_{version}_{name}.log"
     threads: 4
     params:
         dbt = "data/processed/{name}/dbt_as_{version}",
@@ -129,7 +129,7 @@ rule build_database:
         duckdb = "data/processed/{name}/dbt_as_{version}/dbt_bgcflow.duckdb"
     conda:
         "../envs/dbt-duckdb.yaml"
-    log: "workflow/report/logs/database/report/database_{version}_{name}.log"
+    log: "logs/database/report/database_{version}_{name}.log"
     threads: 16
     params:
         dbt = "data/processed/{name}/dbt_as_{version}"

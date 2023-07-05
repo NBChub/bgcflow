@@ -4,7 +4,7 @@ rule prep_clinker:
     output:
         gbk_dir = temp(directory("data/interim/clinker/{name}/{version}"))
     log:
-        "workflow/report/logs/clinker/prep_clinker_{name}_{version}.log",
+        "logs/clinker/prep_clinker_{name}_{version}.log",
     conda:
         "../envs/bgc_analytics.yaml"
     shell:
@@ -20,7 +20,7 @@ rule clinker:
     conda:
         "../envs/clinker.yaml"
     threads: 4
-    log: "workflow/report/logs/clinker/clinker-{version}-{name}.log"
+    log: "logs/clinker/clinker-{version}-{name}.log"
     shell:
         """
         clinker {input.gbk_dir}/*.gbk -j {threads} -o {output.txt} -p {output.html} 2>> {log}

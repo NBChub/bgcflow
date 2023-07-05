@@ -9,7 +9,7 @@ rule fastani:
         "../envs/fastani.yaml"
     threads: 32
     log:
-        "workflow/report/logs/fastani/fastani-{name}.log",
+        "logs/fastani/fastani-{name}.log",
     shell:
         """
         for fna in {input.fna}
@@ -26,7 +26,7 @@ rule fastani_convert:
     output:
         df_fastani="data/processed/{name}/fastani/df_fastani.csv",
     log:
-        "workflow/report/logs/fastani/fastani-convert-{name}.log",
+        "logs/fastani/fastani-convert-{name}.log",
     conda:
         "../envs/bgc_analytics.yaml"
     shell:

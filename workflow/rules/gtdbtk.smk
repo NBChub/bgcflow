@@ -15,7 +15,7 @@ rule install_gtdbtk:
     conda:
         "../envs/gtdbtk.yaml"
     log:
-        "workflow/report/logs/gtdbtk/gtdbtk-install_gtdbtk.log",
+        "logs/gtdbtk/gtdbtk-install_gtdbtk.log",
     params:
         release=gtdb_release,
         release_version=gtdb_release_version,
@@ -32,7 +32,7 @@ rule prepare_gtdbtk_input:
     output:
         fnadir=directory("data/interim/gtdbtk/{name}/fasta/"),
     log:
-        "workflow/report/logs/gtdbtk/prepare_gtdbtk_input/{name}.log",
+        "logs/gtdbtk/prepare_gtdbtk_input/{name}.log",
     conda:
         "../envs/bgc_analytics.yaml"
     shell:
@@ -54,7 +54,7 @@ rule gtdbtk:
     conda:
         "../envs/gtdbtk.yaml"
     log:
-        "workflow/report/logs/gtdbtk/gtdbtk/gtdbtk_{name}.log",
+        "logs/gtdbtk/gtdbtk/gtdbtk_{name}.log",
     threads: 32
     shell:
         """

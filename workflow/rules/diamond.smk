@@ -9,7 +9,7 @@ rule create_diamond_db:
         "../envs/antismash.yaml"
     threads: 8
     log:
-        "workflow/report/logs/create_diamond_db/create_diamond_db_{name}.log",
+        "logs/create_diamond_db/create_diamond_db_{name}.log",
     params:
         diamond="data/interim/diamond/{name}/{name}.dmnd",
     shell:

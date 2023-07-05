@@ -7,7 +7,7 @@ rule arts:
         "../envs/arts.yaml"
     threads: 4
     log:
-        "workflow/report/logs/arts/arts/arts-{version}-{strains}.log",
+        "logs/arts/arts/arts-{version}-{strains}.log",
     params:
         ref="resources/arts/reference/actinobacteria/",
         resources="resources/arts",
@@ -27,7 +27,7 @@ rule arts_extract:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/arts/arts_extract/arts_extract-{version}-{strains}.log",
+        "logs/arts/arts_extract/arts_extract-{version}-{strains}.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/arts_extract.py {input.arts}/tables/bgctable.tsv {input.json} {output.json} {wildcards.strains} 2>> {log}
@@ -46,7 +46,7 @@ rule arts_combine:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/arts/arts_combine/arts_combine-{version}-{name}.log",
+        "logs/arts/arts_combine/arts_combine-{version}-{name}.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/arts_gather.py '{input.json}' {input.changelog} {output.table} 2>> {log}

@@ -10,7 +10,7 @@ else:
         conda:
             "../envs/bgc_analytics.yaml"
         log:
-            "workflow/report/logs/ncbi/ncbi_genome_download/ncbi_genome_download_{ncbi}.log",
+            "logs/ncbi/ncbi_genome_download/ncbi_genome_download_{ncbi}.log",
         shell:
             """
             if [[ {wildcards.ncbi} == GCF* ]]
@@ -44,7 +44,7 @@ else:
         conda:
             "../envs/bgc_analytics.yaml"
         log:
-            "workflow/report/logs/ncbi/extract_ncbi_information/extract_ncbi_information-{name}.log",
+            "logs/ncbi/extract_ncbi_information/extract_ncbi_information-{name}.log",
         shell:
             """
             TMPDIR="data/interim/tmp/{wildcards.name}"
@@ -63,7 +63,7 @@ else:
         conda:
             "../envs/bgc_analytics.yaml"
         log:
-            "workflow/report/logs/patric/download_patric_tables.log",
+            "logs/patric/download_patric_tables.log",
         shell:
             """
             wget ftp://ftp.patricbrc.org/RELEASE_NOTES/genome_summary -O {output.patric_genome_summary} 2>> {log}
@@ -85,7 +85,7 @@ else:
         conda:
             "../envs/bgc_analytics.yaml"
         log:
-            "workflow/report/logs/patric/extract_patric_information/extract_patric_information-{name}.log",
+            "logs/patric/extract_patric_information/extract_patric_information-{name}.log",
         shell:
             """
             python workflow/bgcflow/bgcflow/data/extract_patric_meta.py \

@@ -33,9 +33,9 @@ rule downstream_bgc_prep_selection:
     params:
         dataset="data/interim/bgcs/datasets.tsv",
     log:
-        general="workflow/report/logs/bgcs/downstream_bgc_prep/{name}/downstream_bgc_prep-{version}.log",
-        symlink="workflow/report/logs/bgcs/downstream_bgc_prep/{name}/bgc_downstream_bgc_prep-{version}.log",
-        taxonomy="workflow/report/logs/bgcs/downstream_bgc_prep/{name}/tax_downstream_bgc_prep-{version}.log",
+        general="logs/bgcs/downstream_bgc_prep/{name}/downstream_bgc_prep-{version}.log",
+        symlink="logs/bgcs/downstream_bgc_prep/{name}/bgc_downstream_bgc_prep-{version}.log",
+        taxonomy="logs/bgcs/downstream_bgc_prep/{name}/tax_downstream_bgc_prep-{version}.log",
     shell:
         """
         echo "Preparing BGCs for {wildcards.name} downstream analysis..." 2>> {log.general}

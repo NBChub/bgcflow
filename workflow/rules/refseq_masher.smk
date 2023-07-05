@@ -9,7 +9,7 @@ rule refseq_masher:
         output_type="csv",
         top_n_results=10,
     log:
-        "workflow/report/logs/refseq_masher/refseq_masher-{strains}.log",
+        "logs/refseq_masher/refseq_masher-{strains}.log",
     shell:
         """
         refseq_masher matches --output-type {params.output_type} --top-n-results \
