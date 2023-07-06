@@ -65,7 +65,12 @@ resources_path:
   gtdbtk: resources/gtdbtk
   #RNAmmer: resources/RNAmmer # If specified, will override Barnapp in Prokka
 
+# Check for valid release versions from https://data.gtdb.ecogenomic.org/releases/
+# Examples:
+# - release 214.1, release_version r214 --> https://data.gtdb.ecogenomic.org/releases/release214/214.1/auxillary_files/gtdbtk_r214_data.tar.gz
+# - release 207, release_version r207_v2 --> https://data.gtdb.ecogenomic.org/releases/release207/207.0/auxillary_files/gtdbtk_r207_v2_data.tar.gz
+
 rule_parameters:
   install_gtdbtk:
-    release: 214
-    release_version: 214
+    release: "214.1"
+    release_version: "r214"

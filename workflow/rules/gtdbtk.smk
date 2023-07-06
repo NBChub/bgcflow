@@ -5,9 +5,15 @@ try:
         "release_version"
     ]
 except KeyError:
-    gtdb_release = "207"
-    gtdb_release_version = "207_v2"
+    gtdb_release = "207.0"
+    gtdb_release_version = "r207_v2"
 
+if "." in str(gtdb_release):
+    gtdb_release_major, gtdb_release_minor = str(gtdb_release).split(".")
+    gtdb_release_version = f"r{gtdb_release_major}_v{gtdb_release_minor}"
+else:
+    gtdb_release_major = gtdb_release
+    gtdb_release_minor = "0"
 
 rule install_gtdbtk:
     output:
@@ -18,11 +24,12 @@ rule install_gtdbtk:
         "logs/gtdbtk/gtdbtk-install_gtdbtk.log",
     params:
         release=gtdb_release,
+        release_minor=gtdb_release_minor,
         release_version=gtdb_release_version,
     shell:
         """
-        (cd resources && wget https://data.gtdb.ecogenomic.org/releases/release{params.release}/{params.release}.0/auxillary_files/gtdbtk_r{params.release_version}_data.tar.gz -nc) 2>> {log}
-        (cd resources && mkdir -p gtdbtk && tar -xvzf gtdbtk_r{params.release_version}_data.tar.gz -C "gtdbtk" --strip 1 && rm gtdbtk_r{params.release_version}_data.tar.gz) &>> {log}
+        (cd resources && wget https://data.gtdb.ecogenomic.org/releases/release{params.release}/{params.release}.{params.release_minor}/auxillary_files/gtdbtk_{params.release_version}_data.tar.gz -nc) 2>> {log}
+        (cd resources && mkdir -p gtdbtk && tar -xvzf gtdbtk_{params.release_version}_data.tar.gz -C "gtdbtk" --strip 1 && rm gtdbtk_{params.release_version}_data.tar.gz) &>> {log}
         """
 
 rule prepare_gtdbtk_input:
