@@ -15,6 +15,15 @@ else:
     gtdb_release_major = gtdb_release
     gtdb_release_minor = "0"
 
+# Decide to use ani screen or not
+try:
+    if config["rule_parameters"]["gtdbtk"]["ani_screen"]:
+        ani_screen = f"--mash_db resources/gtdb-tk-{gtdb_release_version}.msh"
+    else:
+        ani_screen = "--skip_ani_screen"
+except KeyError:
+    ani_screen = "--skip_ani_screen"
+
 rule install_gtdbtk:
     output:
         gtdbtk=directory("resources/gtdbtk/"),
@@ -47,7 +56,6 @@ rule prepare_gtdbtk_input:
         python workflow/bgcflow/bgcflow/data/gtdbtk_prep.py '{input.fna}' '{input.json_list}' {output.fnadir} 2>> {log}
         """
 
-
 rule gtdbtk:
     input:
         gtdbtk="resources/gtdbtk/",
@@ -64,10 +72,10 @@ rule gtdbtk:
         "logs/gtdbtk/gtdbtk/gtdbtk_{name}.log",
     threads: 32
     params:
-        gtdb_release_version=gtdb_release_version,
+        ani_screen=ani_screen,
     shell:
         """
         mkdir -p {output.tmpdir}
-        gtdbtk classify_wf --genome_dir {input.fnadir} --out_dir {output.gtdbtk_dir} --cpus {threads} --pplacer_cpus 1 --tmpdir {output.tmpdir} --mash_db "resources/gtdb-tk-{params.gtdb_release_version}.msh" &>> {log}
+        gtdbtk classify_wf --genome_dir {input.fnadir} --out_dir {output.gtdbtk_dir} --cpus {threads} --pplacer_cpus 1 --tmpdir {output.tmpdir} {params.ani_screen} &>> {log}
         cp {output.summary_interim} {output.summary_processed}
         """

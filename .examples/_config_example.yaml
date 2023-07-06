@@ -74,3 +74,5 @@ rule_parameters:
   install_gtdbtk:
     release: "214.1"
     release_version: "r214"
+  gtdbtk:
+    ani_screen: FALSE
