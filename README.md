@@ -33,6 +33,8 @@ bgcflow run -n # do a dry run, remove the flag "-n" to run the example dataset
 
 See [`README.md`](https://github.com/NBChub/bgcflow_wrapper) for more details about [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
 
+[![asciicast](https://asciinema.org/a/595149.svg)](https://asciinema.org/a/595149)
+
 ## Workflow overview
 The main Snakefile workflow comprises various pipelines for data selection, functional annotation, phylogenetic analysis, genome mining, and comparative genomics for Prokaryotic datasets.
 
