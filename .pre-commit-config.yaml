@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.1.13
+    rev: v1.5.1
     hooks:
     -   id: forbid-crlf
     -   id: remove-crlf
@@ -21,12 +21,12 @@ repos:
     hooks:
     - id: isort
 -   repo: https://github.com/ambv/black
-    rev: 22.3.0
+    rev: 23.3.0
     hooks:
     - id: black
       language_version: python3
 -   repo: https://github.com/PyCQA/flake8
-    rev: 3.9.2
+    rev: 6.0.0
     hooks:
     -   id: flake8
         args: ['--ignore=E501,W503']
