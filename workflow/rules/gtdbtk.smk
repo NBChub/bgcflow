@@ -56,9 +56,11 @@ rule gtdbtk:
     log:
         "logs/gtdbtk/gtdbtk/gtdbtk_{name}.log",
     threads: 32
+    params:
+        gtdb_release_version=gtdb_release_version,
     shell:
         """
         mkdir -p {output.tmpdir}
-        gtdbtk classify_wf --genome_dir {input.fnadir} --out_dir {output.gtdbtk_dir} --cpus {threads} --pplacer_cpus 1 --tmpdir {output.tmpdir} --skip_ani_screen &>> {log}
+        gtdbtk classify_wf --genome_dir {input.fnadir} --out_dir {output.gtdbtk_dir} --cpus {threads} --pplacer_cpus 1 --tmpdir {output.tmpdir} --mash_db "resources/gtdb-tk-{params.gtdb_release_version}.msh" &>> {log}
         cp {output.summary_interim} {output.summary_processed}
         """
