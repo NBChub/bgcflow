@@ -15,13 +15,13 @@
         "1432"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1432": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -44,7 +44,7 @@
         "1155"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|grpE|Protein GrpE|loc|1119606 1120194 -1 # ID=1_1155|Type=CDS|transl_table=11]"
     },
     {
@@ -62,13 +62,13 @@
         "665"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "665": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP175",
+            "SP102",
             "Lactobacillus_delbrueckii, 1384484_Adlercreutzia_equolifaciens_DSM_19450",
             0.6458234649956989
           ]
@@ -91,13 +91,13 @@
         "568"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "568": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -120,7 +120,7 @@
         "1466"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rplJ|50S ribosomal protein L10|loc|1421770 1422280 -1 # ID=1_1466|Type=CDS|transl_table=11]"
     },
     {
@@ -138,13 +138,13 @@
         "349"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "349": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP166",
+            "SP93",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -167,7 +167,7 @@
         "360"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "360": [
           [
@@ -196,7 +196,7 @@
         "378"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rpsI|30S ribosomal protein S9|loc|364180 364576 1 # ID=1_378|Type=CDS|transl_table=11]"
     },
     {
@@ -214,13 +214,13 @@
         "1301"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1301": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 42256_Rubrobacter_radiotolerans",
             0.5
           ]
@@ -243,7 +243,7 @@
         "276"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|pncB|Nicotinate phosphoribosyltransferase|loc|271257 272781 -1 # ID=1_276|Type=CDS|transl_table=11]"
     },
     {
@@ -261,7 +261,7 @@
         "1338"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1338": [
           [
@@ -290,7 +290,7 @@
         "214"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|folB|Dihydroneopterin aldolase|loc|210197 210548 1 # ID=1_214|Type=CDS|transl_table=11]"
     },
     {
@@ -308,7 +308,7 @@
         "1240"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|thiN|Thiamine pyrophosphokinase|loc|1208959 1209643 -1 # ID=1_1240|Type=CDS|transl_table=11]"
     },
     {
@@ -326,7 +326,7 @@
         "217"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "217": [
           [
@@ -346,7 +346,7 @@
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 557599_Mycobacterium_kansasii_ATCC_12478",
             0.714953322652085
           ]
@@ -369,7 +369,7 @@
         "215"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "215": [
           [
@@ -398,13 +398,13 @@
         "1602"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1602": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP166",
+            "SP93",
             "Lactobacillus_delbrueckii, 350058_Mycobacterium_vanbaalenii_PYR_1",
             0.714953322652085
           ]
@@ -427,13 +427,13 @@
         "1605"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1605": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP102",
+            "SP89",
             "Lactobacillus_delbrueckii, 1354275_Mycobacterium_vaccae_95051",
             0.714953322652085
           ],
@@ -463,7 +463,7 @@
         "1603"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|iscU|Iron-sulfur cluster assembly scaffold protein IscU|loc|1548016 1548457 -1 # ID=1_1603|Type=CDS|transl_table=11]"
     },
     {
@@ -481,13 +481,13 @@
         "1178"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1178": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP169",
+            "SP96",
             "Lactobacillus_delbrueckii, 712411_Olsenella_sp_oral_taxon_807",
             0.6458234649956989
           ]
@@ -510,13 +510,13 @@
         "660"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "660": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP169",
+            "SP96",
             "Lactobacillus_delbrueckii, 521095_Atopobium_parvulum_DSM_20469",
             0.6458234649956989
           ]
@@ -539,7 +539,7 @@
         "523"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|uppP|Undecaprenyl-diphosphatase|loc|495535 496363 -1 # ID=1_523|Type=CDS|transl_table=11]"
     },
     {
@@ -557,7 +557,7 @@
         "1348"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|murC|UDP-N-acetylmuramate--L-alanine ligase|loc|1311707 1313027 -1 # ID=1_1348|Type=CDS|transl_table=11]"
     },
     {
@@ -575,13 +575,13 @@
         "669"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "669": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP175",
+            "SP102",
             "Lactobacillus_delbrueckii, 502558_Eggerthella_sp_YY7918",
             0.6458234649956989
           ]
@@ -604,7 +604,7 @@
         "673"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|ftsZ|Cell division protein FtsZ|loc|635219 636578 1 # ID=1_673|Type=CDS|transl_table=11]"
     },
     {
@@ -622,13 +622,13 @@
         "275"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "275": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP169",
+            "SP96",
             "Lactobacillus_delbrueckii, 521095_Atopobium_parvulum_DSM_20469",
             0.6458234649956989
           ]
@@ -651,7 +651,7 @@
         "557"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|whiA|putative cell division protein WhiA|loc|532796 533729 1 # ID=1_557|Type=CDS|transl_table=11]"
     },
     {
@@ -669,7 +669,7 @@
         "1117"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1117": [
           [
@@ -705,7 +705,7 @@
         "1394"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|metK|S-adenosylmethionine synthase|loc|1354481 1355678 -1 # ID=1_1394|Type=CDS|transl_table=11]"
     },
     {
@@ -723,13 +723,13 @@
         "460"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "460": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP166",
+            "SP93",
             "Lactobacillus_delbrueckii, 290399_Arthrobacter_sp_FB24",
             0.714953322652085
           ]
@@ -752,7 +752,7 @@
         "1093"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|dnaG|DNA primase|loc|1054356 1056195 -1 # ID=1_1093|Type=CDS|transl_table=11]"
     },
     {
@@ -770,7 +770,7 @@
         "1414"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|-|dITP/XTP pyrophosphatase|loc|1372244 1372865 -1 # ID=1_1414|Type=CDS|transl_table=11]"
     },
     {
@@ -788,7 +788,7 @@
         "1428"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|ruvA|Holliday junction ATP-dependent DNA helicase RuvA|loc|1386901 1387495 -1 # ID=1_1428|Type=CDS|transl_table=11]"
     },
     {
@@ -806,13 +806,13 @@
         "744"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "744": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP175",
+            "SP102",
             "Lactobacillus_delbrueckii, 502558_Eggerthella_sp_YY7918",
             0.6458234649956989
           ]
@@ -835,7 +835,7 @@
         "1257"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|xseA|Exodeoxyribonuclease 7 large subunit|loc|1224123 1225494 -1 # ID=1_1257|Type=CDS|transl_table=11]"
     },
     {
@@ -853,7 +853,7 @@
         "771"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|scpB|Segregation and condensation protein B|loc|734631 735234 1 # ID=1_771|Type=CDS|transl_table=11]"
     },
     {
@@ -871,7 +871,7 @@
         "1"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|dnaA|Chromosomal replication initiator protein DnaA|loc|322 1687 1 # ID=1_1|Type=CDS|transl_table=11]"
     },
     {
@@ -889,7 +889,7 @@
         "1529"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|radA|DNA repair protein RadA|loc|1475149 1476526 -1 # ID=1_1529|Type=CDS|transl_table=11]"
     },
     {
@@ -907,7 +907,7 @@
         "408"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|ligA|DNA ligase|loc|392242 394258 1 # ID=1_408|Type=CDS|transl_table=11]"
     },
     {
@@ -925,7 +925,7 @@
         "1339"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|mutM|Formamidopyrimidine-DNA glycosylase|loc|1303876 1304698 -1 # ID=1_1339|Type=CDS|transl_table=11]"
     },
     {
@@ -943,7 +943,7 @@
         "317"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|mfd|Transcription-repair-coupling factor|loc|311150 314627 1 # ID=1_317|Type=CDS|transl_table=11]"
     },
     {
@@ -961,7 +961,7 @@
         "1340"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|polA|DNA polymerase I|loc|1304708 1307369 -1 # ID=1_1340|Type=CDS|transl_table=11]"
     },
     {
@@ -979,7 +979,7 @@
         "1246"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|priA|Primosomal protein N|loc|1215594 1217976 -1 # ID=1_1246|Type=CDS|transl_table=11]"
     },
     {
@@ -997,7 +997,7 @@
         "1096"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1096": [
           [
@@ -1026,13 +1026,13 @@
         "1447"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1447": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP121",
+            "SP124",
             "Lactobacillus_delbrueckii, 1150423_Bifidobacterium_dentium_JCM_1195",
             0.714953322652085
           ],
@@ -1069,7 +1069,7 @@
         "550"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|uvrA|UvrABC system protein A|loc|525284 528140 1 # ID=1_550|Type=CDS|transl_table=11]"
     },
     {
@@ -1087,7 +1087,7 @@
         "549"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|uvrB_2|UvrABC system protein B|loc|523252 525295 1 # ID=1_549|Type=CDS|transl_table=11]"
     },
     {
@@ -1105,7 +1105,7 @@
         "1427"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|ruvB_1|Holliday junction ATP-dependent DNA helicase RuvB|loc|1385877 1386888 -1 # ID=1_1427|Type=CDS|transl_table=11]"
     },
     {
@@ -1123,17 +1123,17 @@
         "1226"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|recG|ATP-dependent DNA helicase RecG|loc|1195445 1197485 -1 # ID=1_1226|Type=CDS|transl_table=11]"
     },
     {
       "coregene": "TIGR00663",
       "TC": "137.65",
-      "dNdS": "0.5365",
-      "SC": "0.8684",
-      "Ubiq": "0.9947",
-      "description": "dnan: DNA polymerase III, beta subunit",
-      "func": "DNA metabolism",
+      "dNdS": "N/A",
+      "SC": "N/A",
+      "Ubiq": "N/A",
+      "description": "TIGR00663: dnan: DNA polymerase III, beta subunit",
+      "func": "N/A",
       "duplicate": "No",
       "proximity": "No",
       "phylogeny": "No",
@@ -1141,7 +1141,7 @@
         "2"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "Yes",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|dnaN|Beta sliding clamp|loc|1867 2995 1 # ID=1_2|Type=CDS|transl_table=11]"
     },
     {
@@ -1159,13 +1159,13 @@
         "12"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "12": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -1188,7 +1188,7 @@
         "1116"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|topA|DNA topoisomerase 1|loc|1077579 1079763 -1 # ID=1_1116|Type=CDS|transl_table=11]"
     },
     {
@@ -1206,7 +1206,7 @@
         "5"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "Yes",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|gyrB|DNA gyrase subunit B|loc|4578 6540 1 # ID=1_5|Type=CDS|transl_table=11]"
     },
     {
@@ -1224,7 +1224,7 @@
         "6"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "Yes",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|gyrA|DNA gyrase subunit A|loc|6552 9024 1 # ID=1_6|Type=CDS|transl_table=11]"
     },
     {
@@ -1242,7 +1242,7 @@
         "407"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|pcrA|ATP-dependent DNA helicase PcrA|loc|389970 392232 1 # ID=1_407|Type=CDS|transl_table=11]"
     },
     {
@@ -1260,13 +1260,13 @@
         "902"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "902": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP175",
+            "SP102",
             "Lactobacillus_delbrueckii, 469378_Cryptobacterium_curtum_DSM_15641",
             0.6458234649956989
           ]
@@ -1289,13 +1289,13 @@
         "700"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "700": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -1318,13 +1318,13 @@
         "1256"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1256": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP175",
+            "SP102",
             "Lactobacillus_delbrueckii, 1531429_Coriobacteriaceae_bacterium_68_1_3",
             0.6458234649956989
           ]
@@ -1347,13 +1347,13 @@
         "742"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "742": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP175",
+            "SP102",
             "Lactobacillus_delbrueckii, 1150423_Bifidobacterium_dentium_JCM_1195",
             0.714953322652085
           ]
@@ -1376,7 +1376,7 @@
         "535"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|recA|Protein RecA|loc|507699 508695 1 # ID=1_535|Type=CDS|transl_table=11]"
     },
     {
@@ -1394,7 +1394,7 @@
         "768"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|xerD_1|Tyrosine recombinase XerD|loc|732657 733554 1 # ID=1_768|Type=CDS|transl_table=11]"
     },
     {
@@ -1412,7 +1412,7 @@
         "616"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|ackA|Acetate kinase|loc|579934 581122 1 # ID=1_616|Type=CDS|transl_table=11]"
     },
     {
@@ -1430,13 +1430,13 @@
         "468"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "468": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP120",
+            "SP123",
             "Lactobacillus_delbrueckii, 553190_Gardnerella_vaginalis_409_05",
             0.714953322652085
           ]
@@ -1459,7 +1459,7 @@
         "569"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|tpiA|Triosephosphate isomerase|loc|542957 543716 1 # ID=1_569|Type=CDS|transl_table=11]"
     },
     {
@@ -1477,13 +1477,13 @@
         "575"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "575": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP175",
+            "SP102",
             "Lactobacillus_delbrueckii, 502558_Eggerthella_sp_YY7918",
             0.6458234649956989
           ]
@@ -1506,7 +1506,7 @@
         "1425"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|zwf|Glucose-6-phosphate 1-dehydrogenase|loc|1383852 1385301 -1 # ID=1_1425|Type=CDS|transl_table=11]"
     },
     {
@@ -1524,7 +1524,7 @@
         "637"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|atpA|ATP synthase subunit alpha|loc|600266 601778 1 # ID=1_637|Type=CDS|transl_table=11]"
     },
     {
@@ -1542,7 +1542,7 @@
         "639"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|atpD|ATP synthase subunit beta|loc|602770 604210 1 # ID=1_639|Type=CDS|transl_table=11]"
     },
     {
@@ -1560,7 +1560,7 @@
         "1135"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|eno|Enolase|loc|1096011 1097289 1 # ID=1_1135|Type=CDS|transl_table=11]"
     },
     {
@@ -1578,7 +1578,7 @@
         "763"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|pyk|Pyruvate kinase|loc|728461 730231 1 # ID=1_763|Type=CDS|transl_table=11]"
     },
     {
@@ -1596,7 +1596,7 @@
         "633"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|atpB|ATP synthase subunit a|loc|598179 598899 1 # ID=1_633|Type=CDS|transl_table=11]"
     },
     {
@@ -1614,13 +1614,13 @@
         "635"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "635": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP166",
+            "SP93",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -1643,7 +1643,7 @@
         "636"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "636": [
           [
@@ -1672,13 +1672,13 @@
         "638"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "638": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -1701,7 +1701,7 @@
         "640"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|atpC|ATP synthase epsilon chain|loc|604221 604662 1 # ID=1_640|Type=CDS|transl_table=11]"
     },
     {
@@ -1719,7 +1719,7 @@
         "634"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "634": [
           [
@@ -1732,7 +1732,7 @@
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP159",
+            "SP162",
             "Lactobacillus_delbrueckii, 452863_Pseudarthrobacter_chlorophenolicus_A6",
             0.714953322652085
           ]
@@ -1755,20 +1755,20 @@
         "567"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "Yes",
       "phylhits": {
         "567": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP114",
+            "SP117",
             "Lactobacillus_delbrueckii, 1150423_Bifidobacterium_dentium_JCM_1195",
             0.714953322652085
           ],
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP169",
+            "SP96",
             "700015_Coriobacterium_glomerans_PW2, 1150423_Bifidobacterium_dentium_JCM_1195",
             0.6458234649956989
           ]
@@ -1791,7 +1791,7 @@
         "104"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|ldh|L-lactate dehydrogenase|loc|99904 100828 -1 # ID=1_104|Type=CDS|transl_table=11]"
     },
     {
@@ -1809,20 +1809,20 @@
         "830"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "830": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP174",
+            "SP101",
             "Lactobacillus_delbrueckii, 502558_Eggerthella_sp_YY7918",
             0.6458234649956989
           ],
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP171",
+            "SP98",
             "479437_Eggerthella_lenta_DSM_2243, 502558_Eggerthella_sp_YY7918",
             5.681941504483967
           ]
@@ -1845,13 +1845,13 @@
         "1723"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1723": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP175",
+            "SP102",
             "Lactobacillus_delbrueckii, 471855_Slackia_heliotrinireducens_DSM_20476",
             0.6458234649956989
           ]
@@ -1874,13 +1874,13 @@
         "603"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "603": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 452863_Pseudarthrobacter_chlorophenolicus_A6",
             0.714953322652085
           ]
@@ -1903,7 +1903,7 @@
         "916"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|lspA|Lipoprotein signal peptidase|loc|881194 881647 1 # ID=1_916|Type=CDS|transl_table=11]"
     },
     {
@@ -1921,13 +1921,13 @@
         "691"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "691": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP166",
+            "SP93",
             "Lactobacillus_delbrueckii, 1650658_Actinobacteria_bacterium_IMCC26256",
             0.714953322652085
           ]
@@ -1950,7 +1950,7 @@
         "706"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|tig|Trigger factor|loc|668841 670161 1 # ID=1_706|Type=CDS|transl_table=11]"
     },
     {
@@ -1968,7 +1968,7 @@
         "492"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "492": [
           [
@@ -1997,7 +1997,7 @@
         "1038"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|pcp|Pyrrolidone-carboxylate peptidase|loc|993222 993834 -1 # ID=1_1038|Type=CDS|transl_table=11]"
     },
     {
@@ -2015,13 +2015,13 @@
         "546"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "546": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -2044,7 +2044,7 @@
         "1619"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1619": [
           [
@@ -2073,7 +2073,7 @@
         "542"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|secA|Protein translocase subunit SecA|loc|515417 517820 1 # ID=1_542|Type=CDS|transl_table=11]"
     },
     {
@@ -2091,7 +2091,7 @@
         "1475"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|secE|Protein translocase subunit SecE|loc|1429566 1429737 -1 # ID=1_1475|Type=CDS|transl_table=11]"
     },
     {
@@ -2109,7 +2109,7 @@
         "366"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|secY|Protein translocase subunit SecY|loc|355593 356889 1 # ID=1_366|Type=CDS|transl_table=11]"
     },
     {
@@ -2127,27 +2127,27 @@
         "1069"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1069": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP118",
+            "SP121",
             "Lactobacillus_delbrueckii, 1150423_Bifidobacterium_dentium_JCM_1195",
             0.714953322652085
           ],
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP113",
+            "SP116",
             "1437605_Bifidobacterium_actinocoloniiforme_DSM_22766, 1150423_Bifidobacterium_dentium_JCM_1195",
             5.888835767266696
           ],
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP112",
+            "SP115",
             "864564_Parascardovia_denticolens_DSM_10105, 1150423_Bifidobacterium_dentium_JCM_1195",
             5.888835767266696
           ]
@@ -2170,7 +2170,7 @@
         "1431"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|groL|60 kDa chaperonin|loc|1392353 1393967 -1 # ID=1_1431|Type=CDS|transl_table=11]"
     },
     {
@@ -2188,7 +2188,7 @@
         "1154"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|dnaK|Chaperone protein DnaK|loc|1117702 1119547 -1 # ID=1_1154|Type=CDS|transl_table=11]"
     },
     {
@@ -2206,13 +2206,13 @@
         "630"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "630": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 712411_Olsenella_sp_oral_taxon_807",
             0.6458234649956989
           ]
@@ -2235,7 +2235,7 @@
         "1485"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|-|Putative TrmH family tRNA/rRNA methyltransferase|loc|1433794 1434544 -1 # ID=1_1485|Type=CDS|transl_table=11]"
     },
     {
@@ -2253,13 +2253,13 @@
         "296"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "296": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP158",
+            "SP161",
             "Lactobacillus_delbrueckii, 455632_Streptomyces_griseus_subsp_griseus_NBRC_13350",
             0.714953322652085
           ]
@@ -2282,7 +2282,7 @@
         "1329"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rpmI|50S ribosomal protein L35|loc|1294459 1294660 -1 # ID=1_1329|Type=CDS|transl_table=11]"
     },
     {
@@ -2300,13 +2300,13 @@
         "368"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "368": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP173",
+            "SP100",
             "Lactobacillus_delbrueckii, 479437_Eggerthella_lenta_DSM_2243",
             0.6458234649956989
           ],
@@ -2336,7 +2336,7 @@
         "1229"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1229": [
           [
@@ -2356,14 +2356,14 @@
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP59",
+            "SP62",
             "860235_Kibdelosporangium_phytohabitans, 263358_Verrucosispora_maris_AB_18_032",
             2.6502641970840495
           ],
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP13",
+            "SP16",
             "860235_Kibdelosporangium_phytohabitans, 526225_Geodermatophilus_obscurus_DSM_43160",
             2.6502641970840495
           ]
@@ -2386,7 +2386,7 @@
         "355"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "355": [
           [
@@ -2415,7 +2415,7 @@
         "629"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|prfA|Peptide chain release factor 1|loc|594425 595511 1 # ID=1_629|Type=CDS|transl_table=11]"
     },
     {
@@ -2433,7 +2433,7 @@
         "543"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|prfB|Peptide chain release factor 2|loc|518026 519025 1 # ID=1_543|Type=CDS|transl_table=11]"
     },
     {
@@ -2451,13 +2451,13 @@
         "701"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "701": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -2481,7 +2481,7 @@
         "1668"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|efp_1|Elongation factor P|loc|1227239 1227809 -1 # ID=1_1261|Type=CDS|transl_table=11; Lactobacillus delbrueckii strain ATCC 11842|efp_2|Elongation factor P|loc|1607624 1608182 -1 # ID=1_1668|Type=CDS|transl_table=11]"
     },
     {
@@ -2499,7 +2499,7 @@
         "631"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "631": [
           [
@@ -2512,7 +2512,7 @@
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP70",
+            "SP173",
             "Lactobacillus_delbrueckii, 391037_Salinispora_arenicola_CNS_205",
             0.714953322652085
           ]
@@ -2535,13 +2535,13 @@
         "372"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "372": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP173",
+            "SP100",
             "Lactobacillus_delbrueckii, 479437_Eggerthella_lenta_DSM_2243",
             0.6458234649956989
           ]
@@ -2564,7 +2564,7 @@
         "362"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rplR|50S ribosomal protein L18|loc|354047 354407 1 # ID=1_362|Type=CDS|transl_table=11]"
     },
     {
@@ -2582,7 +2582,7 @@
         "1264"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rplU|50S ribosomal protein L21|loc|1229445 1229757 -1 # ID=1_1264|Type=CDS|transl_table=11]"
     },
     {
@@ -2600,7 +2600,7 @@
         "1263"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1263": [
           [
@@ -2629,7 +2629,7 @@
         "376"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|truA|tRNA pseudouridine synthase A|loc|362830 363619 1 # ID=1_376|Type=CDS|transl_table=11]"
     },
     {
@@ -2647,13 +2647,13 @@
         "1617"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1617": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP108",
+            "SP111",
             "Lactobacillus_delbrueckii, 156978_Corynebacterium_imitans",
             0.714953322652085
           ],
@@ -2674,7 +2674,7 @@
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP171",
+            "SP98",
             "469378_Cryptobacterium_curtum_DSM_15641, 156978_Corynebacterium_imitans",
             0.6458234649956989
           ]
@@ -2697,7 +2697,7 @@
         "1206"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|trmD|tRNA (guanine-N(1)-)-methyltransferase|loc|1175461 1176199 -1 # ID=1_1206|Type=CDS|transl_table=11]"
     },
     {
@@ -2715,7 +2715,7 @@
         "1324"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rsfS|Ribosomal silencing factor RsfS|loc|1291216 1291564 -1 # ID=1_1324|Type=CDS|transl_table=11]"
     },
     {
@@ -2733,7 +2733,7 @@
         "310"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "310": [
           [
@@ -2746,7 +2746,7 @@
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP145",
+            "SP148",
             "Lactobacillus_delbrueckii, 1690248_Arthrobacter_sp_LS16",
             0.714953322652085
           ]
@@ -2769,7 +2769,7 @@
         "1181"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|tsf|Elongation factor Ts|loc|1148806 1149835 -1 # ID=1_1181|Type=CDS|transl_table=11]"
     },
     {
@@ -2787,7 +2787,7 @@
         "412"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|gatB|Aspartyl/glutamyl-tRNA(Asn/Gln) amidotransferase subunit B|loc|397164 398595 1 # ID=1_412|Type=CDS|transl_table=11]"
     },
     {
@@ -2805,7 +2805,7 @@
         "410"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|gatC|Glutamyl-tRNA(Gln) amidotransferase subunit C|loc|395411 395717 1 # ID=1_410|Type=CDS|transl_table=11]"
     },
     {
@@ -2823,7 +2823,7 @@
         "576"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "576": [
           [
@@ -2836,7 +2836,7 @@
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP174",
+            "SP101",
             "Lactobacillus_delbrueckii, 121292_Pseudarthrobacter_sulfonivorans",
             0.714953322652085
           ]
@@ -2859,7 +2859,7 @@
         "1241"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rsgA|Small ribosomal subunit biogenesis GTPase RsgA|loc|1209672 1210566 -1 # ID=1_1241|Type=CDS|transl_table=11]"
     },
     {
@@ -2877,13 +2877,13 @@
         "11"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "11": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP174",
+            "SP101",
             "Lactobacillus_delbrueckii, 1384484_Adlercreutzia_equolifaciens_DSM_19450",
             0.6458234649956989
           ]
@@ -2906,7 +2906,7 @@
         "9"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "9": [
           [
@@ -2935,7 +2935,7 @@
         "7"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "7": [
           [
@@ -2964,7 +2964,7 @@
         "1330"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|infC|Translation initiation factor IF-3|loc|1294680 1295202 -1 # ID=1_1330|Type=CDS|transl_table=11]"
     },
     {
@@ -2982,7 +2982,7 @@
         "1304"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|miaA|tRNA dimethylallyltransferase|loc|1272002 1272929 -1 # ID=1_1304|Type=CDS|transl_table=11]"
     },
     {
@@ -3000,7 +3000,7 @@
         "292"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "292": [
           [
@@ -3020,7 +3020,7 @@
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP175",
+            "SP102",
             "1449976_Kutzneria_albida_DSM_43870, 1150468_Scardovia_inopinata_JCM_12537",
             2.4377521335799184
           ]
@@ -3043,7 +3043,7 @@
         "224"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|tyrS|Tyrosine--tRNA ligase|loc|219424 220690 1 # ID=1_224|Type=CDS|transl_table=11]"
     },
     {
@@ -3061,7 +3061,7 @@
         "808"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "808": [
           [
@@ -3090,7 +3090,7 @@
         "1421"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|alaS|Alanine--tRNA ligase|loc|1377489 1380123 -1 # ID=1_1421|Type=CDS|transl_table=11]"
     },
     {
@@ -3108,7 +3108,7 @@
         "677"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|ileS|Isoleucine--tRNA ligase|loc|638487 641283 1 # ID=1_677|Type=CDS|transl_table=11]"
     },
     {
@@ -3126,27 +3126,27 @@
         "1389"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1389": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP180",
+            "SP167",
             "Lactobacillus_delbrueckii, 350058_Mycobacterium_vanbaalenii_PYR_1",
             0.714953322652085
           ],
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP158",
+            "SP161",
             "266940_Kineococcus_radiotolerans_SRS30216, 350058_Mycobacterium_vanbaalenii_PYR_1",
             2.4377521335799184
           ],
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "266117_Rubrobacter_xylanophilus_DSM_9941, 350058_Mycobacterium_vanbaalenii_PYR_1",
             0.5
           ]
@@ -3169,7 +3169,7 @@
         "1175"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|proS|Proline--tRNA ligase|loc|1142843 1144541 -1 # ID=1_1175|Type=CDS|transl_table=11]"
     },
     {
@@ -3187,7 +3187,7 @@
         "1639"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|serS|Serine--tRNA ligase|loc|1580697 1582005 -1 # ID=1_1639|Type=CDS|transl_table=11]"
     },
     {
@@ -3205,7 +3205,7 @@
         "1334"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|thrS|Threonine--tRNA ligase|loc|1298298 1300230 -1 # ID=1_1334|Type=CDS|transl_table=11]"
     },
     {
@@ -3223,7 +3223,7 @@
         "655"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|valS|Valine--tRNA ligase|loc|616950 619590 1 # ID=1_655|Type=CDS|transl_table=11]"
     },
     {
@@ -3241,7 +3241,7 @@
         "1167"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|truB|tRNA pseudouridine synthase B|loc|1132243 1133140 -1 # ID=1_1167|Type=CDS|transl_table=11]"
     },
     {
@@ -3259,7 +3259,7 @@
         "1487"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|cysS|Cysteine--tRNA ligase|loc|1434966 1436391 -1 # ID=1_1487|Type=CDS|transl_table=11]"
     },
     {
@@ -3277,13 +3277,13 @@
         "809"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "809": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -3306,13 +3306,13 @@
         "316"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "316": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP121",
+            "SP124",
             "Lactobacillus_delbrueckii, 1150460_Bifidobacterium_kashiwanohense_JCM_15439",
             0.714953322652085
           ]
@@ -3335,13 +3335,13 @@
         "737"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "737": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP166",
+            "SP93",
             "Lactobacillus_delbrueckii, 681645_Corynebacterium_pseudotuberculosis_C231",
             0.714953322652085
           ]
@@ -3364,7 +3364,7 @@
         "810"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|aspS|Aspartate--tRNA ligase|loc|780579 782424 1 # ID=1_810|Type=CDS|transl_table=11]"
     },
     {
@@ -3382,13 +3382,13 @@
         "1491"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1491": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP82",
+            "SP69",
             "Lactobacillus_delbrueckii, 267747_Propionibacterium_acnes_KPA171202",
             0.714953322652085
           ]
@@ -3411,13 +3411,13 @@
         "1315"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1315": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP166",
+            "SP93",
             "Lactobacillus_delbrueckii, 42256_Rubrobacter_radiotolerans",
             0.5
           ]
@@ -3440,7 +3440,7 @@
         "1314"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|pheT|Phenylalanine--tRNA ligase beta subunit|loc|1280620 1283032 -1 # ID=1_1314|Type=CDS|transl_table=11]"
     },
     {
@@ -3458,13 +3458,13 @@
         "1179"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1179": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP50",
+            "SP53",
             "Lactobacillus_delbrueckii, 35755_Corynebacterium_kutscheri",
             0.714953322652085
           ]
@@ -3487,7 +3487,7 @@
         "327"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|lysS|Lysine--tRNA ligase|loc|324828 326334 1 # ID=1_327|Type=CDS|transl_table=11]"
     },
     {
@@ -3505,7 +3505,7 @@
         "299"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rsmA|Ribosomal RNA small subunit methyltransferase A|loc|293361 294252 1 # ID=1_299|Type=CDS|transl_table=11]"
     },
     {
@@ -3523,7 +3523,7 @@
         "1465"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rplL|50S ribosomal protein L7/L12|loc|1421352 1421718 -1 # ID=1_1465|Type=CDS|transl_table=11]"
     },
     {
@@ -3541,7 +3541,7 @@
         "702"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "702": [
           [
@@ -3570,7 +3570,7 @@
         "343"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "343": [
           [
@@ -3599,7 +3599,7 @@
         "353"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rpsC|30S ribosomal protein S3|loc|350041 350713 1 # ID=1_353|Type=CDS|transl_table=11]"
     },
     {
@@ -3617,7 +3617,7 @@
         "1182"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rpsB|30S ribosomal protein S2|loc|1149897 1150659 -1 # ID=1_1182|Type=CDS|transl_table=11]"
     },
     {
@@ -3635,7 +3635,7 @@
         "650"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rpsD|30S ribosomal protein S4|loc|610876 611488 -1 # ID=1_650|Type=CDS|transl_table=11]"
     },
     {
@@ -3653,13 +3653,13 @@
         "363"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "363": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -3683,13 +3683,13 @@
         "1476"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1310": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP102",
+            "SP89",
             "Lactobacillus_delbrueckii, 1147128_Bifidobacterium_asteroides_PRL2011",
             0.714953322652085
           ],
@@ -3703,7 +3703,7 @@
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP73",
+            "SP170",
             "512565_Actinoplanes_missouriensis_431, 1147128_Bifidobacterium_asteroides_PRL2011",
             2.4377521335799184
           ],
@@ -3726,7 +3726,7 @@
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP170",
+            "SP97",
             "Lactobacillus_delbrueckii, 1384484_Adlercreutzia_equolifaciens_DSM_19450",
             0.6458234649956989
           ]
@@ -3749,7 +3749,7 @@
         "1201"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1201": [
           [
@@ -3778,7 +3778,7 @@
         "344"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "344": [
           [
@@ -3814,7 +3814,7 @@
         "1942"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1942": [
           [
@@ -3843,7 +3843,7 @@
         "750"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "750": [
           [
@@ -3872,7 +3872,7 @@
         "1328"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rplT|50S ribosomal protein L20|loc|1294058 1294415 -1 # ID=1_1328|Type=CDS|transl_table=11]"
     },
     {
@@ -3890,7 +3890,7 @@
         "352"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "352": [
           [
@@ -3919,7 +3919,7 @@
         "346"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rpsJ|30S ribosomal protein S10|loc|346606 346915 1 # ID=1_346|Type=CDS|transl_table=11]"
     },
     {
@@ -3937,13 +3937,13 @@
         "351"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "351": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP67",
+            "SP182",
             "Lactobacillus_delbrueckii, 35755_Corynebacterium_kutscheri",
             0.714953322652085
           ]
@@ -3966,13 +3966,13 @@
         "377"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "377": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP175",
+            "SP102",
             "Lactobacillus_delbrueckii, 469378_Cryptobacterium_curtum_DSM_15641",
             0.6458234649956989
           ]
@@ -3995,7 +3995,7 @@
         "357"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "357": [
           [
@@ -4024,7 +4024,7 @@
         "365"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rplO|50S ribosomal protein L15|loc|355153 355594 1 # ID=1_365|Type=CDS|transl_table=11]"
     },
     {
@@ -4042,7 +4042,7 @@
         "358"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rplX|50S ribosomal protein L24|loc|352043 352283 1 # ID=1_358|Type=CDS|transl_table=11]"
     },
     {
@@ -4060,13 +4060,13 @@
         "354"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "354": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP174",
+            "SP101",
             "Lactobacillus_delbrueckii, 479437_Eggerthella_lenta_DSM_2243",
             0.6458234649956989
           ]
@@ -4089,7 +4089,7 @@
         "1472"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rplA|50S ribosomal protein L1|loc|1427590 1428286 -1 # ID=1_1472|Type=CDS|transl_table=11]"
     },
     {
@@ -4107,7 +4107,7 @@
         "350"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rplB|50S ribosomal protein L2|loc|348523 349360 1 # ID=1_350|Type=CDS|transl_table=11]"
     },
     {
@@ -4125,7 +4125,7 @@
         "364"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "364": [
           [
@@ -4154,13 +4154,13 @@
         "1473"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1473": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -4183,7 +4183,7 @@
         "745"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|obg|GTPase Obg|loc|709923 711177 1 # ID=1_745|Type=CDS|transl_table=11]"
     },
     {
@@ -4201,7 +4201,7 @@
         "369"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rpsM|30S ribosomal protein S13|loc|358006 358357 1 # ID=1_369|Type=CDS|transl_table=11]"
     },
     {
@@ -4219,13 +4219,13 @@
         "370"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "370": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -4248,13 +4248,13 @@
         "356"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "356": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP133",
+            "SP136",
             "Lactobacillus_delbrueckii, 156978_Corynebacterium_imitans",
             0.714953322652085
           ]
@@ -4277,7 +4277,7 @@
         "361"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "361": [
           [
@@ -4306,7 +4306,7 @@
         "348"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rplD|50S ribosomal protein L4|loc|347584 348202 1 # ID=1_348|Type=CDS|transl_table=11]"
     },
     {
@@ -4324,13 +4324,13 @@
         "1271"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1271": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP121",
+            "SP124",
             "Lactobacillus_delbrueckii, 1150423_Bifidobacterium_dentium_JCM_1195",
             0.714953322652085
           ]
@@ -4353,13 +4353,13 @@
         "1278"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1278": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP120",
+            "SP123",
             "Lactobacillus_delbrueckii, 864564_Parascardovia_denticolens_DSM_10105",
             0.714953322652085
           ],
@@ -4389,20 +4389,20 @@
         "1279"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1279": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP121",
+            "SP124",
             "Lactobacillus_delbrueckii, 1150468_Scardovia_inopinata_JCM_12537",
             0.714953322652085
           ],
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP166",
+            "SP93",
             "Lactobacillus_delbrueckii, 446470_Stackebrandtia_nassauensis_DSM_44728",
             0.714953322652085
           ]
@@ -4425,7 +4425,7 @@
         "775"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|cmk|Cytidylate kinase|loc|737485 738118 1 # ID=1_775|Type=CDS|transl_table=11]"
     },
     {
@@ -4443,13 +4443,13 @@
         "1276"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1276": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP117",
+            "SP120",
             "Lactobacillus_delbrueckii, 864564_Parascardovia_denticolens_DSM_10105",
             0.714953322652085
           ]
@@ -4472,7 +4472,7 @@
         "1275"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|purS|Phosphoribosylformylglycinamidine synthase subunit PurS|loc|1240360 1240609 -1 # ID=1_1275|Type=CDS|transl_table=11]"
     },
     {
@@ -4490,7 +4490,7 @@
         "1269"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|purH|Bifunctional purine biosynthesis protein PurH|loc|1232841 1234383 -1 # ID=1_1269|Type=CDS|transl_table=11]"
     },
     {
@@ -4508,20 +4508,20 @@
         "1272"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1272": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP114",
+            "SP117",
             "Lactobacillus_delbrueckii, 555970_Bifidobacterium_animalis_subsp_lactis_DSM_10140",
             0.714953322652085
           ],
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP166",
+            "SP93",
             "Lactobacillus_delbrueckii, 216594_Mycobacterium_marinum_M",
             0.714953322652085
           ]
@@ -4544,7 +4544,7 @@
         "1273"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|purL|Phosphoribosylformylglycinamidine synthase subunit PurL|loc|1237464 1239687 -1 # ID=1_1273|Type=CDS|transl_table=11]"
     },
     {
@@ -4562,13 +4562,13 @@
         "187"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "187": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP175",
+            "SP102",
             "Lactobacillus_delbrueckii, 571915_Corynebacterium_mustelae",
             0.714953322652085
           ]
@@ -4591,7 +4591,7 @@
         "1248"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|gmk_1|Guanylate kinase|loc|1218261 1218876 -1 # ID=1_1248|Type=CDS|transl_table=11]"
     },
     {
@@ -4609,13 +4609,13 @@
         "717"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "717": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP169",
+            "SP96",
             "Lactobacillus_delbrueckii, 712411_Olsenella_sp_oral_taxon_807",
             0.6458234649956989
           ]
@@ -4638,7 +4638,7 @@
         "1172"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|nusA|Transcription termination/antitermination protein NusA|loc|1136667 1137888 -1 # ID=1_1172|Type=CDS|transl_table=11]"
     },
     {
@@ -4656,7 +4656,7 @@
         "1092"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|sigA_2|RNA polymerase sigma factor SigA|loc|1053266 1054385 -1 # ID=1_1092|Type=CDS|transl_table=11]"
     },
     {
@@ -4674,7 +4674,7 @@
         "1168"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rbfA|Ribosome-binding factor A|loc|1133190 1133553 -1 # ID=1_1168|Type=CDS|transl_table=11]"
     },
     {
@@ -4692,13 +4692,13 @@
         "1941"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1941": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP141",
+            "SP144",
             "Lactobacillus_delbrueckii, 203267_Tropheryma_whipplei_str_Twist",
             0.714953322652085
           ]
@@ -4721,7 +4721,7 @@
         "1247"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1247": [
           [
@@ -4750,7 +4750,7 @@
         "1474"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|nusG|Transcription termination/antitermination protein NusG|loc|1428920 1429475 -1 # ID=1_1474|Type=CDS|transl_table=11]"
     },
     {
@@ -4768,13 +4768,13 @@
         "1259"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1259": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP55",
+            "SP58",
             "Lactobacillus_delbrueckii, 471857_Saccharomonospora_viridis_DSM_43017",
             0.714953322652085
           ]
@@ -4785,11 +4785,11 @@
     {
       "coregene": "TIGR02013",
       "TC": "801.15",
-      "dNdS": "0.2815",
-      "SC": "0.9895",
-      "Ubiq": "1",
-      "description": "rpoB: DNA-directed RNA polymerase, beta subunit",
-      "func": "Transcription",
+      "dNdS": "N/A",
+      "SC": "N/A",
+      "Ubiq": "N/A",
+      "description": "TIGR02013: rpoB: DNA-directed RNA polymerase, beta subunit",
+      "func": "N/A",
       "duplicate": "No",
       "proximity": "No",
       "phylogeny": "No",
@@ -4797,7 +4797,7 @@
         "338"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "Yes",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rpoB|DNA-directed RNA polymerase subunit beta|loc|334509 338184 1 # ID=1_338|Type=CDS|transl_table=11]"
     },
     {
@@ -4815,7 +4815,7 @@
         "371"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rpoA|DNA-directed RNA polymerase subunit alpha|loc|358818 359757 1 # ID=1_371|Type=CDS|transl_table=11]"
     },
     {
@@ -4833,13 +4833,13 @@
         "1217"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1217": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP166",
+            "SP93",
             "Lactobacillus_delbrueckii, 502558_Eggerthella_sp_YY7918",
             0.6458234649956989
           ]
@@ -4862,7 +4862,7 @@
         "1207"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1207": [
           [
@@ -4891,7 +4891,7 @@
         "339"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rpoC|DNA-directed RNA polymerase subunit beta|loc|338199 341865 1 # ID=1_339|Type=CDS|transl_table=11]"
     },
     {
@@ -4909,7 +4909,7 @@
         "1153"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|dnaJ|Chaperone protein DnaJ|loc|1116483 1117620 -1 # ID=1_1153|Type=CDS|transl_table=11]"
     },
     {
@@ -4927,13 +4927,13 @@
         "347"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "347": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP166",
+            "SP93",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -4957,7 +4957,7 @@
         "1795"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|spo0J|Stage 0 sporulation protein J|loc|1720149 1721040 -1 # ID=1_1793|Type=CDS|transl_table=11; Lactobacillus delbrueckii strain ATCC 11842|noc|Nucleoid occlusion protein|loc|1721798 1722623 -1 # ID=1_1795|Type=CDS|transl_table=11]"
     },
     {
@@ -4975,7 +4975,7 @@
         "1377"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|nnrD|ADP-dependent (S)-NAD(P)H-hydrate dehydratase|loc|1338272 1339139 -1 # ID=1_1377|Type=CDS|transl_table=11]"
     },
     {
@@ -4993,7 +4993,7 @@
         "1791"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|ychF|Ribosome-binding ATPase YchF|loc|1718716 1719817 -1 # ID=1_1791|Type=CDS|transl_table=11]"
     },
     {
@@ -5011,13 +5011,13 @@
         "1419"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1419": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP111",
+            "SP114",
             "Lactobacillus_delbrueckii, 35755_Corynebacterium_kutscheri",
             0.714953322652085
           ]
@@ -5040,7 +5040,7 @@
         "538"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "538": [
           [
@@ -5053,14 +5053,14 @@
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP160",
+            "SP163",
             "Lactobacillus_delbrueckii, 749414_Streptomyces_bingchenggensis_BCW_1",
             0.714953322652085
           ],
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP117",
+            "SP120",
             "553190_Gardnerella_vaginalis_409_05, 749414_Streptomyces_bingchenggensis_BCW_1",
             2.4377521335799184
           ]
@@ -5083,13 +5083,13 @@
         "386"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "386": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP114",
+            "SP117",
             "Lactobacillus_delbrueckii, 864564_Parascardovia_denticolens_DSM_10105",
             0.714953322652085
           ],
@@ -5119,13 +5119,13 @@
         "1072"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1072": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -5148,7 +5148,7 @@
         "687"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|recD2|ATP-dependent RecD-like DNA helicase|loc|647109 649500 1 # ID=1_687|Type=CDS|transl_table=11]"
     },
     {
@@ -5166,7 +5166,7 @@
         "1448"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|-|Nucleoid-associated protein|loc|1405662 1405992 -1 # ID=1_1448|Type=CDS|transl_table=11]"
     },
     {
@@ -5184,7 +5184,7 @@
         "1755"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|hflX|GTPase HflX|loc|1681367 1682648 1 # ID=1_1755|Type=CDS|transl_table=11]"
     },
     {
@@ -5206,7 +5206,7 @@
         "1134"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|-|DegV domain-containing protein|loc|62450 63248 1 # ID=1_64|Type=CDS|transl_table=11; Lactobacillus delbrueckii strain ATCC 11842|-|DegV domain-containing protein|loc|890483 890978 1 # ID=1_923|Type=CDS|transl_table=11; Lactobacillus delbrueckii strain ATCC 11842|degV|Protein DegV|loc|890974 891364 1 # ID=1_924|Type=CDS|transl_table=11; Lactobacillus delbrueckii strain ATCC 11842|-|DegV domain-containing protein|loc|1082752 1083598 -1 # ID=1_1121|Type=CDS|transl_table=11; Lactobacillus delbrueckii strain ATCC 11842|-|DegV domain-containing protein|loc|1094868 1095705 -1 # ID=1_1134|Type=CDS|transl_table=11]"
     },
     {
@@ -5224,7 +5224,7 @@
         "1152"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|lepA|Elongation factor 4|loc|1114523 1116362 -1 # ID=1_1152|Type=CDS|transl_table=11]"
     },
     {
@@ -5242,7 +5242,7 @@
         "512"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|ptsI|Phosphoenolpyruvate-protein phosphotransferase|loc|487286 489014 1 # ID=1_512|Type=CDS|transl_table=11]"
     },
     {
@@ -5260,7 +5260,7 @@
         "308"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "308": [
           [
@@ -5289,13 +5289,13 @@
         "1268"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1268": [
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP121",
+            "SP124",
             "Lactobacillus_delbrueckii, 1150468_Scardovia_inopinata_JCM_12537",
             0.714953322652085
           ]
@@ -5318,7 +5318,7 @@
         "632"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|upp|Uracil phosphoribosyltransferase|loc|597440 598070 1 # ID=1_632|Type=CDS|transl_table=11]"
     },
     {
@@ -5336,7 +5336,7 @@
         "1842"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1842": [
           [
@@ -5349,21 +5349,21 @@
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP112",
+            "SP115",
             "864564_Parascardovia_denticolens_DSM_10105, 644284_Arcanobacterium_haemolyticum_DSM_20595",
             3.263857479173563
           ],
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP104",
+            "SP107",
             "267747_Propionibacterium_acnes_KPA171202, 644284_Arcanobacterium_haemolyticum_DSM_20595",
             2.5751456880345054
           ],
           [
             "Lactobacillus_delbrueckii",
             "D",
-            "SP165",
+            "SP92",
             "42256_Rubrobacter_radiotolerans, 644284_Arcanobacterium_haemolyticum_DSM_20595",
             0.5
           ]
@@ -5387,7 +5387,7 @@
         "497"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|-|putative RNA methyltransferase|loc|400342 401698 1 # ID=1_415|Type=CDS|transl_table=11; Lactobacillus delbrueckii strain ATCC 11842|rlmCD|23S rRNA (uracil-C(5))-methyltransferase RlmCD|loc|475828 477211 -1 # ID=1_497|Type=CDS|transl_table=11]"
     },
     {
@@ -5405,7 +5405,7 @@
         "345"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|fusA|Elongation factor G|loc|344135 346220 1 # ID=1_345|Type=CDS|transl_table=11]"
     },
     {
@@ -5423,7 +5423,7 @@
         "705"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|tuf|Elongation factor Tu|loc|667467 668658 1 # ID=1_705|Type=CDS|transl_table=11]"
     },
     {
@@ -5441,7 +5441,7 @@
         "1169"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|infB|Translation initiation factor IF-2|loc|1133565 1136043 -1 # ID=1_1169|Type=CDS|transl_table=11]"
     },
     {
@@ -5459,7 +5459,7 @@
         "1244"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rsmB|Ribosomal RNA small subunit methyltransferase B|loc|1213323 1214640 -1 # ID=1_1244|Type=CDS|transl_table=11]"
     },
     {
@@ -5477,7 +5477,7 @@
         "777"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|der|GTPase Der|loc|739487 740795 1 # ID=1_777|Type=CDS|transl_table=11]"
     },
     {
@@ -5495,7 +5495,7 @@
         "1437"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "1437": [
           [
@@ -5524,7 +5524,7 @@
         "707"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|clpX|ATP-dependent Clp protease ATP-binding subunit ClpX|loc|670312 671566 1 # ID=1_707|Type=CDS|transl_table=11]"
     },
     {
@@ -5542,7 +5542,7 @@
         "1209"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|ffh|Signal recognition particle protein|loc|1177130 1178561 -1 # ID=1_1209|Type=CDS|transl_table=11]"
     },
     {
@@ -5560,7 +5560,7 @@
         "534"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "534": [
           [
@@ -5589,7 +5589,7 @@
         "52"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "52": [
           [
@@ -5618,7 +5618,7 @@
         "433"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|glmS|Glutamine--fructose-6-phosphate aminotransferase [isomerizing]|loc|413882 415694 1 # ID=1_433|Type=CDS|transl_table=11]"
     },
     {
@@ -5636,7 +5636,7 @@
         "586"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|glmM|Phosphoglucosamine mutase|loc|555798 557151 1 # ID=1_586|Type=CDS|transl_table=11]"
     },
     {
@@ -5654,13 +5654,13 @@
         "578"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "phylhits": {
         "578": [
           [
             "Lactobacillus_delbrueckii",
             "R",
-            "SP165",
+            "SP92",
             "Lactobacillus_delbrueckii, 266117_Rubrobacter_xylanophilus_DSM_9941",
             0.5
           ]
@@ -5683,7 +5683,7 @@
         "739"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|coaBC|Coenzyme A biosynthesis bifunctional protein CoaBC|loc|701616 702816 1 # ID=1_739|Type=CDS|transl_table=11]"
     },
     {
@@ -5701,7 +5701,7 @@
         "1295"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|add|Adenosine deaminase|loc|1262376 1263369 -1 # ID=1_1295|Type=CDS|transl_table=11]"
     },
     {
@@ -5719,7 +5719,7 @@
         "1553"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|thrB_2|Homoserine kinase|loc|1496783 1497647 -1 # ID=1_1553|Type=CDS|transl_table=11]"
     },
     {
@@ -5737,7 +5737,7 @@
         "467"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|rpe|Ribulose-phosphate 3-epimerase|loc|445907 446558 1 # ID=1_467|Type=CDS|transl_table=11]"
     },
     {
@@ -5755,7 +5755,7 @@
         "309"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|murA1|UDP-N-acetylglucosamine 1-carboxyvinyltransferase|loc|303417 304689 1 # ID=1_309|Type=CDS|transl_table=11]"
     },
     {
@@ -5773,7 +5773,7 @@
         "1099"
       ],
       "proxhits": [],
-      "known_hit": "N/A",
+      "known_hit": "No",
       "allhits": "[Lactobacillus delbrueckii strain ATCC 11842|ybeY|Endoribonuclease YbeY|loc|1061520 1062045 -1 # ID=1_1099|Type=CDS|transl_table=11]"
     }
   ],
@@ -8266,12 +8266,13 @@
     "Cell envelope": 7,
     "Cellular processes": 4,
     "Central intermediary metabolism": 4,
-    "DNA metabolism": 31,
+    "DNA metabolism": 30,
+    "N/A": 2,
     "Energy metabolism": 19,
     "Protein fate": 19,
     "Protein synthesis": 91,
     "Purines, pyrimidines, nucleosides, and nucleotides": 16,
-    "Transcription": 12,
+    "Transcription": 11,
     "Unknown function": 11,
     "Fatty acid and phospholipid metabolism": 1
   }

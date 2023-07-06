@@ -11,6 +11,15 @@
   "cluster-1_2": {
     "row": [
       "cluster-1_2",
+      "RiPP-like",
+      "scaffold_1",
+      "125153 - 136119"
+    ],
+    "hits": []
+  },
+  "cluster-1_3": {
+    "row": [
+      "cluster-1_3",
       "lanthipeptide-class-iv",
       "scaffold_1",
       "1745672 - 1767868"
@@ -29,6 +38,15 @@
     ],
     [
       "cluster-1_2",
+      "RiPP-like",
+      "scaffold_1",
+      "125153 - 136119",
+      "0",
+      "0",
+      []
+    ],
+    [
+      "cluster-1_3",
       "lanthipeptide-class-iv",
       "scaffold_1",
       "1745672 - 1767868",

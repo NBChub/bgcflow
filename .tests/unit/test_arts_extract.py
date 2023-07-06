@@ -22,14 +22,14 @@ def test_arts_extract():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("data/interim/arts/antismash-6.1.1/GCA_000056065.1.json", file=sys.stderr)
+        print("data/interim/arts/antismash-7.0.0/GCA_000056065.1.json", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "data/interim/arts/antismash-6.1.1/GCA_000056065.1.json",
+            "data/interim/arts/antismash-7.0.0/GCA_000056065.1.json",
             "-f", 
             "-j1",
             "--keep-target-files",
