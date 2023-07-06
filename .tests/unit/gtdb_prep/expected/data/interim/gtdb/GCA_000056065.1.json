@@ -1,10 +1,10 @@
 {
   "genome_id": "GCA_000056065.1",
   "gtdb_url": "https://api.gtdb.ecogenomic.org/genome/GCA_000056065.1/taxon-history",
-  "gtdb_release": "R207",
+  "gtdb_release": "R214",
   "gtdb_taxonomy": {
     "domain": "d__Bacteria",
-    "phylum": "p__Firmicutes",
+    "phylum": "p__Bacillota",
     "class": "c__Bacilli",
     "order": "o__Lactobacillales",
     "family": "f__Lactobacillaceae",
