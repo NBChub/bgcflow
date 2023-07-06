@@ -1,0 +1,8 @@
+bgc_id,genome_id,region,accession,start_pos,end_pos,contig_edge,product,region_length,source,gbk_path
+CR954253.1.region001,GCA_000056065.1,1.1,CR954253.1,17407,39909,False,['lanthipeptide-class-iii'],22502,bgcflow,data/interim/antismash/7.0.0/GCA_000056065.1/CR954253.1.region001.gbk
+CR954253.1.region002,GCA_000056065.1,1.2,CR954253.1,125153,136119,False,['RiPP-like'],10966,bgcflow,data/interim/antismash/7.0.0/GCA_000056065.1/CR954253.1.region002.gbk
+CR954253.1.region003,GCA_000056065.1,1.3,CR954253.1,1745672,1767868,False,['lanthipeptide-class-iv'],22196,bgcflow,data/interim/antismash/7.0.0/GCA_000056065.1/CR954253.1.region003.gbk
+CP000156.1.region001,GCA_000191165.1,1.1,CP000156.1,117260,128451,False,['RiPP-like'],11191,bgcflow,data/interim/antismash/7.0.0/GCA_000191165.1/CP000156.1.region001.gbk
+CP000156.1.region002,GCA_000191165.1,1.2,CP000156.1,1767251,1789447,False,['lanthipeptide-class-iv'],22196,bgcflow,data/interim/antismash/7.0.0/GCA_000191165.1/CP000156.1.region002.gbk
+CP000412.1.region001,GCA_000014405.1,1.1,CP000412.1,17283,39785,False,['lanthipeptide-class-iii'],22502,bgcflow,data/interim/antismash/7.0.0/GCA_000014405.1/CP000412.1.region001.gbk
+CP000412.1.region002,GCA_000014405.1,1.2,CP000412.1,120275,131241,False,['RiPP-like'],10966,bgcflow,data/interim/antismash/7.0.0/GCA_000014405.1/CP000412.1.region002.gbk
