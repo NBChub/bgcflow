@@ -19,6 +19,11 @@ def extract_bgc_project_information(config, project_variable="projects", sample_
     projects = config[project_variable]
     print(f"   Available projects: {projects}", file=sys.stderr)
 
+    # mask pep and name as alias
+    for item in projects:
+        if 'pep' in item:
+            item['name'] = item.pop('pep')
+
     # filter for pep projects
     df_projects = pd.DataFrame(projects).set_index("name", drop=False)
     for i in df_projects.index:

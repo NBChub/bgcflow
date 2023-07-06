@@ -102,12 +102,29 @@ rule mmseqs2_extract:
         mmseqs createseqfiledb {input.db} data/interim/mmseqs2/{wildcards.name}/cluster_{wildcards.name}_{wildcards.version}.db data/interim/mmseqs2/{wildcards.name}/seq_{wildcards.name}_{wildcards.version}.db &>> {log}
         """
 
+rule mmseqs2_extract_cog:
+    input:
+        tsv = "data/interim/mmseqs2/{name}/{name}_{version}_cluster.tsv",
+    output:
+        csv = "data/processed/{name}/mmseqs2/as_{version}_mmseqs2_cog.csv",
+    log:
+        "logs/mmseqs2/extract_cog_{name}_{version}.log",
+    conda:
+        "../envs/bgc_analytics.yaml"
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/features/mmseqs2_extract.py {input.tsv} {output.csv} 2>> {log}
+        """
+
 rule mmseq_all:
     input:
+        csv = "data/processed/{name}/mmseqs2/mmseqs2_cog_as_{version}.csv",
         msa = "data/interim/mmseqs2/{name}/msa_{name}_{version}.db",
         edge_table = "data/processed/{name}/mmseqs2/edge_{version}.tsv",
         tsv = "data/interim/mmseqs2/{name}/{name}_{version}_cluster.tsv",
         paf = "data/interim/minimap2/{name}/{name}_{version}.paf",
+    log:
+        "logs/mmseqs2/all_{name}_{version}.log",
     output:
         tag = "data/processed/{name}/mmseqs2/{version}.tag",
     shell:

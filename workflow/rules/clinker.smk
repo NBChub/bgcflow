@@ -25,3 +25,20 @@ rule clinker:
         """
         clinker {input.gbk_dir}/*.gbk -j {threads} -o {output.txt} -p {output.html} 2>> {log}
         """
+
+rule clinker_extract:
+    input:
+        gbk_dir = "data/interim/clinker/{name}/{version}",
+        txt = "data/processed/{name}/clinker/{version}/clinker.txt",
+    output:
+        csv = "data/processed/{name}/clinker/{version}/clinker.csv",
+    conda:
+        "../envs/bgc_analytics.yaml"
+    threads: 4
+    log: "logs/clinker/clinker_extract-{version}-{name}.log"
+    params:
+        cutoff = 0.7
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/features/clinker_extract.py {input.txt} {input.gbk_dir} {output.csv} {params.cutoff} 2>> {log}
+        """

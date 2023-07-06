@@ -15,18 +15,12 @@
 # PS: the variable pep and name is an alias
 
 projects:
-# Project 1 (yaml object)
-  - name: example
-    samples: .examples/_genome_project_example/samples.csv
-    rules: .examples/_genome_project_example/project_config.yaml
-    prokka-db: .examples/_genome_project_example/prokka-db.csv
-    gtdb-tax: .examples/_genome_project_example/gtdbtk.bac120.summary.tsv
-
 # Project 2 (PEP file)
   - pep: .examples/_pep_example/project_config.yaml
+  - pep: .examples/lactobacillus_delbruecki/project_config.yaml
 
 bgc_projects:
-  - pep: config/lanthipeptide/project_config.yaml
+  - pep: .examples/lanthipeptide_lactobacillus/project_config.yaml
 
 #### GLOBAL RULE CONFIGURATION ####
 # This section configures the rules to run globally.
@@ -67,5 +61,5 @@ resources_path:
 
 rule_parameters:
   install_gtdbtk:
-    release: 214
-    release_version: 214
+    release: "214.1"
+    release_version: "r214"
