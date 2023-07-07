@@ -8,12 +8,20 @@ from Bio import SeqIO
 def correct_gbks_for_mmseqs2(filepath):
     with open(filepath, "r") as input_handle:
         for record in SeqIO.parse(input_handle, "genbank"):
-            try:
-                correct_id = record.annotations["structured_comment"]["antiSMASH-Data"][
-                    "Original ID"
-                ].split()[0]
-            except KeyError:
-                logging.info(record.annotations["structured_comment"]["antiSMASH-Data"])
+            if "structured_comment" in record.annotations.keys():
+                try:
+                    correct_id = record.annotations["structured_comment"][
+                        "antiSMASH-Data"
+                    ]["Original ID"].split()[0]
+                except KeyError:
+                    logging.info(
+                        record.annotations["structured_comment"]["antiSMASH-Data"]
+                    )
+                    correct_id = record.id
+            else:
+                logging.warning(
+                    f"{filepath} does not seem to have structured comment from antiSMASH: {record.annotations.keys()}"
+                )
                 correct_id = record.id
             region = filepath.stem.split(".")[-1]
             record.id = f"{correct_id}.{region}"
