@@ -661,6 +661,15 @@ dependencies = {
 }
 
 print(f"Checking dependencies...", file=sys.stderr)
+try:
+    antismash_major_version = int(config["rule_parameters"]["antismash"]["version"])
+    print(f"Found configuration setting to use antiSMASH {antismash_major_version}", file=sys.stderr)
+except KeyError:
+    antismash_major_version = 7
+
+if antismash_major_version == 6:
+    dependencies["antismash"] = r"workflow/envs/antismash_v6.yaml"
+
 dependency_version = get_dependencies(dependencies)
 print(f"", file=sys.stderr)
 

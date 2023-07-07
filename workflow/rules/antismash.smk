@@ -1,11 +1,9 @@
-antismash_major_version = int(dependency_version["antismash"].split(".")[0])
-
 if antismash_major_version <= 6:
     rule antismash_db_setup:
         output:
             directory("resources/antismash_db"),
         conda:
-            "../envs/antismash.yaml"
+            "../envs/antismash_v6.yaml"
         log:
             "logs/antismash/antismash_db_setup.log",
         shell:
@@ -25,7 +23,7 @@ if antismash_major_version <= 6:
             json="data/interim/antismash/{version}/{strains}/{strains}.json",
             zip="data/interim/antismash/{version}/{strains}/{strains}.zip",
         conda:
-            "../envs/antismash.yaml"
+            "../envs/antismash_v6.yaml"
         threads: 4
         log:
             "logs/antismash/antismash/antismash_{version}-{strains}.log",
@@ -82,7 +80,7 @@ rule copy_antismash:
     output:
         dir=directory("data/processed/{name}/antismash/{version}/{strains}"),
     conda:
-        "../envs/antismash.yaml"
+        "../envs/bgc_analytics.yaml"
     log:
         "logs/antismash/copy_antismash/copy_antismash_{version}-{strains}-{name}.log",
     shell:

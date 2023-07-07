@@ -1,0 +1,8 @@
+name: antismash_6
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - antismash=6.1.1
+  - jinja2

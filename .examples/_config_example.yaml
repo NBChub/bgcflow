@@ -70,3 +70,5 @@ rule_parameters:
     release_version: "r214"
   gtdbtk:
     ani_screen: FALSE
+  antismash:
+    version: "7" # valid versions: 6, 7
