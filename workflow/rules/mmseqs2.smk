@@ -87,7 +87,7 @@ rule mmseqs2_extract:
         db = "data/interim/mmseqs2/{name}/{name}_{version}.db",
         clusterdb = "data/interim/mmseqs2/{name}/cluster_{name}_{version}.db.index",
     output:
-        edge_table = "data/processed/{name}/mmseqs2/edge_{version}.tsv",
+        edge_table = "data/processed/{name}/mmseqs2/mmseqs2_edge_as_{version}.tsv",
         seqdb = "data/interim/mmseqs2/{name}/seq_{name}_{version}.db.index",
         msa = "data/interim/mmseqs2/{name}/msa_{name}_{version}.db",
     log:
@@ -106,7 +106,7 @@ rule mmseqs2_extract_cog:
     input:
         tsv = "data/interim/mmseqs2/{name}/{name}_{version}_cluster.tsv",
     output:
-        csv = "data/processed/{name}/mmseqs2/as_{version}_mmseqs2_cog.csv",
+        csv = temp("data/processed/{name}/mmseqs2/as_{version}_mmseqs2_cog.csv"),
     log:
         "logs/mmseqs2/extract_cog_{name}_{version}.log",
     conda:
@@ -116,11 +116,26 @@ rule mmseqs2_extract_cog:
         python workflow/bgcflow/bgcflow/features/mmseqs2_extract.py {input.tsv} {output.csv} 2>> {log}
         """
 
+rule mmseqs2_annotate_cog:
+    input:
+        gbk = "data/interim/minimap2/{name}/{name}_{version}.gbk",
+        csv = "data/processed/{name}/mmseqs2/as_{version}_mmseqs2_cog.csv",
+    output:
+        json = "data/processed/{name}/mmseqs2/mmseqs2_cog_as_{version}.json",
+    log:
+        "logs/mmseqs2/annotate_cog_{name}_{version}.log",
+    conda:
+        "../envs/r_notebook.yaml"
+    shell:
+        """
+        workflow/scripts/cog_feats.R {input.gbk} {input.csv} {output.json} 2>> {log}
+        """
+
 rule mmseq_all:
     input:
-        csv = "data/processed/{name}/mmseqs2/mmseqs2_cog_as_{version}.csv",
+        json = "data/processed/{name}/mmseqs2/mmseqs2_cog_as_{version}.json",
         msa = "data/interim/mmseqs2/{name}/msa_{name}_{version}.db",
-        edge_table = "data/processed/{name}/mmseqs2/edge_{version}.tsv",
+        edge_table = "data/processed/{name}/mmseqs2/mmseqs2_edge_as_{version}.tsv",
         tsv = "data/interim/mmseqs2/{name}/{name}_{version}_cluster.tsv",
         paf = "data/interim/minimap2/{name}/{name}_{version}.paf",
     log:

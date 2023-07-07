@@ -12,6 +12,7 @@ dependencies:
   - r-tidyverse
   - bioconductor-ggtree
   - bioconductor-ggtreeextra
+  - bioconductor-iranges
   - r-plotly
   - r-ggstar
   - r-repr
