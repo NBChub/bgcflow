@@ -5,7 +5,7 @@ rule bigslice_prep:
     output:
         folder=temp(directory("data/interim/bigslice/tmp/{name}_antismash_{version}/")),
     log:
-        "workflow/report/logs/bigslice/bigslice_prep/bigslice_{name}-antismash-{version}.log",
+        "logs/bigslice/bigslice_prep/bigslice_{name}-antismash-{version}.log",
     conda:
         "../envs/bgc_analytics.yaml"
     params:
@@ -29,7 +29,7 @@ rule bigslice:
     resources:
         tmpdir="data/interim/tempdir",
     log:
-        "workflow/report/logs/bigslice/bigslice/bigslice_{name}-antismash-{version}.log",
+        "logs/bigslice/bigslice/bigslice_{name}-antismash-{version}.log",
     shell:
         """
         bigslice -i {input.dir} {output.folder} --threshold {params.threshold} -t {threads} &>> {log}
@@ -42,7 +42,7 @@ rule fetch_bigslice_db:
     conda:
         "../envs/bigslice.yaml"
     log:
-        "workflow/report/logs/bigslice/fetch_bigslice_db.log",
+        "logs/bigslice/fetch_bigslice_db.log",
     shell:
         """
         (cd resources/bigslice && wget -c -nc http://bioinformatics.nl/~kauts001/ltr/bigslice/paper_data/data/full_run_result.zip && unzip full_run_result.zip) &>> {log}
@@ -60,7 +60,7 @@ rule query_bigslice:
         "../envs/bigslice.yaml"
     threads: 8
     log:
-        "workflow/report/logs/bigslice/query_bigslice/query_bigslice_{name}-antismash-{version}.log",
+        "logs/bigslice/query_bigslice/query_bigslice_{name}-antismash-{version}.log",
     params:
         n_ranks=10,
         query_name="{name}",
@@ -83,7 +83,7 @@ rule summarize_bigslice_query:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/bigslice/summarize_bigslice_query/summarize_bigslice_query_{name}-antismash-{version}.log",
+        "logs/bigslice/summarize_bigslice_query/summarize_bigslice_query_{name}-antismash-{version}.log",
     params:
         bigfam_db_path="resources/bigslice/full_run_result/result/data.db",
         cutoff=900,

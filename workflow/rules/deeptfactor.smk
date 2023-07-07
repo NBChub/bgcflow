@@ -5,7 +5,7 @@ rule deeptfactor_setup:
     conda:
         "../envs/deeptfactor.yaml"
     log:
-        "workflow/report/logs/deeptfactor/deeptfactor_setup.log",
+        "logs/deeptfactor/deeptfactor_setup.log",
     shell:
         """
         git clone https://bitbucket.org/kaistsystemsbiology/deeptfactor.git {output.folder} 2>> {log}
@@ -25,7 +25,7 @@ rule deeptfactor:
         faa="../../data/interim/prokka/{strains}/{strains}.faa",
         outdir="../../data/interim/deeptfactor/{strains}/",
     log:
-        "workflow/report/logs/deeptfactor/deeptfactor/deeptfactor-{strains}.log",
+        "logs/deeptfactor/deeptfactor/deeptfactor-{strains}.log",
     shell:
         """
         mkdir -p data/interim/deeptfactor/{wildcards.strains} 2>> {log}
@@ -43,7 +43,7 @@ rule deeptfactor_to_json:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/deeptfactor/deeptfactor/deeptfactor-{strains}_to_json.log",
+        "logs/deeptfactor/deeptfactor/deeptfactor-{strains}_to_json.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/deeptfactor_scatter.py {input.deeptfactor_dir}/prediction_result.txt {output.deeptfactor_json} 2>> {log}
@@ -61,7 +61,7 @@ rule deeptfactor_summary:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/deeptfactor/deeptfactor_{name}.log",
+        "logs/deeptfactor/deeptfactor_{name}.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/deeptfactor_gather.py '{input.deeptfactor_json}' {output.df_deeptfactor} 2>> {log}

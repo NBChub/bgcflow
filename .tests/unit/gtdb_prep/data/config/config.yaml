@@ -11,24 +11,21 @@
 #   - prokka-db (optional): list of the custom accessions to use as prokka reference database.
 #   - gtdb-tax (optional): output summary file of GTDB-tk with "user_genome" and "classification" as the two minimum columns
 # (2) To define project using PEP file, only variable "name" should be given that points to the location of the PEP yaml file.
-#   - name: path to PEP .yaml file. See project example_pep for details.
+#   - pep: path to PEP .yaml file. See project example_pep for details.
+# PS: the variable pep and name is an alias
 
 projects:
 # Project 1 (yaml object)
-#  - name: example
-#    samples: config/_genome_project_example/samples.csv
-#    rules: config/_genome_project_example/project_config.yaml
-#    prokka-db: config/_genome_project_example/prokka-db.csv
-#    gtdb-tax: config/_genome_project_example/gtdbtk.bac120.summary.tsv
+  - name: config/lactobacillus_delbruecki/project_config.yaml
 
-# Project 2 (PEP file)
-#  - name: config/_pep_example/project_config.yaml
-  - name: config/gtdb_prep/project_config.yaml
+bgc_projects:
+  - pep: config/lanthipeptide/project_config.yaml
+
 #### GLOBAL RULE CONFIGURATION ####
 # This section configures the rules to run globally.
 # Use project specific rule configurations if you want to run different rules for each projects.
-# rules: set value to TRUE if you want to run the analysis or FALSE if you don't
-rules:
+# pipelines or rules: set value to TRUE if you want to run the analysis or FALSE if you don't
+pipelines:
   seqfu: FALSE
   mash: FALSE
   fastani: FALSE
@@ -60,3 +57,8 @@ resources_path:
   checkm: resources/checkm
   gtdbtk: resources/gtdbtk
   #RNAmmer: resources/RNAmmer # If specified, will override Barnapp in Prokka
+
+rule_parameters:
+  install_gtdbtk:
+    release: 214
+    release_version: 214

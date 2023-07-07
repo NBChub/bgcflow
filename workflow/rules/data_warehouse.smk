@@ -6,7 +6,7 @@ rule csv_to_parquet:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/data_warehouse/{name}/convert_to_parquet.log",
+        "logs/data_warehouse/{name}/convert_to_parquet.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/database/csv_to_parquet.py data/processed/{wildcards.name} 2>> {log}

@@ -57,6 +57,7 @@ jobs:
           python-version: 3.x
       - run: pip install git+https://github.com/NBChub/bgcflow_wrapper.git
       - run: pip install pytest-cov
+      - run: pip install alive-progress
       - name: Test coverage
         run: pytest --cov=.tests/unit .tests/unit/
       - name: Build coverage file

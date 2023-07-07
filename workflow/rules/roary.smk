@@ -10,7 +10,7 @@ rule roary:
         g=60000,
     threads: 8
     log:
-        "workflow/report/logs/roary/roary-{name}.log",
+        "logs/roary/roary-{name}.log",
     shell:
         """
         roary -p {threads} -f {output.roary_dir} -i {params.i} -g {params.g} -e -n -r -v {input.gff} &>> {log}
@@ -28,7 +28,7 @@ rule eggnog_roary:
         "../envs/eggnog.yaml"
     threads: 8
     log:
-        "workflow/report/logs/eggnog-roary/eggnog-{name}.log",
+        "logs/eggnog-roary/eggnog-{name}.log",
     params:
         faa="data/interim/roary/{name}/pan_genome_reference.fa",
     shell:
@@ -48,7 +48,7 @@ rule deeptfactor_roary:
         "../envs/deeptfactor.yaml"
     threads: 8
     log:
-        "workflow/report/logs/deeptfactor-roary/deeptfactor-roary-{name}.log",
+        "logs/deeptfactor-roary/deeptfactor-roary-{name}.log",
     params:
         faa="../../data/interim/roary/{name}/pan_genome_reference.fa",
         outdir="../../data/interim/deeptfactor_roary/{name}/",
@@ -71,7 +71,7 @@ rule diamond_roary:
         "../envs/antismash.yaml"
     threads: 8
     log:
-        "workflow/report/logs/diamond-roary/diamond-roary-{name}.log",
+        "logs/diamond-roary/diamond-roary-{name}.log",
     params:
         faa="data/interim/roary/{name}/pan_genome_reference.fa",
     shell:
@@ -91,7 +91,7 @@ rule roary_out:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/roary/roary-out-{name}.log",
+        "logs/roary/roary-out-{name}.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/make_pangenome_dataset.py {input.roary_interim_dir} {output.roary_processed_dir} {input.automlst_processed_dir} 2>> {log}

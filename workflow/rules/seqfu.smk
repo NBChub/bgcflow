@@ -6,7 +6,7 @@ rule seqfu_stats:
     conda:
         "../envs/seqfu.yaml"
     log:
-        "workflow/report/logs/seqfu/seqfu/seqfu-{strains}.log",
+        "logs/seqfu/seqfu/seqfu-{strains}.log",
     params:
         precision=3,
     shell:
@@ -31,7 +31,7 @@ rule seqfu_combine:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/seqfu/seqfu-{name}.log",
+        "logs/seqfu/seqfu-{name}.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/make_seqfu_table.py '{input.json}' {output.all_csv} 2>> {log}

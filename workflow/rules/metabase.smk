@@ -2,7 +2,7 @@ rule metabase_install:
     output:
         jar="resources/metabase/metabase.jar",
     log:
-        "workflow/report/logs/metabase_install.log",
+        "logs/metabase_install.log",
     conda:
         "../envs/utilities.yaml"
     params:
@@ -16,7 +16,7 @@ rule metabase_duckdb_plugin:
     output:
         plugin="resources/metabase/plugins/duckdb.metabase-driver.jar",
     log:
-        "workflow/report/logs/metabase_duckdb_install.log",
+        "logs/metabase_duckdb_install.log",
     params:
         release="0.1.6"
     shell:

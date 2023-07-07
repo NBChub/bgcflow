@@ -4,6 +4,13 @@ def get_bgc_inputs(pep_object, antismash_version):
     """
     antismash_path = Path(f"data/interim/antismash/{antismash_version}")
     gbk_list = []
+
+    base_path = Path(pep_object.config["sample_table"]).parent
+    input_path = ""
+    if "input_folder" in list(pep_object.config.keys()):
+        input_path = base_path / pep_object.config["input_folder"]
+        input_path = input_path.resolve()
+
     df = pep_object.sample_tables
     for i in df.index:
         bgc_id = df.loc[i, "bgc_id"]
@@ -12,8 +19,11 @@ def get_bgc_inputs(pep_object, antismash_version):
         assert 'gbk_path' in df.columns
         custom_path = df.loc[i, "gbk_path"]
         #print(custom_path, type(custom_path), custom_path != None, file=sys.stderr)
+
         if custom_path != None:
             gbk_path = custom_path
+        elif 'input_folder' in pep_object.config.keys():
+            gbk_path = Path(input_path / f"{bgc_id}.gbk")
         else:
             gbk_path = antismash_path / genome_id / f"{bgc_id}.gbk"
         #print(bgc_id, gbk_path, file=sys.stderr)
@@ -33,9 +43,9 @@ rule downstream_bgc_prep_selection:
     params:
         dataset="data/interim/bgcs/datasets.tsv",
     log:
-        general="workflow/report/logs/bgcs/downstream_bgc_prep/{name}/downstream_bgc_prep-{version}.log",
-        symlink="workflow/report/logs/bgcs/downstream_bgc_prep/{name}/bgc_downstream_bgc_prep-{version}.log",
-        taxonomy="workflow/report/logs/bgcs/downstream_bgc_prep/{name}/tax_downstream_bgc_prep-{version}.log",
+        general="logs/bgcs/downstream_bgc_prep/{name}/downstream_bgc_prep-{version}.log",
+        symlink="logs/bgcs/downstream_bgc_prep/{name}/bgc_downstream_bgc_prep-{version}.log",
+        taxonomy="logs/bgcs/downstream_bgc_prep/{name}/tax_downstream_bgc_prep-{version}.log",
     shell:
         """
         echo "Preparing BGCs for {wildcards.name} downstream analysis..." 2>> {log.general}

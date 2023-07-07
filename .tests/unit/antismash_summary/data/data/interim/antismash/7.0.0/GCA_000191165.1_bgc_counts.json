@@ -1,0 +1,12 @@
+{
+  "GCA_000191165.1": {
+    "bgcs_count": 2,
+    "bgcs_on_contig_edge": 0,
+    "protoclusters_count": 0,
+    "cand_clusters_count": 0,
+    "products": {
+      "RiPP-like": 1,
+      "lanthipeptide-class-iv": 1
+    }
+  }
+}

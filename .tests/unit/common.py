@@ -1,10 +1,10 @@
 """
-Common code for unit testing of rules generated with Snakemake 7.20.0.
+Common code for unit testing of rules generated with Snakemake 7.28.3.
 """
 
-from pathlib import Path
-import subprocess as sp
 import os
+import subprocess as sp
+from pathlib import Path
 
 
 class OutputChecker:
@@ -31,6 +31,8 @@ class OutputChecker:
                 if str(f).startswith(".snakemake"):
                     continue
                 elif str(f).startswith("workflow"):
+                    continue
+                elif str(f).startswith("logs"):
                     continue
                 elif str(f).startswith("data/interim/bgcflow_utils/samples.csv"):
                     continue

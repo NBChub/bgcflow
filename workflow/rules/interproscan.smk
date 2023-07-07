@@ -4,7 +4,7 @@ rule install_interproscan:
     output:
         interproscan = f"resources/interproscan-{interproscan_version}"
     log:
-        "workflow/report/logs/interproscan/install_interproscan.log",
+        "logs/interproscan/install_interproscan.log",
     conda:
         "../envs/utilities.yaml"
     params:
@@ -28,7 +28,7 @@ rule prepare_aa_interproscan:
     output:
         fasta = temp("data/interim/interproscan/{name}_{version}.faa"),
     log:
-        "workflow/report/logs/interproscan/create_aa_{name}_{version}.log",
+        "logs/interproscan/create_aa_{name}_{version}.log",
     conda:
         "../envs/bgc_analytics.yaml"
     shell:
@@ -44,7 +44,7 @@ rule interproscan:
         tsv = "data/processed/{name}/tables/interproscan_as_{version}.tsv",
         json = "data/processed/{name}/tables/interproscan_as_{version}.json",
     log:
-        "workflow/report/logs/interproscan/{name}_{version}.log",
+        "logs/interproscan/{name}_{version}.log",
     conda:
         "../envs/utilities.yaml"
     threads: 4

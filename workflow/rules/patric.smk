@@ -8,7 +8,7 @@ else:
         conda:
             "../envs/bgc_analytics.yaml"
         log:
-            "workflow/report/logs/patric/patric_genome_download-{patric}.log",
+            "logs/patric/patric_genome_download-{patric}.log",
         shell:
             """
             (cd data/interim/fasta && wget -qN "ftp://ftp.patricbrc.org/genomes/{wildcards.patric}/{wildcards.patric}.fna" 2> ../../../{log})

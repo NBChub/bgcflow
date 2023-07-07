@@ -2,7 +2,7 @@ rule copy_readme:
     output:
         "data/processed/{name}/README.md",
     log:
-        "workflow/report/logs/report/copy-readme-{name}.log",
+        "logs/report/copy-readme-{name}.log",
 
     shell:
         """
@@ -16,7 +16,7 @@ if len(py_wildcards) > 0:
         conda:
             "../envs/bgc_analytics.yaml"
         log:
-            "workflow/report/logs/report/{bgcflow_rules_py}-report-copy-{name}.log",
+            "logs/report/{bgcflow_rules_py}-report-copy-{name}.log",
         wildcard_constraints:
             bgcflow_rules_py="|".join(py_wildcards),
         params:
@@ -34,7 +34,7 @@ if len(py_wildcards) > 0:
         conda:
             "../envs/bgc_analytics.yaml"
         log:
-            "workflow/report/logs/report/{bgcflow_rules_py}-report-{name}.log",
+            "logs/report/{bgcflow_rules_py}-report-{name}.log",
         wildcard_constraints:
             bgcflow_rules_py="|".join(py_wildcards),
         shell:
@@ -52,7 +52,7 @@ if len(rpy_wildcards) > 0:
         conda:
             "../envs/bgc_analytics.yaml"
         log:
-            "workflow/report/logs/report/{bgcflow_rules_rpy}-report-copy-{name}.log",
+            "logs/report/{bgcflow_rules_rpy}-report-copy-{name}.log",
         wildcard_constraints:
             bgcflow_rules_rpy="|".join(rpy_wildcards),
         params:
@@ -70,7 +70,7 @@ if len(rpy_wildcards) > 0:
         conda:
             "../envs/r_notebook.yaml"
         log:
-            "workflow/report/logs/report/{bgcflow_rules_rpy}-report-{name}.log",
+            "logs/report/{bgcflow_rules_rpy}-report-{name}.log",
         wildcard_constraints:
             bgcflow_rules_rpy="|".join(rpy_wildcards),
         shell:

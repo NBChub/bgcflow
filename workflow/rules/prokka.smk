@@ -7,7 +7,7 @@ try:
             priority: 50
             conda:
                 "../envs/prokka.yaml"
-            log: "workflow/report/logs/prokka/rnammer_setup.log"
+            log: "logs/prokka/rnammer_setup.log"
             shell:
                 """
                 ln -s $PWD/resources/RNAmmer/rnammer $CONDA_PREFIX/bin/rnammer 2>> {log}
@@ -27,7 +27,7 @@ rule copy_custom_fasta:
         fna = "data/interim/fasta/{custom}.fna"
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/prokka/copy_custom_fasta/copy_custom_fasta-{custom}.log"
+    log: "logs/prokka/copy_custom_fasta/copy_custom_fasta-{custom}.log"
     shell:
         """
         if [[ {input} == *.fna ]]
@@ -47,7 +47,7 @@ rule prokka_db_setup:
         ncbi_tempdir = temp(directory("resources/prokka_db/{prokka_db}")),
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/prokka/prokka_db_setup/prokka_db_setup-{prokka_db}.log"
+    log: "logs/prokka/prokka_db_setup/prokka_db_setup-{prokka_db}.log"
     shell:
         """
         python workflow/bgcflow/bgcflow/data/make_prokka_db.py {wildcards.prokka_db} \
@@ -61,7 +61,7 @@ rule extract_meta_prokka:
         org_info = "data/interim/prokka/{strains}/organism_info.txt",
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/prokka/extract_meta_prokka/extract_meta_prokka-{strains}.log"
+    log: "logs/prokka/extract_meta_prokka/extract_meta_prokka-{strains}.log"
     params:
         samples_path = bgcflow_util_dir / "samples.csv",
     shell:
@@ -94,7 +94,7 @@ rule prokka:
         tbl = temp("data/interim/prokka/{strains}/{strains}.tbl"),
     conda:
         "../envs/prokka.yaml"
-    log: "workflow/report/logs/prokka/prokka/prokka-{strains}.log"
+    log: "logs/prokka/prokka/prokka-{strains}.log"
     params:
         increment = 10,
         evalue = "1e-05",
@@ -121,7 +121,7 @@ rule format_gbk:
         "../envs/bgc_analytics.yaml"
     params:
         version = __version__,
-    log: "workflow/report/logs/prokka/format_gbk/format_gbk-{strains}.log"
+    log: "logs/prokka/format_gbk/format_gbk-{strains}.log"
     shell:
         """
         python workflow/bgcflow/bgcflow/data/format_genbank_meta.py {input.gbk_prokka} \
@@ -140,7 +140,7 @@ rule copy_prokka_gbk:
         tsv = "data/processed/{name}/genbank/{strains}.tsv",
     conda:
         "../envs/bgc_analytics.yaml"
-    log: "workflow/report/logs/prokka/copy_prokka_gbk/copy_prokka_gbk_-{strains}-{name}.log"
+    log: "logs/prokka/copy_prokka_gbk/copy_prokka_gbk_-{strains}-{name}.log"
     shell:
         """
         cp {input.gbk} {output.gbk} 2>> {log}

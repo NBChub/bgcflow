@@ -4,7 +4,7 @@ rule install_checkm:
     conda:
         "../envs/checkm.yaml"
     log:
-        "workflow/report/logs/checkm/checkm-install_checkm.log",
+        "logs/checkm/checkm-install_checkm.log",
     shell:
         """
         (cd resources && wget -O checkm_data_2015_01_16.tar.gz https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz) &>> {log}
@@ -24,7 +24,7 @@ rule checkm:
     conda:
         "../envs/checkm.yaml"
     log:
-        "workflow/report/logs/checkm/checkm_{name}.log",
+        "logs/checkm/checkm_{name}.log",
     params:
         checkm_log="data/interim/checkm/{name}/checkm_{name}.log",
     threads: 16
@@ -46,7 +46,7 @@ rule checkm_out:
             category="Quality Control",
         ),
     log:
-        "workflow/report/logs/checkm/checkm_out_{name}.log",
+        "logs/checkm/checkm_out_{name}.log",
     params:
         checkm_json=directory("data/interim/checkm/{name}/json/"),
     conda:

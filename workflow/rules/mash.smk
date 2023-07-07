@@ -8,7 +8,7 @@ rule mash:
         "../envs/mash.yaml"
     threads: 32
     log:
-        "workflow/report/logs/mash/mash-triangle-{name}.log",
+        "logs/mash/mash-triangle-{name}.log",
     shell:
         """
         for fna in {input.fna}
@@ -25,7 +25,7 @@ rule mash_convert:
     output:
         df_mash="data/processed/{name}/mash/df_mash.csv",
     log:
-        "workflow/report/logs/mash/mash-convert-{name}.log",
+        "logs/mash/mash-convert-{name}.log",
     conda:
         "../envs/bgc_analytics.yaml"
     shell:

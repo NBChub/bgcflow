@@ -1,0 +1,5 @@
+genome_id,source,organism,genus,species,strain,closest_placement_reference,input_file,bgcs_count,bgcs_on_contig_edge,protoclusters_count,cand_clusters_count,lanthipeptide-class-iii,RiPP-like,lanthipeptide-class-iv
+GCA_000056065.1,ncbi,,,,,,,3.0,0.0,0.0,0.0,1.0,1.0,1.0
+GCA_000182835.1,ncbi,,,,,,,,,,,,,
+GCA_000191165.1,ncbi,,,,,,,2.0,0.0,0.0,0.0,,1.0,1.0
+GCA_000014405.1,ncbi,,,,,,,2.0,0.0,0.0,0.0,1.0,1.0,

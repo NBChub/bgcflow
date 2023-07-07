@@ -8,7 +8,7 @@ from pathlib import Path
 import peppy
 
 min_version("7.14.0")
-__version__ = "0.6.4"
+__version__ = "0.7.0-alpha"
 
 
 container: "docker://matinnu/bgcflow:latest"
@@ -78,6 +78,12 @@ def hash_prokka_db(prokka_db_path):
 def get_input_location(p):
     """
     Get input file locations for custom samples
+
+    Arguments:
+        p: BGCFlow peppy project object
+
+    Returns:
+        p.sample_table: updated sample table with input file locations
     """
     base_path = Path(p.config["sample_table"]).parent
     input_path = ""
@@ -305,6 +311,15 @@ def extract_project_information(config, project_variable="projects"):
     print(f"Step 1. Extracting project information from config...\n", file=sys.stderr)
     projects = config[project_variable]
 
+    # mask pep and name as alias
+    for item in projects:
+        if 'pep' in item:
+            item['name'] = item.pop('pep')
+
+    # mask rules and pipelines as alias
+    if 'pipelines' in config.keys():
+        config['rules'] = config.pop('pipelines')
+
     # filter for pep projects
     df_projects = pd.DataFrame(projects).set_index("name", drop=False)
     for i in df_projects.index:
@@ -326,13 +341,18 @@ def extract_project_information(config, project_variable="projects"):
 
     for num, p in enumerate(projects):
         print(
-            f"Step 2.{num+1} Getting sample information for project: {p['name']}",
+            f"Step 2.{num+1} Getting sample information from: {p['name']}",
             file=sys.stderr,
         )
         # grab a bgcflow pep project
         if p["name"].endswith(".yaml"):
             pep_file = p["name"]
             p = peppy.Project(p["name"], sample_table_index="genome_id")
+
+            # mask pipelines and rules as alias, use rules as default
+            if 'pipelines' in p.config.keys():
+                p.config['rules'] = p.config.pop("pipelines")
+
             print(f" - Processing project [{p.name}]", file=sys.stderr)
 
             # make sure each project has unique names
@@ -425,6 +445,13 @@ def extract_project_information(config, project_variable="projects"):
 def get_fasta_inputs(name, df_samples):
     """
     Given a project name, list all corresponding strains (genome_id) fasta file
+
+    Arguments:
+        name {str} -- project name
+        df_samples {pd.DataFrame} -- sample table
+
+    Returns:
+        output {list} -- list of fasta files
     """
     selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     output = [f"data/interim/fasta/{s}.fna" for s in selection]
@@ -435,10 +462,21 @@ def get_fasta_inputs(name, df_samples):
 def get_prokka_refdb(genome_id, params, df_samples, mapping_file, config=config):
     """
     Given a genome id, find which prokka-db input to use.
+
     params:
         - "table" - will return the corresponding prokka-db table to use
         - "file" - will return the corresponding reference gbks
         - "params" - will return prokka protein params and the corresponding file
+
+    Arguments:
+        genome_id {str} -- genome id
+        params {str} -- "table" or "file" or "params"
+        df_samples {pd.DataFrame} -- sample table
+        mapping_file {dict} -- mapping file between prokka-db and reference gbks
+        config {dict} -- config file
+
+    Returns:
+        output {str} -- prokka-db table or reference gbks or prokka protein params
     """
 
     prokka_db = df_samples.loc[genome_id, "ref_annotation"][0]
@@ -465,6 +503,14 @@ def get_prokka_refdb(genome_id, params, df_samples, mapping_file, config=config)
 def get_antismash_inputs(name, version, df_samples):
     """
     Given a project name, find the corresponding sample file to use
+
+    Arguments:
+        name {str} -- project name
+        version {str} -- antismash version
+        df_samples {pd.DataFrame} -- sample table
+
+    Returns:
+        output {list} -- list of antismash gbk files
     """
     selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     output = [f"data/interim/antismash/{version}/{s}/{s}.gbk" for s in selection]
@@ -475,6 +521,14 @@ def get_antismash_inputs(name, version, df_samples):
 def get_prokka_outputs(name, df_samples, ext="gff"):
     """
     Given a project name, find the corresponding sample file to use
+
+    Arguments:
+        name {str} -- project name
+        df_samples {pd.DataFrame} -- sample table
+        ext {str} -- file extension
+
+    Returns:
+        output {list} -- list of prokka outputs
     """
     selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     output = [f"data/interim/prokka/{s}/{s}.{ext}" for s in selection]
@@ -485,6 +539,13 @@ def get_prokka_outputs(name, df_samples, ext="gff"):
 def get_automlst_inputs(name, df_samples):
     """
     Given a project name, find the corresponding sample file to use
+
+    Arguments:
+        name {str} -- project name
+        df_samples {pd.DataFrame} -- sample table
+
+    Returns:
+        output {list} -- list of automlst gbk files
     """
     selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     output = [f"data/interim/automlst_wrapper/{name}/{s}.gbk" for s in selection]
@@ -495,6 +556,13 @@ def get_automlst_inputs(name, df_samples):
 def get_json_inputs(name, df_samples):
     """
     Given a project name, find the corresponding sample file to use
+
+    Arguments:
+        name {str} -- project name
+        df_samples {pd.DataFrame} -- sample table
+
+    Returns:
+        output {list} -- list of gtdb json files
     """
     selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     output = [f"data/interim/gtdb/{s}.json" for s in selection]
@@ -505,6 +573,13 @@ def get_json_inputs(name, df_samples):
 def get_ncbi_assembly_inputs(name, df_samples):
     """
     Given a project name, find the corresponding sample file to use
+
+    Arguments:
+        name {str} -- project name
+        df_samples {pd.DataFrame} -- sample table
+
+    Returns:
+        output {list} -- list of ncbi assembly json files
     """
     selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
     selection_ncbi = df_samples[df_samples["source"] == "ncbi"].genome_id.values
@@ -516,19 +591,54 @@ def get_ncbi_assembly_inputs(name, df_samples):
 def get_dependency_version(dep, dep_key):
     """
     return dependency version tags given a dictionary (dep) and its key (dep_key)
+
+    Arguments:
+        dep {dict} -- dictionary of dependencies
+        dep_key {str} -- key of the dependency to return
+
+    Returns:
+        result {list} -- list of dependency version tags
     """
+    print(f"{dep_key} from: {dep[dep_key]}", file=sys.stderr)
     with open(dep[dep_key]) as file:
         result = []
         documents = yaml.full_load(file)
         for i in documents["dependencies"]:
-            if i.startswith(dep_key):
-                result = i.split("=")[-1]
-    return str(result)
+            if type(i) == str:
+                if i.startswith(dep_key):
+                    dep_name, dep_version = i.split("=")
+                    result.append(dep_version)
+            elif type(i) == dict:
+                assert len(i.keys()) == 1
+                for item in i['pip']:
+                    if dep_key in item:
+                        if item.startswith("git"):
+                            dep_name, dep_version = item.split("@")
+                            print(f" - {dep_key} will be installed from {dep_name}", file=sys.stderr)
+                            result.append(dep_version)
+                        else:
+                            dep_name, dep_version = [item.split("=")[i] for i in (0, -1)]
+                            print(f" - {dep_key} will be installed using pip", file=sys.stderr)
+                            result.append(dep_version)
+    assert len(result) == 1, f"Cannot determine {dep_key} version from {result}"
+
+    # beautify antismash version, changing "-" to "."
+    if dep_key == "antismash" and "-" in result[0]:
+        result[0] = result[0].replace("-",".")
+
+    print(f" - {dep_key}=={result[0]}", file=sys.stderr)
+    return str(result[0])
 
 
 def get_dependencies(dep):
     """
     get dependency version
+
+    Arguments:
+        dep {dict} -- dictionary of dependencies
+
+    Returns:
+        dv {dict} -- dictionary of dependency versions
     """
     dv = {}
     for ky in dep.keys():
@@ -540,16 +650,29 @@ def get_dependencies(dep):
 # list of the main dependecies used in the workflow
 dependencies = {
     "antismash": r"workflow/envs/antismash.yaml",
+    "bigslice" : r"workflow/envs/bigslice.yaml",
+    "cblaster" : r"workflow/envs/cblaster.yaml",
     "prokka": r"workflow/envs/prokka.yaml",
-    "mlst": r"workflow/envs/mlst.yaml",
     "eggnog-mapper": r"workflow/envs/eggnog.yaml",
     "roary": r"workflow/envs/roary.yaml",
-    "refseq_masher": r"workflow/envs/refseq_masher.yaml",
     "seqfu": r"workflow/envs/seqfu.yaml",
     "checkm": r"workflow/envs/checkm.yaml",
+    "gtdbtk" : r"workflow/envs/gtdbtk.yaml"
 }
 
+print(f"Checking dependencies...", file=sys.stderr)
+try:
+    antismash_major_version = int(config["rule_parameters"]["antismash"]["version"])
+    print(f"Found configuration setting to use antiSMASH {antismash_major_version}", file=sys.stderr)
+except KeyError:
+    antismash_major_version = 7
+
+if antismash_major_version == 6:
+    dependencies["antismash"] = r"workflow/envs/antismash_v6.yaml"
+
 dependency_version = get_dependencies(dependencies)
+print(f"", file=sys.stderr)
+
 
 ##### 7. Customize final output based on config["rule"] values #####
 
@@ -559,6 +682,15 @@ def get_project_outputs(
 ):
     """
     Generate outputs of a project given a TRUE value in config["rules"]
+
+    Arguments:
+        config {dict} -- dictionary of config.yaml
+        PROJECT_IDS {str} -- project name
+        df_samples {pd.DataFrame} -- sample table
+        rule_dict_path {str} -- path to rule dictionary
+
+    Returns:
+        final_output {list} -- list of final output files
     """
 
     with open(rule_dict_path, "r") as file:
@@ -641,6 +773,14 @@ def get_project_outputs(
 def get_final_output(df_samples, peppy_objects, rule_dict_path):
     """
     Generate outputs of for all projects
+
+    Arguments:
+        df_samples {pd.DataFrame} -- sample table
+        peppy_objects {dict} -- dictionary of peppy objects
+        rule_dict_path {str} -- path to rule dictionary
+
+    Returns:
+        final_output {list} -- list of final output files
     """
     sys.stderr.write(f"Step 5. Preparing list of final outputs...\n")
     final_output = []
@@ -655,6 +795,12 @@ def get_final_output(df_samples, peppy_objects, rule_dict_path):
 def custom_resource_dir():
     """
     Generate symlink for user defined resources location
+
+    Arguments:
+        config {dict} -- dictionary of config.yaml
+
+    Returns:
+        None
     """
     resource_dbs = config["resources_path"]
     sys.stderr.write(f"Step 4. Checking for user-defined local resources...\n")

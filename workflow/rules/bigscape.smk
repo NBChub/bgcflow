@@ -4,7 +4,7 @@ rule install_bigscape:
     conda:
         "../envs/bigscape.yaml"
     log:
-        "workflow/report/logs/bigscape/bigscape-install_bigscape.log",
+        "logs/bigscape/bigscape-install_bigscape.log",
     params:
         release="1.1.5",
     shell:
@@ -25,7 +25,7 @@ rule get_mibig_table:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/bigscape/get_mibig_table.log",
+        "logs/bigscape/get_mibig_table.log",
     params:
         mibig_version="3.1",
     shell:
@@ -49,7 +49,7 @@ rule bigscape:
         bigscape_dir="data/interim/bigscape/{name}_antismash_{version}/",
         label="{name}_antismash_{version}",
     log:
-        "workflow/report/logs/bigscape/{name}_antismash_{version}/bigscape.log",
+        "logs/bigscape/{name}_antismash_{version}/bigscape.log",
     threads: 32
     shell:
         """
@@ -71,7 +71,7 @@ rule bigscape_no_mibig:
         bigscape_dir="data/interim/bigscape/no_mibig_{name}_antismash_{version}/",
         label="{name}_antismash_{version}",
     log:
-        "workflow/report/logs/bigscape/{name}_antismash_{version}/bigscape.log",
+        "logs/bigscape/{name}_antismash_{version}/bigscape.log",
     threads: 32
     shell:
         """
@@ -87,7 +87,7 @@ rule copy_bigscape_zip:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/bigscape/copy_bigscape_zip/copy_bigscape_zip-{name}-{version}.log",
+        "logs/bigscape/copy_bigscape_zip/copy_bigscape_zip-{name}-{version}.log",
     shell:
         """
         topdir=$PWD
@@ -111,7 +111,7 @@ rule bigscape_to_cytoscape:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/bigscape/bigscape_to_cytoscape/bigscape_to_cytoscape-{name}-{version}.log",
+        "logs/bigscape/bigscape_to_cytoscape/bigscape_to_cytoscape-{name}-{version}.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/make_bigscape_to_cytoscape.py data/interim/bigscape/{wildcards.name}_antismash_{wildcards.version}/ {input.as_dir} {input.df_genomes_path} {input.mibig_bgc_table} {output.output_dir} 2>> {log}
@@ -128,7 +128,7 @@ rule copy_bigscape:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "workflow/report/logs/bigscape/copy_bigscape_zip/copy_bigscape-{name}-{version}.log",
+        "logs/bigscape/copy_bigscape_zip/copy_bigscape-{name}-{version}.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/bigscape_copy.py {input.index} data/processed/{wildcards.name}/bigscape/result_as{wildcards.version} 2>> {log}

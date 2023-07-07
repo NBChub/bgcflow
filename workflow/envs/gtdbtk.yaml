@@ -4,7 +4,8 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - gtdbtk=2.1.0
+  - gtdbtk=2.3.0
   - wget
   - tar
   - numpy=1.23.1
+  - pydantic=1.10.10

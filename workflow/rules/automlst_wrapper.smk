@@ -5,7 +5,7 @@ rule install_automlst_wrapper:
     conda:
         "../envs/automlst_wrapper.yaml"
     log:
-        "workflow/report/logs/automlst_wrapper/install_automlst_wrapper.log",
+        "logs/automlst_wrapper/install_automlst_wrapper.log",
     params:
         source="https://github.com/matinnuhamunada/automlst-simplified-wrapper",
         version="0.1.1"
@@ -29,7 +29,7 @@ rule prep_automlst_gbk:
     conda:
         "../envs/automlst_wrapper.yaml"
     log:
-        "workflow/report/logs/automlst_wrapper/prep_automlst_gbk/prep_automlst_gbk-{name}_{strains}.log",
+        "logs/automlst_wrapper/prep_automlst_gbk/prep_automlst_gbk-{name}_{strains}.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/features/prep_automlst.py {input.gbk} {output.auto_gbk} {wildcards.strains} 2>> {log}
@@ -43,7 +43,7 @@ rule automlst_wrapper:
     output:
         tree="data/interim/automlst_wrapper/{name}/raxmlpart.txt.treefile",
     log:
-        "workflow/report/logs/automlst_wrapper/automlst_wrapper/automlst_wrapper-{name}.log",
+        "logs/automlst_wrapper/automlst_wrapper/automlst_wrapper-{name}.log",
     conda:
         "../envs/automlst_wrapper.yaml"
     threads: 8
@@ -66,7 +66,7 @@ rule automlst_wrapper_out:
         automlst_processed=directory("data/processed/{name}/automlst_wrapper/"),
         final_tree="data/processed/{name}/automlst_wrapper/final.newick",
     log:
-        "workflow/report/logs/automlst_wrapper/automlst_wrapper/automlst_wrapper_out-{name}.log",
+        "logs/automlst_wrapper/automlst_wrapper/automlst_wrapper_out-{name}.log",
     params:
         automlst_interim=lambda wildcards: f"data/interim/automlst_wrapper/{wildcards.name}/",
         prokka_interim="data/interim/prokka",
