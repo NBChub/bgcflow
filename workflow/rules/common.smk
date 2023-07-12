@@ -678,7 +678,7 @@ print(f"", file=sys.stderr)
 
 
 def get_project_outputs(
-    config, PROJECT_IDS, df_samples, rule_dict_path
+    config, PROJECT_IDS, df_samples, rule_dict_path, ignore_missing=False
 ):
     """
     Generate outputs of a project given a TRUE value in config["rules"]
@@ -751,13 +751,21 @@ def get_project_outputs(
         else:
             print(rule_dict.keys(), file=sys.stderr)
             value = rule_dict[k]["final_output"]
-            print(f"WARNING: {k} is not in the rule dictionary", file=sys.stderr)
+            print(f" - WARNING: {k} is not in the rule dictionary ({rule_dict_path})", file=sys.stderr)
         project_dict[k] = value
 
     # get keys from config
     opt_rules = config.keys()
 
     # if values are TRUE add output files to rule all
+    for r in opt_rules:
+        if r not in project_dict.keys():
+            print(f" - WARNING: {r} is not in the rule dictionary ({rule_dict_path})", file=sys.stderr)
+
+    if ignore_missing:
+        print(f" - WARNING: ignoring errors in rule_dictionary", file=sys.stderr)
+        opt_rules = [r for r in opt_rules if r in project_dict.keys()]
+
     final_output = [project_dict[r] for r in opt_rules if config[r]]
 
     if NCBI == []:
@@ -770,7 +778,7 @@ def get_project_outputs(
     return final_output
 
 
-def get_final_output(df_samples, peppy_objects, rule_dict_path):
+def get_final_output(df_samples, peppy_objects, rule_dict_path, ignore_missing=False):
     """
     Generate outputs of for all projects
 
@@ -786,7 +794,7 @@ def get_final_output(df_samples, peppy_objects, rule_dict_path):
     final_output = []
     for p in peppy_objects.values():
         sys.stderr.write(f" - Getting outputs for project: {p.name}\n")
-        final_output.extend(get_project_outputs(p.config["rules"], p.name, df_samples, rule_dict_path))
+        final_output.extend(get_project_outputs(p.config["rules"], p.name, df_samples, rule_dict_path, ignore_missing=ignore_missing))
     sys.stderr.write(f" - Ready to generate all outputs.\n\n")
     return final_output
 
