@@ -95,7 +95,12 @@ rule antismash_summary:
         df_samples=lambda wildcards: PEP_PROJECTS[wildcards.name].config["sample_table"],
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/make_genome_dataset.py '{input.bgc_count}' '{params.df_samples}' {output.df_antismash_summary} 2>> {log}
+        TMPDIR="data/interim/tmp/{wildcards.name}/{wildcards.version}"
+        mkdir -p $TMPDIR
+        INPUT_JSON="$TMPDIR/df_bgc_counts.txt"
+        echo '{input.bgc_count}' > $INPUT_JSON
+        python workflow/bgcflow/bgcflow/data/make_genome_dataset.py $INPUT_JSON '{params.df_samples}' {output.df_antismash_summary} 2>> {log}
+        rm $INPUT_JSON
         """
 
 rule write_dependency_versions:
