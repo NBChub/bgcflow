@@ -32,7 +32,7 @@ if [ -d "arts_v3-$ARTS_RELEASE_VERSION" ]; then
     rm -rf "arts_v3-$ARTS_RELEASE_VERSION" 2>> "$ARTS_LOG_DIR/arts_setup.log"
 fi
 
-(cd resources && unzip arts.zip && mv "arts_v3-$ARTS_RELEASE_VERSION" arts) &>> "$ARTS_LOG_DIR/arts_setup.log"
+(cd resources && unzip -o arts.zip && mv "arts_v3-$ARTS_RELEASE_VERSION" arts) &>> "$ARTS_LOG_DIR/arts_setup.log"
 
 mkdir -p data/interim/arts/tmp/ 2>> "$ARTS_LOG_DIR/arts_setup.log"
 
