@@ -41,8 +41,36 @@ def write_genome_table(input_json, samples_table, genome_table):
     df_samples = pd.concat(dfList, axis=0)
 
     # Handle multiple json
-    input_json = input_json.split()
-    bgc_counts = combine_bgc_counts(input_json)
+    input_json = Path(input_json)
+    logging.info(input_json)
+    if input_json.is_file() and input_json.suffix == ".json":
+        logging.info(f"Getting BGC overview from a single file: {input_json}")
+        input_json_files = input_json
+
+    elif input_json.is_file() and input_json.suffix == ".txt":
+        logging.info(f"Getting BGC overview  from a text file: {input_json}")
+        with open(input_json, "r") as file:
+            file_content = [i.strip("\n") for i in file.readlines()]
+            if len(file_content) == 1:
+                # Paths space-separated on a single line
+                paths = file_content[0].split()
+            else:
+                # Paths written on separate lines
+                paths = file_content
+            input_json_files = [
+                Path(path) for path in paths if Path(path).suffix == ".json"
+            ]
+    else:
+        input_json_files = [
+            Path(file)
+            for file in str(input_json).split()
+            if Path(file).suffix == ".json"
+        ]
+        logging.info(
+            f"Getting BGC overview from the given list of {len(input_json_files)} files..."
+        )
+
+    bgc_counts = combine_bgc_counts(input_json_files)
     bgc_counts = pd.DataFrame.from_dict(bgc_counts).T
 
     logging.debug(f"Writing file to: {genome_table}")
