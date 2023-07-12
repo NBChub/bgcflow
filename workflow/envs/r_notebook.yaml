@@ -4,6 +4,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - r-base==4.1.3
   - jupyterlab>3
   - ipywidgets>=7.6
   - nbconvert
