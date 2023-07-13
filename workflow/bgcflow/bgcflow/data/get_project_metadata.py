@@ -58,7 +58,6 @@ def get_bgcflow_metadata(bgcflow_path="."):
 
 
 def get_all_metadata(config, rules_dict, BGCFlow_path, bgcflow_version):
-
     # Get Metadata
     logging.info("Getting metadata from projects...")
     project_metadata = {}
@@ -90,8 +89,9 @@ def get_all_metadata(config, rules_dict, BGCFlow_path, bgcflow_version):
             rules = config["rules"]
         for r in rules.keys():
             if rules[r]:
-                bgcflow_rules = rules_dict[r]
-                rule_used[r] = bgcflow_rules
+                if r in rules_dict.keys():
+                    bgcflow_rules = rules_dict[r]
+                    rule_used[r] = bgcflow_rules
         project_metadata[name].update({"rule_used": rule_used})
 
         # get sample size
