@@ -34,5 +34,10 @@ rule seqfu_combine:
         "logs/seqfu/seqfu-{name}.log",
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/make_seqfu_table.py '{input.json}' {output.all_csv} 2>> {log}
+        TMPDIR="data/interim/tmp/{wildcards.name}"
+        mkdir -p $TMPDIR
+        INPUT_JSON="$TMPDIR/df_arts.txt"
+        echo '{input.json}' > $INPUT_JSON
+        python workflow/bgcflow/bgcflow/data/make_seqfu_table.py $INPUT_JSON {output.all_csv} 2>> {log}
+        rm $INPUT_JSON
         """
