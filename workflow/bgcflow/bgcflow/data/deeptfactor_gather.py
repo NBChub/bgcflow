@@ -33,8 +33,36 @@ def write_deeptf_table(input_json, deeptf_table):
     Write df_deeptfactor.csv table in processed data
     """
     # Handle multiple json
-    input_json = input_json.split()
-    df = combine_deeptfactor_prediction(input_json)
+    input_json = Path(input_json)
+    logging.info(input_json)
+    if input_json.is_file() and input_json.suffix == ".json":
+        logging.info(f"Getting deepTFactor overview from a single file: {input_json}")
+        input_json_files = input_json
+
+    elif input_json.is_file() and input_json.suffix == ".txt":
+        logging.info(f"Getting deepTFactor overview from a text file: {input_json}")
+        with open(input_json, "r") as file:
+            file_content = [i.strip("\n") for i in file.readlines()]
+            if len(file_content) == 1:
+                # Paths space-separated on a single line
+                paths = file_content[0].split()
+            else:
+                # Paths written on separate lines
+                paths = file_content
+            input_json_files = [
+                Path(path) for path in paths if Path(path).suffix == ".json"
+            ]
+    else:
+        input_json_files = [
+            Path(file)
+            for file in str(input_json).split()
+            if Path(file).suffix == ".json"
+        ]
+        logging.info(
+            f"Getting deepTFactor overview from the given list of {len(input_json_files)} files..."
+        )
+
+    df = combine_deeptfactor_prediction(input_json_files)
     df = pd.DataFrame.from_dict(df).T
     df.index.name = "locus_tag"
 
