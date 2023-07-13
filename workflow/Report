@@ -8,9 +8,14 @@ py_wildcards = []
 rpy_wildcards = []
 markdown = []
 
+rules_dict_path = "workflow/rules.yaml"
+with open(rules_dict_path, "r") as f:
+     rules_dict = yaml.safe_load(f)
+
 metadata = []
 for name in PEP_PROJECTS.keys():
     bgcflow_rules = [r for r in PEP_PROJECTS[name].config['rules'].keys() if PEP_PROJECTS[name].config['rules'][r]]
+    bgcflow_rules = [r for r in bgcflow_rules if r in rules_dict.keys()]
     for b in bgcflow_rules:
         if b in ['automlst-wrapper']:
             markdown.append(f"data/processed/{name}/docs/{b}.md")
@@ -20,8 +25,6 @@ for name in PEP_PROJECTS.keys():
             py_wildcards.append(b)
     metadata.append(f"data/processed/{name}/metadata/project_metadata.json")
     metadata.append(f"data/processed/{name}/README.md",)
-
-print(metadata)
 
 rule all:
     input:
