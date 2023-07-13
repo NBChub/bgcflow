@@ -64,5 +64,10 @@ rule deeptfactor_summary:
         "logs/deeptfactor/deeptfactor_{name}.log",
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/deeptfactor_gather.py '{input.deeptfactor_json}' {output.df_deeptfactor} 2>> {log}
+        TMPDIR="data/interim/tmp/{wildcards.name}"
+        mkdir -p $TMPDIR
+        INPUT_JSON="$TMPDIR/df_deeptfactor.txt"
+        echo '{input.deeptfactor_json}' > $INPUT_JSON
+        python workflow/bgcflow/bgcflow/data/deeptfactor_gather.py $INPUT_JSON {output.df_deeptfactor} 2>> {log}
+        rm $INPUT_JSON
         """
