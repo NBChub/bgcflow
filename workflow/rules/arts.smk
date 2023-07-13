@@ -49,5 +49,10 @@ rule arts_combine:
         "logs/arts/arts_combine/arts_combine-{version}-{name}.log",
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/arts_gather.py '{input.json}' {input.changelog} {output.table} 2>> {log}
+        TMPDIR="data/interim/tmp/{wildcards.name}/{wildcards.version}"
+        mkdir -p $TMPDIR
+        INPUT_JSON="$TMPDIR/df_arts.txt"
+        echo '{input.json}' > $INPUT_JSON
+        python workflow/bgcflow/bgcflow/data/arts_gather.py $INPUT_JSON {input.changelog} {output.table} 2>> {log}
+        rm $INPUT_JSON
         """
