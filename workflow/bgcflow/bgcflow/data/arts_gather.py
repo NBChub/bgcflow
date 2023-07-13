@@ -40,14 +40,40 @@ def correct_arts_bgc_ids(arts_json, change_dict, genome_id):
 def combine_arts_json(input_json, change_log_path, table):
     logging.info("Combining and correcting ARTS output...")
 
-    # Handle multiple json
-    input_json = input_json.split()
+    input_json = Path(input_json)
+    logging.info(input_json)
+    if input_json.is_file() and input_json.suffix == ".json":
+        logging.info(f"Getting ARTS overview from a single file: {input_json}")
+        input_json_files = input_json
+
+    elif input_json.is_file() and input_json.suffix == ".txt":
+        logging.info(f"Getting ARTS overview  from a text file: {input_json}")
+        with open(input_json, "r") as file:
+            file_content = [i.strip("\n") for i in file.readlines()]
+            if len(file_content) == 1:
+                # Paths space-separated on a single line
+                paths = file_content[0].split()
+            else:
+                # Paths written on separate lines
+                paths = file_content
+            input_json_files = [
+                Path(path) for path in paths if Path(path).suffix == ".json"
+            ]
+    else:
+        input_json_files = [
+            Path(file)
+            for file in str(input_json).split()
+            if Path(file).suffix == ".json"
+        ]
+        logging.info(
+            f"Getting ARTS overview from the given list of {len(input_json_files)} files..."
+        )
 
     container = {}
     change_dict = generate_change_dict(change_log_path)
 
-    with alive_bar(len(input_json), title="Merging json:") as bar:
-        for j in input_json:
+    with alive_bar(len(input_json_files), title="Merging json:") as bar:
+        for j in input_json_files:
             arts_json = Path(j)
             genome_id = arts_json.stem
             value = correct_arts_bgc_ids(arts_json, change_dict, genome_id)
