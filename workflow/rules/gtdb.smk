@@ -46,5 +46,10 @@ rule fix_gtdb_taxonomy:
         samples_path=SAMPLE_PATHS,
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/fix_gtdb_taxonomy.py '{input.json_list}' {output.meta} 2> {log}
+        TMPDIR="data/interim/tmp/{wildcards.name}"
+        mkdir -p $TMPDIR
+        INPUT_JSON="$TMPDIR/df_gtdb.txt"
+        echo '{input.json_list}' > $INPUT_JSON
+        python workflow/bgcflow/bgcflow/data/fix_gtdb_taxonomy.py $INPUT_JSON {output.meta} 2> {log}
+        rm $INPUT_JSON
         """
