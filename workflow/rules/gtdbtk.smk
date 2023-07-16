@@ -53,7 +53,15 @@ rule prepare_gtdbtk_input:
         "../envs/bgc_analytics.yaml"
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/gtdbtk_prep.py '{input.fna}' '{input.json_list}' {output.fnadir} 2>> {log}
+        TMPDIR="data/interim/tmp/{wildcards.name}"
+        mkdir -p $TMPDIR
+        INPUT_FNA="$TMPDIR/df_fna_gtdbtk.txt"
+        INPUT_JSON="$TMPDIR/df_json_gtdbtk.txt"
+        echo '{input.fna}' > $INPUT_FNA
+        echo '{input.json_list}' > $INPUT_JSON
+        python workflow/bgcflow/bgcflow/data/gtdbtk_prep.py $INPUT_FNA $INPUT_JSON {output.fnadir} 2>> {log}
+        rm $INPUT_FNA
+        rm $INPUT_JSON
         """
 
 rule gtdbtk:
