@@ -9,6 +9,7 @@ dependencies:
   - matplotlib
   - antismash==6.1.1
   - jinja2
+  - unzip
   - mafft
   - pip:
     - aniso8601==9.0.1
