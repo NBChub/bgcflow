@@ -5,7 +5,6 @@ channels:
   - defaults
 dependencies:
   - python>=3.9,<3.10
-  - ncbi-genome-download=0.3.1
   - jupyterlab>3
   - ipywidgets>=7.6
   - jupyter-dash
@@ -17,7 +16,7 @@ dependencies:
   - python-kaleido
   - bokeh
   - openpyxl
-  - nbconvert
+  - nbconvert==6.4.2
   - ipykernel
   - ete3
   - pyarrow
@@ -35,3 +34,4 @@ dependencies:
       - networkx
       - alive_progress
       - python-louvain
+      - ncbi-genome-download==0.3.3
