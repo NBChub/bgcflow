@@ -23,8 +23,18 @@ def get_dependency_version(dep, dep_key):
         result = []
         documents = yaml.full_load(file)
         for i in documents["dependencies"]:
-            if i.startswith(dep_key):
-                result = i.split("=")[-1]
+            if type(i) == str:
+                if i.startswith(dep_key):
+                    result = i.split("=")[-1]
+            elif type(i) == dict:
+                assert list(i.keys()) == ["pip"], i.keys()
+                for p in i["pip"]:
+                    if dep_key in p:
+                        if p.startswith("git+"):
+                            result = p.split("@")[-1]
+                            result = result.replace("-", ".")
+                        else:
+                            result = p.split("=")[-1]
     return str(result)
 
 
