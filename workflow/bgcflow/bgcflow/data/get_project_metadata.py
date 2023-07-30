@@ -63,6 +63,10 @@ def get_all_metadata(config, rules_dict, BGCFlow_path, bgcflow_version):
     project_metadata = {}
 
     for p in config["projects"]:
+        # mask pep and name as alias
+        if "pep" in p.keys():
+            p["name"] = p.pop("pep")
+
         # process only pep projets
         if p["name"].endswith(".yaml"):
             project = peppy.Project(
