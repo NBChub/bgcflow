@@ -4,7 +4,11 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - openjdk
   - singularity
   - pip
   - pip:
     - git+https://github.com/NBChub/bgcflow_wrapper.git
+    - pre-commit
+    - pytest-cov
+    - alive-progress
