@@ -7,7 +7,7 @@ dependencies:
   - r-base==4.1.3
   - jupyterlab>3
   - ipywidgets>=7.6
-  - nbconvert
+  - nbconvert==6.4.2
   - pandas
   - r-irkernel
   - r-tidyverse
