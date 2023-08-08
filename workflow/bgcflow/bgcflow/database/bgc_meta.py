@@ -10,12 +10,20 @@ logging.basicConfig(format=log_format, datefmt=date_format, level=logging.INFO)
 
 def handle_join_locus_location(raw_location):
     """
-    Function to handle locus location with two or more possibilities (PGAP?).
-    Will go through all possible start and stop location, then select the range that covers all.
+    Process a locus location string with multiple possible ranges and strands, selecting a consolidated range (for example in PGAP).
+
+    This function takes a locus location string that may contain multiple possible start-stop pairs, each associated
+    with a strand. It calculates and returns a single, consolidated locus range that covers all possibilities.
+
+    Args:
+        raw_location (str): The locus location string to be processed, possibly starting with 'join'.
+
+    Returns:
+        str: A consolidated locus location string representing the encompassing range.
+
     Example:
-        handle_join_locus_location("join{[282863:283224](-), [282406:282864](-)}")
-    Returns a string:
-        "[282406:283224](-)"
+        >>> handle_join_locus_location("join{[282863:283224](-), [282406:282864](-)}")
+        '[282406:283224](-)'
     """
     container = {"+": {"start": [], "stop": []}, "-": {"start": [], "stop": []}}
 
@@ -44,10 +52,37 @@ def handle_join_locus_location(raw_location):
     return location
 
 
-# regions
 def region_table_builder(f, accession):
     """
-    Given a feature of a record, return value to build database table
+    Build a database table entry from a feature of a record representing a genomic region.
+
+    This function takes a feature of a genomic record and extracts relevant information to create an entry for a
+    database table representing a genomic region. The function returns a dictionary with the extracted information.
+
+    Args:
+        f (dict): A dictionary representing a genomic feature containing information about a region.
+        accession (str): The accession number associated with the genomic record.
+
+    Returns:
+        dict: A dictionary containing the extracted information structured for database entry.
+
+    Example:
+        >>> feature = {...}  # A dictionary representing a genomic feature
+        >>> accession = "NC_12345"
+        >>> result = region_table_builder(feature, accession)
+        >>> print(result)
+        {
+            'NC_12345.region001': {
+                'accession': 'NC_12345',
+                'region_number': '001',
+                'location': '[100:200]',
+                'start_pos': '100',
+                'end_pos': '200',
+                'contig_edge': 'yes',
+                'product': ['Some Product'],
+                'rules': ['Some Rule']
+            }
+        }
     """
     # grab region values
     region_number = f["qualifiers"]["region_number"][0]
@@ -72,7 +107,38 @@ def region_table_builder(f, accession):
 
 
 def cdss_table_builder(f, cds_id):
-    # location, strand = f['location'].strip("[").strip(")").split("](")
+    """
+    Build a database table entry from a feature of a record representing a coding sequence (CDS).
+
+    This function takes a feature of a genomic record representing a coding sequence (CDS) and extracts relevant
+    information to create an entry for a database table. The function returns a dictionary with the extracted information.
+
+    Args:
+        f (dict): A dictionary representing a genomic feature containing information about a CDS.
+        cds_id (str): The unique identifier associated with the CDS.
+
+    Returns:
+        dict: A dictionary containing the extracted information structured for database entry.
+
+    Example:
+        >>> feature = {...}  # A dictionary representing a genomic feature
+        >>> cds_id = "CDS12345"
+        >>> result = cdss_table_builder(feature, cds_id)
+        >>> print(result)
+        {
+            'CDS12345': {
+                'gene_function': ['Some Gene Function'],
+                'locus_tag': 'ABC123',
+                'name': 'Gene Name',
+                'product': 'Some Product',
+                'translation': 'ATGGCCTTAAG...',
+                'location': '[100:200](+)',
+                'gene_kind': 'Some Gene Kind',
+                'codon_start': '1',
+                'EC_number': 'EC-12345'
+            }
+        }
+    """
     try:
         gene_function = f["qualifiers"]["gene_functions"]
     except KeyError:
@@ -122,6 +188,36 @@ def cdss_table_builder(f, cds_id):
 
 
 def region_finder(cdss_id, location_raw, regions_container):
+    """
+    Find regions that overlap with a given coding sequence (CDS) location.
+
+    This function takes a coding sequence (CDS) identifier, a raw location string, and a dictionary of regions,
+    and identifies regions from the provided dictionary that overlap with the specified CDS location. It returns
+    lists of overlapping region IDs and the corresponding overlapping ranges.
+
+    Args:
+        cdss_id (str): The identifier of the coding sequence (CDS) being analyzed.
+        location_raw (str): The raw location string of the CDS, including start and stop positions and strand.
+        regions_container (dict): A dictionary containing region information with start and stop positions.
+
+    Returns:
+        list: A list of region IDs that overlap with the CDS location.
+        list: A list of overlapping ranges between the CDS and each overlapping region.
+
+    Example:
+        >>> cdss_id = "CDS12345"
+        >>> location_raw = "[100:200](+)"
+        >>> regions = {
+        ...     'Region001': {'start_pos': 150, 'end_pos': 250},
+        ...     'Region002': {'start_pos': 50, 'end_pos': 120},
+        ...     ...
+        ... }
+        >>> overlaps, overlapping_ranges = region_finder(cdss_id, location_raw, regions)
+        >>> print(overlaps)
+        ['Region001', 'Region002']
+        >>> print(overlapping_ranges)
+        [range(150, 201), range(100, 121)]
+    """
     try:
         location, strand = location_raw.strip("[").strip(")").split("](")
     except ValueError:
@@ -179,19 +275,55 @@ def get_dna_sequences(record, genome_id):
     record_container["description"] = record["description"]
     record_container["molecule_type"] = record["annotations"]["molecule_type"]
     record_container["topology"] = record["annotations"]["topology"]
-    if len(record["annotations"]["accessions"]) != 1:
+    if "accessions" in record["annotations"].keys():
+        if len(record["annotations"]["accessions"]) != 1:
+            logging.warning(
+                f'More than one accession in record: {record["annotations"]["accessions"]}'
+            )
+            logging.debug(
+                f'Grabbing only the first accession: {record["annotations"]["accessions"][0]}'
+            )
+        record_container["accessions"] = record["annotations"]["accessions"][0]
+    else:
         logging.warning(
-            f'More than one accession in record: {record["annotations"]["accessions"]}'
+            f'record["annotations"] does not have "accessions" information.'
         )
-        logging.debug(
-            f'Grabbing only the first accession: {record["annotations"]["accessions"][0]}'
-        )
-    record_container["accessions"] = record["annotations"]["accessions"][0]
+        logging.debug(f'Using sequence_id: {sequence_id} as "accessions"')
+        record_container["accessions"] = sequence_id
     record_container["genome_id"] = genome_id
     return sequence_id, record_container
 
 
 def get_region_information(record, genome_id, r, table_regions, n_hits=1):
+    """
+    Retrieve DNA sequences and associated information from a sequence record.
+
+    This function takes a sequence record and a genome identifier, and extracts relevant DNA sequence data and metadata
+    from the record. It returns a tuple containing the sequence identifier and a dictionary with extracted information.
+
+    Args:
+        record (dict): A dictionary representing a sequence record, typically obtained from a sequence database.
+        genome_id (str): The identifier of the genome to which the sequence belongs.
+
+    Returns:
+        tuple: A tuple containing the sequence identifier and a dictionary with extracted sequence and metadata.
+
+    Example:
+        >>> sequence_record = {...}  # A dictionary representing a sequence record
+        >>> genome_id = "Genome123"
+        >>> sequence_id, sequence_info = get_dna_sequences(sequence_record, genome_id)
+        >>> print(sequence_id)
+        'Sequence789'
+        >>> print(sequence_info)
+        {
+            'seq': 'ATCGATCG...',
+            'description': 'Some sequence description',
+            'molecule_type': 'DNA',
+            'topology': 'linear',
+            'accessions': 'Accession123',
+            'genome_id': 'Genome123'
+        }
+    """
     region_db = {}
     region_feat = [i for i in record["features"] if i["type"] == "region"]
     for f in region_feat:
@@ -262,6 +394,32 @@ def get_region_information(record, genome_id, r, table_regions, n_hits=1):
 
 
 def get_cdss_information(record, genome_id, table_regions, table_cdss, accession):
+    """
+    Extract CDS (coding sequence) information from a sequence record and update a database table.
+
+    This function takes a sequence record, a genome identifier, and existing database tables for regions and CDSs.
+    It processes CDS features in the sequence record, extracts relevant information, and updates the CDS database table.
+    It also assigns overlapping regions to each CDS based on their genomic locations.
+
+    Args:
+        record (dict): A dictionary representing a sequence record.
+        genome_id (str): The identifier of the genome to which the sequence belongs.
+        table_regions (dict): A dictionary containing region information with start and stop positions.
+        table_cdss (dict): A dictionary representing the current CDS database table.
+        accession (str): The accession number associated with the genomic record.
+
+    Returns:
+        None
+
+    Example:
+        >>> sequence_record = {...}  # A dictionary representing a sequence record
+        >>> genome_id = "Genome123"
+        >>> regions_table = {...}  # A dictionary representing a database table for regions
+        >>> cdss_table = {...}  # A dictionary representing a database table for CDSs
+        >>> accession = "NC_12345"
+        >>> get_cdss_information(sequence_record, genome_id, regions_table, cdss_table, accession)
+        # The cdss_table dictionary is updated with CDS information
+    """
     starting_size = len(table_cdss)
     cds_ctr = len(table_cdss)
     logging.debug(f"Starting CDS counter from {cds_ctr}")
@@ -304,7 +462,30 @@ def get_cdss_information(record, genome_id, table_regions, table_cdss, accession
 
 def antismash_json_exporter(json_path, output_dir, genome_id=False, n_hits=1):
     """
-    Read antismash json output and get region, dna_sequences, and cdss information
+    Read AntiSMASH JSON output and extract region, DNA sequence, and CDS information.
+
+    This function reads an AntiSMASH JSON output file, processes its contents, and extracts relevant information
+    including DNA sequences, regions, and coding sequences (CDSs). It then generates separate JSON files for each
+    extracted information type and saves them to the specified output directory.
+
+    Args:
+        json_path (str): Path to the AntiSMASH JSON output file.
+        output_dir (str): Directory where the extracted information JSON files will be saved.
+        genome_id (str, optional): Identifier for the genome associated with the processed data.
+            If not provided, the function uses the input filename without the '.gbk' extension.
+        n_hits (int, optional): The number of hits to consider when processing region information.
+            Default is 1.
+
+    Returns:
+        None
+
+    Example:
+        >>> json_path = 'antismash_output.json'
+        >>> output_dir = 'output_data'
+        >>> genome_id = 'Genome123'
+        >>> n_hits = 2
+        >>> antismash_json_exporter(json_path, output_dir, genome_id, n_hits)
+        # JSON files for DNA sequences, regions, and CDSs are generated and saved in the output directory.
     """
     # Create output containers
     table_dna_sequences = {}
