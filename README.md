@@ -2,7 +2,9 @@
 [![Snakemake](https://img.shields.io/badge/snakemake-≥7.14.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![PEP compatible](https://pepkit.github.io/img/PEP-compatible-green.svg)](https://pep.databio.org)
 
-BGCFlow is a systematic workflow for the analysis of biosynthetic gene clusters across large collections of genomes (pangenomes) from internal &amp; public datasets.
+`BGCFlow` is a systematic workflow for the analysis of biosynthetic gene clusters across large collections of genomes (pangenomes) from internal &amp; public datasets.
+
+At present, `BGCFlow` is only tested and confirmed to work on **Linux** systems with `conda` / `mamba` package manager.
 
 ## Publication
 > Matin Nuhamunada, Omkar S. Mohite, Patrick V. Phaneuf, Bernhard O. Palsson, and Tilmann Weber. (2023). BGCFlow: Systematic pangenome workflow for the analysis of biosynthetic gene clusters across large genomic datasets. bioRxiv 2023.06.14.545018; doi: [https://doi.org/10.1101/2023.06.14.545018](https://doi.org/10.1101/2023.06.14.545018)
@@ -14,24 +16,35 @@ A quick and easy way to use BGCFlow using [`bgcflow_wrapper`](https://github.com
 
 ```bash
 # create and activate a new conda environment
-conda create -n bgcflow pip openjdk -y
+conda create -n bgcflow pip -y
 conda activate bgcflow
 
 # install BGCFlow wrapper
 pip install git+https://github.com/NBChub/bgcflow_wrapper.git
 ```
 
-2. Deploy and run BGCFlow:
+2. **Additional pre-requisites**:
+With the environment activated, install or setup this configurations:
+  - Set `conda` channel priorities to `flexible`
+```bash
+conda config --set channel_priority disabled
+conda config --describe channel_priority
+```
+  - Java (required to run `metabase`)
+```bash
+conda install openjdk 
+```
+
+3. Deploy and run BGCFlow, your bgcflow directory accordingly:
 ```bash
 # Deploy and run BGCFlow
-BGCFLOW_PATH="<change this to your desired path for BGCFlow>"
-bgcflow clone $BGCFLOW_PATH # clone BGCFlow to BGCFLOW_PATH
-cd $BGCFLOW_PATH # move to BGCFLOW_PATH
+bgcflow clone <your_bgcflow_directory> # clone BGCFlow to your_bgcflow_directory
+cd <your_bgcflow_directory> # move to BGCFLOW_PATH
 bgcflow init # initiate BGCFlow config and examples from template
 bgcflow run -n # do a dry run, remove the flag "-n" to run the example dataset
 ```
 
-- For detailed usage and configurations, have a look at the [BGCFlow WIKI](https://github.com/NBChub/bgcflow/wiki/)  :warning:  `under development`
+- For detailed usage and configurations, have a look at the [BGCFlow WIKI](https://github.com/NBChub/bgcflow/wiki/) (`under development`) :warning:  
 - Read more about [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper) for a detailed overview of the command line interface.
 
 [![asciicast](https://asciinema.org/a/595149.svg)](https://asciinema.org/a/595149)
