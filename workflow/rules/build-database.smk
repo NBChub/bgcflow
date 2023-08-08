@@ -137,6 +137,6 @@ rule build_database:
         """
         (cd {params.dbt} \
             && dbt debug \
-            && dbt build \
+            && dbt build --threads {threads} \
         ) &>> {log}
         """
