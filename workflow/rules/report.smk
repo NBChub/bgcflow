@@ -28,6 +28,7 @@ if len(py_wildcards) > 0:
 
     rule mkdocs_py_report:
         input:
+            dependency_version = "data/processed/{name}/metadata/dependency_versions.json",
             notebook="data/processed/{name}/docs/{bgcflow_rules_py}.ipynb",
         output:
             markdown="data/processed/{name}/docs/{bgcflow_rules_py}.md",
@@ -39,7 +40,6 @@ if len(py_wildcards) > 0:
             bgcflow_rules_py="|".join(py_wildcards),
         shell:
             """
-            #jupyter nbconvert --to notebook --execute {input.notebook} --output {wildcards.bgcflow_rules_py}.ipynb 2>> {log}
             jupyter nbconvert --to markdown --execute {input.notebook} --no-input --output {wildcards.bgcflow_rules_py}.md 2>> {log}
             """
 
@@ -64,6 +64,7 @@ if len(rpy_wildcards) > 0:
 
     rule mkdocs_rpy_report:
         input:
+            dependency_version = "data/processed/{name}/metadata/dependency_versions.json",
             notebook="data/processed/{name}/docs/{bgcflow_rules_rpy}.ipynb",
         output:
             markdown="data/processed/{name}/docs/{bgcflow_rules_rpy}.md",
@@ -75,6 +76,5 @@ if len(rpy_wildcards) > 0:
             bgcflow_rules_rpy="|".join(rpy_wildcards),
         shell:
             """
-            #jupyter nbconvert --to notebook --execute {input.notebook} --output {wildcards.bgcflow_rules_rpy}.ipynb 2>> {log}
             jupyter nbconvert --to markdown --execute {input.notebook} --no-input --output {wildcards.bgcflow_rules_rpy}.md 2>> {log}
             """
