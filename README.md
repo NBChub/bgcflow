@@ -45,6 +45,16 @@ bgcflow init # initiate BGCFlow config and examples from template
 bgcflow run -n # do a dry run, remove the flag "-n" to run the example dataset
 ```
 
+4. Build and serve interactive report (after `bgcflow run` finished). The report will be served in [http://localhost:8001/](http://localhost:8001/):
+```bash
+# build a report
+bgcflow run --snakefile workflow/Report
+
+# serve report
+bgcflow serve --project Lactobacillus_delbrueckii
+```
+
+
 - For detailed usage and configurations, have a look at the [BGCFlow WIKI](https://github.com/NBChub/bgcflow/wiki/) (`under development`) :warning:  
 - Read more about [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper) for a detailed overview of the command line interface.
 
