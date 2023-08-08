@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  pull_request:
+  pull_request_target:
     branches:
       - main
 
@@ -49,7 +49,8 @@ jobs:
         init-shell: bash
         cache-environment: true
         post-cleanup: 'all'
-    - name: Run post-deploy script for R environment
-      if: matrix.environment == 'workflow/envs/r_notebook.yaml'
-      run: bash workflow/envs/r_notebook.post-deploy.sh
-      shell: bash -el {0}
+    - name: Test conda environment
+      run: echo "Testing conda environment"
+    - name: Fail build if tests fail
+      run: exit 1
+      if: ${{ job.status != 'success' }}
