@@ -1,0 +1,57 @@
+name: build-conda-environments
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment:
+            - workflow/envs/antismash.yaml
+            #- workflow/envs/antismash_v6.yaml
+            #- workflow/envs/arts.yaml
+            - workflow/envs/automlst_wrapper.yaml
+            - workflow/envs/bgc_analytics.yaml
+            - workflow/envs/bigscape.yaml
+            - workflow/envs/bigslice.yaml
+            - workflow/envs/checkm.yaml
+            - workflow/envs/cblaster.yaml
+            - workflow/envs/clinker.yaml
+            - workflow/envs/dbt-duckdb.yaml
+            - workflow/envs/deeptfactor.yaml
+            - workflow/envs/eggnog.yaml
+            - workflow/envs/fastani.yaml
+            - workflow/envs/gtdbtk.yaml
+            - workflow/envs/mash.yaml
+            - workflow/envs/mmseqs2.yaml
+            - workflow/envs/prokka.yaml
+            - workflow/envs/r_notebook.yaml
+            - workflow/envs/roary.yaml
+            - workflow/envs/seqfu.yaml
+            - workflow/envs/utilities.yaml
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Set up Micromamba
+      uses: mamba-org/setup-micromamba@v1
+      with:
+        micromamba-version: '1.3.1-0'
+        environment-file: ${{ matrix.environment }}
+        init-shell: bash
+        cache-environment: true
+        post-cleanup: 'all'
+    - name: Run post-deploy script for arts environment
+      if: matrix.environment == 'workflow/envs/arts.yaml'
+      run: workflow/envs/arts.post-deploy.sh
+    - name: Run post-deploy script for R environment
+      if: matrix.environment == 'workflow/envs/r_notebook.yaml'
+      run: workflow/envs/r_notebook.post-deploy.sh
