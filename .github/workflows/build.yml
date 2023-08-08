@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test:
+  build-environments:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -49,9 +49,7 @@ jobs:
         init-shell: bash
         cache-environment: true
         post-cleanup: 'all'
-    - name: Run post-deploy script for arts environment
-      if: matrix.environment == 'workflow/envs/arts.yaml'
-      run: workflow/envs/arts.post-deploy.sh
     - name: Run post-deploy script for R environment
       if: matrix.environment == 'workflow/envs/r_notebook.yaml'
-      run: workflow/envs/r_notebook.post-deploy.sh
+      run: bash workflow/envs/r_notebook.post-deploy.sh
+      shell: bash -el {0}
