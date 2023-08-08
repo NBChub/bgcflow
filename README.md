@@ -21,6 +21,7 @@ conda activate bgcflow
 
 # install BGCFlow wrapper
 pip install git+https://github.com/NBChub/bgcflow_wrapper.git
+bgcflow --help
 ```
 
 2. **Additional pre-requisites**:
@@ -35,7 +36,7 @@ conda config --describe channel_priority
 conda install openjdk 
 ```
 
-3. Deploy and run BGCFlow, your bgcflow directory accordingly:
+3. Deploy and run BGCFlow, change `your_bgcflow_directory` variable accordingly:
 ```bash
 # Deploy and run BGCFlow
 bgcflow clone <your_bgcflow_directory> # clone BGCFlow to your_bgcflow_directory
