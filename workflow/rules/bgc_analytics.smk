@@ -104,12 +104,14 @@ rule antismash_summary:
         """
 
 rule write_dependency_versions:
+    input:
+        "data/processed/{name}/metadata/project_metadata.json",
     output:
-        "workflow/report/dependency_versions.json",
+        "data/processed/{name}/metadata/dependency_versions.json",
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "logs/bgc_analytics/write_dependency_versions.log",
+        "logs/bgc_analytics/{name}/write_dependency_versions.log",
     shell:
         """
         python workflow/bgcflow/bgcflow/data/get_dependencies.py {output} 2> {log}

@@ -25,10 +25,10 @@ for name in PEP_PROJECTS.keys():
             py_wildcards.append(b)
     metadata.append(f"data/processed/{name}/metadata/project_metadata.json")
     metadata.append(f"data/processed/{name}/README.md",)
+    metadata.append(f"data/processed/{name}/metadata/dependency_versions.json"),
 
 rule all:
     input:
-        "workflow/report/dependency_versions.json",
         markdown,
         metadata
 
