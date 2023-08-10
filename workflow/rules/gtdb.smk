@@ -20,9 +20,10 @@ rule gtdb_prep:
     params:
         samples_path=bgcflow_util_dir / "samples.csv",
         gtdb_paths=GTDB_PATHS,
-        version=f"R{gtdb_release}",
+        version=f"R{gtdb_release.split('.')[0]}",
     shell:
         """
+        echo {params.version}
         python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} '{params.samples_path}' '{params.gtdb_paths}' {params.version} 2> {log}
         """
 
