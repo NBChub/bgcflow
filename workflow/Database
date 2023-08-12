@@ -8,15 +8,24 @@ db = []
 
 version = dependency_version["antismash"]
 
-metadata = []
+##### Make sure all required inputs exist
+NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
+final_outputs = get_final_output(DF_SAMPLES, PEP_PROJECTS, rule_dict_path="workflow/rules.yaml", ignore_missing=True)
+
+error_message = " * Has the jobs from the main workflow finished?\n * Check by running: 'bgcflow run -n'"
+for main_pipeline_outputs in final_outputs:
+    if type(main_pipeline_outputs) == list:
+        for main_pipeline_output in main_pipeline_outputs:
+            assert Path(main_pipeline_output).is_file(), f"\nMissing file: {main_pipeline_output}.\n{error_message}\n"
+    else:
+       assert Path(main_pipeline_outputs).is_file(), f"\nMissing file: {main_pipeline_outputs}.\n{error_message}\n"
+
 for name in PEP_PROJECTS.keys():
     bgcflow_rules = [r for r in PEP_PROJECTS[name].config['rules'].keys() if PEP_PROJECTS[name].config['rules'][r]]
     db.append(f"data/processed/{name}/dbt_as_{version}/dbt_bgcflow.duckdb")
-    metadata.append(f"data/processed/{name}/metadata/project_metadata.json")
 
 rule all:
     input:
-        "workflow/report/dependency_versions.json",
         db,
 
 ##### Modules #####
