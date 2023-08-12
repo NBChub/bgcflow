@@ -16,7 +16,7 @@ jobs:
         environment:
             - workflow/envs/antismash.yaml
             #- workflow/envs/antismash_v6.yaml
-            #- workflow/envs/arts.yaml
+            - workflow/envs/arts.yaml
             - workflow/envs/automlst_wrapper.yaml
             - workflow/envs/bgc_analytics.yaml
             - workflow/envs/bigscape.yaml
@@ -38,7 +38,7 @@ jobs:
             - workflow/envs/utilities.yaml
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: recursive
     - name: Set up Micromamba
