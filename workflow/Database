@@ -16,9 +16,11 @@ error_message = " * Has the jobs from the main workflow finished?\n * Check by r
 for main_pipeline_outputs in final_outputs:
     if type(main_pipeline_outputs) == list:
         for main_pipeline_output in main_pipeline_outputs:
-            assert Path(main_pipeline_output).is_file(), f"\nMissing file: {main_pipeline_output}.\n{error_message}\n"
-    else:
-       assert Path(main_pipeline_outputs).is_file(), f"\nMissing file: {main_pipeline_outputs}.\n{error_message}\n"
+            main_pipeline_output = Path(main_pipeline_output)
+            assert main_pipeline_output.is_file() or main_pipeline_output.is_dir(), f"\nMissing file: {main_pipeline_output}.\n{error_message}\n"
+    elif type(main_pipeline_outputs) == str:
+       main_pipeline_output = Path(main_pipeline_outputs)
+       assert main_pipeline_output.is_file() or main_pipeline_output.is_dir(), f"\nMissing file: {main_pipeline_outputs}.\n{error_message}\n"
 
 for name in PEP_PROJECTS.keys():
     bgcflow_rules = [r for r in PEP_PROJECTS[name].config['rules'].keys() if PEP_PROJECTS[name].config['rules'][r]]
