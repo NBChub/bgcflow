@@ -7,7 +7,7 @@ dependencies:
   - python==3.8
   - pip
   - matplotlib
-  - antismash==6.1.1
+  - antismash-lite==6.1.1
   - jinja2
   - unzip
   - mafft
