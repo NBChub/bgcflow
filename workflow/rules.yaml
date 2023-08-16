@@ -105,7 +105,7 @@ query-bigslice:
   category: Genome Mining
   link:
   - https://github.com/medema-group/bigslice
-  - https://bigfam.bioinformatics.nl/
+  - https://bigfam.bioinformatics.nl
   references:
   - 'Satria A Kautsar, Kai Blin, Simon Shaw, Tilmann Weber, Marnix H Medema, BiG-FAM:
     the biosynthetic gene cluster families database, Nucleic Acids Research, gkaa812,
@@ -160,7 +160,7 @@ arts:
   description: Run Antibiotic Resistant Target Seeker (ARTS) on samples.
   category: Genome Mining
   link:
-  - https://bitbucket.org/ziemertlab/arts/src
+  - https://bitbucket.org/ziemertlab/arts
   references:
   - 'Mungan,M.D., Alanjary,M., Blin,K., Weber,T., Medema,M.H. and Ziemert,N. (2020)
     ARTS 2.0: feature updates and expansion of the Antibiotic Resistant Target Seeker
@@ -174,7 +174,7 @@ deeptfactor:
   description: Use deep learning to find Transcription Factors.
   category: Functional Annotation
   link:
-  - https://bitbucket.org/kaistsystemsbiology/deeptfactor/src
+  - https://bitbucket.org/kaistsystemsbiology/deeptfactor
   references:
   - 'Kim G.B., Gao Y., Palsson B.O., Lee S.Y. 2020. DeepTFactor: A deep learning-based
     tool for the prediction of transcription factors. [PNAS. doi: 10.1073/pnas.2021171118](https://www.pnas.org/doi/10.1073/pnas.2021171118)'
@@ -183,7 +183,7 @@ deeptfactor-roary:
   description: Use DeepTFactor on Roary outputs.
   category: Comparative Genomics
   link:
-  - https://bitbucket.org/kaistsystemsbiology/deeptfactor/src
+  - https://bitbucket.org/kaistsystemsbiology/deeptfactor
   - https://github.com/sanger-pathogens/Roary
   references:
   - 'Kim G.B., Gao Y., Palsson B.O., Lee S.Y. 2020. DeepTFactor: A deep learning-based
