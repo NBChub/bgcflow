@@ -30,7 +30,7 @@ rule copy_custom_fasta:
     log: "logs/prokka/copy_custom_fasta/copy_custom_fasta-{custom}.log"
     shell:
         """
-        if [[ {input} == *.fna ]]
+        if [[ {input} == *.fna || {input} == *.fasta || {input} == *.fa ]]
         then
             cp {input} {output} 2>> {log}
         else
