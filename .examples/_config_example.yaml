@@ -16,8 +16,7 @@
 
 projects:
 # Project 2 (PEP file)
-  - pep: .examples/_pep_example/project_config.yaml
-  - pep: .examples/lactobacillus_delbruecki/project_config.yaml
+  - pep: .examples/Lactobacillus_delbrueckii/project_config.yaml
 
 bgc_projects:
   - pep: .examples/lanthipeptide_lactobacillus/project_config.yaml
