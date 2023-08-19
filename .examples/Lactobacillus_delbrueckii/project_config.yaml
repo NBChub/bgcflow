@@ -12,19 +12,19 @@ rules:
   seqfu: TRUE
   mash: TRUE
   fastani: TRUE
-  checkm: FALSE
+  checkm: TRUE
   gtdbtk: FALSE
   prokka-gbk: TRUE
   antismash: TRUE
-  query-bigslice: TRUE
+  query-bigslice: FALSE
   bigscape: TRUE
   bigslice: TRUE
   automlst-wrapper: TRUE
   arts: TRUE
   roary: TRUE
-  eggnog: TRUE
-  eggnog-roary: TRUE
+  eggnog: FALSE
+  eggnog-roary: FALSE
   deeptfactor: TRUE
-  deeptfactor-roary: TRUE
+  deeptfactor-roary: FALSE
   cblaster-genome: TRUE
-  cblaster-bgc: TRUE
+  cblaster-bgc: FALSE
