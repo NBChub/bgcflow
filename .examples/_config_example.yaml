@@ -16,10 +16,10 @@
 
 projects:
 # Project 2 (PEP file)
-  - pep: .examples/Lactobacillus_delbrueckii/project_config.yaml
+  - pep: config/Lactobacillus_delbrueckii/project_config.yaml
 
 bgc_projects:
-  - pep: .examples/lanthipeptide_lactobacillus/project_config.yaml
+  - pep: config/lanthipeptide_lactobacillus/project_config.yaml
 
 #### GLOBAL RULE CONFIGURATION ####
 # This section configures the rules to run globally.
