@@ -518,7 +518,7 @@ def get_antismash_inputs(name, version, df_samples):
 
 
 # roary.smk #
-def get_prokka_outputs(name, df_samples, ext="gff"):
+def get_prokka_outputs(name, df_samples, ext="gff", path="prokka"):
     """
     Given a project name, find the corresponding sample file to use
 
@@ -531,7 +531,11 @@ def get_prokka_outputs(name, df_samples, ext="gff"):
         output {list} -- list of prokka outputs
     """
     selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
-    output = [f"data/interim/prokka/{s}/{s}.{ext}" for s in selection]
+    assert path in ["prokka", "processed-genbank"]
+    if path == "prokka":
+        output = [f"data/interim/{path}/{s}/{s}.{ext}" for s in selection]
+    elif path == "processed-genbank":
+        output = [f"data/interim/{path}/{s}.{ext}" for s in selection]
     return output
 
 
