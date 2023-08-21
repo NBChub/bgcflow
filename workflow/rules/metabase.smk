@@ -1,12 +1,12 @@
 rule metabase_install:
     output:
-        jar="resources/metabase/metabase.jar",
+        jar="resources/metabase/metabase_{METABASE_VERSION}.jar",
     log:
-        "logs/metabase_install.log",
+        "logs/metabase/metabase_install_{METABASE_VERSION}.log",
     conda:
         "../envs/utilities.yaml"
     params:
-        version="v0.45.3"
+        version=METABASE_VERSION
     shell:
         """
         wget -O {output.jar} https://downloads.metabase.com/{params.version}/metabase.jar 2>> {log}
@@ -14,11 +14,11 @@ rule metabase_install:
 
 rule metabase_duckdb_plugin:
     output:
-        plugin="resources/metabase/plugins/duckdb.metabase-driver.jar",
+        plugin="resources/metabase/plugins/duckdb.metabase-driver_{METABASE_DUCKDB_PLUGIN_VERSION}.jar",
     log:
-        "logs/metabase_duckdb_install.log",
+        "logs/metabase/metabase_duckdb_install_{METABASE_DUCKDB_PLUGIN_VERSION}.log",
     params:
-        release="0.1.6"
+        release=METABASE_DUCKDB_PLUGIN_VERSION
     shell:
         """
         wget -O {output.plugin} https://github.com/AlexR2D2/metabase_duckdb_driver/releases/download/{params.release}/duckdb.metabase-driver.jar 2>> {log}

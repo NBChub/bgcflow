@@ -95,13 +95,13 @@ rule get_dbt_template:
         regions = "data/processed/{name}/data_warehouse/{version}/regions.parquet",
         dna_sequences = "data/processed/{name}/data_warehouse/{version}/dna_sequences.parquet",
     output:
-        profile = "data/processed/{name}/dbt_as_{version}/models/sources.yml"
+        profile = "data/processed/{name}/dbt/antiSMASH_{version}/models/sources.yml"
     conda:
         "../envs/dbt-duckdb.yaml"
     log: "logs/database/report/get_dbt_template_{version}_{name}.log"
     threads: 4
     params:
-        dbt = "data/processed/{name}/dbt_as_{version}",
+        dbt = "data/processed/{name}/dbt/antiSMASH_{version}",
         dbt_repo = "git@github.com:NBChub/bgcflow_dbt-duckdb.git",
         branch = "v0.1.0",
         cutoff = "0.30",
@@ -114,7 +114,8 @@ rule get_dbt_template:
             echo "{params.dbt} already exists!" >> {log}
         else
             rm -rf {params.dbt} 2>> {log}
-            (cd data/processed/{wildcards.name} \
+            mkdir -p data/processed/{wildcards.name}/dbt
+            (cd data/processed/{wildcards.name}/dbt \
                 && git clone --branch {params.branch} {params.dbt_repo} $(basename {params.dbt})
             ) &>> {log}
         fi
@@ -124,15 +125,15 @@ rule get_dbt_template:
 
 rule build_database:
     input:
-        profile = "data/processed/{name}/dbt_as_{version}/models/sources.yml"
+        profile = "data/processed/{name}/dbt/antiSMASH_{version}/models/sources.yml"
     output:
-        duckdb = "data/processed/{name}/dbt_as_{version}/dbt_bgcflow.duckdb"
+        duckdb = "data/processed/{name}/dbt/antiSMASH_{version}/dbt_bgcflow.duckdb"
     conda:
         "../envs/dbt-duckdb.yaml"
     log: "logs/database/report/database_{version}_{name}.log"
     threads: 16
     params:
-        dbt = "data/processed/{name}/dbt_as_{version}"
+        dbt = "data/processed/{name}/dbt/antiSMASH_{version}"
     shell:
         """
         (cd {params.dbt} \
