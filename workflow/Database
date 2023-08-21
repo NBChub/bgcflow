@@ -24,7 +24,7 @@ for main_pipeline_outputs in final_outputs:
 
 for name in PEP_PROJECTS.keys():
     bgcflow_rules = [r for r in PEP_PROJECTS[name].config['rules'].keys() if PEP_PROJECTS[name].config['rules'][r]]
-    db.append(f"data/processed/{name}/dbt_as_{version}/dbt_bgcflow.duckdb")
+    db.append(f"data/processed/{name}/dbt/antiSMASH_{version}/dbt_bgcflow.duckdb")
 
 rule all:
     input:
