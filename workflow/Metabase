@@ -1,11 +1,21 @@
+METABASE_MIN_MEMORY = "2g"
+METABASE_MAX_MEMORY = "8g"
+METABASE_VERSION = "v0.46.2"
+METABASE_DUCKDB_PLUGIN_VERSION = "0.2.2"
+
+if  "utility_parameters" in config.keys():
+    for keyword in ["METABASE_MIN_MEMORY", "METABASE_MAX_MEMORY", "METABASE_VERSION", "METABASE_DUCKDB_PLUGIN_VERSION"]:
+        if keyword in config["utility_parameters"].keys():
+            keyword = config["utility_parameters"][keyword]
+
 rule all:
     input:
-        "resources/metabase/metabase.jar",
-        "resources/metabase/plugins/duckdb.metabase-driver.jar",
+        f"resources/metabase/metabase_{METABASE_VERSION}.jar",
+        f"resources/metabase/plugins/duckdb.metabase-driver_{METABASE_DUCKDB_PLUGIN_VERSION}.jar",
 
 onsuccess:
     shell(
-        "(cd resources/metabase && java -Xms2g -Xmx8g -jar metabase.jar)"
+        f"(cd resources/metabase && java -Xms{METABASE_MIN_MEMORY} -Xmx{METABASE_MAX_MEMORY} -jar metabase_{METABASE_VERSION}.jar)"
     )
 
 ##### Modules #####
