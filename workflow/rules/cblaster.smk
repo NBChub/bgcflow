@@ -1,6 +1,6 @@
 rule cblaster_genome_db:
     input:
-        gbk=lambda wildcards: get_prokka_outputs(wildcards.name, DF_SAMPLES, ext="gbk"),
+        gbk=lambda wildcards: get_prokka_outputs(wildcards.name, DF_SAMPLES, ext="gbk", path="processed-genbank"),
     output:
         folder_interim=directory("data/interim/cblaster/{name}/genomes/"),
         folder_processed=directory("data/processed/{name}/cblaster/genomes/"),
