@@ -103,7 +103,7 @@ rule get_dbt_template:
     params:
         dbt = "data/processed/{name}/dbt/antiSMASH_{version}",
         dbt_repo = "https://github.com/NBChub/bgcflow_dbt-duckdb",
-        release = "0.1.2",
+        release = "0.1.3",
         cutoff = "0.30",
         as_version = "{version}"
     shell:
