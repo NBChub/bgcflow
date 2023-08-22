@@ -102,8 +102,8 @@ rule get_dbt_template:
     threads: 4
     params:
         dbt = "data/processed/{name}/dbt/antiSMASH_{version}",
-        dbt_repo = "git@github.com:NBChub/bgcflow_dbt-duckdb.git",
-        branch = "v0.1.0",
+        dbt_repo = "https://github.com/NBChub/bgcflow_dbt-duckdb",
+        release = "0.1.2",
         cutoff = "0.30",
         as_version = "{version}"
     shell:
@@ -116,8 +116,10 @@ rule get_dbt_template:
             rm -rf {params.dbt} 2>> {log}
             mkdir -p data/processed/{wildcards.name}/dbt
             (cd data/processed/{wildcards.name}/dbt \
-                && git clone --branch {params.branch} {params.dbt_repo} $(basename {params.dbt})
+                && wget {params.dbt_repo}/archive/refs/tags/v{params.release}.zip && unzip v{params.release}.zip
             ) &>> {log}
+            mv data/processed/{wildcards.name}/dbt/bgcflow_dbt-duckdb-{params.release} {params.dbt}
+            rm data/processed/{wildcards.name}/dbt/v{params.release}.zip
         fi
 
         python {params.dbt}/scripts/source_template.py {params.dbt}/templates/_sources.yml {output.profile} {params.as_version} {params.cutoff} &>> {log}
