@@ -3,6 +3,7 @@ METABASE_MAX_MEMORY = "8g"
 METABASE_VERSION = "v0.46.2"
 METABASE_DUCKDB_PLUGIN_VERSION = "0.2.2"
 DMB_SETUP_TOKEN="ad0fb086-351b-4fa5-a17e-76282d2c9753"
+METABASE_HTTP="http://localhost:3000"
 
 import subprocess
 import requests
@@ -101,7 +102,7 @@ rule all:
         f"resources/metabase/plugins/duckdb.metabase-driver_{METABASE_DUCKDB_PLUGIN_VERSION}.jar",
 
 onsuccess:
-    setup_metabase(DMB_SETUP_TOKEN, "http://localhost:3000/api")
+    setup_metabase(DMB_SETUP_TOKEN, f"{METABASE_HTTP}/api")
 
 ##### Modules #####
 include: "rules/metabase.smk"
