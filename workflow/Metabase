@@ -2,6 +2,93 @@ METABASE_MIN_MEMORY = "2g"
 METABASE_MAX_MEMORY = "8g"
 METABASE_VERSION = "v0.46.2"
 METABASE_DUCKDB_PLUGIN_VERSION = "0.2.2"
+DMB_SETUP_TOKEN="ad0fb086-351b-4fa5-a17e-76282d2c9753"
+
+import subprocess
+import requests
+import time
+
+def setup_metabase(token, api_url):
+    # Start the Metabase server in the background
+    command_line = f"(cd resources/metabase && java -Xms{METABASE_MIN_MEMORY} -Xmx{METABASE_MAX_MEMORY} -DMB_SETUP_TOKEN={DMB_SETUP_TOKEN} -jar metabase_{METABASE_VERSION}.jar)"
+    print(command_line)
+    p = subprocess.Popen(
+        ["sh", "-c", command_line],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    print(f"Metabase is running - pid: {p.pid}")
+    # Set up Metabase using the API
+    setup_params = {
+        "token": token,
+        "prefs": {
+            "site_name": "BGCFlow",
+            "allow_tracking": "true"
+        },
+        "database": None,
+        "user": {
+            "first_name": "Admin",
+            "last_name": "BGCFlow",
+            "email": "admin@bgcflow.com",
+            "password": "Q&@Gt853Q7Ae",
+            "site_name": "BGCFlow"
+        }
+    }
+
+    ctr = 1
+    print("Connecting to metabase...")
+    time.sleep(5)
+
+    for tries in range(10):
+
+        try:
+            response = requests.post(
+                f"{api_url}/setup",
+                headers={"Content-Type": "application/json"},
+                json=setup_params
+            )
+            if response.status_code == 200:
+                print("Metabase setup successful.")
+                print(f'\nLogin account: {setup_params["user"]["email"]}')
+                print(f'Password: {setup_params["user"]["password"]}')
+                print(f"Please change the password once you logged in.\n")
+                break
+            elif response.status_code == 403:
+                print(f"WARNING {response.status_code}: {response.text}")
+                break
+            elif response.status_code == 400:
+                print(response.status_code, response.text)
+                print(f"Shutting down pid: {p.pid}")
+                p.terminate()
+                raise
+
+        except requests.exceptions.RequestException:  # This is the correct syntax
+            print(f"Retrying to connect: {ctr}x")
+            ctr = ctr + 1
+            time.sleep(5)
+            pass
+        else:
+            time.sleep(5)
+
+    # Prompt the user to enter a command to terminate the process
+    try:
+        while True:
+            print(f"Metabase is running at: {api_url.strip('/api')}")
+            print("To add database connections, see: https://www.metabase.com/docs/latest/databases/connecting")
+            command = input("Press q to quit Metabase server: ")
+            if command == "q":
+                # Terminate the Metabase process
+                print(f"Shutting down pid: {p.pid}")
+                p.terminate()
+                break
+
+    except KeyboardInterrupt:
+            # Gracefully terminate the Metabase process when Ctrl+C is pressed
+            print(f"\nShutting down pid: {p.pid}")
+            p.terminate()
+
+    # Wait for the Metabase process to finish
+    p.wait()
 
 if  "utility_parameters" in config.keys():
     for keyword in ["METABASE_MIN_MEMORY", "METABASE_MAX_MEMORY", "METABASE_VERSION", "METABASE_DUCKDB_PLUGIN_VERSION"]:
@@ -14,9 +101,7 @@ rule all:
         f"resources/metabase/plugins/duckdb.metabase-driver_{METABASE_DUCKDB_PLUGIN_VERSION}.jar",
 
 onsuccess:
-    shell(
-        f"(cd resources/metabase && java -Xms{METABASE_MIN_MEMORY} -Xmx{METABASE_MAX_MEMORY} -jar metabase_{METABASE_VERSION}.jar)"
-    )
+    setup_metabase(DMB_SETUP_TOKEN, "http://localhost:3000/api")
 
 ##### Modules #####
 include: "rules/metabase.smk"
