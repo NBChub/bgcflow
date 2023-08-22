@@ -8,17 +8,38 @@ METABASE_HTTP="http://localhost:3000"
 import subprocess
 import requests
 import time
+import psutil
+
+def get_process_by_port(port):
+    for proc in psutil.process_iter(['pid', 'name', 'connections']):
+        try:
+            if proc.name() == "java":
+                for conn in proc.connections():
+                    if conn.status == psutil.CONN_LISTEN and conn.laddr.port == port:
+                        return proc
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+
+    return None
 
 def setup_metabase(token, api_url):
     # Start the Metabase server in the background
     command_line = f"(cd resources/metabase && java -Xms{METABASE_MIN_MEMORY} -Xmx{METABASE_MAX_MEMORY} -DMB_SETUP_TOKEN={DMB_SETUP_TOKEN} -jar metabase_{METABASE_VERSION}.jar)"
     print(command_line)
-    p = subprocess.Popen(
-        ["sh", "-c", command_line],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
-    print(f"Metabase is running - pid: {p.pid}")
+
+    metabase_port = int(METABASE_HTTP.split(":")[-1])
+    p = get_process_by_port(metabase_port)
+
+    if p is not None:
+        print(f"Process {p.pid} is listening on port {metabase_port}.")
+    else:
+        p = subprocess.Popen(
+            ["sh", "-c", command_line],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        print(f"Metabase is running - pid: {p.pid}")
+
     # Set up Metabase using the API
     setup_params = {
         "token": token,
@@ -38,16 +59,20 @@ def setup_metabase(token, api_url):
 
     ctr = 1
     print("Connecting to metabase...")
-    time.sleep(5)
+    time.sleep(10)
 
     for tries in range(10):
+        print(f"Retrying to connect: {ctr}x")
+        ctr = ctr + 1
 
         try:
             response = requests.post(
                 f"{api_url}/setup",
                 headers={"Content-Type": "application/json"},
-                json=setup_params
+                json=setup_params,
+                timeout=5
             )
+
             if response.status_code == 200:
                 print("Metabase setup successful.")
                 print(f'\nLogin account: {setup_params["user"]["email"]}')
@@ -57,18 +82,11 @@ def setup_metabase(token, api_url):
             elif response.status_code == 403:
                 print(f"WARNING {response.status_code}: {response.text}")
                 break
-            elif response.status_code == 400:
+            else:
                 print(response.status_code, response.text)
-                print(f"Shutting down pid: {p.pid}")
-                p.terminate()
-                raise
+                time.sleep(5)
 
-        except requests.exceptions.RequestException:  # This is the correct syntax
-            print(f"Retrying to connect: {ctr}x")
-            ctr = ctr + 1
-            time.sleep(5)
-            pass
-        else:
+        except (requests.exceptions.RequestException, requests.exceptions.ReadTimeout, requests.exceptions.ConnectTimeout):  # This is the correct syntax
             time.sleep(5)
 
     # Prompt the user to enter a command to terminate the process
@@ -81,13 +99,20 @@ def setup_metabase(token, api_url):
                 # Terminate the Metabase process
                 print(f"Shutting down pid: {p.pid}")
                 p.terminate()
+                port_process = get_process_by_port(metabase_port)
+                if port_process is not None:
+                    port_process.terminate()
+                print("\n")
                 break
 
     except KeyboardInterrupt:
             # Gracefully terminate the Metabase process when Ctrl+C is pressed
-            print(f"\nShutting down pid: {p.pid}")
+            print(f"\nShutting down Metabase (pid: {p.pid})")
             p.terminate()
-
+            port_process = get_process_by_port(metabase_port)
+            if port_process is not None:
+                port_process.terminate()
+            print("\n")
     # Wait for the Metabase process to finish
     p.wait()
 
