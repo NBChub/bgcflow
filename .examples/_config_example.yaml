@@ -71,3 +71,9 @@ rule_parameters:
     ani_screen: FALSE
   antismash:
     version: "7" # valid versions: 6, 7
+
+utility_parameters:
+  METABASE_MIN_MEMORY: "2g"
+  METABASE_MAX_MEMORY: "8g"
+  METABASE_VERSION: "v0.46.2"
+  METABASE_DUCKDB_PLUGIN_VERSION: "0.2.2"
