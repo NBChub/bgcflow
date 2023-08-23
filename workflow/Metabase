@@ -1,9 +1,4 @@
-METABASE_MIN_MEMORY = "2g"
-METABASE_MAX_MEMORY = "8g"
-METABASE_VERSION = "v0.46.2"
-METABASE_DUCKDB_PLUGIN_VERSION = "0.2.2"
-DMB_SETUP_TOKEN="ad0fb086-351b-4fa5-a17e-76282d2c9753"
-METABASE_HTTP="http://localhost:3000"
+include: "rules/common.smk"
 
 import subprocess
 import requests
@@ -22,12 +17,12 @@ def get_process_by_port(port):
 
     return None
 
-def setup_metabase(token, api_url):
+def setup_metabase(token, api_url, metabase_config):
     # Start the Metabase server in the background
-    command_line = f"(cd resources/metabase && java -Xms{METABASE_MIN_MEMORY} -Xmx{METABASE_MAX_MEMORY} -DMB_SETUP_TOKEN={DMB_SETUP_TOKEN} -jar metabase_{METABASE_VERSION}.jar)"
+    command_line = f"(cd resources/metabase && java -Xms{metabase_config['METABASE_MIN_MEMORY']} -Xmx{metabase_config['METABASE_MAX_MEMORY']} -DMB_SETUP_TOKEN={metabase_config['DMB_SETUP_TOKEN']} -jar metabase_{metabase_config['METABASE_VERSION']}.jar)"
     print(command_line)
 
-    metabase_port = int(METABASE_HTTP.split(":")[-1])
+    metabase_port = int(metabase_config['METABASE_HTTP'].split(":")[-1])
     p = get_process_by_port(metabase_port)
 
     if p is not None:
@@ -116,18 +111,28 @@ def setup_metabase(token, api_url):
     # Wait for the Metabase process to finish
     p.wait()
 
-if  "utility_parameters" in config.keys():
-    for keyword in ["METABASE_MIN_MEMORY", "METABASE_MAX_MEMORY", "METABASE_VERSION", "METABASE_DUCKDB_PLUGIN_VERSION"]:
-        if keyword in config["utility_parameters"].keys():
-            keyword = config["utility_parameters"][keyword]
+
+metabase_config = {
+    "METABASE_MIN_MEMORY": "2g",
+    "METABASE_MAX_MEMORY": "8g",
+    "METABASE_VERSION": "v0.46.2",
+    "METABASE_DUCKDB_PLUGIN_VERSION": "0.2.2",
+    "DMB_SETUP_TOKEN": "ad0fb086-351b-4fa5-a17e-76282d2c9753",
+    "METABASE_HTTP": "http://localhost:3000"
+}
+
+if "utility_parameters" in config.keys():
+    for param_key in metabase_config.keys():
+        if param_key in list(config["utility_parameters"].keys()):
+            metabase_config[param_key] = config["utility_parameters"][param_key]
 
 rule all:
     input:
-        f"resources/metabase/metabase_{METABASE_VERSION}.jar",
-        f"resources/metabase/plugins/duckdb.metabase-driver_{METABASE_DUCKDB_PLUGIN_VERSION}.jar",
+        f"resources/metabase/metabase_{metabase_config['METABASE_VERSION']}.jar",
+        f"resources/metabase/plugins/duckdb.metabase-driver_{metabase_config['METABASE_DUCKDB_PLUGIN_VERSION']}.jar",
 
 onsuccess:
-    setup_metabase(DMB_SETUP_TOKEN, f"{METABASE_HTTP}/api")
+    setup_metabase(metabase_config['DMB_SETUP_TOKEN'], f"{metabase_config['METABASE_HTTP']}/api", metabase_config)
 
 ##### Modules #####
 include: "rules/metabase.smk"
