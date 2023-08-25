@@ -89,6 +89,8 @@ rule build_warehouse:
         echo {input.dna_sequences} >> {output.log}
         """
 
+
+
 rule get_dbt_template:
     input:
         cdss = "data/processed/{name}/data_warehouse/{version}/cdss.parquet",
@@ -103,7 +105,7 @@ rule get_dbt_template:
     params:
         dbt = "data/processed/{name}/dbt/antiSMASH_{version}",
         dbt_repo = "https://github.com/NBChub/bgcflow_dbt-duckdb",
-        release = "0.1.3",
+        release = "0.2.1",
         cutoff = "0.30",
         as_version = "{version}"
     shell:
@@ -125,6 +127,14 @@ rule get_dbt_template:
         python {params.dbt}/scripts/source_template.py {params.dbt}/templates/_sources.yml {output.profile} {params.as_version} {params.cutoff} &>> {log}
         """
 
+def exclude_model_dbt(model_to_ignore):
+    """
+    """
+    if len(model_to_ignore) == 0:
+        return ""
+    else:
+        return " ".join(model_to_ignore)
+
 rule build_database:
     input:
         profile = "data/processed/{name}/dbt/antiSMASH_{version}/models/sources.yml"
@@ -135,11 +145,14 @@ rule build_database:
     log: "logs/database/report/database_{version}_{name}.log"
     threads: 16
     params:
-        dbt = "data/processed/{name}/dbt/antiSMASH_{version}"
+        dbt = "data/processed/{name}/dbt/antiSMASH_{version}",
+        exclude = lambda wildcards: exclude_model_dbt(models_to_ignore[wildcards.name])
     shell:
         """
+        command="dbt build --threads {threads} {params.exclude} -x"
+        echo $command >> {log}
         (cd {params.dbt} \
             && dbt debug \
-            && dbt build --threads {threads} \
+            && $command \
         ) &>> {log}
         """
