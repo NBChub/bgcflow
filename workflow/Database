@@ -22,8 +22,22 @@ for main_pipeline_outputs in final_outputs:
        main_pipeline_output = Path(main_pipeline_outputs)
        assert main_pipeline_output.is_file() or main_pipeline_output.is_dir(), f"\nMissing file: {main_pipeline_outputs}.\n{error_message}\n"
 
+model_dict = {"query-bigslice" : ["bigfam_hits", "bigfam_network"],
+              "bigscape" : ["bigscape_cluster", "bigscape_network", "mibig_hits"],
+              "checkm" : ["checkm"],
+              "seqfu" : ["seqfu"],
+              "antismash" : ["genomes"]
+              }
+
+models_to_ignore = {}
 for name in PEP_PROJECTS.keys():
     bgcflow_rules = [r for r in PEP_PROJECTS[name].config['rules'].keys() if PEP_PROJECTS[name].config['rules'][r]]
+    model_to_ignore = []
+    for p, dbt_model in model_dict.items():
+        if p not in bgcflow_rules:
+            for item in dbt_model:
+                model_to_ignore.append(item)
+    models_to_ignore[name] = model_to_ignore
     db.append(f"data/processed/{name}/dbt/antiSMASH_{version}/dbt_bgcflow.duckdb")
 
 rule all:
