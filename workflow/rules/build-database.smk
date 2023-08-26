@@ -133,7 +133,7 @@ def exclude_model_dbt(model_to_ignore):
     if len(model_to_ignore) == 0:
         return ""
     else:
-        return " ".join(model_to_ignore)
+        return " ".join(["--exclude"] + model_to_ignore)
 
 rule build_database:
     input:
