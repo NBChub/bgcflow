@@ -18,6 +18,10 @@ def get_process_by_port(port):
     return None
 
 def setup_metabase(token, api_url, metabase_config):
+    # Check if Java is installed
+    if os.system("java -version") != 0:
+        print("Java is not installed. Please install Java and try again.")
+        exit(1)
     # Start the Metabase server in the background
     command_line = f"(cd resources/metabase && java -Xms{metabase_config['METABASE_MIN_MEMORY']} -Xmx{metabase_config['METABASE_MAX_MEMORY']} -DMB_SETUP_TOKEN={metabase_config['DMB_SETUP_TOKEN']} -jar metabase_{metabase_config['METABASE_VERSION']}.jar)"
     print(command_line)

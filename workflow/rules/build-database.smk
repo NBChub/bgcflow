@@ -129,6 +129,20 @@ rule get_dbt_template:
 
 def exclude_model_dbt(model_to_ignore):
     """
+    Returns a string containing the `--exclude` option followed by the models to ignore in a dbt project.
+
+    Args:
+        model_to_ignore (list of str): A list of model names to ignore.
+
+    Returns:
+        str: A string containing the `--exclude` option followed by the model names, or an empty string if the list is empty.
+
+    Example:
+        >>> exclude_model_dbt(['model1', 'model2'])
+        '--exclude model1 model2'
+
+    Note:
+        The returned string can be used as an argument to the `dbt build` command to exclude the specified models from the build process.
     """
     if len(model_to_ignore) == 0:
         return ""
