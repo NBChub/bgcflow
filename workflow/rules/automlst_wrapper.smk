@@ -7,8 +7,8 @@ rule install_automlst_wrapper:
     log:
         "logs/automlst_wrapper/install_automlst_wrapper.log",
     params:
-        source="https://github.com/matinnuhamunada/automlst-simplified-wrapper",
-        version="0.1.1"
+        source="https://github.com/NBChub/automlst-simplified-wrapper",
+        version="0.1.2"
     shell:
         """
         set -e
