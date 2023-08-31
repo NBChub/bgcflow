@@ -270,10 +270,13 @@ def update_cluster_family(df_clusters, df_known, family_nodes, cutoff="0.30"):
     for cntr in range(len(family_nodes)):
         fam_id = cntr + 1
         family = family_nodes[cntr]
-        known_bgcs = [bgc for bgc in family if "BGC" in bgc]
+        known_bgcs = [bgc for bgc in family if bgc.startswith("BGC")]
 
         if len(known_bgcs) > 0:
             df_families.loc[fam_id, "fam_type"] = "known_family"
+            logging.debug(
+                f'Family {fam_id} has {len(known_bgcs)} known BGCs: {", ".join(known_bgcs)}'
+            )
 
             # handle missing entry from MIBIG release
             try:
