@@ -259,10 +259,13 @@ def get_family_graph(G_clusters):
     return family_graphs
 
 
-def update_cluster_family(df_clusters, df_known, family_nodes, cutoff="0.30"):
+def update_cluster_family(
+    df_clusters, df_known, family_nodes, mibig_bgc_table, cutoff="0.30"
+):
     """
     Updates df_clusters with family ids (connected components)
     """
+    df_mibig_bgcs = pd.read_csv(mibig_bgc_table, index_col="mibig_id")
 
     df_families = pd.DataFrame(
         columns=["fam_type", "fam_name", "clusters_in_fam", "mibig_ids"]
@@ -270,7 +273,7 @@ def update_cluster_family(df_clusters, df_known, family_nodes, cutoff="0.30"):
     for cntr in range(len(family_nodes)):
         fam_id = cntr + 1
         family = family_nodes[cntr]
-        known_bgcs = [bgc for bgc in family if bgc.startswith("BGC")]
+        known_bgcs = [bgc for bgc in family if bgc in df_mibig_bgcs.index]  #
 
         if len(known_bgcs) > 0:
             df_families.loc[fam_id, "fam_type"] = "known_family"
@@ -357,7 +360,14 @@ def get_family_presence(df_clusters, df_genomes, df_families, cutoff):
 
 
 def run_family_analysis(
-    cutoff, net_data_path, df_clusters, df_genomes, df_known_all, output_dir, query_name
+    cutoff,
+    net_data_path,
+    df_clusters,
+    df_genomes,
+    df_known_all,
+    output_dir,
+    mibig_table,
+    query_name,
 ):
     logging.info(f"Processing data from BiG-SCAPE with cutoff {cutoff}")
     df_network = get_bigscape_network(net_data_path, cutoff=cutoff)
@@ -367,7 +377,7 @@ def run_family_analysis(
     singleton_bgc = [list(fam)[0] for fam in family_nodes if len(fam) == 1]
     family_graphs = get_family_graph(G_clusters)
     df_clusters, df_known, df_families = update_cluster_family(
-        df_clusters, df_known, family_nodes, cutoff=cutoff
+        df_clusters, df_known, family_nodes, mibig_table, cutoff=cutoff
     )
     df_family_presence = get_family_presence(
         df_clusters, df_genomes, df_families, cutoff=cutoff
@@ -470,6 +480,7 @@ def process_bigscape_output(
             df_genomes,
             df_known_all,
             output_dir,
+            mibig_bgc_table,
             str(selected_run).replace(":", "_"),
         )
     return
