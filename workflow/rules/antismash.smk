@@ -63,15 +63,26 @@ elif antismash_major_version >= 7:
             "../envs/antismash.yaml"
         threads: 4
         log:
-            "logs/antismash/antismash/antismash_{version}-{strains}.log",
+            "logs/antismash/antismash/{version}/antismash_{version}-{strains}.log",
         params:
             folder=directory("data/interim/antismash/{version}/{strains}/"),
             genefinding="none",
         shell:
             """
+            # Find the latest existing json output for this strain
+            latest_version=$(ls -d data/interim/antismash/*/*/*.json | grep {wildcards.strains} | sort -r | head -n 1 | cut -d '/' -f 4)
+            if [ -n "$latest_version" ]; then
+                OLD_JSON="data/interim/antismash/$latest_version/{wildcards.strains}/{wildcards.strains}.json"
+                echo "Using existing json from $OLD_JSON as starting point..." >> {log}
+                ANTISMASH_INPUT="--reuse-result $OLD_JSON"
+            else
+                echo "No existing output directories found, starting AntiSMASH from scratch..." >> {log}
+                ANTISMASH_INPUT="{input.gbk}"
+            fi
+            # run antismash
             antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
                 --database {input.resources} \
-                --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} --logfile {log} 2>> {log}
+                --cb-general --cb-subclusters --cb-knownclusters -c {threads} $ANTISMASH_INPUT --logfile {log} 2>> {log}
             """
 
 rule copy_antismash:
