@@ -21,14 +21,14 @@ A quick and easy way to use `BGCFlow` using [`bgcflow_wrapper`](https://github.c
 
 ```bash
 # create and activate a new conda environment
-conda create -n `BGCFlow` pip -y
+conda create -n bgcflow pip -y
 conda activate bgcflow
 
 # install `BGCFlow` wrapper
 pip install git+https://github.com/NBChub/bgcflow_wrapper.git
 
 # make sure to use bgcflow_wrapper version >= 0.2.7
-`BGCFlow` --version
+bgcflow --version
 ```
 
 2. **Additional pre-requisites**:
@@ -46,22 +46,22 @@ conda install openjdk
 3. Deploy and run BGCFlow, change `your_bgcflow_directory` variable accordingly:
 ```bash
 # Deploy and run BGCFlow
-`BGCFlow` clone <your_bgcflow_directory> # clone `BGCFlow` to your_bgcflow_directory
+bgcflow clone <your_bgcflow_directory> # clone `BGCFlow` to your_bgcflow_directory
 cd <your_bgcflow_directory> # move to BGCFLOW_PATH
-`BGCFlow` init # initiate `BGCFlow` config and examples from template
-`BGCFlow` run -n # do a dry run, remove the flag "-n" to run the example dataset
+bgcflow init # initiate `BGCFlow` config and examples from template
+bgcflow run -n # do a dry run, remove the flag "-n" to run the example dataset
 ```
 
-4. Build and serve interactive report (after ``BGCFlow` run` finished). The report will be served in [http://localhost:8001/](http://localhost:8001/):
+4. Build and serve interactive report (after `bgcflow run` finished). The report will be served in [http://localhost:8001/](http://localhost:8001/):
 ```bash
 # build a report
-`BGCFlow` build report
+bgcflow build report
 
 # show available projects
-`BGCFlow` serve
+bgcflow serve
 
 # serve interactive report
-`BGCFlow` serve --project Lactobacillus_delbrueckii
+bgcflow serve --project Lactobacillus_delbrueckii
 ```
 
 
@@ -76,8 +76,8 @@ The main Snakefile workflow comprises various pipelines for data selection, func
 ![dag](workflow/report/images/rulegraph_annotated.png)
 
 Available pipelines in the main Snakefile can be checked using the following command:
-```
-`BGCFlow` pipelines
+```bash
+bgcflow pipelines
 ```
 
 
