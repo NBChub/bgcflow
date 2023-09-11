@@ -69,20 +69,35 @@ elif antismash_major_version >= 7:
             genefinding="none",
         shell:
             """
-            # Find the latest existing json output for this strain
+            set +e
+
+            # Find the latest existing JSON output for this strain
             latest_version=$(ls -d data/interim/antismash/*/*/*.json | grep {wildcards.strains} | sort -r | head -n 1 | cut -d '/' -f 4)
+
             if [ -n "$latest_version" ]; then
-                OLD_JSON="data/interim/antismash/$latest_version/{wildcards.strains}/{wildcards.strains}.json"
-                echo "Using existing json from $OLD_JSON as starting point..." >> {log}
-                ANTISMASH_INPUT="--reuse-result $OLD_JSON"
+                # Use existing JSON result as starting point
+                old_json="data/interim/antismash/$latest_version/{wildcards.strains}/{wildcards.strains}.json"
+                echo "Using existing JSON from $old_json as starting point..." >> {log}
+                antismash_input="--reuse-result $old_json"
             else
-                echo "No existing output directories found, starting AntiSMASH from scratch..." >> {log}
-                ANTISMASH_INPUT="{input.gbk}"
+                # No existing JSON result found, use genbank input
+                echo "No existing JSON result found, starting AntiSMASH from scratch..." >> {log}
+                antismash_input="{input.gbk}"
             fi
-            # run antismash
+
+            # Run AntiSMASH
             antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
                 --database {input.resources} \
-                --cb-general --cb-subclusters --cb-knownclusters -c {threads} $ANTISMASH_INPUT --logfile {log} 2>> {log}
+                --cb-general --cb-subclusters --cb-knownclusters -c {threads} $antismash_input --logfile {log} 2>> {log}
+
+            # Check if the run failed due to changed detection results
+            if grep -q "ValueError: Detection results have changed. No results can be reused" {log}; then
+                # Use genbank input instead
+                echo "Previous JSON result is invalid, starting AntiSMASH from scratch..." >> {log}
+                antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
+                    --database {input.resources} \
+                    --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} --logfile {log} 2>> {log}
+            fi
             """
 
 rule copy_antismash:
