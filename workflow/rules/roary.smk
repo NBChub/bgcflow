@@ -7,8 +7,8 @@ rule roary:
         "../envs/roary.yaml"
     params:
         i=80,
-        g=60000,
-    threads: 8
+        g=80000,
+    threads: 16
     log:
         "logs/roary/roary-{name}.log",
     shell:
