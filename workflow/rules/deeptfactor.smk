@@ -14,30 +14,30 @@ rule deeptfactor_setup:
 
 rule deeptfactor:
     input:
-        fasta="data/interim/prokka/{strains}/{strains}.faa",
+        faa="data/interim/prokka/{strains}/{strains}.faa",
         resource="resources/deeptfactor/",
     output:
-        deeptfactor_dir=directory("data/interim/deeptfactor/{strains}/"),
+        deeptfactor="data/interim/deeptfactor/{strains}/prediction_result.txt",
     conda:
         "../envs/deeptfactor.yaml"
     threads: 2
     params:
-        faa="../../data/interim/prokka/{strains}/{strains}.faa",
-        outdir="../../data/interim/deeptfactor/{strains}/",
+        outdir="data/interim/deeptfactor/{strains}/",
     log:
         "logs/deeptfactor/deeptfactor/deeptfactor-{strains}.log",
     shell:
         """
+        workdir=$PWD
         mkdir -p data/interim/deeptfactor/{wildcards.strains} 2>> {log}
         (cd {input.resource} && python tf_running.py \
-            -i {params.faa} -o {params.outdir} \
+            -i $workdir/{input.faa} -o $workdir/{params.outdir} \
             -g cpu -cpu {threads}) 2>> {log}
         """
 
 
 rule deeptfactor_to_json:
     input:
-        deeptfactor_dir="data/interim/deeptfactor/{strains}/",
+        deeptfactor="data/interim/deeptfactor/{strains}/prediction_result.txt",
     output:
         deeptfactor_json="data/interim/deeptfactor/{strains}_deeptfactor.json",
     conda:
@@ -46,7 +46,7 @@ rule deeptfactor_to_json:
         "logs/deeptfactor/deeptfactor/deeptfactor-{strains}_to_json.log",
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/deeptfactor_scatter.py {input.deeptfactor_dir}/prediction_result.txt {output.deeptfactor_json} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/deeptfactor_scatter.py {input.deeptfactor} {output.deeptfactor_json} 2>> {log}
         """
 
 
