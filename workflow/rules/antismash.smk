@@ -72,7 +72,7 @@ elif antismash_major_version >= 7:
             set +e
 
             # Find the latest existing JSON output for this strain
-            latest_version=$(ls -d data/interim/antismash/*/*/*.json | grep {wildcards.strains} | sort -r | head -n 1 | cut -d '/' -f 4) 2>> {log}
+            latest_version=$(ls -d data/interim/antismash/*/{wildcards.strains}/{wildcards.strains}.json | grep {wildcards.strains} | sort -r | head -n 1 | cut -d '/' -f 4) 2>> {log}
 
             if [ -n "$latest_version" ]; then
                 # Use existing JSON result as starting point
