@@ -170,6 +170,7 @@ def extract_arts_coretable(
     arts_coretable.index = [
         f"{genome_id}__arts_core__{i}" for i in arts_coretable["#Core_gene"]
     ]
+    arts_coretable["genome_id"] = genome_id
     arts_coretable_dict = arts_coretable.T.to_dict()
     logging.info(f"Writing Core Table JSON to: {outfile_summary}")
     with open(outfile_summary, "w") as f:
@@ -274,6 +275,7 @@ def extract_arts_bgctable(
         arts_bgctable["bgc_id"] = [
             f"{hit_mapper[i]}" for i in arts_bgctable["#Cluster"]
         ]
+        arts_bgctable["genome_id"] = genome_id
         arts_bgctable.index = [f"{i}__arts_bgc" for i in arts_bgctable["bgc_id"]]
     logging.info(f"Writing BGC Table JSON to: {outfile_summary}")
     arts_bgctable_dict = arts_bgctable.T.to_dict()
@@ -362,6 +364,7 @@ def extract_arts_duptable(
         f"{genome_id}__arts_dup__{i}" for i in arts_duptable["#Core_gene"]
     ]
     logging.info(f"Writing Duplication Table JSON to: {outfile_summary}")
+    arts_duptable["genome_id"] = genome_id
     arts_duptable_dict = arts_duptable.T.to_dict()
     with open(outfile_summary, "w") as f:
         json.dump(arts_duptable_dict, f, indent=2)
