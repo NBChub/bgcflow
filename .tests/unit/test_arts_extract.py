@@ -29,7 +29,7 @@ def test_arts_extract():
             "python",
             "-m",
             "snakemake", 
-            "data/interim/arts/antismash-7.0.0/GCA_000056065.1_arts_all_hits.json data/interim/arts/antismash-7.0.0/GCA_000056065.1_arts_bgctable_summary.json data/interim/arts/antismash-7.0.0/GCA_000056065.1_arts_coretable_summary.json data/interim/arts/antismash-7.0.0/GCA_000056065.1_arts_knownhits.json",
+            "data/interim/arts/antismash-7.0.0/GCA_000056065.1_arts_all_hits.json",
             "-f", 
             "-j1",
             "--keep-target-files",
