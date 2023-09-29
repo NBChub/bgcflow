@@ -1,0 +1,24 @@
+{
+  "CP000412.1.region001__arts_bgc": {
+    "#Cluster": "cluster-1_1",
+    "Type": "lanthipeptide-class-iii",
+    "Source": "scaffold_1",
+    "Location": "17283 - 39785",
+    "Core hits": 0,
+    "Other hits": 0,
+    "Genelist": "[]",
+    "bgc_id": "CP000412.1.region001",
+    "genome_id": "GCA_000014405.1"
+  },
+  "CP000412.1.region002__arts_bgc": {
+    "#Cluster": "cluster-1_2",
+    "Type": "RiPP-like",
+    "Source": "scaffold_1",
+    "Location": "120275 - 131241",
+    "Core hits": 0,
+    "Other hits": 0,
+    "Genelist": "[]",
+    "bgc_id": "CP000412.1.region002",
+    "genome_id": "GCA_000014405.1"
+  }
+}
