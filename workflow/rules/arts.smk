@@ -139,7 +139,7 @@ rule arts_final:
         coretable="data/processed/{name}/tables/df_arts_coretable_as-{version}.csv",
         knownhits="data/processed/{name}/tables/df_arts_knownhits_as-{version}.csv"
     output:
-        table="data/processed/{name}/tables/df_arts_as-{version}.csv"
+        table="data/processed/{name}/tables/df_arts_allhits_as-{version}.csv"
     conda:
         "../envs/bgc_analytics.yaml"
     log:
