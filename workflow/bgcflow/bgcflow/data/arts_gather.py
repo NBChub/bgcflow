@@ -24,19 +24,6 @@ def generate_change_dict(change_log):
     return change_dict
 
 
-def correct_arts_bgc_ids(arts_json, change_dict, genome_id):
-    logging.debug(f"Correcting BGC ids for {genome_id}")
-    output = {}
-    with open(arts_json, "r") as f:
-        query = json.load(f)
-        for k in query.keys():
-            correct_bgc_id = Path(
-                change_dict[genome_id][f"{k}.gbk"]["symlink_path"]
-            ).stem
-            output[correct_bgc_id] = query[k]
-    return output
-
-
 def combine_arts_json(input_json, change_log_path, table):
     logging.info("Combining and correcting ARTS output...")
 
@@ -75,13 +62,13 @@ def combine_arts_json(input_json, change_log_path, table):
     with alive_bar(len(input_json_files), title="Merging json:") as bar:
         for j in input_json_files:
             arts_json = Path(j)
-            genome_id = arts_json.stem
-            value = correct_arts_bgc_ids(arts_json, change_dict, genome_id)
+            with open(arts_json, "r") as f:
+                value = json.load(f)
             container.update(value)
             bar()
 
     df = pd.DataFrame.from_dict(container).T
-    df.index.name = "bgc_id"
+    df.index.name = "pkey"
 
     logging.debug(f"Writing file to: {table}")
 
