@@ -1,0 +1,8 @@
+pkey,#Cluster,Type,Source,Location,Core hits,Other hits,Genelist,bgc_id,genome_id
+CR954253.1.region001__arts_bgc,cluster-1_1,lanthipeptide-class-iii,scaffold_1,17407 - 39909,0,0,[],CR954253.1.region001,GCA_000056065.1
+CR954253.1.region002__arts_bgc,cluster-1_2,RiPP-like,scaffold_1,125153 - 136119,0,0,[],CR954253.1.region002,GCA_000056065.1
+CR954253.1.region003__arts_bgc,cluster-1_3,lanthipeptide-class-iv,scaffold_1,1745672 - 1767868,0,0,[],CR954253.1.region003,GCA_000056065.1
+CP000156.1.region001__arts_bgc,cluster-1_1,RiPP-like,scaffold_1,117260 - 128451,0,0,[],CP000156.1.region001,GCA_000191165.1
+CP000156.1.region002__arts_bgc,cluster-1_2,lanthipeptide-class-iv,scaffold_1,1767251 - 1789447,1,0,"[['1883', 'TIGR01369', 1788915, 1792104, 'Core', 'CPSaseII_lrg: carbamoyl-phosphate synthase, large subunit', 'Purines, pyrimidines, nucleosides, and nucleotides']]",CP000156.1.region002,GCA_000191165.1
+CP000412.1.region001__arts_bgc,cluster-1_1,lanthipeptide-class-iii,scaffold_1,17283 - 39785,0,0,[],CP000412.1.region001,GCA_000014405.1
+CP000412.1.region002__arts_bgc,cluster-1_2,RiPP-like,scaffold_1,120275 - 131241,0,0,[],CP000412.1.region002,GCA_000014405.1
