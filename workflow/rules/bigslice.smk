@@ -79,15 +79,36 @@ rule summarize_bigslice_query:
     input:
         query_dir="data/interim/bigslice/query/{name}_antismash_{version}/",
     output:
-        folder=directory("data/processed/{name}/bigslice/query_as_{version}/"),
+        gcf_summary_csv="data/processed/{name}/bigslice/query_as_{version}/gcf_summary.csv",
+        gcf_summary_json="data/processed/{name}/bigslice/query_as_{version}/gcf_summary.json",
+        query_network="data/processed/{name}/bigslice/query_as_{version}/query_network.csv",
     conda:
         "../envs/bgc_analytics.yaml"
     log:
         "logs/bigslice/summarize_bigslice_query/summarize_bigslice_query_{name}-antismash-{version}.log",
     params:
+        folder = "data/processed/{name}/bigslice/query_as_{version}/",
         bigfam_db_path="resources/bigslice/full_run_result/result/data.db",
         cutoff=900,
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/summarize_bigslice_query.py {input.query_dir} {output.folder} {params.bigfam_db_path} {params.cutoff} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/summarize_bigslice_query.py {input.query_dir} {params.folder} {params.bigfam_db_path} {params.cutoff} 2>> {log}
+        """
+
+
+rule annotate_bigfam_hits:
+    input:
+        gcf_summary_csv="data/processed/{name}/bigslice/query_as_{version}/gcf_summary.csv",
+    output:
+        models="data/processed/{name}/bigslice/query_as_{version}/gcf_annotation.csv",
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log:
+        "logs/bigslice/summarize_bigslice_query/summarize_bigslice_query_{name}-antismash-{version}.log",
+    params:
+        folder = "data/processed/{name}/bigslice/query_as_{version}/",
+        bigfam_db_path="resources/bigslice/full_run_result/result/data.db",
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/annotate_bigfam_model.py {input.gcf_summary_csv} {params.bigfam_db_path} {output.models} 2>> {log}
         """
