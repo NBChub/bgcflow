@@ -91,7 +91,7 @@ rule summarize_bigslice_query:
         cutoff=900,
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/summarize_bigslice_query.py data/processed/{wildcards.name}/bigslice/query_as_{wildcards.version}/ {params.folder} {params.bigfam_db_path} {params.cutoff} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/summarize_bigslice_query.py data/processed/{wildcards.name}/bigslice/query_as_{wildcards.version}/ {params.bigfam_db_path} {params.cutoff} 2>> {log}
         """
 
 
