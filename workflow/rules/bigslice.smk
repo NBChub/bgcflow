@@ -87,12 +87,11 @@ rule summarize_bigslice_query:
     log:
         "logs/bigslice/summarize_bigslice_query/summarize_bigslice_query_{name}-antismash-{version}.log",
     params:
-        folder = "data/processed/{name}/bigslice/query_as_{version}/",
         bigfam_db_path="resources/bigslice/full_run_result/result/data.db",
         cutoff=900,
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/summarize_bigslice_query.py {input.query_dir} {params.folder} {params.bigfam_db_path} {params.cutoff} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/summarize_bigslice_query.py data/processed/{wildcards.name}/bigslice/query_as_{wildcards.version}/ {params.folder} {params.bigfam_db_path} {params.cutoff} 2>> {log}
         """
 
 
@@ -106,7 +105,6 @@ rule annotate_bigfam_hits:
     log:
         "logs/bigslice/summarize_bigslice_query/summarize_bigslice_query_{name}-antismash-{version}.log",
     params:
-        folder = "data/processed/{name}/bigslice/query_as_{version}/",
         bigfam_db_path="resources/bigslice/full_run_result/result/data.db",
     shell:
         """
