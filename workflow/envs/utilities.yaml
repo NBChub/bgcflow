@@ -5,3 +5,5 @@ channels:
 dependencies:
   - openjdk
   - perl
+  - wget
+s
