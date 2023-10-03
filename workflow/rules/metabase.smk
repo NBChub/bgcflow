@@ -17,6 +17,8 @@ rule metabase_duckdb_plugin:
         plugin="resources/metabase/plugins/duckdb.metabase-driver_{METABASE_DUCKDB_PLUGIN_VERSION}.jar",
     log:
         "logs/metabase/metabase_duckdb_install_{METABASE_DUCKDB_PLUGIN_VERSION}.log",
+    conda:
+        "../envs/utilities.yaml"
     params:
         release=metabase_config["METABASE_DUCKDB_PLUGIN_VERSION"]
     shell:
