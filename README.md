@@ -21,7 +21,7 @@ A quick and easy way to use `BGCFlow` using [`bgcflow_wrapper`](https://github.c
 
 ```bash
 # create and activate a new conda environment
-conda create -n bgcflow -c conda-forge pip openjdk -y
+conda create -n bgcflow -c conda-forge python=3.11 pip openjdk -y
 conda activate bgcflow
 
 # install `BGCFlow` wrapper
