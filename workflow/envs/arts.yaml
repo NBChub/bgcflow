@@ -7,6 +7,7 @@ dependencies:
   - python==3.8
   - pip
   - matplotlib
+  - numpy
   - antismash-lite==6.1.1
   - jinja2
   - unzip
@@ -34,7 +35,6 @@ dependencies:
     - lxml==4.6.3
     - markupsafe==2.0.1
     - networkx==2.6.2
-    - numpy==1.20.2
     - openpyxl==3.0.7
     - pillow==8.3.1
     - pyexcelerator==0.6.4.1
