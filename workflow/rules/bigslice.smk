@@ -103,7 +103,7 @@ rule annotate_bigfam_hits:
     conda:
         "../envs/bgc_analytics.yaml"
     log:
-        "logs/bigslice/summarize_bigslice_query/summarize_bigslice_query_{name}-antismash-{version}.log",
+        "logs/bigslice/summarize_bigslice_query/annotate_bigslice_query_{name}-antismash-{version}.log",
     params:
         bigfam_db_path="resources/bigslice/full_run_result/result/data.db",
     shell:
