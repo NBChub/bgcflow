@@ -125,7 +125,7 @@ rule mmseqs2_annotate_cog:
     log:
         "logs/mmseqs2/annotate_cog_{name}_{version}.log",
     conda:
-        "../envs/r_notebook.yaml"
+        "../envs/r_notebook_bgc.yaml"
     shell:
         """
         workflow/scripts/cog_feats.R {input.gbk} {input.csv} {output.json} 2>> {log}
