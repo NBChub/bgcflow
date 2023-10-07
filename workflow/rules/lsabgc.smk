@@ -1,21 +1,18 @@
-rule install_lsabgc:
+rule install_lsabgc_db:
     output:
-        directory("resources/lsaBGC")
+        directory("resources/lsaBGC-database")
     log:
-        "logs/lsabgc/install.log"
+        "logs/lsabgc/install-db.log"
     conda:
         "../envs/lsabgc.yaml"
     shell:
         """
-        (cd resources && git clone https://github.com/Kalan-Lab/lsaBGC) &>> {log}
-        (cd {output} && python setup.py install) &>> {log}
-        (cd {output} && pip install -e .) &>> {log}
-        (cd {output} && setup_annotation_dbs.py) &>> {log}
+        mkdir -p {output}
+        setup_annotation_dbs.py -p {output} &>> {log}
         """
 
 rule lsabgc_prepare:
     input:
-        lsabgc="resources/lsaBGC",
         fna=lambda wildcards: get_fasta_inputs(wildcards.name, DF_SAMPLES),
         bgc_mapping="data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
     output:
@@ -41,6 +38,7 @@ rule lsabgc_prepare:
 
 rule lsabgc_ready:
     input:
+        database="resources/lsaBGC-database",
         Primary_Genomes_Listing = "data/interim/lsabgc/{name}/as_{version}/Primary_Genomes_Listing.txt",
         Primary_Genome_BGC_Genbanks_Listing = "data/interim/lsabgc/{name}/as_{version}/Primary_Genome_BGC_Genbanks_Listing.txt",
         bigscape_index="data/interim/bigscape/{name}_antismash_{version}/index.html",
