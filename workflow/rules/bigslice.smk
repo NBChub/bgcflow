@@ -97,6 +97,7 @@ rule summarize_bigslice_query:
 
 rule annotate_bigfam_hits:
     input:
+        region_table="data/processed/{name}/tables/df_regions_antismash_{version}.csv",
         gcf_summary_csv="data/processed/{name}/bigslice/query_as_{version}/gcf_summary.csv",
     output:
         models="data/processed/{name}/bigslice/query_as_{version}/gcf_annotation.csv",
