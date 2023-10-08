@@ -1,0 +1,30 @@
+name: Cutibacterium
+
+pep_version: 2.1.0
+
+description: "A collection of cutibacterium genomes"
+
+sample_table: samples.csv
+
+#### RULE CONFIGURATION ####
+# rules: set value to TRUE if you want to run the analysis or FALSE if you don't
+rules:
+  seqfu: TRUE
+  mash: TRUE
+  fastani: TRUE
+  checkm: TRUE
+  gtdbtk: FALSE
+  prokka-gbk: TRUE
+  antismash: TRUE
+  query-bigslice: TRUE
+  bigscape: TRUE
+  bigslice: TRUE
+  automlst-wrapper: TRUE
+  arts: TRUE
+  roary: TRUE
+  eggnog: FALSE
+  eggnog-roary: FALSE
+  deeptfactor: TRUE
+  deeptfactor-roary: TRUE
+  cblaster-genome: TRUE
+  cblaster-bgc: TRUE
