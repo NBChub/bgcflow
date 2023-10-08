@@ -80,7 +80,7 @@ rule lsabgc_autoanalyze:
         lsabgc_output=directory("data/processed/{name}/lsabgc/as_{version}/lsaBGC_AutoAnalyze_Results")
     conda:
         "../envs/lsabgc.yaml"
-    threads: 8
+    threads: 16
     log:
         "logs/lsabgc/lsabgc_autoanalyze-{name}-as_{version}.log",
     shell:
