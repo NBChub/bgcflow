@@ -10,8 +10,14 @@ include: "rules/common.smk"
     PEP_PROJECTS,
 ) = extract_project_information(config)
 
+# generate centralized sample datasets
+bgcflow_util_dir = Path("data/interim/bgcflow_utils")
+bgcflow_util_dir.mkdir(parents=True, exist_ok=True)
+DF_SAMPLES.to_csv(bgcflow_util_dir / "samples.csv", index=False)
+
 ##### 2. Generate wildcard constants #####
 STRAINS = DF_SAMPLES.genome_id.to_list()
+NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
 
 ##### 3. Wildcard constraints #####
 wildcard_constraints:
@@ -26,3 +32,5 @@ rule all:
 
 ##### Modules #####
 include: "rules/defense-finder.smk"
+include: "rules/prokka.smk"
+include: "rules/ncbi.smk"
