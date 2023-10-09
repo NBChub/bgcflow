@@ -1,24 +1,36 @@
 import json
+import logging
 import sys
+
+log_format = "%(levelname)-8s %(asctime)s   %(message)s"
+date_format = "%d/%m %H:%M:%S"
+logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 import yaml
 
 # list of the main dependecies used in the workflow
 dependencies = {
     "antismash": r"workflow/envs/antismash.yaml",
+    "bigslice": r"workflow/envs/bigslice.yaml",
+    "cblaster": r"workflow/envs/cblaster.yaml",
     "prokka": r"workflow/envs/prokka.yaml",
-    "mlst": r"workflow/envs/mlst.yaml",
     "eggnog-mapper": r"workflow/envs/eggnog.yaml",
     "roary": r"workflow/envs/roary.yaml",
-    "refseq_masher": r"workflow/envs/refseq_masher.yaml",
     "seqfu": r"workflow/envs/seqfu.yaml",
+    "checkm": r"workflow/envs/checkm.yaml",
+    "gtdbtk": r"workflow/envs/gtdbtk.yaml",
 }
 
 
-def get_dependency_version(dep, dep_key):
+def get_dependency_version(dep, dep_key, antismash_version="7"):
     """
     return dependency version tags given a dictionary (dep) and its key (dep_key)
     """
+    if dep_key == "antismash":
+        logging.info(f"AntiSMASH version is: {antismash_version}")
+        if antismash_version == "6":
+            dep[dep_key] = "workflow/envs/antismash_v6.yaml"
+    logging.info(f"Getting software version for: {dep_key}")
     with open(dep[dep_key]) as file:
         result = []
         documents = yaml.full_load(file)
@@ -38,14 +50,14 @@ def get_dependency_version(dep, dep_key):
     return str(result)
 
 
-def write_dependecies_to_json(outfile, dep=dependencies):
+def write_dependecies_to_json(outfile, antismash_version, dep=dependencies):
     """
     write dependency version to a json file
     """
     with open(outfile, "w") as file:
         dv = {}
         for ky in dep.keys():
-            vr = get_dependency_version(dep, ky)
+            vr = get_dependency_version(dep, ky, antismash_version=antismash_version)
             dv[ky] = vr
         json.dump(
             dv,
@@ -57,4 +69,4 @@ def write_dependecies_to_json(outfile, dep=dependencies):
 
 
 if __name__ == "__main__":
-    write_dependecies_to_json(sys.argv[1])
+    write_dependecies_to_json(sys.argv[1], sys.argv[2])
