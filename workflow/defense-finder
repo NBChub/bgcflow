@@ -1,0 +1,28 @@
+include: "rules/common.smk"
+
+
+##### 1. Extract information from config file
+(
+    DF_PROJECTS,
+    DF_SAMPLES,
+    PROKKA_DB_TABLE,
+    PROKKA_DB_MAP,
+    PEP_PROJECTS,
+) = extract_project_information(config)
+
+##### 2. Generate wildcard constants #####
+STRAINS = DF_SAMPLES.genome_id.to_list()
+
+##### 3. Wildcard constraints #####
+wildcard_constraints:
+    strains="|".join(STRAINS),
+
+##### Target rules #####
+
+rule all:
+    input:
+        expand("data/interim/defense_finder/{strains}/", strains=STRAINS),
+
+
+##### Modules #####
+include: "rules/defense-finder.smk"
