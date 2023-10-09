@@ -25,7 +25,7 @@ rule bigslice:
         "../envs/bigslice.yaml"
     threads: 16
     params:
-        threshold=900,
+        threshold="0.4",
     resources:
         tmpdir="data/interim/tempdir",
     log:
