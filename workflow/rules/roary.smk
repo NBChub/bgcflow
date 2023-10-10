@@ -43,7 +43,7 @@ rule deeptfactor_roary:
         roary_dir="data/interim/roary/{name}/",
         resource="resources/deeptfactor/",
     output:
-        deeptfactor_dir=directory("data/interim/deeptfactor_roary/{name}/"),
+        df_deeptfactor="data/processed/{name}/tables/df_deeptfactor_roary.tsv",
     conda:
         "../envs/deeptfactor.yaml"
     threads: 8
@@ -51,14 +51,14 @@ rule deeptfactor_roary:
         "logs/deeptfactor-roary/deeptfactor-roary-{name}.log",
     params:
         faa="../../data/interim/roary/{name}/pan_genome_reference.fa",
-        outdir="../../data/interim/deeptfactor_roary/{name}/",
+        outdir="data/interim/deeptfactor_roary/{name}",
     shell:
         """
         (cd {input.resource} && python tf_running.py \
-            -i {params.faa} -o {params.outdir} \
+            -i {params.faa} -o ../../{params.outdir} \
             -g cpu -cpu {threads}) 2>> {log}
+        cp {params.outdir}/prediction_result.txt {output.df_deeptfactor} &>> {log}
         """
-
 
 rule diamond_roary:
     input:
