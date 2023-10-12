@@ -2,6 +2,7 @@
 [![Snakemake](https://img.shields.io/badge/snakemake-≥7.14.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![PEP compatible](https://pepkit.github.io/img/PEP-compatible-green.svg)](https://pep.databio.org)
 [![wiki](https://img.shields.io/badge/wiki-documentation-forestgreen)](https://github.com/NBChub/bgcflow/wiki)
+[![bgcflow-wrapper](https://img.shields.io/badge/CLI-BGCFlow_wrapper-orange)](https://github.com/NBChub/bgcflow_wrapper)
 [![example report](https://img.shields.io/badge/demo-report-blue)](https://nbchub.github.io/bgcflow_report_demo/)
 
 `BGCFlow` is a systematic workflow for the analysis of biosynthetic gene clusters across large collections of genomes (pangenomes) from internal &amp; public datasets.
@@ -16,7 +17,8 @@ At present, `BGCFlow` is only tested and confirmed to work on **Linux** systems 
 
 Please use the latest version of `BGCFlow` available.
 ## Quick Start
-A quick and easy way to use `BGCFlow` using [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper).
+A quick and easy way to use `BGCFlow` using the command line interface wrapper:
+[![bgcflow-wrapper](https://img.shields.io/badge/CLI-BGCFlow_wrapper-orange)](https://github.com/NBChub/bgcflow_wrapper)
 
 1. Create a conda environment and install the [`BGCFlow` python wrapper](https://github.com/NBChub/bgcflow_wrapper) :
 
@@ -53,7 +55,10 @@ bgcflow init # initiate `BGCFlow` config and examples from template
 bgcflow run -n # do a dry run, remove the flag "-n" to run the example dataset
 ```
 
-4. Build and serve interactive report (after `bgcflow run` finished). The report will be served in [http://localhost:8001/](http://localhost:8001/). A demo of the report is available here: [![example report](https://img.shields.io/badge/demo-report-blue)](https://nbchub.github.io/bgcflow_report_demo/)
+4. Build and serve interactive report (after `bgcflow run` finished). The report will be served in [http://localhost:8001/](http://localhost:8001/). A demo of the report is available here: 
+
+    [![example report](https://img.shields.io/badge/demo-report-blue)](https://nbchub.github.io/bgcflow_report_demo/)
+
 ```bash
 # build a report
 bgcflow build report
@@ -66,7 +71,8 @@ bgcflow serve --project Lactobacillus_delbrueckii
 ```
 
 
-- For detailed usage and configurations, have a look at the [`BGCFlow` WIKI](https://github.com/NBChub/bgcflow/wiki/) (`under development`) :warning:  
+- For detailed usage and configurations, have a look at the WIKI:
+[![wiki](https://img.shields.io/badge/wiki-documentation-forestgreen)](https://github.com/NBChub/bgcflow/wiki) 
 - Read more about [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper) for a detailed overview of the command line interface.
 
 [![asciicast](https://asciinema.org/a/595149.svg)](https://asciinema.org/a/595149)
