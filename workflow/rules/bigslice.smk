@@ -25,7 +25,7 @@ rule bigslice:
         "../envs/bigslice.yaml"
     threads: 16
     params:
-        threshold=900,
+        threshold="0.4",
     resources:
         tmpdir="data/interim/tempdir",
     log:
@@ -65,12 +65,14 @@ rule query_bigslice:
         n_ranks=10,
         query_name="{name}",
         run_id=6,
+        threshold=300,
+        normalize="--no_normalize_feature ",
     resources:
         tmpdir="data/interim/tempdir",
     shell:
         """
         TIMESTAMP=$(date --iso-8601=hours)
-        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} --query_name {params.query_name}_$TIMESTAMP --run_id {params.run_id} &>> {log}
+        bigslice --query {input.tmp_dir} --n_ranks {params.n_ranks} {input.bigslice_dir} -t {threads} --query_name {params.query_name}_$TIMESTAMP --run_id {params.run_id} --threshold {params.threshold} {params.normalize} &>> {log}
         python workflow/bgcflow/bgcflow/data/get_bigslice_query_result.py {params.query_name} {output.folder} {input.bigslice_dir} &>> {log}
         """
 
@@ -97,6 +99,7 @@ rule summarize_bigslice_query:
 
 rule annotate_bigfam_hits:
     input:
+        summary_table="data/processed/{name}/tables/df_antismash_{version}_summary.csv",
         gcf_summary_csv="data/processed/{name}/bigslice/query_as_{version}/gcf_summary.csv",
     output:
         models="data/processed/{name}/bigslice/query_as_{version}/gcf_annotation.csv",

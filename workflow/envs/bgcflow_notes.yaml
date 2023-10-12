@@ -4,6 +4,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - python>=3.9,<3.12
   - jupyterlab>3
   - ipywidgets>=7.6
   - jupyter-dash
@@ -13,13 +14,17 @@ dependencies:
   - python-kaleido
   - bokeh
   - openpyxl
-  - nbconvert
+  - nbconvert==6.4.2
   - ipykernel
-  - ete3
   - xlrd >= 1.0.0
+  - altair
+  - itables
+  - scikit-learn
+  - pyarrow
+  - pygraphviz
   - pip
   - pip:
       - biopython
+      - jupyterlab-dash
       - networkx
       - alive_progress
-      - ../bgcflow

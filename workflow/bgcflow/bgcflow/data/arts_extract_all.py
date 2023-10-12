@@ -430,6 +430,7 @@ def extract_arts_knownhits(arts_knownhits_tsv, outfile_hits, genome_id=None):
     pandas.DataFrame
         A DataFrame representation of the extracted Known Resistance Hits information,
         with each row representing a hit and columns representing hit attributes.
+        If the input DataFrame is empty, an empty DataFrame is returned.
 
     Example
     -------
@@ -465,7 +466,6 @@ def extract_arts_knownhits(arts_knownhits_tsv, outfile_hits, genome_id=None):
         ] = f"{str(genome_id)}__{str(model)}__{str(scaffold)}__{str(sequence_id)}"
     arts_knownhits = (
         arts_knownhits.drop(columns=["Sequence description"])
-        .set_index("index")
         .rename(
             columns={
                 "#Model": "model",
@@ -474,6 +474,10 @@ def extract_arts_knownhits(arts_knownhits_tsv, outfile_hits, genome_id=None):
             }
         )
     )
+    if arts_knownhits.empty:
+        logging.warning("ARTS Known Resistance Hits table is empty.")
+    else:
+        arts_knownhits = arts_knownhits.set_index("index")
     arts_knownhits_dict = arts_knownhits.T.to_dict()
     outfile_hits.parent.mkdir(parents=True, exist_ok=True)
     logging.info(f"Writing Known Resistance Hits JSON to: {outfile_hits}")

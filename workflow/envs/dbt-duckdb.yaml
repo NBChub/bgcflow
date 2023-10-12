@@ -1,8 +1,12 @@
 name: dbt-duckdb
 channels:
   - conda-forge
+  - bioconda
   - defaults
 dependencies:
+  - python==3.11
+  - python-duckdb==0.8.1
+  - unzip
   - pip
   - pip:
     - dbt-duckdb==1.6.0

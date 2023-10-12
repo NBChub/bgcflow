@@ -179,7 +179,7 @@ deeptfactor:
   - 'Kim G.B., Gao Y., Palsson B.O., Lee S.Y. 2020. DeepTFactor: A deep learning-based
     tool for the prediction of transcription factors. [PNAS. doi: 10.1073/pnas.2021171118](https://www.pnas.org/doi/10.1073/pnas.2021171118)'
 deeptfactor-roary:
-  final_output: data/interim/deeptfactor_roary/{name}/
+  final_output: data/processed/{name}/tables/df_deeptfactor_roary.tsv
   description: Use DeepTFactor on Roary outputs.
   category: Comparative Genomics
   link:
