@@ -21,7 +21,7 @@ rules:
   bigslice: TRUE
   automlst-wrapper: TRUE
   arts: TRUE
-  roary: TRUE
+  roary: FALSE
   eggnog: FALSE
   eggnog-roary: FALSE
   deeptfactor: TRUE
