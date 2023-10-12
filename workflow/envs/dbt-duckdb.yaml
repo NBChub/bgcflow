@@ -5,6 +5,7 @@ channels:
   - defaults
 dependencies:
   - python==3.11
+  - unzip
   - pip
   - pip:
     - dbt-duckdb==1.6.0
