@@ -14,7 +14,7 @@ if len(py_wildcards) > 0:
         output:
             notebook="data/processed/{name}/docs/{bgcflow_rules_py}.ipynb",
         conda:
-            "../envs/bgc_analytics.yaml"
+            "../envs/bgcflow_notes.yaml"
         log:
             "logs/report/{bgcflow_rules_py}-report-copy-{name}.log",
         wildcard_constraints:
@@ -33,7 +33,7 @@ if len(py_wildcards) > 0:
         output:
             markdown="data/processed/{name}/docs/{bgcflow_rules_py}.md",
         conda:
-            "../envs/bgc_analytics.yaml"
+            "../envs/bgcflow_notes.yaml"
         log:
             "logs/report/{bgcflow_rules_py}-report-{name}.log",
         wildcard_constraints:
@@ -50,7 +50,7 @@ if len(rpy_wildcards) > 0:
         output:
             notebook="data/processed/{name}/docs/{bgcflow_rules_rpy}.ipynb",
         conda:
-            "../envs/bgc_analytics.yaml"
+            "../envs/bgcflow_notes.yaml"
         log:
             "logs/report/{bgcflow_rules_rpy}-report-copy-{name}.log",
         wildcard_constraints:

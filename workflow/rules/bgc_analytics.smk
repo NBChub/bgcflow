@@ -112,9 +112,11 @@ rule write_dependency_versions:
         "../envs/bgc_analytics.yaml"
     log:
         "logs/bgc_analytics/{name}/write_dependency_versions.log",
+    params:
+        antismash_version=antismash_major_version
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/get_dependencies.py {output} 2> {log}
+        python workflow/bgcflow/bgcflow/data/get_dependencies.py {output} {params.antismash_version} 2> {log}
         """
 
 rule get_project_metadata:
