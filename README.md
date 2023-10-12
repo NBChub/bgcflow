@@ -24,7 +24,7 @@ A quick and easy way to use `BGCFlow` using the command line interface wrapper:
 
 ```bash
 # create and activate a new conda environment
-conda create -n bgcflow -c conda-forge python=3.11 pip openjdk -y
+conda create -n bgcflow -c conda-forge python=3.11 pip openjdk -y # also install java for metabase
 conda activate bgcflow
 
 # install `BGCFlow` wrapper
@@ -40,10 +40,6 @@ With the environment activated, install or setup this configurations:
 ```bash
 conda config --set channel_priority disabled
 conda config --describe channel_priority
-```
-  - Java (required to run `metabase`)
-```bash
-conda install openjdk 
 ```
 
 3. Deploy and run BGCFlow, change `your_bgcflow_directory` variable accordingly:
