@@ -2,6 +2,7 @@
 [![Snakemake](https://img.shields.io/badge/snakemake-≥7.14.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![PEP compatible](https://pepkit.github.io/img/PEP-compatible-green.svg)](https://pep.databio.org)
 [![wiki](https://img.shields.io/badge/wiki-documentation-forestgreen)](https://github.com/NBChub/bgcflow/wiki)
+[![example report](https://img.shields.io/badge/demo-report-blue)](https://nbchub.github.io/bgcflow_report_demo/)
 
 `BGCFlow` is a systematic workflow for the analysis of biosynthetic gene clusters across large collections of genomes (pangenomes) from internal &amp; public datasets.
 
@@ -52,7 +53,7 @@ bgcflow init # initiate `BGCFlow` config and examples from template
 bgcflow run -n # do a dry run, remove the flag "-n" to run the example dataset
 ```
 
-4. Build and serve interactive report (after `bgcflow run` finished). The report will be served in [http://localhost:8001/](http://localhost:8001/):
+4. Build and serve interactive report (after `bgcflow run` finished). The report will be served in [http://localhost:8001/](http://localhost:8001/). A demo of the report is available here: [![example report](https://img.shields.io/badge/demo-report-blue)](https://nbchub.github.io/bgcflow_report_demo/)
 ```bash
 # build a report
 bgcflow build report
