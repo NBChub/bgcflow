@@ -40,12 +40,13 @@ rule install_gtdbtk:
         (cd resources && mkdir -p gtdbtk && tar -xvzf gtdbtk_{params.release_version}_data.tar.gz -C "gtdbtk" --strip 1 && rm gtdbtk_{params.release_version}_data.tar.gz) &>> {log}
         """
 
-rule prepare_gtdbtk_input:
+checkpoint prepare_gtdbtk_input:
     input:
         json_list=lambda wildcards: get_json_inputs(wildcards.name, DF_SAMPLES),
         fna=lambda wildcards: get_fasta_inputs(wildcards.name, DF_SAMPLES),
     output:
         fnadir=directory("data/interim/gtdbtk/{name}/fasta/"),
+        fnalist="data/interim/gtdbtk/{name}/fasta_list.txt",
     log:
         "logs/gtdbtk/prepare_gtdbtk_input/{name}.log",
     conda:
@@ -58,7 +59,7 @@ rule prepare_gtdbtk_input:
         INPUT_JSON="$TMPDIR/df_json_gtdbtk.txt"
         echo '{input.fna}' > $INPUT_FNA
         echo '{input.json_list}' > $INPUT_JSON
-        python workflow/bgcflow/bgcflow/data/gtdbtk_prep.py $INPUT_FNA $INPUT_JSON {output.fnadir} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/gtdbtk_prep.py $INPUT_FNA $INPUT_JSON {output.fnadir} {output.fnalist} 2>> {log}
         rm $INPUT_FNA
         rm $INPUT_JSON
         """
@@ -68,11 +69,11 @@ rule gtdbtk:
         gtdbtk="resources/gtdbtk/",
         fnadir="data/interim/gtdbtk/{name}/fasta/",
     output:
+        fnalist="data/interim/gtdbtk/{name}/fasta_list_success.txt",
         #batchfile = "data/interim/gtdbtk/{name}/fasta_batch.tsv",
         gtdbtk_dir=directory("data/interim/gtdbtk/{name}/result/"),
         tmpdir=temp(directory("data/interim/gtdbtk/{name}_tmp/")),
         summary_interim="data/interim/gtdbtk/{name}/result/classify/gtdbtk.bac120.summary.tsv",
-        summary_processed="data/processed/{name}/tables/gtdbtk.bac120.summary.tsv",
     conda:
         "../envs/gtdbtk.yaml"
     log:
@@ -84,5 +85,33 @@ rule gtdbtk:
         """
         mkdir -p {output.tmpdir}
         gtdbtk classify_wf --genome_dir {input.fnadir} --out_dir {output.gtdbtk_dir} --cpus {threads} --pplacer_cpus 1 --tmpdir {output.tmpdir} {params.ani_screen} &>> {log}
-        cp {output.summary_interim} {output.summary_processed}
         """
+
+rule gtdbtk_fna_fail:
+    output:
+        "data/interim/gtdbtk/{name}/fasta_list_fail.txt",
+    shell:
+        """
+        echo -e "user_genome\tclassification\tfastani_reference\tfastani_reference_radius\tfastani_taxonomy\tfastani_ani\tfastani_af\tclosest_placement_reference\tclosest_placement_radius\tclosest_placement_taxonomy\tclosest_placement_ani\tclosest_placement_af\tpplacer_taxonomy\tclassification_method\tnote\tother_related_references(genome_id,species_name,radius,ANI,AF)\tmsa_percent\ttranslation_table\tred_value\twarnings" > {output}
+        """
+
+def evaluate_input(wildcards):
+    # decision based on content of output file
+    # evaluate whether there is a valid genomes to use for gtdbtk or not
+    # Important: use the method open() of the returned file!
+    # This way, Snakemake is able to automatically download the file if it is generated in
+    # a cloud environment without a shared filesystem.
+    with checkpoints.prepare_gtdbtk_input.get(name=wildcards.name).output["fnalist"].open() as f:
+        textfile = f.readlines()
+        if len(f.readlines()) > 0:
+            return "data/interim/gtdbtk/{name}/fasta_list_success.txt",
+        else:
+            return "data/interim/gtdbtk/{name}/fasta_list_fail.txt",
+
+rule evaluate_gtdbtk_input:
+    input:
+        evaluate_input
+    output:
+        summary_processed="data/processed/{name}/tables/gtdbtk.bac120.summary.tsv"
+    shell:
+        "cp {input} {output.summary_processed}"
