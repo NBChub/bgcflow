@@ -49,6 +49,8 @@ rule lsabgc_ready:
     threads: 16
     log:
         "logs/lsabgc/lsabgc_ready-{name}-as_{version}.log",
+    params:
+        annotate="" #"--annotate",
     shell:
         """
         bigscape_dir=$(dirname {input.bigscape_index})
@@ -57,7 +59,7 @@ rule lsabgc_ready:
             --bgc_prediction_software antiSMASH \
             --bigscape_results $bigscape_dir \
             --cpus {threads} \
-            --annotate --run_gtotree --lsabgc_cluster --lsabgc_expansion \
+            {params.annotate} --run_gtotree --lsabgc_cluster --lsabgc_expansion \
             --output_directory {output.lsabgc_output} 2>> {log}
         """
 
