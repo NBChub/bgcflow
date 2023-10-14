@@ -90,28 +90,20 @@ rule gtdbtk:
 rule gtdbtk_fna_fail:
     output:
         "data/interim/gtdbtk/{name}/fasta_list_fail.txt",
+    log:
+        "logs/gtdbtk/gtdbtk/gtdbtk_{name}.log",
     shell:
         """
+        echo "WARNING: No genomes are eligible for GTDB-Tk classification. Please check if the genome ids already exists in GTDB. Returning empty ouput." > {log}
         echo -e "user_genome\tclassification\tfastani_reference\tfastani_reference_radius\tfastani_taxonomy\tfastani_ani\tfastani_af\tclosest_placement_reference\tclosest_placement_radius\tclosest_placement_taxonomy\tclosest_placement_ani\tclosest_placement_af\tpplacer_taxonomy\tclassification_method\tnote\tother_related_references(genome_id,species_name,radius,ANI,AF)\tmsa_percent\ttranslation_table\tred_value\twarnings" > {output}
         """
 
-def evaluate_input(wildcards):
-    # decision based on content of output file
-    # evaluate whether there is a valid genomes to use for gtdbtk or not
-    # Important: use the method open() of the returned file!
-    # This way, Snakemake is able to automatically download the file if it is generated in
-    # a cloud environment without a shared filesystem.
-    with checkpoints.prepare_gtdbtk_input.get(name=wildcards.name).output["fnalist"].open() as f:
-        textfile = f.readlines()
-        if len(f.readlines()) > 0:
-            return "data/interim/gtdbtk/{name}/fasta_list_success.txt",
-        else:
-            return "data/interim/gtdbtk/{name}/fasta_list_fail.txt",
-
 rule evaluate_gtdbtk_input:
     input:
-        evaluate_input
+        evaluate_gtdbtk_input
     output:
         summary_processed="data/processed/{name}/tables/gtdbtk.bac120.summary.tsv"
+    log:
+        "logs/gtdbtk/gtdbtk/evaluate_gtdbtk_{name}.log",
     shell:
-        "cp {input} {output.summary_processed}"
+        "cp {input} {output.summary_processed} 2>> {log}"

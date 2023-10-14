@@ -850,3 +850,25 @@ def custom_resource_dir():
             )
     sys.stderr.write(f"   All resources set.\n\n")
     return
+
+def evaluate_gtdbtk_input(wildcards):
+    """
+    Evaluate whether there is a valid genome to use for GTDB-Tk or not based on the content of the output file.
+    The function reads the content of the output file using the method open() of the returned file.
+    This way, Snakemake is able to automatically download the file if it is generated in a cloud environment
+    without a shared filesystem. If the file has content, the function returns the path to the
+    `fasta_list_success.txt` file, otherwise it returns the path to the `fasta_list_fail.txt` file.
+
+    Args:
+        wildcards (object): A Snakemake wildcard object.
+
+    Returns:
+        str: The path to the `fasta_list_success.txt` file if the file has content, otherwise the path to the
+        `fasta_list_fail.txt` file.
+    """
+    with checkpoints.prepare_gtdbtk_input.get(name=wildcards.name).output["fnalist"].open() as f:
+        textfile = f.readlines()
+        if len(f.readlines()) > 0:
+            return "data/interim/gtdbtk/{name}/fasta_list_success.txt",
+        else:
+            return "data/interim/gtdbtk/{name}/fasta_list_fail.txt",
