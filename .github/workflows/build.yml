@@ -15,7 +15,7 @@ jobs:
       matrix:
         environment:
             - workflow/envs/antismash.yaml
-            #- workflow/envs/antismash_v6.yaml
+            - workflow/envs/antismash_v6.yaml
             - workflow/envs/arts.yaml
             - workflow/envs/automlst_wrapper.yaml
             - workflow/envs/bgc_analytics.yaml
