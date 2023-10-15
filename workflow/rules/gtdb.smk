@@ -2,28 +2,6 @@ import requests
 import multiprocessing
 import time
 
-# Define a function to get user input with a timeout
-def get_user_input_with_timeout(prompt, timeout):
-    result = [None]  # To store user input
-
-    def get_input():
-        result[0] = input(prompt)
-
-    # Create a process to get user input
-    user_input_process = multiprocessing.Process(target=get_input)
-
-    # Start the process and wait for the specified timeout
-    user_input_process.start()
-    user_input_process.join(timeout)
-
-    # Check if the process is still alive (i.e., the timeout elapsed)
-    if user_input_process.is_alive():
-        user_input_process.terminate()  # Terminate the process if it's still running
-        result[0] = None  # Timeout occurred
-
-    return result[0]
-
-
 # Read release version from config
 try:
     gtdb_release = config["rule_parameters"]["install_gtdbtk"]["release"]
