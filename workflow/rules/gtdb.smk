@@ -1,3 +1,29 @@
+import requests
+import multiprocessing
+import time
+
+# Define a function to get user input with a timeout
+def get_user_input_with_timeout(prompt, timeout):
+    result = [None]  # To store user input
+
+    def get_input():
+        result[0] = input(prompt)
+
+    # Create a process to get user input
+    user_input_process = multiprocessing.Process(target=get_input)
+
+    # Start the process and wait for the specified timeout
+    user_input_process.start()
+    user_input_process.join(timeout)
+
+    # Check if the process is still alive (i.e., the timeout elapsed)
+    if user_input_process.is_alive():
+        user_input_process.terminate()  # Terminate the process if it's still running
+        result[0] = None  # Timeout occurred
+
+    return result[0]
+
+
 # Read release version from config
 try:
     gtdb_release = config["rule_parameters"]["install_gtdbtk"]["release"]
@@ -7,8 +33,56 @@ try:
 except KeyError:
     gtdb_release = "207"
     gtdb_release_version = "207_v2"
-
 sys.stderr.write(f"GTDB API | Grabbing metadata using GTDB release version: {gtdb_release_version}\n")
+
+# Testing connection to GTDB API
+gtdb_api_url = "https://gtdb-api.ecogenomic.org/status/db"
+
+gtdb_offline_mode = False  # Flag to indicate if the GTDB API is offline
+
+if "use_gtdb_api" in config["rule_parameters"]:
+    if config["rule_parameters"]["use_gtdb_api"] == False:
+        gtdb_offline_mode = True
+
+if not gtdb_offline_mode:
+    try:
+        sys.stderr.write(f"GTDB API | Testing connection to: {gtdb_api_url}\n")
+        response = requests.get(gtdb_api_url)
+        response.raise_for_status()  # Raise an exception for HTTP errors (4xx, 5xx)
+        data = response.json()  # Assuming the API returns JSON data
+        sys.stderr.write(f'GTDB API | Database is online: {data["online"]}\n')
+
+    except requests.exceptions.RequestException as e:
+        sys.stderr.write(f"GTDB API | Error: {e}\n")
+        sys.stderr.write("GTDB API | Failed to connect to the GTDB API.\n")
+        sys.stderr.write("GTDB API | It is possible to continue in offline mode. This will return empty taxonomic information for all NCBI genomes!\n")
+
+        # Check if the error is due to a 504 or 404 status code
+        if response.status_code == 504 or response.status_code == 404:
+            countdown_seconds = 30
+            while countdown_seconds > 0:
+                sys.stderr.write(f"\rDo you want to continue in offline mode? (yes/no/stop) (Time left: {countdown_seconds} seconds): ")
+                sys.stderr.flush()
+                time.sleep(1)  # Wait for 1 second
+                countdown_seconds -= 1
+
+            sys.stderr.write("\rDo you want to continue in offline mode? (yes/no/stop) (Time left: 0 seconds): \n")
+            sys.stderr.flush()
+
+            user_input = get_user_input_with_timeout("", 0)  # Get user input with no timeout
+            if user_input is not None and user_input.strip().lower() == 'yes':
+                gtdb_offline_mode = True  # Continue in offline mode
+            elif user_input is not None and user_input.strip().lower() == 'stop':
+                raise
+            else:
+                # timed out, continue anyway
+                #sys.stderr.write("WARNING: No response, continuing BGCFlow in online mode anyway...")
+                pass
+
+else:
+    sys.stderr.write("WARNING! GTDB API offline mode enabled. This will return empty taxonomic information for all NCBI genomes!\n")
+
+sys.stderr.write(f"GTDB API | Searching in offline mode: {gtdb_offline_mode}\n")
 
 rule gtdb_prep:
     output:
@@ -21,6 +95,7 @@ rule gtdb_prep:
         samples_path=bgcflow_util_dir / "samples.csv",
         gtdb_paths=GTDB_PATHS,
         version=f"R{str(gtdb_release).split('.')[0]}",
+        offline=gtdb_offline_mode,
     shell:
         """
         python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} '{params.samples_path}' '{params.gtdb_paths}' {params.version} 2> {log}

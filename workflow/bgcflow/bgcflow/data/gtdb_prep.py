@@ -12,7 +12,7 @@ logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 
 def gtdb_prep(
-    genome_id, outfile, samples_table, tax_path, release="R207"
+    genome_id, outfile, samples_table, tax_path, release="R207", offline_mode=False
 ):  # what happen if it does not find?
     """
     Given a genome id and the samples Pandas dataframe, write  a JSON file containing taxonomic information from GTDB API. The script will first search using the closest taxonomic placement (NCBI accession id), then using the genus information provided by user. If no information is provided, return an empty taxonomic information.
@@ -48,66 +48,77 @@ def gtdb_prep(
         }
         return gtdb_tax
 
-    def find_taxonomy(query, genome_id, gtdb_tax):
+    def find_taxonomy(query, genome_id, gtdb_tax, offline_mode=False):
         """
         Helper script to decide taxonomic placement for a given query
         """
-        # If closest placement reference is provided, try finding taxonomic information from GTDB API
-        if query.closest_placement_reference.values[0] != "":
-            try:
-                logging.info(
-                    "Inferring taxonomic placement from provided closest reference...."
-                )
-                gtdb_tax = get_ncbi_taxon_GTDB(
-                    query.closest_placement_reference.values[0], release
-                )
-                gtdb_tax["genome_id"] = genome_id
-            except KeyError as e:
-                raise PlacementError(
-                    f"Cannot infer taxonomic placement from provided closest reference. Make sure the accession id: {query.closest_placement_reference.values[0]} is part of GTDB release: {e}"
-                )
-
-        # If NCBI accession is provided, try to find taxonomic information from GTDB API
-        elif query.source.values[0] == "ncbi":
-            try:
-                logging.info("Inferring taxonomic placement from NCBI accession....")
-                gtdb_tax = get_ncbi_taxon_GTDB(query.genome_id.values[0], release)
-            except KeyError:
-                if query.genus.values[0] != "":
+        if offline_mode:
+            logging.info(
+                "WARNING: Running in offline mode. Returning empty dataframe..."
+            )
+            gtdb_tax = empty_result(genome_id)
+            return gtdb_tax
+        else:
+            # If closest placement reference is provided, try finding taxonomic information from GTDB API
+            if query.closest_placement_reference.values[0] != "":
+                try:
                     logging.info(
-                        "Inferring taxonomic placement from provided genus information...."
+                        "Inferring taxonomic placement from provided closest reference...."
+                    )
+                    gtdb_tax = get_ncbi_taxon_GTDB(
+                        query.closest_placement_reference.values[0], release
                     )
                     gtdb_tax["genome_id"] = genome_id
-                    gtdb_tax.update(
-                        get_parent_taxon_GTDB(query.genus.values[0], "genus", release)
+                except KeyError as e:
+                    raise PlacementError(
+                        f"Cannot infer taxonomic placement from provided closest reference. Make sure the accession id: {query.closest_placement_reference.values[0]} is part of GTDB release: {e}"
                     )
+
+            # If NCBI accession is provided, try to find taxonomic information from GTDB API
+            elif query.source.values[0] == "ncbi":
+                try:
+                    logging.info(
+                        "Inferring taxonomic placement from NCBI accession...."
+                    )
+                    gtdb_tax = get_ncbi_taxon_GTDB(query.genome_id.values[0], release)
+                except KeyError:
+                    if query.genus.values[0] != "":
+                        logging.info(
+                            "Inferring taxonomic placement from provided genus information...."
+                        )
+                        gtdb_tax["genome_id"] = genome_id
+                        gtdb_tax.update(
+                            get_parent_taxon_GTDB(
+                                query.genus.values[0], "genus", release
+                            )
+                        )
+                        gtdb_tax["gtdb_taxonomy"][
+                            "species"
+                        ] = f"s__{gtdb_tax['gtdb_taxonomy']['genus'].split('__')[-1]} sp."
+                    else:
+                        gtdb_tax = empty_result(genome_id)
+
+            # Try to get taxonomic information from genus information
+            elif query.genus.values[0] != "":
+                logging.info(
+                    "Inferring taxonomic placement from provided genus information...."
+                )
+                gtdb_tax["genome_id"] = genome_id
+                gtdb_tax.update(
+                    get_parent_taxon_GTDB(query.genus.values[0], "genus", release)
+                )
+                try:
                     gtdb_tax["gtdb_taxonomy"][
                         "species"
                     ] = f"s__{gtdb_tax['gtdb_taxonomy']['genus'].split('__')[-1]} sp."
-                else:
+                except KeyError:
                     gtdb_tax = empty_result(genome_id)
 
-        # Try to get taxonomic information from genus information
-        elif query.genus.values[0] != "":
-            logging.info(
-                "Inferring taxonomic placement from provided genus information...."
-            )
-            gtdb_tax["genome_id"] = genome_id
-            gtdb_tax.update(
-                get_parent_taxon_GTDB(query.genus.values[0], "genus", release)
-            )
-            try:
-                gtdb_tax["gtdb_taxonomy"][
-                    "species"
-                ] = f"s__{gtdb_tax['gtdb_taxonomy']['genus'].split('__')[-1]} sp."
-            except KeyError:
+            # If no information is found, return an empty dict
+            else:
                 gtdb_tax = empty_result(genome_id)
 
-        # If no information is found, return an empty dict
-        else:
-            gtdb_tax = empty_result(genome_id)
-
-        return gtdb_tax
+            return gtdb_tax
 
     # get query by subsetting samples df with genome id
     shell_input = samples_table.split()
@@ -128,9 +139,11 @@ def gtdb_prep(
             logging.warning(
                 f"{genome_id}: Not found in user provided taxonomic placement..."
             )
-            gtdb_tax = find_taxonomy(query, genome_id, gtdb_tax)
+            gtdb_tax = find_taxonomy(
+                query, genome_id, gtdb_tax, offline_mode=offline_mode
+            )
     else:
-        gtdb_tax = find_taxonomy(query, genome_id, gtdb_tax)
+        gtdb_tax = find_taxonomy(query, genome_id, gtdb_tax, offline_mode=offline_mode)
 
     if gtdb_tax == {}:
         raise EmptyTaxError(
@@ -350,4 +363,6 @@ def get_parent_taxon_GTDB(taxon, level, release="R207"):
 
 
 if __name__ == "__main__":
-    gtdb_prep(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+    gtdb_prep(
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6]
+    )
