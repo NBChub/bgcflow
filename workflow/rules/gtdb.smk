@@ -76,7 +76,7 @@ rule gtdb_prep:
         offline=gtdb_offline_mode,
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} '{params.samples_path}' '{params.gtdb_paths}' {params.version} 2> {log}
+        python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} '{params.samples_path}' '{params.gtdb_paths}' {params.version} {params.offline} 2> {log}
         """
 
 
