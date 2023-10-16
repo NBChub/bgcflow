@@ -3,8 +3,9 @@ channels:
   - bioconda
   - conda-forge
   - defaults
-  - r
 dependencies:
+  - python<3.12
   - roary=3.13.0
-  - r-base
+  - r-base=4.1.3
   - r-ggplot2=3.3.3
+  - r-markdown

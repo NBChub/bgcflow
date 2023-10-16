@@ -2,7 +2,7 @@ interproscan_version = "5.60-92.0"
 
 rule install_interproscan:
     output:
-        interproscan = f"resources/interproscan-{interproscan_version}"
+        interproscan = directory(f"resources/interproscan/interproscan-{interproscan_version}")
     log:
         "logs/interproscan/install_interproscan.log",
     conda:
@@ -15,8 +15,13 @@ rule install_interproscan:
         #sudo apt-get install libpcre3-dev
         wget -P resources https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/{params.version}/interproscan-{params.version}-64-bit.tar.gz -nc 2>> {log}
         wget -P resources https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/{params.version}/interproscan-{params.version}-64-bit.tar.gz.md5 -nc 2>> {log}
-        (cd resources && md5sum -c interproscan-{params.version}-64-bit.tar.gz.md5) 2>> {log}
-        (cd resources && tar -pxvzf interproscan-{params.version}-64-bit.tar.gz && mv interproscan-{params.version} interproscan) 2>> {log}
+        if [ ! -d "{output.interproscan}" ]; then
+            mkdir -p resources/interproscan
+            (cd resources && md5sum -c interproscan-{params.version}-64-bit.tar.gz.md5) &>> {log}
+            (cd resources && tar -pxvzf interproscan-{params.version}-64-bit.tar.gz && mv interproscan-{params.version} interproscan/) &>> {log}
+        else
+            echo "InterProScan is extracted in {output.interproscan}." >> {log}
+        fi
         (cd resources/interproscan/interproscan-{params.version} && python3 setup.py interproscan.properties) 2>> {log}
         (cd resources/interproscan/interproscan-{params.version} && ./interproscan.sh -i test_all_appl.fasta -f tsv -dp) &>> {log}
         (cd resources/interproscan/interproscan-{params.version} && ./interproscan.sh -i test_all_appl.fasta -f tsv) &>> {log}
@@ -39,7 +44,7 @@ rule prepare_aa_interproscan:
 rule interproscan:
     input:
         fasta = "data/interim/interproscan/{name}_{version}.faa",
-        interproscan = f"resources/interproscan-{interproscan_version}"
+        interproscan = f"resources/interproscan/interproscan-{interproscan_version}"
     output:
         tsv = "data/processed/{name}/tables/interproscan_as_{version}.tsv",
         json = "data/processed/{name}/tables/interproscan_as_{version}.json",

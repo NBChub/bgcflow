@@ -8,7 +8,7 @@ from pathlib import Path
 import peppy
 
 min_version("7.14.0")
-__version__ = "0.7.7"
+__version__ = "0.7.8"
 
 
 container: "docker://matinnu/bgcflow:latest"
@@ -850,3 +850,46 @@ def custom_resource_dir():
             )
     sys.stderr.write(f"   All resources set.\n\n")
     return
+
+def evaluate_gtdbtk_input(wildcards):
+    """
+    Evaluate whether there is a valid genome to use for GTDB-Tk or not based on the content of the output file.
+    The function reads the content of the output file using the method open() of the returned file.
+    This way, Snakemake is able to automatically download the file if it is generated in a cloud environment
+    without a shared filesystem. If the file has content, the function returns the path to the
+    `fasta_list_success.txt` file, otherwise it returns the path to the `fasta_list_fail.txt` file.
+
+    Args:
+        wildcards (object): A Snakemake wildcard object.
+
+    Returns:
+        str: The path to the `fasta_list_success.txt` file if the file has content, otherwise the path to the
+        `fasta_list_fail.txt` file.
+    """
+    with checkpoints.prepare_gtdbtk_input.get(name=wildcards.name).output["fnalist"].open() as f:
+        textfile = f.readlines()
+        if len(f.readlines()) > 0:
+            return "data/interim/gtdbtk/{name}/fasta_list_success.txt",
+        else:
+            return "data/interim/gtdbtk/{name}/fasta_list_fail.txt",
+
+# Define a function to get user input with a timeout
+def get_user_input_with_timeout(prompt, timeout):
+    result = [None]  # To store user input
+
+    def get_input():
+        result[0] = input(prompt)
+
+    # Create a process to get user input
+    user_input_process = multiprocessing.Process(target=get_input)
+
+    # Start the process and wait for the specified timeout
+    user_input_process.start()
+    user_input_process.join(timeout)
+
+    # Check if the process is still alive (i.e., the timeout elapsed)
+    if user_input_process.is_alive():
+        user_input_process.terminate()  # Terminate the process if it's still running
+        result[0] = None  # Timeout occurred
+
+    return result[0]

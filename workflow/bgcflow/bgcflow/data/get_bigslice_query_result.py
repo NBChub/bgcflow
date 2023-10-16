@@ -18,10 +18,15 @@ def get_bigslice_query(
     query_id = find_query_result(project_name, bigslice_full_run)
     fetch_query_tables(query_id, output_folder, bigslice_full_run)
     logging.info("Copying SQL database of the run...")
-    shutil.copy(
-        bigslice_full_run / f"reports/{query_id}/data.db",
-        Path(output_folder) / f"{query_id}.db",
-    )
+    try:
+        shutil.copy(
+            bigslice_full_run / f"reports/{query_id}/data.db",
+            Path(output_folder) / f"{query_id}.db",
+        )
+    except BlockingIOError:
+        subprocess.run(
+            ["cp", str(bigslice_full_run / f"reports/{query_id}/data.db"), str(Path(output_folder) / f"{query_id}.db")]
+        )
     logging.info("Job done!")
     return
 
