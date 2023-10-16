@@ -52,8 +52,8 @@ def gtdb_prep(
         """
         Helper script to decide taxonomic placement for a given query
         """
-        logging.info(f"Offline mode: {offline_mode}")
-        if offline_mode is True:
+        logging.info(f"Offline mode: {bool(offline_mode)}")
+        if bool(offline_mode) is True:
             logging.info(
                 "WARNING: Running in offline mode. Returning empty dataframe..."
             )
