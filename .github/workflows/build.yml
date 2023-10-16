@@ -36,6 +36,7 @@ jobs:
             - workflow/envs/roary.yaml
             - workflow/envs/seqfu.yaml
             - workflow/envs/utilities.yaml
+            - workflow/envs/lsabgc.yaml
     steps:
     - name: Checkout repository and submodules
       uses: actions/checkout@v4

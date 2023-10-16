@@ -2,7 +2,10 @@
 [![Snakemake](https://img.shields.io/badge/snakemake-≥7.14.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![PEP compatible](https://pepkit.github.io/img/PEP-compatible-green.svg)](https://pep.databio.org)
 [![wiki](https://img.shields.io/badge/wiki-documentation-forestgreen)](https://github.com/NBChub/bgcflow/wiki)
-[![bgcflow-wrapper](https://img.shields.io/badge/CLI-BGCFlow_wrapper-orange)](https://github.com/NBChub/bgcflow_wrapper)
+<a href="https://pypi.python.org/pypi/bgcflow_wrapper">
+    <img src="https://img.shields.io/pypi/v/bgcflow_wrapper.svg"
+        alt = "Release Status">
+</a>
 [![example report](https://img.shields.io/badge/demo-report-blue)](https://nbchub.github.io/bgcflow_report_demo/)
 
 `BGCFlow` is a systematic workflow for the analysis of biosynthetic gene clusters across large collections of genomes (pangenomes) from internal &amp; public datasets.
@@ -28,7 +31,7 @@ conda create -n bgcflow -c conda-forge python=3.11 pip openjdk -y # also install
 conda activate bgcflow
 
 # install `BGCFlow` wrapper
-pip install git+https://github.com/NBChub/bgcflow_wrapper.git
+pip install bgcflow_wrapper
 
 # make sure to use bgcflow_wrapper version >= 0.2.7
 bgcflow --version
@@ -45,8 +48,8 @@ conda config --describe channel_priority
 3. Deploy and run BGCFlow, change `your_bgcflow_directory` variable accordingly:
 ```bash
 # Deploy and run BGCFlow
-bgcflow clone <your_bgcflow_directory> # clone `BGCFlow` to your_bgcflow_directory
-cd <your_bgcflow_directory> # move to BGCFLOW_PATH
+bgcflow clone bgcflow # clone `BGCFlow` a directory named bgcflow
+cd bgcflow # move to bgcflow directory
 bgcflow init # initiate `BGCFlow` config and examples from template
 bgcflow run -n # do a dry run, remove the flag "-n" to run the example dataset
 ```
@@ -69,6 +72,7 @@ bgcflow serve --project Lactobacillus_delbrueckii
 
 - For detailed usage and configurations, have a look at the WIKI:
 [![wiki](https://img.shields.io/badge/wiki-documentation-forestgreen)](https://github.com/NBChub/bgcflow/wiki)
+
 - Read more about [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper) for a detailed overview of the command line interface.
 
 [![asciicast](https://asciinema.org/a/595149.svg)](https://asciinema.org/a/595149)
@@ -118,18 +122,14 @@ The development of BGCFlow commenced within the Natural Products Genome Mining r
 - **Danish National Research Foundation:** Additional funding was provided by the Danish National Research Foundation for the Center for Microbial Secondary Metabolites (CeMiSt), under the grant [DNRF137].
 
 ## References
-> - *eggNOG-mapper v2: functional annotation, orthology assignments, and domain prediction at the metagenomic scale. Carlos P. Cantalapiedra, Ana Hernandez-Plaza, Ivica Letunic, Peer Bork, Jaime Huerta-Cepas. 2021. [Molecular Biology and Evolution, msab293](https://doi.org/10.1093/molbev/msab293)*
-> - *eggNOG 5.0: a hierarchical, functionally and phylogenetically annotated orthology resource based on 5090 organisms and 2502 viruses. Jaime Huerta-Cepas, Damian Szklarczyk, Davide Heller, Ana Hernández-Plaza, Sofia K Forslund, Helen Cook, Daniel R Mende, Ivica Letunic, Thomas Rattei, Lars J Jensen, Christian von Mering, Peer Bork [Nucleic Acids Res. 2019 Jan 8; 47(Database issue): D309–D314. doi: 10.1093/nar/gky1085](https://academic.oup.com/nar/article/47/D1/D309/5173662)*
 > - *Mash: fast genome and metagenome distance estimation using MinHash. Ondov BD, Treangen TJ, Melsted P, Mallonee AB, Bergman NH, Koren S, Phillippy AM. [Genome Biol. 2016 Jun 20;17(1):132. doi: 10.1186/s13059-016-0997-x.](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0997-x)*
 > - *Mash Screen: high-throughput sequence containment estimation for genome discovery. Ondov BD, Starrett GJ, Sappington A, Kostic A, Koren S, Buck CB, Phillippy AM. [Genome Biol. 2019 Nov 5;20(1):232. doi: 10.1186/s13059-019-1841-x.](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1841-x)*
 > - *Jain, C., Rodriguez-R, L.M., Phillippy, A.M. et al. High throughput ANI analysis of 90K prokaryotic genomes reveals clear species boundaries. Nat Commun 9, 5114 (2018). [https://doi.org/10.1038/s41467-018-07641-9](https://doi.org/10.1038/s41467-018-07641-9)*
 > - *Mohammad Alanjary, Katharina Steinke, Nadine Ziemert, AutoMLST: an automated web server for generating multi-locus species trees highlighting natural product potential,[Nucleic Acids Research, Volume 47, Issue W1, 02 July 2019, Pages W276–W282](https://doi.org/10.1093/nar/gkz282)*
 > - *Andrew J. Page, Carla A. Cummins, Martin Hunt, Vanessa K. Wong, Sandra Reuter, Matthew T. G. Holden, Maria Fookes, Daniel Falush, Jacqueline A. Keane, Julian Parkhill, 'Roary: Rapid large-scale prokaryote pan genome analysis', Bioinformatics, 2015;31(22):3691-3693 [doi:10.1093/bioinformatics/btv421](https://academic.oup.com/bioinformatics/article/31/22/3691/240757)*
-> - *Andrew J. Page, Carla A. Cummins, Martin Hunt, Vanessa K. Wong, Sandra Reuter, Matthew T. G. Holden, Maria Fookes, Daniel Falush, Jacqueline A. Keane, Julian Parkhill, 'Roary: Rapid large-scale prokaryote pan genome analysis', Bioinformatics, 2015;31(22):3691-3693 [doi:10.1093/bioinformatics/btv421](https://academic.oup.com/bioinformatics/article/31/22/3691/240757)*
 > - *eggNOG-mapper v2: functional annotation, orthology assignments, and domain prediction at the metagenomic scale. Carlos P. Cantalapiedra, Ana Hernandez-Plaza, Ivica Letunic, Peer Bork, Jaime Huerta-Cepas. 2021. [Molecular Biology and Evolution, msab293](https://doi.org/10.1093/molbev/msab293)*
 > - *eggNOG 5.0: a hierarchical, functionally and phylogenetically annotated orthology resource based on 5090 organisms and 2502 viruses. Jaime Huerta-Cepas, Damian Szklarczyk, Davide Heller, Ana Hernández-Plaza, Sofia K Forslund, Helen Cook, Daniel R Mende, Ivica Letunic, Thomas Rattei, Lars J Jensen, Christian von Mering, Peer Bork Nucleic Acids Res. 2019 Jan 8; 47(Database issue): D309–D314. [doi: 10.1093/nar/gky1085](https://academic.oup.com/nar/article/47/D1/D309/5173662)*
 > - *Telatin, A., Birolo, G., & Fariselli, P. SeqFu [Computer software]. GITHUB: [https://github.com/telatin/seqfu2](https://github.com/telatin/seqfu2)*
-> - *Satria A Kautsar, Justin J J van der Hooft, Dick de Ridder, Marnix H Medema, BiG-SLiCE: A highly scalable tool maps the diversity of 1.2 million biosynthetic gene clusters, [GigaScience, Volume 10, Issue 1, January 2021, giaa154](https://doi.org/10.1093/gigascience/giaa154)*
 > - *Satria A Kautsar, Kai Blin, Simon Shaw, Tilmann Weber, Marnix H Medema, BiG-FAM: the biosynthetic gene cluster families database, Nucleic Acids Research, gkaa812, [https://doi.org/10.1093/nar/gkaa812](https://doi.org/10.1093/nar/gkaa812)*
 > - *Satria A Kautsar, Justin J J van der Hooft, Dick de Ridder, Marnix H Medema, BiG-SLiCE: A highly scalable tool maps the diversity of 1.2 million biosynthetic gene clusters, [GigaScience, Volume 10, Issue 1, January 2021, giaa154.](https://doi.org/10.1093/gigascience/giaa154)*
 > - *Parks DH, Imelfort M, Skennerton CT, Hugenholtz P, Tyson GW. 2014. Assessing the quality of microbial genomes recovered from isolates, single cells, and metagenomes. [Genome Research, 25: 1043-1055.](https://genome.cshlp.org/content/25/7/1043.long)*
@@ -141,11 +141,8 @@ The development of BGCFlow commenced within the Natural Products Genome Mining r
 > - *Mungan,M.D., Alanjary,M., Blin,K., Weber,T., Medema,M.H. and Ziemert,N. (2020) ARTS 2.0: feature updates and expansion of the Antibiotic Resistant Target Seeker for comparative genome mining. [Nucleic Acids Res.,10.1093/nar/gkaa374](https://academic.oup.com/nar/article/48/W1/W546/5840579)*
 > - *Alanjary,M., Kronmiller,B., Adamek,M., Blin,K., Weber,T., Huson,D., Philmus,B. and Ziemert,N. (2017) The Antibiotic Resistant Target Seeker (ARTS), an exploration engine for antibiotic cluster prioritization and novel drug target discovery. [Nucleic Acids Res.,10.1093/nar/gkx360](https://academic.oup.com/nar/article/45/W1/W42/3787867?login=false)*
 > - *Kim G.B., Gao Y., Palsson B.O., Lee S.Y. 2020. DeepTFactor: A deep learning-based tool for the prediction of transcription factors. [PNAS. doi: 10.1073/pnas.2021171118](https://www.pnas.org/doi/10.1073/pnas.2021171118)*
-> - *Kim G.B., Gao Y., Palsson B.O., Lee S.Y. 2020. DeepTFactor: A deep learning-based tool for the prediction of transcription factors. [PNAS. doi: 10.1073/pnas.2021171118](https://www.pnas.org/doi/10.1073/pnas.2021171118)*
 > - *Andrew J. Page, Carla A. Cummins, Martin Hunt, Vanessa K. Wong, Sandra Reuter, Matthew T. G. Holden, Maria Fookes, Daniel Falush, Jacqueline A. Keane, Julian Parkhill, 'Roary: Rapid large-scale prokaryote pan genome analysis', [Bioinformatics, 2015;31(22):3691-3693 doi:10.1093/bioinformatics/btv421](https://academic.oup.com/bioinformatics/article/31/22/3691/240757)*
 > - *Gilchrist, C., Booth, T. J., van Wersch, B., van Grieken, L., Medema, M. H., & Chooi, Y. (2021). cblaster: a remote search tool for rapid identification and visualisation of homologous gene clusters (Version 1.3.9) [Computer software]. [https://doi.org/10.1101/2020.11.08.370601](https://doi.org/10.1101/2020.11.08.370601)*
 > - *Buchfink, B., Xie, C. & Huson, D. H. Fast and sensitive protein alignment using DIAMOND. [Nat. Methods 12, 59–60 (2015)](https://www.nature.com/articles/nmeth.3176).*
-> - *Gilchrist, C., Booth, T. J., van Wersch, B., van Grieken, L., Medema, M. H., & Chooi, Y. (2021). cblaster: a remote search tool for rapid identification and visualisation of homologous gene clusters (Version 1.3.9) [Computer software]. [https://doi.org/10.1101/2020.11.08.370601](https://doi.org/10.1101/2020.11.08.370601)*
-> - *Buchfink, B., Xie, C. & Huson, D. H. Fast and sensitive protein alignment using DIAMOND. [Nat. Methods 12, 59–60 (2015)](https://www.nature.com/articles/nmeth.3176).*
 > - *Navarro-Muñoz, J.C., Selem-Mojica, N., Mullowney, M.W. et al. A computational framework to explore large-scale biosynthetic diversity. [Nat Chem Biol 16, 60–68 (2020)](https://doi.org/10.1038/s41589-019-0400-9)*
-​
+> - *Kai Blin, Simon Shaw, Hannah E Augustijn, Zachary L Reitz, Friederike Biermann, Mohammad Alanjary, Artem Fetter, Barbara R Terlouw, William W Metcalf, Eric J N Helfrich, Gilles P van Wezel, Marnix H Medema, Tilmann Weber, antiSMASH 7.0: new and improved predictions for detection, regulation, chemical structures and visualisation, Nucleic Acids Research, Volume 51, Issue W1, 5 July 2023, Pages W46–W50, https://doi.org/10.1093/nar/gkad344*
