@@ -91,7 +91,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
-      - run: pip install git+https://github.com/NBChub/bgcflow_wrapper.git
+      - run: pip install bgcflow_wrapper
       - run: pip install pytest-cov
       - run: pip install alive-progress
       - name: Test coverage

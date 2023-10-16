@@ -52,7 +52,9 @@ def generate_symlink_gtdbtk(input_fna, gtdb_json, outdir):
         outfile = outdir / f"{genome_id}.fna"
         logging.info(f"Generating input files for GTDB-tk: {outfile}")
         outfile.symlink_to(input_fna)
-    return None
+        return None
+    else:
+        return genome_id
 
 
 def input_handling(input_list, category, suffix=".json"):
@@ -90,7 +92,7 @@ def input_handling(input_list, category, suffix=".json"):
     return input_list_files
 
 
-def gtdbtk_prep(fna_list, json_list, outdir):
+def gtdbtk_prep(fna_list, json_list, outdir, output_txt):
     """
     Given a list of gtdb_json file and an list of fna, generate a symlinks to a desired location
     if genome_id cannot be found via GTDB API
@@ -98,15 +100,23 @@ def gtdbtk_prep(fna_list, json_list, outdir):
     shell_json_input = input_handling(json_list, "taxonomy json")
     shell_fna_input = input_handling(fna_list, "fna files", suffix=".fna")
 
+    input_list = []
     for gtdb_json in shell_json_input:
         gid = Path(gtdb_json).stem
         input_fna = [fna for fna in shell_fna_input if gid in Path(fna).stem]
         logging.info(
             f"Found {gid} in {[str(i) for i in input_fna]}. Generating symlink..."
         )
-        generate_symlink_gtdbtk(str(input_fna[0]), str(gtdb_json), str(outdir))
+        fnafile = generate_symlink_gtdbtk(
+            str(input_fna[0]), str(gtdb_json), str(outdir)
+        )
+        if fnafile is not None:
+            input_list.append(fnafile)
+    with open(output_txt, "w") as f:
+        for item in input_list:
+            f.write("%s\n" % item)
     return
 
 
 if __name__ == "__main__":
-    gtdbtk_prep(sys.argv[1], sys.argv[2], sys.argv[3])
+    gtdbtk_prep(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])

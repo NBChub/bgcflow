@@ -16,7 +16,7 @@ At present, `BGCFlow` is only tested and confirmed to work on **Linux** systems 
 > Matin Nuhamunada, Omkar S. Mohite, Patrick V. Phaneuf, Bernhard O. Palsson, and Tilmann Weber. (2023). BGCFlow: Systematic pangenome workflow for the analysis of biosynthetic gene clusters across large genomic datasets. bioRxiv 2023.06.14.545018; doi: [https://doi.org/10.1101/2023.06.14.545018](https://doi.org/10.1101/2023.06.14.545018)
 
 ## Pre-requisites
-`BGCFlow` requires `gcc` and the `conda`/`mamba` package manager. See [installation instruction](https://github.com/NBChub/bgcflow/wiki/00-Installation-Guide) for details. 
+`BGCFlow` requires `gcc` and the `conda`/`mamba` package manager. See [installation instruction](https://github.com/NBChub/bgcflow/wiki/00-Installation-Guide) for details.
 
 Please use the latest version of `BGCFlow` available.
 ## Quick Start
@@ -54,7 +54,7 @@ bgcflow init # initiate `BGCFlow` config and examples from template
 bgcflow run -n # do a dry run, remove the flag "-n" to run the example dataset
 ```
 
-4. Build and serve interactive report (after `bgcflow run` finished). The report will be served in [http://localhost:8001/](http://localhost:8001/). A demo of the report is available here: 
+4. Build and serve interactive report (after `bgcflow run` finished). The report will be served in [http://localhost:8001/](http://localhost:8001/). A demo of the report is available here:
 
     [![example report](https://img.shields.io/badge/demo-report-blue)](https://nbchub.github.io/bgcflow_report_demo/)
 
@@ -71,8 +71,8 @@ bgcflow serve --project Lactobacillus_delbrueckii
 
 
 - For detailed usage and configurations, have a look at the WIKI:
+[![wiki](https://img.shields.io/badge/wiki-documentation-forestgreen)](https://github.com/NBChub/bgcflow/wiki)
 
-  [![wiki](https://img.shields.io/badge/wiki-documentation-forestgreen)](https://github.com/NBChub/bgcflow/wiki) 
 - Read more about [`bgcflow_wrapper`](https://github.com/NBChub/bgcflow_wrapper) for a detailed overview of the command line interface.
 
 [![asciicast](https://asciinema.org/a/595149.svg)](https://asciinema.org/a/595149)
@@ -113,6 +113,13 @@ Here you can find pipeline keywords that you can run using the main Snakefile of
 | 17 | cblaster-bgc      | Build diamond database of BGCs for cblaster search.                                              | [cblaster](https://github.com/gamcil/cblaster)                                           |
 | 18 | bigscape          | Cluster BGCs using BiG-SCAPE                                                                     | [BiG-SCAPE](https://github.com/medema-group/BiG-SCAPE)                                   |
 
+## Development & Funding
+
+The development of BGCFlow commenced within the Natural Products Genome Mining research group at the Novo Nordisk Foundation Center for Biosustainability, Technical University of Denmark (DTU Biosustain). BGCFlow development was/is made possible through the generous support of various funding organizations:
+
+- **Novo Nordisk Foundation:** BGCFlow development was supported by grants from the Novo Nordisk Foundation, specifically [NNF20CC0035580] and [NNF16OC0021746]. Matin Nuhamunada received support from the **NNF Copenhagen Bioscience PhD Program:** , grant [NNF20SA0035588].
+
+- **Danish National Research Foundation:** Additional funding was provided by the Danish National Research Foundation for the Center for Microbial Secondary Metabolites (CeMiSt), under the grant [DNRF137].
 
 ## References
 > - *Mash: fast genome and metagenome distance estimation using MinHash. Ondov BD, Treangen TJ, Melsted P, Mallonee AB, Bergman NH, Koren S, Phillippy AM. [Genome Biol. 2016 Jun 20;17(1):132. doi: 10.1186/s13059-016-0997-x.](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0997-x)*
