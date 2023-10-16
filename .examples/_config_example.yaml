@@ -71,6 +71,7 @@ rule_parameters:
     ani_screen: FALSE
   antismash:
     version: "7" # valid versions: 6, 7
+  use_gtdb_api: TRUE # Set to false to enable offline mode for taxonomic assignment, see https://github.com/NBChub/bgcflow/wiki/07-Advanced-Configurations#using-gtdb_api-offline-mode
 
 utility_parameters:
   METABASE_MIN_MEMORY: "2g"
