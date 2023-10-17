@@ -1,10 +1,11 @@
-set -e
+#!/bin/bash
 
 resource_dir="resources"
 output_lsabgc="$resource_dir/lsaBGC"
 repository="https://github.com/Kalan-Lab/lsaBGC"
 version="1.40.0"
 release="$repository/archive/refs/tags/v$version.tar.gz"
+
 log="logs/lsabgc/install.log"
 
 mkdir -p $(dirname $log)
@@ -19,5 +20,5 @@ echo "Extracting lsaBGC..." >> $log
 (cd $resource_dir && rm v$version.tar.gz) &>> $log
 
 echo "Installing lsaBGC..." >> $log
-(cd $output_lsabgc && python setup.py install) >> $log 2>> $log
-(cd $output_lsabgc && pip install -e .) >> $log &>> $log
+(cd $output_lsabgc && python setup.py install) &>> $log
+(cd $output_lsabgc && pip install -e .) &>> $log
