@@ -5,10 +5,12 @@ rule install_lsabgc_db:
         "logs/lsabgc/install-db.log"
     conda:
         "../envs/lsabgc.yaml"
+    params:
+        kofam="--no_ko"
     shell:
         """
         mkdir -p {output}
-        setup_annotation_dbs.py -p {output} &>> {log}
+        setup_annotation_dbs.py -p {output} {params.kofam} &>> {log}
         """
 
 rule lsabgc_prepare:
