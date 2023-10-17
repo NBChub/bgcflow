@@ -52,9 +52,9 @@ def generate_symlink_gtdbtk(input_fna, gtdb_json, outdir):
         outfile = outdir / f"{genome_id}.fna"
         logging.info(f"Generating input files for GTDB-tk: {outfile}")
         outfile.symlink_to(input_fna)
-        return None
-    else:
         return genome_id
+    else:
+        return None
 
 
 def input_handling(input_list, category, suffix=".json"):
@@ -110,7 +110,9 @@ def gtdbtk_prep(fna_list, json_list, outdir, output_txt):
         fnafile = generate_symlink_gtdbtk(
             str(input_fna[0]), str(gtdb_json), str(outdir)
         )
+        logging.debug(f"fnafile: {fnafile}")
         if fnafile is not None:
+            logging.debug(f"Adding {fnafile} to input list for gtdbtk")
             input_list.append(fnafile)
     with open(output_txt, "w") as f:
         for item in input_list:

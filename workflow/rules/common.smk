@@ -866,11 +866,16 @@ def evaluate_gtdbtk_input(wildcards):
         str: The path to the `fasta_list_success.txt` file if the file has content, otherwise the path to the
         `fasta_list_fail.txt` file.
     """
-    with checkpoints.prepare_gtdbtk_input.get(name=wildcards.name).output["fnalist"].open() as f:
+    gtdtbk_input = checkpoints.prepare_gtdbtk_input.get(name=wildcards.name).output["fnalist"]
+    sys.stderr.write(f"GTDB-Tk checkpoint - Reading input file: {gtdtbk_input}\n")
+    with gtdtbk_input.open() as f:
         textfile = f.readlines()
-        if len(f.readlines()) > 0:
+        sys.stderr.write(f"GTDB-Tk checkpoint - Found {len(textfile)} genomes to process...\n")
+        if len(textfile) > 0:
+            sys.stderr.write("GTDB-Tk checkpoint - Running GTDB-Tk classify_wf...\n")
             return "data/interim/gtdbtk/{name}/fasta_list_success.txt",
         else:
+            sys.stderr.write("GTDB-Tk checkpoint - No input passed. Skipping GTDB-tk run...\n")
             return "data/interim/gtdbtk/{name}/fasta_list_fail.txt",
 
 # Define a function to get user input with a timeout
