@@ -18,9 +18,10 @@ gtdb_api_url = "https://gtdb-api.ecogenomic.org/status/db"
 
 gtdb_offline_mode = False  # Flag to indicate if the GTDB API is offline
 
-if "use_gtdb_api" in config["rule_parameters"]:
-    if config["rule_parameters"]["use_gtdb_api"] == False:
-        gtdb_offline_mode = True
+if "rule_parameters" in config.keys():
+    if "use_gtdb_api" in config["rule_parameters"]:
+        if config["rule_parameters"]["use_gtdb_api"] == False:
+            gtdb_offline_mode = True
 
 if not gtdb_offline_mode:
     try:
