@@ -4,6 +4,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - cython==3.0.0
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_gnu
   - _r-mutex=1.0.1=anacondar_1
@@ -397,7 +398,6 @@ dependencies:
   - zlib=1.2.13=hd590300_5
   - zstd=1.5.5=hfc55251_0
   - pip:
-    - cython==3.0.0a10
     - pip==23.2.1
     - pyqt5-sip==4.19.18
     - pyqtchart==5.12
