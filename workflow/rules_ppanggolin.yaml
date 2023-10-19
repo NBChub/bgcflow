@@ -1,6 +1,6 @@
 ---
 ppanggolin:
-  final_output: "data/ppanggolin/genome/{name}"
+  final_output: "data/processed/{name}/ppanggolin/genome/"
   description: Depicting microbial species diversity via a Partitioned PanGenome Graph Of Linked Neighbors
   category: pangenome
   link:

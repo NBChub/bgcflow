@@ -28,7 +28,7 @@ rule ppanggolin_genome:
         gff=lambda wildcards: get_prokka_outputs(wildcards.name, DF_SAMPLES),
         roary = "data/interim/roary/{name}"
     output:
-        ppanggolin = directory("data/ppanggolin/genome/{name}")
+        ppanggolin = directory("data/processed/{name}/ppanggolin/genome")
     conda:
         "../envs/ppanggolin.yaml"
     log:
