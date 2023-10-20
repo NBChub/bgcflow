@@ -1,6 +1,6 @@
 ---
-ppanggolin:
-  final_output: "data/processed/{name}/ppanggolin/genome/"
+ppanggolin_roary:
+  final_output: "data/processed/{name}/ppanggolin/panrgp_roary"
   description: Depicting microbial species diversity via a Partitioned PanGenome Graph Of Linked Neighbors
   category: pangenome
   link:
