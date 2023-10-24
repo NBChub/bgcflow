@@ -37,7 +37,7 @@ rule ppanggolin_genome:
         "logs/ppanggolin/genome/ppanggolin_{name}.log"
     threads: 16
     params:
-        cluster_identity = 0.5,
+        cluster_identity = 0.8,
         cluster_coverage = 0.8,
         rarefaction_depth = 10,
         rarefaction_min = 5,
