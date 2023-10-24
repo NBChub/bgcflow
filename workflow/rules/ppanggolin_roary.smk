@@ -13,7 +13,7 @@ rule ppanggolin_genome_roary:
         "logs/ppanggolin/genome_roary/ppanggolin_roary_{name}.log"
     threads: 16
     params:
-        cluster_identity = 0.5,
+        cluster_identity = 0.8,
         cluster_coverage = 0.8,
         rarefaction_depth = 30,
         rarefaction_min = 5,
@@ -23,7 +23,7 @@ rule ppanggolin_genome_roary:
         """
         TMPDIR="data/interim/tmp/{wildcards.name}"
         mkdir -p $TMPDIR
-        OUTDIR="data/processed/{wildcards.name}/ppanggolin/genome"
+        OUTDIR=$(dirname {output.ppanggolin})
         mkdir -p $OUTDIR
         INPUT_GFF="$TMPDIR/prokka_gff.txt"
         ORGANISM_ANNOTATION_LIST="$TMPDIR/ORGANISM_ANNOTATION_LIST.txt"
@@ -36,7 +36,7 @@ rule ppanggolin_genome_roary:
         echo "\nConverting Roary output to mmseqs2 format" >> {log}
         python workflow/bgcflow/bgcflow/data/prep_roary_cluster_to_mmseqs2_format.py {input.roary}/clustered_proteins $CLUSTERS_FILE 2>> {log}
 
-        echo "\n##### 1 Running ppanggolin annotate... #####" >> {log}s
+        echo "\n##### 1 Running ppanggolin annotate... #####" >> {log}
         ppanggolin annotate \
             --cpu {threads} \
             --anno $ORGANISM_ANNOTATION_LIST \
@@ -49,7 +49,7 @@ rule ppanggolin_genome_roary:
             --cpu {threads} \
             --identity {params.cluster_identity} \
             --coverage {params.cluster_coverage} \
-            -p {output.ppanggolin}/pangenome.h5 \
+            -p {output.ppanggolin} \
             --clusters $CLUSTERS_FILE \
             --infer_singletons \
             --verbose 1 &>> {log}
