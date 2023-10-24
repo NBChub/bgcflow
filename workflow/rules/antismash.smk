@@ -32,7 +32,14 @@ if antismash_major_version <= 6:
             genefinding="none",
         shell:
             """
-            antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} --logfile {log} 2>> {log}
+            antismash \
+                --genefinding-tool {params.genefinding} \
+                --database {input.resources} \
+                --output-dir {params.folder} \
+                --cb-general \
+                --cb-subclusters \
+                --cb-knownclusters \
+                -c {threads} {input.gbk} --logfile {log} 2>> {log}
             """
 
 elif antismash_major_version >= 7:

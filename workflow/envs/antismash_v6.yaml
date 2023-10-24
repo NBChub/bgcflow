@@ -12,7 +12,7 @@ dependencies:
   - fasttree
   - prodigal
   - blast
-  - muscle
+  - muscle=3.8
   - glimmerhmm
   - expat
   - ghostscript
@@ -22,6 +22,7 @@ dependencies:
   - libxml2
   - libxslt
   - libzlib
+  - openjdk
   - perl
   - perl-cgi
   - perl-file-which
