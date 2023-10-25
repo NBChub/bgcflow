@@ -4,7 +4,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - meme=5.5.2
+  - meme==4.11.2
   - python>=3.9
   - hmmer2
   - hmmer
