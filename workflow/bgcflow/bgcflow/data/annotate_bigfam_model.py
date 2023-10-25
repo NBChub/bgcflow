@@ -142,7 +142,12 @@ def get_bigfam_taxa(gcf_id, conn, threshold="<= 900", rank=0, level=5):
     """
     df_all_hits = pd.read_sql_query(sql_all_hits, conn)
     df = pd.read_sql_query(sql_query, conn)
-    taxonomic_level = df["Taxon Class - Level__name"].unique()[0]
+    taxonomic_level = df["Taxon Class - Level__name"].unique()
+    if len(taxonomic_level) > 0:
+        taxonomic_level = taxonomic_level[0]
+    else:
+        logging.info(f"No taxonomic level found for {gcf_id}")
+        taxonomic_level = "Unassigned"
     df = df_all_hits.merge(
         df, on=["bgc_id", "gcf_id", "membership_value", "rank"], how="outer"
     ).fillna("Unassigned")
