@@ -1,0 +1,12 @@
+name: getphylo
+channels:
+  - conda-forge
+  - defaults
+  - bioconda
+dependencies:
+  - diamond
+  - muscle<5
+  - fasttree
+  - pip
+  - pip:
+    - getphylo
