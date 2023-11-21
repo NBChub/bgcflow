@@ -76,7 +76,15 @@ def write_genome_table(input_json, samples_table, genome_table):
     logging.debug(f"Writing file to: {genome_table}")
 
     # Generate dataframe
-    df_genomes = pd.concat([df_samples, bgc_counts], axis=1)
+    if "bgc_id" in df_samples.columns:
+        logging.debug("Processing BGC sub-workflow summary")
+        bgc_counts = bgc_counts.reset_index().rename(columns={"index": "genome_id"})
+        df_samples.index.name = "index"
+        df_genomes = df_samples.merge(
+            bgc_counts, left_on="genome_id", right_on="genome_id", how="left"
+        )
+    else:
+        df_genomes = pd.concat([df_samples, bgc_counts], axis=1)
 
     # Save dataframes to csv tables
     genome_table = Path(genome_table)
