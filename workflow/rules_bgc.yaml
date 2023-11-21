@@ -57,3 +57,21 @@ mmseqs2:
   - https://github.com/soedinglab/MMseqs2
   references:
   - 'Steinegger, M., Söding, J. MMseqs2 enables sensitive protein sequence searching for the analysis of massive data sets. Nat Biotechnol 35, 1026–1028 (2017). https://doi.org/10.1038/nbt.3988'
+getphylo:
+  final_output: "data/processed/{name}/getphylo/as_{version}"
+  description: Automated generation of phylogenetic trees from genbank files
+  category: Phylogenomic Placement
+  link:
+  - https://github.com/drboothtj/getphylo
+  references:
+  - 'getphylo: rapid and automatic generation of multi-locus phylogenetic trees. T. J. Booth, Simon Shaw, T. Weber. bioRxiv 2023.07.26.550493; doi: https://doi.org/10.1101/2023.07.26.550493'
+automlst-wrapper:
+  final_output: data/processed/{name}/automlst_wrapper/final.newick
+  description: Simplified Tree building using [autoMLST](https://github.com/NBChub/automlst-simplified-wrapper)
+  category: Phylogenomic Placement
+  link:
+  - https://github.com/KatSteinke/automlst-simplified-wrapper
+  references:
+  - 'Mohammad Alanjary, Katharina Steinke, Nadine Ziemert, AutoMLST: an automated
+    web server for generating multi-locus species trees highlighting natural product
+    potential,[Nucleic Acids Research, Volume 47, Issue W1, 02 July 2019, Pages W276–W282](https://doi.org/10.1093/nar/gkz282)'
