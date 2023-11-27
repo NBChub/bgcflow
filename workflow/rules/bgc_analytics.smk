@@ -31,7 +31,7 @@ rule antismash_overview_gather:
         bgc_overview=lambda wildcards: expand("data/interim/antismash/{version}/{strains}_bgc_overview.json",
             name=wildcards.name,
             version=wildcards.version,
-            strains=[s for s in set(PEP_PROJECTS[wildcards.name].sample_table.genome_id)],
+            strains=[s for s in PEP_PROJECTS[wildcards.name].sample_table.genome_id.unique()],
         ),
         mapping_dir = "data/interim/bgcs/{name}/{version}",
     output:
@@ -71,13 +71,13 @@ rule antismash_summary:
         bgc_count=lambda wildcards: expand(
             "data/interim/antismash/{version}/{strains}_bgc_counts.json",
             version=wildcards.version,
-            strains=[s for s in set(PEP_PROJECTS[wildcards.name].sample_table.genome_id)],
+            strains=[s for s in PEP_PROJECTS[wildcards.name].sample_table.genome_id.unique()],
         ),
         as_dir=lambda wildcards: expand(
             "data/processed/{name}/antismash/{version}/{strains}",
             name=wildcards.name,
             version=wildcards.version,
-            strains=[s for s in set(PEP_PROJECTS[wildcards.name].sample_table.genome_id)],
+            strains=[s for s in PEP_PROJECTS[wildcards.name].sample_table.genome_id.unique()],
         ),
         bgc_overview="data/processed/{name}/tables/df_regions_antismash_{version}.csv",
     output:
