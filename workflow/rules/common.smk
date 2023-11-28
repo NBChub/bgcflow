@@ -133,7 +133,7 @@ def get_input_location(p):
             input_file = input_file.resolve()
             assert input_file.is_file(), f"ERROR: Cannot find {input_file}"
             p.sample_table.loc[i, "input_file"] = input_file
-
+        p.sample_table.loc[i, "input_type"] = extension
     return p.sample_table
 
 

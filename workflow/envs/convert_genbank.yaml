@@ -1,0 +1,7 @@
+name: convert_gbk
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - any2fasta==0.4.2
