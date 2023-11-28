@@ -21,7 +21,10 @@ DF_SAMPLES.to_csv(bgcflow_util_dir / "samples.csv", index=False)
 ##### 2. Generate wildcard constants #####
 PROJECT_IDS = list(DF_PROJECTS.name.unique())
 STRAINS = DF_SAMPLES.genome_id.to_list()
-CUSTOM = DF_SAMPLES[DF_SAMPLES.source.eq("custom")].genome_id.to_list()
+STRAINS_FNA = DF_SAMPLES[DF_SAMPLES.input_type.eq("fna")].genome_id.to_list()
+STRAINS_GENBANK = DF_SAMPLES[DF_SAMPLES.input_type.eq("gbk")].genome_id.to_list()
+CUSTOM_GENBANK = DF_SAMPLES[(DF_SAMPLES.source.eq("custom")) & (DF_SAMPLES.input_type.eq("gbk"))].genome_id.to_list()
+CUSTOM_FNA = DF_SAMPLES[(DF_SAMPLES.source.eq("custom")) & (DF_SAMPLES.input_type.eq("fna"))].genome_id.to_list()
 NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
 PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
 SAMPLE_PATHS = list(DF_PROJECTS.samples.unique())
@@ -32,20 +35,20 @@ GTDB_PATHS = [
 ]
 PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
 
-
 ##### 3. Wildcard constraints #####
 wildcard_constraints:
     strains="|".join(STRAINS),
+    strains_fna="|".join(STRAINS_FNA),
+    strains_genbank="|".join(STRAINS_GENBANK),
     ncbi="|".join(NCBI),
-    custom="|".join(CUSTOM),
+    custom_fna="|".join(CUSTOM_FNA),
+    custom_genbank="|".join(CUSTOM_GENBANK),
     patric="|".join(PATRIC),
     name="|".join(PROJECT_IDS),
     prokka_db="|".join(PROKKA_GBFF),
 
-
 ##### 4. Generate user-defined local resources
 custom_resource_dir()
-
 
 ##### Target rules #####
 
@@ -83,3 +86,4 @@ include: "rules/diamond.smk"
 include: "rules/deeptfactor.smk"
 include: "rules/cblaster.smk"
 include: "rules/data_warehouse.smk"
+include: "rules/convert_genbank.smk"
