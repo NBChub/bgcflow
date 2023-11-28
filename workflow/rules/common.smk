@@ -346,14 +346,15 @@ def extract_project_information(config, project_variable="projects"):
         )
         # grab a bgcflow pep project
         if p["name"].endswith(".yaml"):
-            pep_file = p["name"]
-            p = peppy.Project(p["name"], sample_table_index="genome_id")
+            assert len(workflow.configfiles) == 1, f"Only one config file is allowed. Found {workflow.configfiles}"
+            pep_file = Path(workflow.configfiles[0]).parent.parent / p["name"]
+            p = peppy.Project(str(pep_file), sample_table_index="genome_id")
 
             # mask pipelines and rules as alias, use rules as default
             if 'pipelines' in p.config.keys():
                 p.config['rules'] = p.config.pop("pipelines")
 
-            print(f" - Processing project [{p.name}]", file=sys.stderr)
+            print(f" - Processing project [{pep_file}]", file=sys.stderr)
 
             # make sure each project has unique names
             assert (
@@ -604,7 +605,8 @@ def get_dependency_version(dep, dep_key):
         result {list} -- list of dependency version tags
     """
     print(f"{dep_key} from: {dep[dep_key]}", file=sys.stderr)
-    with open(dep[dep_key]) as file:
+    conda_env_path = workflow.source_path(f"../../{dep[dep_key]}")
+    with open(conda_env_path) as file:
         result = []
         documents = yaml.full_load(file)
         for i in documents["dependencies"]:
@@ -696,8 +698,7 @@ def get_project_outputs(
     Returns:
         final_output {list} -- list of final output files
     """
-
-    with open(rule_dict_path, "r") as file:
+    with open(workflow.source_path(f"../../{rule_dict_path}"), "r") as file:
         rule_dict = yaml.safe_load(file)
 
     selection = [
