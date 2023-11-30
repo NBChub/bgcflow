@@ -5,3 +5,7 @@ channels:
   - defaults
 dependencies:
   - any2fasta==0.4.2
+  - biopython
+  - pip
+  - pip:
+    - bcbio-gff==0.7.0
