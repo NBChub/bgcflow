@@ -1,3 +1,9 @@
+"""
+This Snakefile sets up and runs a Metabase server. It includes functionality for handling setup parameters,
+handling server responses, and user interaction for terminating the server. It also includes configuration
+for Metabase memory usage, version, setup token, and HTTP address.
+"""
+
 include: "rules/common.smk"
 
 import subprocess
@@ -6,6 +12,15 @@ import time
 import psutil
 
 def get_process_by_port(port):
+    """
+    This function returns the process that is using the given port.
+
+    Args:
+        port (int): The port number to check.
+
+    Returns:
+        psutil.Process: The process using the given port, or None if no process is using the port.
+    """
     for proc in psutil.process_iter(['pid', 'name', 'connections']):
         try:
             if proc.name() == "java":
@@ -18,10 +33,32 @@ def get_process_by_port(port):
     return None
 
 def setup_metabase(token, api_url, metabase_config):
+    """
+    Sets up and starts a Metabase server.
+
+    This function checks if Java is installed, sets up Metabase environment variables, starts the Metabase server,
+    and sets up Metabase using the API. It also handles user interaction for terminating the Metabase server.
+
+    Args:
+        token (str): The setup token for Metabase.
+        api_url (str): The URL of the Metabase API.
+        metabase_config (dict): A dictionary containing configuration parameters for Metabase, including:
+            - 'MB_IS_METABOT_ENABLED': Whether the Metabot is enabled.
+            - 'METABASE_MIN_MEMORY': The minimum amount of memory for the Metabase server.
+            - 'METABASE_MAX_MEMORY': The maximum amount of memory for the Metabase server.
+            - 'DMB_SETUP_TOKEN': The setup token for Metabase.
+            - 'METABASE_VERSION': The version of Metabase.
+            - 'METABASE_HTTP': The HTTP address of the Metabase server.
+
+    Returns:
+        None
+    """
     # Check if Java is installed
     if os.system("java -version") != 0:
         print("Java is not installed. Please install Java and try again.")
         exit(1)
+    # Set up Metabase environment variables
+    os.environ["MB_IS_METABOT_ENABLED"] = metabase_config["MB_IS_METABOT_ENABLED"]
     # Start the Metabase server in the background
     command_line = f"(cd resources/metabase && java -Xms{metabase_config['METABASE_MIN_MEMORY']} -Xmx{metabase_config['METABASE_MAX_MEMORY']} -DMB_SETUP_TOKEN={metabase_config['DMB_SETUP_TOKEN']} -jar metabase_{metabase_config['METABASE_VERSION']}.jar)"
     print(command_line)
@@ -122,7 +159,8 @@ metabase_config = {
     "METABASE_VERSION": "v0.47.0",
     "METABASE_DUCKDB_PLUGIN_VERSION": "0.2.2",
     "DMB_SETUP_TOKEN": "ad0fb086-351b-4fa5-a17e-76282d2c9753",
-    "METABASE_HTTP": "http://localhost:3000"
+    "METABASE_HTTP": "http://localhost:3000",
+    "MB_IS_METABOT_ENABLED" : "true"
 }
 
 if "utility_parameters" in config.keys():
