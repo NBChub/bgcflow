@@ -108,7 +108,7 @@ def get_input_location(p, force_extension=False):
         f" - Custom input format: {'input_type' in list(p.config.keys())}",
         file=sys.stderr,
     )
-    print(force_extension)
+
     if force_extension is not False:
         assert force_extension in ["fna", "fasta", "faa", "gbk"]
         extension = force_extension
