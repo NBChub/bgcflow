@@ -21,7 +21,6 @@ def extract_bgc_project_information(config, project_variable="projects", sample_
     # Check if the key exists in the dictionary
     if project_variable in config:
         projects = config[project_variable]
-        print(f"   Available projects: {projects}", file=sys.stderr)
     else:
         # Handle the error appropriately
         raise Exception("No 'bgc_project' available. Please add the 'bgc_project' variable to the global configuration.\nThis variable should contain a list of pep projects with a list of antiSMASH region genbanks files as input.\nStopping the workflow.")
@@ -79,11 +78,8 @@ def extract_bgc_project_information(config, project_variable="projects", sample_
             print(f" - Processing project [{p['name']}]", file=sys.stderr)
             p = refine_bgcflow_project(p_bgcflow, p)
 
-        # force input type to be genbank
-        p.config["input_type"] = "gbk"
-
         # populate input files for custom samples
-        p.sample_tables = get_input_location(p)
+        p.sample_tables = get_input_location(p, force_extension="gbk")
 
         # grab global rule config if rule not presents
         if "rules" not in p.config.keys():
