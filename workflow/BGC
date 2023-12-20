@@ -59,7 +59,7 @@ def extract_bgc_project_information(config, project_variable="projects", sample_
         if p["name"].endswith(".yaml"):
             pep_file = p["name"]
             print(pep_file)
-            print(f" - Processing project [{pep_file}]", file=sys.stderr)
+            print(f" - Processing project {pep_file}", file=sys.stderr)
             p = peppy.Project(pep_file, sample_table_index=sample_table_index)
 
 
@@ -78,6 +78,9 @@ def extract_bgc_project_information(config, project_variable="projects", sample_
             p_bgcflow = peppy.Project(p["samples"], sample_table_index=sample_table_index)
             print(f" - Processing project [{p['name']}]", file=sys.stderr)
             p = refine_bgcflow_project(p_bgcflow, p)
+
+        # force input type to be genbank
+        p.config["input_type"] = "gbk"
 
         # populate input files for custom samples
         p.sample_tables = get_input_location(p)
