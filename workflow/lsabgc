@@ -34,7 +34,15 @@ PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
 
 ##### 3. Wildcard constraints #####
 wildcard_constraints:
-    strains="|".join(STRAINS)
+    strains="|".join(STRAINS),
+    strains_fna="|".join(STRAINS_FNA),
+    strains_genbank="|".join(STRAINS_GENBANK),
+    ncbi="|".join(NCBI),
+    custom_fna="|".join(CUSTOM_FNA),
+    custom_genbank="|".join(CUSTOM_GENBANK),
+    patric="|".join(PATRIC),
+    name="|".join(PROJECT_IDS),
+    prokka_db="|".join(PROKKA_GBFF),
 
 
 ##### Target rules #####
@@ -52,3 +60,4 @@ include: "rules/ncbi.smk"
 include: "rules/antismash.smk"
 include: "rules/bgc.smk"
 include: "rules/bigscape.smk"
+include: "rules/patric.smk"
