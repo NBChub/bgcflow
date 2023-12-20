@@ -6,7 +6,7 @@ def get_bgc_inputs(pep_object, antismash_version):
     gbk_list = []
 
     base_path = Path(pep_object.config["sample_table"]).parent
-    input_path = ""
+    input_path = "."
     if "input_folder" in list(pep_object.config.keys()):
         input_path = base_path / pep_object.config["input_folder"]
         input_path = input_path.resolve()
@@ -21,7 +21,7 @@ def get_bgc_inputs(pep_object, antismash_version):
         #print(custom_path, type(custom_path), custom_path != None, file=sys.stderr)
 
         if custom_path != None:
-            gbk_path = custom_path
+            gbk_path = input_path / custom_path
         elif 'input_folder' in pep_object.config.keys():
             gbk_path = Path(input_path / f"{bgc_id}.gbk")
         else:
