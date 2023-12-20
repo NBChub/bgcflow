@@ -1,16 +1,16 @@
 if antismash_major_version <= 6:
     rule antismash_db_setup:
         output:
-            directory("resources/antismash_db"),
+            database=directory("resources/antismash_db"),
         conda:
             "../envs/antismash_v6.yaml"
         log:
             "logs/antismash/antismash_db_setup.log",
         shell:
             """
-            download-antismash-databases --database-dir resources/antismash_db 2>> {log}
+            download-antismash-databases --database-dir {output.database} &>> {log}
             antismash --version >> {log}
-            antismash --check-prereqs >> {log}
+            antismash --check-prereqs --databases {output.database} &>> {log}
             """
 
     rule antismash:
