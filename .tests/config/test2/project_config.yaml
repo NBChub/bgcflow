@@ -11,11 +11,13 @@ rules:
   query-bigslice: TRUE
   bigscape: TRUE
   bigslice: TRUE
-  automlst-wrapper: FALSE
+  automlst-wrapper: TRUE
   arts: TRUE
   roary: FALSE
-  eggnog: TRUE
+  eggnog: FALSE
+  eggnog-roary: FALSE
   deeptfactor: TRUE
   deeptfactor-roary: FALSE
   cblaster-genome: TRUE
   cblaster-bgc: TRUE
+  ppanggolin: TRUE

@@ -1,17 +1,23 @@
 #### RULE CONFIGURATION ####
 # rules: set value to FALSE if you want to run the analysis or FALSE if you don't
 rules:
-  seqfu: FALSE
-  checkm: FALSE
-  prokka-gbk: FALSE
+  seqfu: TRUE
+  mash: TRUE
+  fastani: TRUE
+  checkm: TRUE
+  gtdbtk: TRUE
+  prokka-gbk: TRUE
   antismash: TRUE
-  query-bigslice: FALSE
-  bigscape: FALSE
-  bigslice: FALSE
-  automlst-wrapper: FALSE
-  arts: FALSE
+  query-bigslice: TRUE
+  bigscape: TRUE
+  bigslice: TRUE
+  automlst-wrapper: TRUE
+  arts: TRUE
   roary: FALSE
   eggnog: FALSE
   eggnog-roary: FALSE
-  diamond: FALSE
-  deeptfactor: FALSE
+  deeptfactor: TRUE
+  deeptfactor-roary: FALSE
+  cblaster-genome: TRUE
+  cblaster-bgc: TRUE
+  ppanggolin: TRUE
