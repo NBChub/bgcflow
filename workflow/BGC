@@ -16,8 +16,15 @@ def extract_bgc_project_information(config, project_variable="projects", sample_
 
     # load information from config
     print(f"Step 1. Extracting project information from config...\n", file=sys.stderr)
-    projects = config[project_variable]
-    print(f"   Available projects: {projects}", file=sys.stderr)
+
+    project_variable = 'bgc_projects'
+    # Check if the key exists in the dictionary
+    if project_variable in config:
+        projects = config[project_variable]
+        print(f"   Available projects: {projects}", file=sys.stderr)
+    else:
+        # Handle the error appropriately
+        raise Exception("No 'bgc_project' available. Please add the 'bgc_project' variable to the global configuration.\nThis variable should contain a list of pep projects with a list of antiSMASH region genbanks files as input.\nStopping the workflow.")
 
     # mask pep and name as alias
     for item in projects:
