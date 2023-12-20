@@ -75,7 +75,7 @@ def hash_prokka_db(prokka_db_path):
     return hash_object, file_map
 
 
-def get_input_location(p):
+def get_input_location(p, force_extension=False):
     """
     Get input file locations for custom samples
 
@@ -108,7 +108,11 @@ def get_input_location(p):
         f" - Custom input format: {'input_type' in list(p.config.keys())}",
         file=sys.stderr,
     )
-    if "input_type" in list(p.config.keys()):
+    print(force_extension)
+    if force_extension is not False:
+        assert force_extension in ["fna", "fasta", "faa", "gbk"]
+        extension = force_extension
+    elif "input_type" in list(p.config.keys()):
         extension = p.config["input_type"]
     else:
         extension = "fna"
