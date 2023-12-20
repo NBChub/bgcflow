@@ -2,7 +2,7 @@ name: lanthipeptide_lactobacillus
 pep_version: 2.1.0
 description: 'A selection of lanthipeptides from Lactobacillus delbrueckii'
 sample_table: df_regions_antismash_7.0.0.csv
-
+input_folder: "input_files"
 rules:
   bigslice: TRUE
   bigscape: TRUE
