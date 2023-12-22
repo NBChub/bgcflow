@@ -20,7 +20,7 @@ dependencies:
   - ipykernel
   - ete3
   - pyarrow
-  - peppy
+  - peppy==0.35.7
   - xlrd >= 1.0.0
   - zip
   - altair
