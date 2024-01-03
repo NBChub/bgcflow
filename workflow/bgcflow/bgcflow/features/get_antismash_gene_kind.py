@@ -65,8 +65,8 @@ def process_genbank_file(genbank_file, output):
             # Iterate over each feature in the record
             for feature in record.features:
                 # Check if the feature is a CDS and has the 'gene_kind' qualifier
-                if feature.type == "CDS" and "gene_kind" in feature.qualifiers:
-                    if "gene_kind" not in feature.qualifiers:
+                if feature.type == "CDS":
+                    if "gene_kind" in feature.qualifiers:
                         gene_kind = feature.qualifiers["gene_kind"][0]
                     else:
                         logging.warning(
