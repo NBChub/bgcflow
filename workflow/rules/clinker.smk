@@ -38,7 +38,7 @@ rule clinker_gene_functions:
     input:
         gbk_dir = "data/interim/clinker/{name}/{version}",
     output:
-        gene_functions = "data/interim/clinker/{name}/{version}__gene_functions.csv",
+        gene_functions = temp("data/interim/clinker/{name}/{version}__gene_functions.csv"),
     conda:
         "../envs/bgc_analytics.yaml"
     log:
