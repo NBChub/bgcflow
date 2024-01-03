@@ -162,6 +162,7 @@ GTDB_PATHS = [
     if "gtdb-tax" in PEP_PROJECTS[k].config.keys()
 ]
 PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
+VERSIONS = dependency_version.values()
 
 ##### 3. Wildcard constraints #####
 wildcard_constraints:
@@ -172,6 +173,7 @@ wildcard_constraints:
     name="|".join(PROJECT_IDS),
     prokka_db="|".join(PROKKA_GBFF),
     bgc="|".join(BGCS),
+    version="|".join(VERSIONS),
 
 ##### 4. Generate user-defined local resources
 custom_resource_dir()
