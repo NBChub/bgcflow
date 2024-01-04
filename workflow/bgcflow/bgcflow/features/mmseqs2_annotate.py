@@ -40,6 +40,17 @@ def annotate_mmseqs2_cog(mmseqs2_cog: str, gbk_path: str, outfile: str) -> None:
             for f in record.features:
                 if f.type == "CDS":
                     value = {k: ",".join(v) for k, v in f.qualifiers.items()}
+                    if "locus_tag" not in value.keys():
+                        logging.warning(
+                            f"Could not find locus_tag in {file_id} {seq_id}. Available keys: {value.keys()}"
+                        )
+                        for locus_tag in ["protein_id", "gene"]:
+                            if locus_tag in value:
+                                logging.info(
+                                    f"Using {locus_tag} as locus_tag in {file_id} {seq_id}."
+                                )
+                                value["locus_tag"] = value[locus_tag]
+                                break
                     value["file_id"] = file_id
                     value["seq_id"] = seq_id
                     value["start"] = int(f.location.start)
@@ -51,9 +62,15 @@ def annotate_mmseqs2_cog(mmseqs2_cog: str, gbk_path: str, outfile: str) -> None:
     df_annotation = pd.DataFrame.from_dict(output).T
 
     logging.info("Merging dataframes...")
+    logging.info(f"Length of MMseqs2 COG dataframe: {df_mmseqs2.shape}")
+    logging.info(f"Length of annotation dataframe: {df_annotation.shape}")
+    df_mmseqs2.set_index("locus_tag").to_csv("mmseqs2_cog2.csv")
+    df_annotation.set_index("locus_tag").to_csv("annotation2.csv")
     df = df_mmseqs2.merge(
         df_annotation, right_on="locus_tag", left_on="locus_tag", how="outer"
     )
+    logging.info(f"Length of merged dataframe: {df.shape}")
+    df.set_index("locus_tag").to_csv("merged2s.csv")
     assert len(df_mmseqs2) == len(
         df
     ), "Error: Merged dataframe has different length than original MMseqs2 COG dataframe."

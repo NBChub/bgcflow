@@ -91,7 +91,10 @@ def build_cds_dict(gbk_dir):
                             locus_tag = feature.qualifiers["protein_id"][0]
                             logging.warning(locus_tag)
                         if seq_id.startswith("BGC"):
-                            locus_tag = feature.qualifiers["protein_id"][0]
+                            if "protein_id" in feature.qualifiers.keys():
+                                locus_tag = feature.qualifiers["protein_id"][0]
+                            else:
+                                locus_tag = feature.qualifiers["locus_tag"][0]
                         cds_dict[locus_tag] = {
                             "seq_id": seq_id,
                             "start": start,
