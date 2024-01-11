@@ -62,24 +62,28 @@ def process_genbank_file(genbank_file, output):
     with open(genbank_file, "r") as input_handle:
         # Parse the GenBank file
         for record in SeqIO.parse(input_handle, "genbank"):
+            logging.debug(f"Processing record: {record.id}")
             # Iterate over each feature in the record
             for feature in record.features:
                 # Check if the feature is a CDS and has the 'gene_kind' qualifier
                 if feature.type == "CDS":
+                    for identifier in ["protein_id", "locus_tag", "gene"]:
+                        if identifier in feature.qualifiers:
+                            logging.debug(f"Using identifier: {identifier}")
+                            identifier_value = feature.qualifiers[identifier][0]
+                            break
+                    logging.debug(f"Processing feature: {identifier_value}")
+
                     if "gene_kind" in feature.qualifiers:
+                        logging.debug(f"Gene kind: {feature.qualifiers['gene_kind']}")
                         gene_kind = feature.qualifiers["gene_kind"][0]
                     else:
                         logging.warning(
-                            f"Feature {feature} does not have a 'gene_kind' qualifier"
+                            f"Feature does not have a 'gene_kind' qualifier: {feature.qualifiers.keys()}"
                         )
                         gene_kind = "other"
-                    if "locus_tag" in feature.qualifiers:
-                        locus_tag = feature.qualifiers["locus_tag"][0]
-                    elif "gene" in feature.qualifiers:
-                        locus_tag = feature.qualifiers["gene"][0]
-                    else:
-                        locus_tag = feature.qualifiers["protein_id"][0]
-                    output[locus_tag] = gene_kind
+                    logging.debug(f"Gene kind {identifier_value}: {gene_kind}")
+                    output[identifier_value] = gene_kind
 
 
 if __name__ == "__main__":
