@@ -41,7 +41,7 @@ if len(CUSTOM_GENBANK) > 0:
         log: "logs/convert_genbank/genbank_to_faa/genbank_to_faa-{custom_genbank}.log"
         shell:
             """
-            python workflow/bgcflow/bgcflow/misc/create_aa.py {input.gbk} > {output.faa} 2>> {log}
+            python workflow/bgcflow/bgcflow/misc/create_aa.py {input.gbk} {output.faa} 2>> {log}
             """
 
     rule extract_meta_genbank:
