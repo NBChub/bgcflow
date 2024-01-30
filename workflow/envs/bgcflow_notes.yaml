@@ -19,7 +19,7 @@ dependencies:
   - xlrd >= 1.0.0
   - altair
   - itables
-  - scikit-learn
+  - scikit-learn==1.4.0
   - pyarrow
   - pygraphviz
   - pip
