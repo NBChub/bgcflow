@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Linting
-      uses: snakemake/snakemake-github-action@v1
+      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
       with:
         directory: .tests
         snakefile: workflow/Snakefile
@@ -39,7 +39,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: snakemake/snakemake-github-action@v1
+      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
       with:
         directory: .tests
         snakefile: workflow/Snakefile
@@ -57,7 +57,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: snakemake/snakemake-github-action@v1
+      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
       with:
         directory: .tests
         snakefile: workflow/Report
@@ -75,7 +75,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: snakemake/snakemake-github-action@v1
+      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
       with:
         directory: .tests
         snakefile: workflow/Metabase
@@ -93,7 +93,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: snakemake/snakemake-github-action@v1
+      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
       with:
         directory: .tests
         snakefile: workflow/BGC
@@ -111,7 +111,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: snakemake/snakemake-github-action@v1
+      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
       with:
         directory: .tests
         snakefile: workflow/ppanggolin
@@ -129,7 +129,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: snakemake/snakemake-github-action@v1
+      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
       with:
         directory: .tests
         snakefile: workflow/lsabgc
