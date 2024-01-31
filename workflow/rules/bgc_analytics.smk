@@ -132,3 +132,20 @@ rule get_project_metadata:
         """
         python workflow/bgcflow/bgcflow/data/get_project_metadata.py {wildcards.name} {output} {params.bgcflow_version} 2> {log}
         """
+
+rule get_mibig_table:
+    output:
+        mibig_json_folder=directory("resources/mibig/json/"),
+        mibig_bgc_table="resources/mibig/df_mibig_bgcs.csv",
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log:
+        "logs/bigscape/get_mibig_table.log",
+    params:
+        mibig_version="3.1",
+    shell:
+        """
+        (cd resources && wget  https://dl.secondarymetabolites.org/mibig/mibig_json_{params.mibig_version}.tar.gz) &>> {log}
+        (cd resources && tar -xvf mibig_json_{params.mibig_version}.tar.gz && mkdir -p mibig && mv mibig_json_{params.mibig_version}/ mibig/json && rm mibig_json_{params.mibig_version}.tar.gz) &>> {log}
+        python workflow/bgcflow/bgcflow/data/get_mibig_data.py {output.mibig_json_folder} {output.mibig_bgc_table} 2>> {log}
+        """
