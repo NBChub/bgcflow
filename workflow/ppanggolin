@@ -58,7 +58,7 @@ rule all:
     input:
         expand("data/processed/{name}/tables/df_gtdb_meta.csv", name=PROJECT_IDS),
         final_outputs,
-        expand("data/processed/{name}/data_warehouse/tables.log", name=PROJECT_IDS)
+        expand("data/processed/{name}/data_warehouse/tables/df_mibig_bgcs.parquet", name=PROJECT_IDS)
 
 
 ##### Modules #####
