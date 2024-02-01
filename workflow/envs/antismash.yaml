@@ -4,7 +4,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - meme=5.5.2
+  - meme=4.11.2
   - python>=3.9
   - hmmer2
   - hmmer
@@ -40,4 +40,4 @@ dependencies:
   - yaml
   - pip
   - pip:
-    - git+https://github.com/antismash/antismash.git@7-0-0
+    - git+https://github.com/antismash/antismash.git@7-1-0-1
