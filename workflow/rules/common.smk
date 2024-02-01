@@ -428,7 +428,7 @@ def extract_project_information(config, project_variable="projects"):
                 columns=df_samples.columns.tolist() + [item]
             )
 
-    print(f"Step 3 Merging genome_ids across projects...\n", file=sys.stderr)
+    print(f"Step 3. Merging genome_ids across projects...\n", file=sys.stderr)
     df_samples = df_samples.fillna("")
     df_samples = find_conflicting_samples(df_samples)
 
