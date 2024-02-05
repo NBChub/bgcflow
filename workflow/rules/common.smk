@@ -838,7 +838,7 @@ def custom_resource_dir(resources_path, resource_mapping):
         if len(slink.parts) > 2:
             sys.stderr.write(f' - Symlink for {slink} has more than two levels, using only the first two...\n')
             slink = Path(*slink.parts[:2])
-        if resource_dbs[r] == resource_mapping[r]:
+        if str(path) == str(slink):
             pass
         # check for user-defined external resources
         elif path.exists():
@@ -864,7 +864,7 @@ def custom_resource_dir(resources_path, resource_mapping):
         # raise an Error if external path not found
         else:
             raise FileNotFoundError(
-                f"Error: User-defined resource {r} at {path} does not exist.\nCheck the config.yaml and provide the right path for resource {r} or\nchange it to the default path: {resource_mapping[r]}\n"
+                f"Error: User-defined resource {r} at {path} does not exist.\nCheck the config.yaml and provide the right path for resource {r} or\nchange it to the default path: {str(slinks)}\n"
             )
     sys.stderr.write(f"   All resources set.\n\n")
     return
