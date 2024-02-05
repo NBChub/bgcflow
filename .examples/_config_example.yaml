@@ -50,7 +50,7 @@ pipelines:
 # resources : the location of the resources to run the rule.
 # The default location is at "resources/{resource_name}".
 resources_path:
-  antismash_db: resources/antismash_db
+  antismash_db: resources/antismash7_db
   eggnog_db: resources/eggnog_db
   BiG-SCAPE: resources/BiG-SCAPE
   bigslice: resources/bigslice
