@@ -428,7 +428,7 @@ def extract_project_information(config, project_variable="projects"):
                 columns=df_samples.columns.tolist() + [item]
             )
 
-    print(f"Step 3. Merging genome_ids across projects...\n", file=sys.stderr)
+    print(f"\nStep 3. Merging genome_ids across projects...\n", file=sys.stderr)
     df_samples = df_samples.fillna("")
     df_samples = find_conflicting_samples(df_samples)
 
@@ -799,7 +799,7 @@ def get_final_output(df_samples, peppy_objects, rule_dict_path, ignore_missing=F
     Returns:
         final_output {list} -- list of final output files
     """
-    sys.stderr.write(f"Step 5. Preparing list of final outputs...\n")
+    sys.stderr.write(f"Step 4. Preparing list of final outputs...\n")
     final_output = []
     for p in peppy_objects.values():
         sys.stderr.write(f" - Getting outputs for project: {p.name}\n")
@@ -809,27 +809,40 @@ def get_final_output(df_samples, peppy_objects, rule_dict_path, ignore_missing=F
 
 
 ##### 8. Set up custom resource directory provided in config["resources_path"] #####
-def custom_resource_dir():
+def custom_resource_dir(resources_path, resource_mapping):
     """
     Generate symlink for user defined resources location
 
     Arguments:
         config {dict} -- dictionary of config.yaml
-
+        resource_mapping = {"antismash_db": str(rules.antismash_db_setup.output.database),
+                            "eggnog_db": str(rules.install_eggnog.output.eggnog_db),
+                            "BiG-SCAPE": str(rules.install_bigscape.output.bigscape),
+                            "bigslice": str(rules.fetch_bigslice_db.output.folder),
+                            "checkm": str(rules.install_checkm.output.checkm_db),
+                            "gtdbtk": str(rules.install_gtdbtk.output.gtdbtk)
+                            }
     Returns:
         None
     """
     resource_dbs = config["resources_path"]
-    sys.stderr.write(f"Step 4. Checking for user-defined local resources...\n")
+    sys.stderr.write(f"Step 5. Checking for user-defined local resources...\n")
+
     for r in resource_dbs.keys():
         # check for default path
         path = Path(resource_dbs[r])
-        if resource_dbs[r] == f"resources/{r}":
+        if r in resource_mapping.keys():
+            slink = Path(resource_mapping[r])
+        else:
+            continue
+        if len(slink.parts) > 2:
+            sys.stderr.write(f' - Symlink for {slink} has more than two levels, using only the first two...\n')
+            slink = Path(*slink.parts[:2])
+        if resource_dbs[r] == resource_mapping[r]:
             pass
         # check for user-defined external resources
         elif path.exists():
             try:
-                slink = Path(f"resources/{r}")
                 existing_path = Path.readlink(slink)
                 # check if symlink for extrenal path is already generated
                 if existing_path == path:
@@ -846,7 +859,7 @@ def custom_resource_dir():
                     )
             # generate a new symlink
             except FileNotFoundError:
-                sys.stderr.write(f" - Generating symlink for {r} from: {path}\n")
+                sys.stderr.write(f" - Generating symlink for {slink} from: {path}\n")
                 slink.symlink_to(path)
         # raise an Error if external path not found
         else:
