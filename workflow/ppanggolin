@@ -46,8 +46,7 @@ wildcard_constraints:
     prokka_db="|".join(PROKKA_GBFF),
 
 
-##### 4. Generate user-defined local resources
-custom_resource_dir()
+
 
 
 ##### Target rules #####
@@ -60,9 +59,10 @@ rule all:
         final_outputs,
         expand("data/processed/{name}/data_warehouse/tables/df_mibig_bgcs.parquet", name=PROJECT_IDS)
 
+# Create place holder for resources defined in each modules, will be added if module is included, and passed to create custom_resource_dir
+resource_mapping = {}
 
 ##### Modules #####
-include: "rules/gtdb.smk"
 include: "rules/ncbi.smk"
 include: "rules/prokka.smk"
 #include: "rules/antismash.smk"
@@ -88,3 +88,8 @@ include: "rules/bgc_analytics.smk"
 include: "rules/data_warehouse.smk"
 include: "rules/ppanggolin.smk"
 include: "rules/ppanggolin_roary.smk"
+
+##### 4. Generate user-defined local resources
+custom_resource_dir(config["resources_path"], resource_mapping)
+
+include: "rules/gtdb.smk"

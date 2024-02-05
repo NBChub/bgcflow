@@ -47,9 +47,6 @@ wildcard_constraints:
     name="|".join(PROJECT_IDS),
     prokka_db="|".join(PROKKA_GBFF),
 
-##### 4. Generate user-defined local resources
-custom_resource_dir()
-
 ##### Target rules #####
 
 final_outputs = get_final_output(DF_SAMPLES, PEP_PROJECTS, rule_dict_path="workflow/rules.yaml", ignore_missing=True)
@@ -60,25 +57,32 @@ rule all:
         final_outputs,
         expand("data/processed/{name}/data_warehouse/tables/df_mibig_bgcs.parquet", name=PROJECT_IDS)
 
+# Create place holder for resources defined in each modules, will be added if module is included, and passed to create custom_resource_dir
+resource_mapping = {}
 
 ##### Modules #####
-include: "rules/gtdb.smk"
 include: "rules/ncbi.smk"
 include: "rules/prokka.smk"
 include: "rules/antismash.smk"
+resource_mapping["antismash_db"] = str(rules.antismash_db_setup.output.database)
 include: "rules/roary.smk"
 include: "rules/bigscape.smk"
+resource_mapping["BiG-SCAPE"] = str(rules.install_bigscape.output.bigscape)
 include: "rules/bigslice.smk"
+resource_mapping["bigslice"] = str(rules.fetch_bigslice_db.output.folder)
 include: "rules/gtdbtk.smk"
+resource_mapping["gtdbtk"] = str(rules.install_gtdbtk.output.gtdbtk)
 include: "rules/mash.smk"
 include: "rules/fastani.smk"
 include: "rules/refseq_masher.smk"
 include: "rules/patric.smk"
 include: "rules/eggnog.smk"
+resource_mapping["eggnog_db"] = str(rules.install_eggnog.output.eggnog_db)
 include: "rules/mlst.smk"
 include: "rules/automlst_wrapper.smk"
 include: "rules/seqfu.smk"
 include: "rules/checkm.smk"
+resource_mapping["checkm"] = str(rules.install_checkm.output.checkm_db)
 include: "rules/bgc_analytics.smk"
 include: "rules/arts.smk"
 include: "rules/bgc.smk"
@@ -87,3 +91,8 @@ include: "rules/deeptfactor.smk"
 include: "rules/cblaster.smk"
 include: "rules/data_warehouse.smk"
 include: "rules/convert_genbank.smk"
+
+##### 4. Generate user-defined local resources
+custom_resource_dir(config["resources_path"], resource_mapping)
+
+include: "rules/gtdb.smk"

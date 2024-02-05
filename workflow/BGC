@@ -175,22 +175,29 @@ wildcard_constraints:
     bgc="|".join(BGCS),
     version="|".join(VERSIONS),
 
-##### 4. Generate user-defined local resources
-custom_resource_dir()
-
 ##### Target rules #####
 rule all:
     input:
         expand("data/processed/{name}/tables/df_gtdb_meta.csv", name=PROJECT_IDS),
         get_final_output(DF_SAMPLES, PEP_PROJECTS, rule_dict_path="workflow/rules_bgc.yaml"),
 
-include: "rules/gtdb.smk"
+# Create place holder for resources defined in each modules, will be added if module is included, and passed to create custom_resource_dir
+resource_mapping = {}
+
 include: "rules/bgc_selection.smk" # need to be better
 include: "rules/bigscape.smk"
+resource_mapping["BiG-SCAPE"] = str(rules.install_bigscape.output.bigscape)
 include: "rules/bgc_analytics.smk"
 include: "rules/antismash.smk"
+resource_mapping["antismash_db"] = str(rules.antismash_db_setup.output.database)
 include: "rules/bigslice.smk"
+resource_mapping["bigslice"] = str(rules.fetch_bigslice_db.output.folder)
 include: "rules/clinker.smk"
 include: "rules/interproscan.smk"
 include: "rules/mmseqs2.smk"
 include: "rules/getphylo.smk"
+
+##### 4. Generate user-defined local resources
+custom_resource_dir(config["resources_path"], resource_mapping)
+
+include: "rules/gtdb.smk"

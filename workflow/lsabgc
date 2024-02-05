@@ -51,6 +51,8 @@ rule all:
     input:
         expand("data/processed/{name}/lsabgc/as_{version}/lsaBGC_AutoAnalyze_Results", name=PROJECT_IDS, version=dependency_version["antismash"]),
 
+# Create place holder for resources defined in each modules, will be added if module is included, and passed to create custom_resource_dir
+resource_mapping = {}
 
 ##### Modules #####
 include: "rules/lsabgc.smk"
@@ -58,6 +60,11 @@ include: "rules/gtdb.smk"
 include: "rules/prokka.smk"
 include: "rules/ncbi.smk"
 include: "rules/antismash.smk"
+resource_mapping["antismash_db"] = str(rules.antismash_db_setup.output.database)
 include: "rules/bgc.smk"
 include: "rules/bigscape.smk"
+resource_mapping["BiG-SCAPE"] = str(rules.install_bigscape.output.bigscape)
 include: "rules/patric.smk"
+
+##### 4. Generate user-defined local resources
+custom_resource_dir(config["resources_path"], resource_mapping)

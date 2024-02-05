@@ -45,7 +45,7 @@ if antismash_major_version <= 6:
 elif antismash_major_version >= 7:
     rule antismash_db_setup:
         output:
-            directory(f"resources/antismash{antismash_major_version}_db"),
+            database=directory(f"resources/antismash{antismash_major_version}_db"),
         conda:
             "../envs/antismash.yaml"
         log:
