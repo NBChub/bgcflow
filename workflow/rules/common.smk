@@ -864,7 +864,7 @@ def custom_resource_dir(resources_path, resource_mapping):
         # raise an Error if external path not found
         else:
             raise FileNotFoundError(
-                f"Error: User-defined resource {r} at {path} does not exist.\nCheck the config.yaml and provide the right path for resource {r} or\nchange it to the default path: resources/{r}\n"
+                f"Error: User-defined resource {r} at {path} does not exist.\nCheck the config.yaml and provide the right path for resource {r} or\nchange it to the default path: {resource_mapping[r]}\n"
             )
     sys.stderr.write(f"   All resources set.\n\n")
     return
