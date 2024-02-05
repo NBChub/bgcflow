@@ -11,7 +11,8 @@ try:
 except KeyError:
     gtdb_release = "207"
     gtdb_release_version = "207_v2"
-sys.stderr.write(f"GTDB API | Grabbing metadata using GTDB release version: {gtdb_release_version}\n")
+sys.stderr.write(f"Checking GTDB API...\n")
+sys.stderr.write(f" - GTDB API | Grabbing metadata using GTDB release version: {gtdb_release_version}\n")
 
 # Testing connection to GTDB API
 gtdb_api_url = "https://gtdb-api.ecogenomic.org/status/db"
@@ -25,16 +26,16 @@ if "rule_parameters" in config.keys():
 
 if not gtdb_offline_mode:
     try:
-        sys.stderr.write(f"GTDB API | Testing connection to: {gtdb_api_url}\n")
+        sys.stderr.write(f" - GTDB API | Testing connection to: {gtdb_api_url}\n")
         response = requests.get(gtdb_api_url)
         response.raise_for_status()  # Raise an exception for HTTP errors (4xx, 5xx)
         data = response.json()  # Assuming the API returns JSON data
-        sys.stderr.write(f'GTDB API | Database is online: {data["online"]}\n')
+        sys.stderr.write(f' - GTDB API | Database is online: {data["online"]}\n')
 
     except requests.exceptions.RequestException as e:
-        sys.stderr.write(f"GTDB API | Error: {e}\n")
-        sys.stderr.write("GTDB API | Failed to connect to the GTDB API.\n")
-        sys.stderr.write("GTDB API | It is possible to continue in offline mode. This will return empty taxonomic information for all NCBI genomes!\n")
+        sys.stderr.write(f" - GTDB API | Error: {e}\n")
+        sys.stderr.write(" - GTDB API | Failed to connect to the GTDB API.\n")
+        sys.stderr.write(" - GTDB API | It is possible to continue in offline mode. This will return empty taxonomic information for all NCBI genomes!\n")
 
         # Check if the error is due to a 504 or 404 status code
         if response.status_code == 504 or response.status_code == 404:
@@ -61,7 +62,7 @@ if not gtdb_offline_mode:
 else:
     sys.stderr.write("WARNING! GTDB API offline mode enabled. This will return empty taxonomic information for all NCBI genomes!\n")
 
-sys.stderr.write(f"GTDB API | Searching in offline mode: {gtdb_offline_mode}\n")
+sys.stderr.write(f" - GTDB API | Searching in offline mode: {gtdb_offline_mode}\n")
 
 rule gtdb_prep:
     output:
