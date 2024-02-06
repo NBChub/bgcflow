@@ -838,13 +838,16 @@ def custom_resource_dir(resources_path, resource_mapping):
         if len(slink.parts) > 2:
             sys.stderr.write(f' - Symlink for {slink} has more than two levels, using only the first two...\n')
             slink = Path(*slink.parts[:2])
+        print(str(path), str(slink))
         if str(path) == str(slink):
             pass
         # check for user-defined external resources
         elif path.exists():
             try:
-                existing_path = Path.readlink(slink)
-                # check if symlink for extrenal path is already generated
+                if slink.is_file() or slink.is_dir():
+                    raise OSError(f"The resources directory '{slink}' already exists. If you want to replace it with your custom path: '{path}', remove '{slink}' from the resources directory.")
+                existing_path = slink.readlink()
+                # check if symlink for external path is already generated
                 if existing_path == path:
                     sys.stderr.write(
                         f" - Symlink for {r} already generated from: {existing_path}\n"
