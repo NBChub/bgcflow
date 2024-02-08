@@ -483,9 +483,8 @@ def get_prokka_refdb(genome_id, params, df_samples, mapping_file, config=config)
     Returns:
         output {str} -- prokka-db table or reference gbks or prokka protein params
     """
-
-    prokka_db = df_samples.loc[genome_id, "ref_annotation"][0]
-    name = df_samples.loc[genome_id, "name"][0]
+    prokka_db = df_samples.loc[genome_id, "ref_annotation"].iloc[0]
+    name = df_samples.loc[genome_id, "name"].iloc[0]
 
     if not os.path.isfile(str(prokka_db)):
         if params == "file":
