@@ -634,7 +634,7 @@ def get_dependency_version(dep, dep_key):
 
     # beautify antismash version, changing "-" to "."
     if dep_key == "antismash" and "-" in result[0]:
-        result[0] = result[0].replace("-",".")
+        result[0] = re.sub(r'\-', '.', result[0], count=2).split("-")[0]
 
     print(f" - {dep_key}=={result[0]}", file=sys.stderr)
     return str(result[0])
