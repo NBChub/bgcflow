@@ -41,3 +41,4 @@ dependencies:
   - pip
   - pip:
     - git+https://github.com/antismash/antismash.git@7-1-0-1
+    - psycopg2-binary
