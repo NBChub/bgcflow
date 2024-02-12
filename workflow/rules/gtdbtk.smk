@@ -70,7 +70,6 @@ rule gtdbtk:
         fnadir="data/interim/gtdbtk/{name}/fasta/",
     output:
         fnalist="data/interim/gtdbtk/{name}/fasta_list_success.txt",
-        #batchfile = "data/interim/gtdbtk/{name}/fasta_batch.tsv",
         gtdbtk_dir=directory("data/interim/gtdbtk/{name}/result/"),
         tmpdir=temp(directory("data/interim/gtdbtk/{name}_tmp/")),
         summary_interim="data/interim/gtdbtk/{name}/result/classify/gtdbtk.bac120.summary.tsv",
@@ -83,8 +82,10 @@ rule gtdbtk:
         ani_screen=ani_screen,
     shell:
         """
+        set -e
         mkdir -p {output.tmpdir}
         gtdbtk classify_wf --genome_dir {input.fnadir} --out_dir {output.gtdbtk_dir} --cpus {threads} --pplacer_cpus 1 --tmpdir {output.tmpdir} {params.ani_screen} &>> {log}
+        tail -n +2 {output.summary_interim} | cut -f1 > {output.fnalist}
         """
 
 rule gtdbtk_fna_fail:
