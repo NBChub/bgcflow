@@ -45,11 +45,11 @@ if antismash_major_version <= 6:
 elif antismash_major_version >= 7:
     rule antismash_db_setup:
         output:
-            database=directory(f"resources/antismash{antismash_major_version}_db"),
+            database=directory(f"resources/antismash_{dependency_version['antismash']}_db"),
         conda:
             "../envs/antismash.yaml"
         log:
-            "logs/antismash/antismash_db_setup.log",
+            f"logs/antismash/antismash_{dependency_version['antismash']}_db_setup.log",
         shell:
             """
             download-antismash-databases --database-dir {output} &>> {log}
@@ -60,7 +60,7 @@ elif antismash_major_version >= 7:
     rule antismash:
         input:
             gbk="data/interim/processed-genbank/{strains}.gbk",
-            resources=f"resources/antismash{antismash_major_version}_db/",
+            resources="resources/antismash_{version}_db/",
         output:
             folder=directory("data/interim/antismash/{version}/{strains}/"),
             gbk="data/interim/antismash/{version}/{strains}/{strains}.gbk",
@@ -74,13 +74,33 @@ elif antismash_major_version >= 7:
         params:
             folder=directory("data/interim/antismash/{version}/{strains}/"),
             genefinding="none",
+            taxon="bacteria",
+            cb_knownclusters="--cb-knownclusters",
+            cb_subclusters="--cb-subclusters",
+            cc_mibig="--cc-mibig",
+            clusterhmmer="--clusterhmmer",
+            tigrfam="--tigrfam",
+            pfam2go="--pfam2go",
+            rre="--rre",
+            asf="--asf",
+            tfbs="--tfbs",
         shell:
             """
             set +e
 
+            # Define antiSMASH command
+            antismash_command="antismash \
+                --genefinding-tool {params.genefinding} \
+                --taxon {params.taxon} \
+                --output-dir {params.folder} \
+                --database {input.resources} \
+                {params.cb_knownclusters} {params.cb_subclusters} {params.cc_mibig} {params.clusterhmmer} {params.tigrfam} {params.pfam2go} {params.rre} {params.asf} {params.tfbs} \
+                -c {threads}"
+
             # Find the latest existing JSON output for this strain
             latest_version=$(ls -d data/interim/antismash/*/{wildcards.strains}/{wildcards.strains}.json | grep {wildcards.strains} | sort -r | head -n 1 | cut -d '/' -f 4) 2>> {log}
 
+            # Check if a previous version exists
             if [ -n "$latest_version" ]; then
                 # Use existing JSON result as starting point
                 old_json="data/interim/antismash/$latest_version/{wildcards.strains}/{wildcards.strains}.json"
@@ -93,17 +113,14 @@ elif antismash_major_version >= 7:
             fi
 
             # Run AntiSMASH
-            antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
-                --database {input.resources} \
-                --cb-general --cb-subclusters --cb-knownclusters -c {threads} $antismash_input --logfile {log} 2>> {log}
+            $antismash_command $antismash_input --logfile {log} 2>> {log}
 
             # Check if the run failed due to changed detection results
-            if grep -q "ValueError: Detection results have changed. No results can be reused" {log}; then
+            if grep -q -e "ValueError: Detection results have changed. No results can be reused" -e "RuntimeError: Protocluster types supported by HMM detection have changed, all results invalid" {log}; then
                 # Use genbank input instead
+                antismash_input="{input.gbk}"
                 echo "Previous JSON result is invalid, starting AntiSMASH from scratch..." >> {log}
-                antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
-                    --database {input.resources} \
-                    --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} --logfile {log} 2>> {log}
+                $antismash_command $antismash_input --logfile {log} 2>> {log}
             fi
             """
 
