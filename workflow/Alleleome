@@ -1,0 +1,69 @@
+report: "report/workflow.rst"
+
+
+include: "rules/common.smk"
+
+
+##### 1. Extract information from config file
+(
+    DF_PROJECTS,
+    DF_SAMPLES,
+    PROKKA_DB_TABLE,
+    PROKKA_DB_MAP,
+    PEP_PROJECTS,
+) = extract_project_information(config)
+
+# generate centralized sample datasets
+bgcflow_util_dir = Path("data/interim/bgcflow_utils")
+bgcflow_util_dir.mkdir(parents=True, exist_ok=True)
+DF_SAMPLES.to_csv(bgcflow_util_dir / "samples.csv", index=False)
+
+##### 2. Generate wildcard constants #####
+PROJECT_IDS = list(DF_PROJECTS.name.unique())
+STRAINS = DF_SAMPLES.genome_id.to_list()
+STRAINS_FNA = DF_SAMPLES[DF_SAMPLES.input_type.eq("fna")].genome_id.to_list()
+STRAINS_GENBANK = DF_SAMPLES[DF_SAMPLES.input_type.eq("gbk")].genome_id.to_list()
+CUSTOM_GENBANK = DF_SAMPLES[(DF_SAMPLES.source.eq("custom")) & (DF_SAMPLES.input_type.eq("gbk"))].genome_id.to_list()
+CUSTOM_FNA = DF_SAMPLES[(DF_SAMPLES.source.eq("custom")) & (DF_SAMPLES.input_type.eq("fna"))].genome_id.to_list()
+NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
+PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
+SAMPLE_PATHS = list(DF_PROJECTS.samples.unique())
+GTDB_PATHS = [
+    str(PEP_PROJECTS[k].config["gtdb-tax"])
+    for k in PEP_PROJECTS.keys()
+    if "gtdb-tax" in PEP_PROJECTS[k].config.keys()
+]
+PROKKA_GBFF = list(PROKKA_DB_TABLE.keys())
+
+##### 3. Wildcard constraints #####
+wildcard_constraints:
+    strains="|".join(STRAINS),
+    strains_fna="|".join(STRAINS_FNA),
+    strains_genbank="|".join(STRAINS_GENBANK),
+    ncbi="|".join(NCBI),
+    custom_fna="|".join(CUSTOM_FNA),
+    custom_genbank="|".join(CUSTOM_GENBANK),
+    patric="|".join(PATRIC),
+    name="|".join(PROJECT_IDS),
+    prokka_db="|".join(PROKKA_GBFF),
+
+##### Target rules #####
+rule all:
+    input:
+        expand("data/processed/{name}/tables/df_gtdb_meta.csv", name=PROJECT_IDS),
+        expand("data/processed/{name}/alleleome/pan_core_gene_syno_non_syno_df.csv", name=PROJECT_IDS),
+
+# Create place holder for resources defined in each modules, will be added if module is included, and passed to create custom_resource_dir
+resource_mapping = {}
+
+##### 4. Generate user-defined local resources
+custom_resource_dir(config["resources_path"], resource_mapping)
+
+##### Modules #####
+include: "rules/convert_genbank.smk"
+include: "rules/bgc_analytics.smk"
+include: "rules/ncbi.smk"
+include: "rules/prokka.smk"
+include: "rules/gtdb.smk"
+include: "rules/roary.smk"
+include: "rules/alleleome.smk"
