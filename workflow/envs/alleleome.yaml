@@ -9,4 +9,4 @@ dependencies:
   - blast==2.14.0
   - pip
   - pip:
-    - git+https://github.com/anpanche/Core-Alleleome.git
+    - git+https://github.com/anpanche/Core-Alleleome.git@v0.1.0
