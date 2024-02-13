@@ -484,8 +484,8 @@ def get_prokka_refdb(genome_id, params, df_samples, mapping_file, config=config)
         output {str} -- prokka-db table or reference gbks or prokka protein params
     """
 
-    prokka_db = df_samples.loc[genome_id, "ref_annotation"][0]
-    name = df_samples.loc[genome_id, "name"][0]
+    prokka_db = df_samples.loc[genome_id, "ref_annotation"].iloc[0]
+    name = df_samples.loc[genome_id, "name"].iloc[0]
 
     if not os.path.isfile(str(prokka_db)):
         if params == "file":
@@ -634,7 +634,7 @@ def get_dependency_version(dep, dep_key):
 
     # beautify antismash version, changing "-" to "."
     if dep_key == "antismash" and "-" in result[0]:
-        result[0] = result[0].replace("-",".")
+        result[0] = re.sub(r'\-', '.', result[0], count=2).split("-")[0]
 
     print(f" - {dep_key}=={result[0]}", file=sys.stderr)
     return str(result[0])
@@ -867,7 +867,7 @@ def custom_resource_dir(resources_path, resource_mapping):
         # raise an Error if external path not found
         else:
             raise FileNotFoundError(
-                f"Error: User-defined resource {r} at {path} does not exist.\nCheck the config.yaml and provide the right path for resource {r} or\nchange it to the default path: {str(slinks)}\n"
+                f"Error: User-defined resource {r} at {path} does not exist.\nCheck the config.yaml and provide the right path for resource {r} or\nchange it to the default path: {str(slink)}\n"
             )
     sys.stderr.write(f"   All resources set.\n\n")
     return
