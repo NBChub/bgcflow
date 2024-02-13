@@ -60,5 +60,10 @@ resource_mapping = {}
 custom_resource_dir(config["resources_path"], resource_mapping)
 
 ##### Modules #####
+include: "rules/convert_genbank.smk"
+include: "rules/bgc_analytics.smk"
+include: "rules/ncbi.smk"
+include: "rules/prokka.smk"
 include: "rules/gtdb.smk"
+include: "rules/roary.smk"
 include: "rules/alleleome.smk"

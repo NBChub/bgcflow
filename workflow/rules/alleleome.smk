@@ -17,7 +17,10 @@ rule prepare_alleleome:
 rule prepare_alleleome_fasta:
     input:
         roary_path="data/interim/roary/{name}",
-        gbk_folder="data/interim/processed-genbank",
+        gbk_folder=lambda wildcards: expand("data/interim/processed-genbank/{strains}.gbk",
+            name=wildcards.name,
+            strains=[s for s in PEP_PROJECTS[wildcards.name].sample_table.genome_id.unique()],
+        ),
         pangene_summary_path="data/processed/{name}/alleleome/pangene_v2.csv"
     output:
         fasta=directory("data/processed/{name}/pangenome_alignments")
@@ -29,7 +32,7 @@ rule prepare_alleleome_fasta:
         """
         python workflow/scripts/alleleome_get_core_genes_fasta.py \
             --roary_path {input.roary_path} \
-            --gbk_folder {input.gbk_folder} \
+            --gbk_folder data/interim/processed-genbank \
             --pangene_summary_path {input.pangene_summary_path} \
             --output_folder data/processed/{wildcards.name} 2>> {log}
         """
