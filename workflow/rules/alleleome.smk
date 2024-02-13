@@ -23,7 +23,7 @@ rule prepare_alleleome_fasta:
         ),
         pangene_summary_path="data/processed/{name}/alleleome/pangene_v2.csv"
     output:
-        fasta=directory("data/processed/{name}/pangenome_alignments")
+        fasta=directory("data/processed/{name}/alleleome/pangenome_alignments")
     log:
         "logs/prepare_alleleome_fasta/{name}.log"
     conda:
@@ -34,12 +34,12 @@ rule prepare_alleleome_fasta:
             --roary_path {input.roary_path} \
             --gbk_folder data/interim/processed-genbank \
             --pangene_summary_path {input.pangene_summary_path} \
-            --output_folder data/processed/{wildcards.name} 2>> {log}
+            --output_folder data/processed/{wildcards.name}/alleleome 2>> {log}
         """
 
 rule alleleome:
     input:
-        pangenome_aligments_path="data/processed/{name}/pangenome_alignments",
+        pangenome_aligments_path="data/processed/{name}/alleleome/pangenome_alignments",
         pangene_summary_path="data/processed/{name}/alleleome/pangene_v2.csv"
     output:
         alleleome_directory_path="data/processed/{name}/alleleome/pan_core_gene_syno_non_syno_df.csv"
