@@ -1,0 +1,12 @@
+name: alleleome
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python==3.11
+  - mafft==7.505
+  - blast==2.14.0
+  - pip
+  - pip:
+    - git+https://github.com/anpanche/Core-Alleleome.git
