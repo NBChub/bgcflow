@@ -1,3 +1,6 @@
+if "taxonomic_mode" not in config.keys():
+    config["taxonomic_mode"] = "bacteria"
+
 if NCBI == []:
     pass
 else:
@@ -12,12 +15,13 @@ else:
             log:
                 "logs/ncbi/ncbi_genome_download/ncbi_genome_download_{ncbi_fasta}.log",
             params:
-                groups="bacteria",
+                ncbi_groups=config["taxonomic_mode"],
                 file_format="fasta",
                 extension="fna",
                 retries=3,
             shell:
                 """
+                set -e
                 if [[ {wildcards.ncbi_fasta} == GCF* ]]
                 then
                     source="refseq"
@@ -27,10 +31,10 @@ else:
                 else
                     echo "accession must start with GCA or GCF" >> {log}
                 fi
-                ncbi-genome-download -s $source -F {params.file_format},assembly-report -A {wildcards.ncbi_fasta} -o data/raw/ncbi/download -P -N --verbose -d -r {params.retries} {params.groups} 2>> {log}
-                gunzip -c data/raw/ncbi/download/$source/{params.groups}/{wildcards.ncbi_fasta}/*.{params.extension}.gz > {output.fna}
-                cp data/raw/ncbi/download/$source/{params.groups}/{wildcards.ncbi_fasta}/*report.txt {output.assembly_report}
-                rm -rf data/raw/ncbi/download/$source/{params.groups}/{wildcards.ncbi_fasta}
+                ncbi-genome-download -s $source -F {params.file_format},assembly-report -A {wildcards.ncbi_fasta} -o data/raw/ncbi/download -P -N --verbose -d -r {params.retries} {params.ncbi_groups} 2>> {log}
+                gunzip -c data/raw/ncbi/download/$source/{params.ncbi_groups}/{wildcards.ncbi_fasta}/*.{params.extension}.gz > {output.fna}
+                cp data/raw/ncbi/download/$source/{params.ncbi_groups}/{wildcards.ncbi_fasta}/*report.txt {output.assembly_report}
+                rm -rf data/raw/ncbi/download/$source/{params.ncbi_groups}/{wildcards.ncbi_fasta}
                 python workflow/bgcflow/bgcflow/data/get_assembly_information.py {output.assembly_report} {output.json_report} {wildcards.ncbi_fasta} 2>> {log}
                 """
 
@@ -48,11 +52,12 @@ else:
             log:
                 "logs/ncbi/ncbi_genome_download/ncbi_genome_download_{ncbi_genbank}.log",
             params:
-                groups="bacteria",
+                ncbi_groups=config["taxonomic_mode"],
                 file_format="genbank,fasta,gff,translated-cds",
                 retries=3,
             shell:
                 """
+                set -e
                 if [[ {wildcards.ncbi_genbank} == GCF* ]]
                 then
                     source="refseq"
@@ -62,13 +67,13 @@ else:
                 else
                     echo "accession must start with GCA or GCF" >> {log}
                 fi
-                ncbi-genome-download -s $source -F {params.file_format},assembly-report -A {wildcards.ncbi_genbank} -o data/raw/ncbi/download -P -N --verbose -d -r {params.retries} {params.groups} 2>> {log}
-                gunzip -c data/raw/ncbi/download/$source/{params.groups}/{wildcards.ncbi_genbank}/*.gbff.gz > {output.gbk}
-                gunzip -c data/raw/ncbi/download/$source/{params.groups}/{wildcards.ncbi_genbank}/*.fna.gz > {output.fna}
-                gunzip -c data/raw/ncbi/download/$source/{params.groups}/{wildcards.ncbi_genbank}/*.gff.gz > {output.gff}
-                gunzip -c data/raw/ncbi/download/$source/{params.groups}/{wildcards.ncbi_genbank}/*.faa.gz > {output.faa}
-                cp data/raw/ncbi/download/$source/{params.groups}/{wildcards.ncbi_genbank}/*report.txt {output.assembly_report}
-                rm -rf data/raw/ncbi/download/$source/{params.groups}/{wildcards.ncbi_genbank}
+                ncbi-genome-download -s $source -F {params.file_format},assembly-report -A {wildcards.ncbi_genbank} -o data/raw/ncbi/download -P -N --verbose -d -r {params.retries} {params.ncbi_groups} 2>> {log}
+                gunzip -c data/raw/ncbi/download/$source/{params.ncbi_groups}/{wildcards.ncbi_genbank}/*.gbff.gz > {output.gbk}
+                gunzip -c data/raw/ncbi/download/$source/{params.ncbi_groups}/{wildcards.ncbi_genbank}/*.fna.gz > {output.fna}
+                gunzip -c data/raw/ncbi/download/$source/{params.ncbi_groups}/{wildcards.ncbi_genbank}/*.gff.gz > {output.gff}
+                gunzip -c data/raw/ncbi/download/$source/{params.ncbi_groups}/{wildcards.ncbi_genbank}/*.faa.gz > {output.faa}
+                cp data/raw/ncbi/download/$source/{params.ncbi_groups}/{wildcards.ncbi_genbank}/*report.txt {output.assembly_report}
+                rm -rf data/raw/ncbi/download/$source/{params.ncbi_groups}/{wildcards.ncbi_genbank}
                 python workflow/bgcflow/bgcflow/data/get_assembly_information.py {output.assembly_report} {output.json_report} {wildcards.ncbi_genbank} 2>> {log}
                 """
 

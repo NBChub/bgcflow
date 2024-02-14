@@ -1,3 +1,6 @@
+if "taxonomic_mode" not in config.keys():
+    config["taxonomic_mode"] = "bacteria"
+
 if antismash_major_version <= 6:
     rule antismash_db_setup:
         output:
@@ -74,7 +77,7 @@ elif antismash_major_version >= 7:
         params:
             folder=directory("data/interim/antismash/{version}/{strains}/"),
             genefinding="none",
-            taxon="bacteria",
+            antismash_taxon=config["taxonomic_mode"],
             cb_knownclusters="--cb-knownclusters",
             cb_subclusters="--cb-subclusters",
             cc_mibig="--cc-mibig",
@@ -91,7 +94,7 @@ elif antismash_major_version >= 7:
             # Define antiSMASH command
             antismash_command="antismash \
                 --genefinding-tool {params.genefinding} \
-                --taxon {params.taxon} \
+                --taxon {params.antismash_taxon} \
                 --output-dir {params.folder} \
                 --database {input.resources} \
                 {params.cb_knownclusters} {params.cb_subclusters} {params.cc_mibig} {params.clusterhmmer} {params.tigrfam} {params.pfam2go} {params.rre} {params.asf} {params.tfbs} \
@@ -113,15 +116,18 @@ elif antismash_major_version >= 7:
             fi
 
             # Run AntiSMASH
-            $antismash_command $antismash_input --logfile {log} 2>> {log}
-
-            # Check if the run failed due to changed detection results
-            if grep -q -e "ValueError: Detection results have changed. No results can be reused" -e "RuntimeError: Protocluster types supported by HMM detection have changed, all results invalid" {log}; then
-                # Use genbank input instead
-                antismash_input="{input.gbk}"
-                echo "Previous JSON result is invalid, starting AntiSMASH from scratch..." >> {log}
-                $antismash_command $antismash_input --logfile {log} 2>> {log}
-            fi
+            $antismash_command $antismash_input --logfile {log} 2>> {log} || {{
+                # Check if the run failed due to changed detection results
+                if grep -q -e "ValueError: Detection results have changed. No results can be reused" -e "RuntimeError: Protocluster types supported by HMM detection have changed, all results invalid" {log}; then
+                    # Use genbank input instead
+                    antismash_input="{input.gbk}"
+                    echo "Previous JSON result is invalid, starting AntiSMASH from scratch..." >> {log}
+                    $antismash_command $antismash_input --logfile {log} 2>> {log}
+                else
+                    echo "Unexpected error occurred" >&2
+                    exit 1
+                fi
+            }}
             """
 
 rule copy_antismash:
