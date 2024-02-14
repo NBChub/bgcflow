@@ -23,6 +23,8 @@ STRAINS_GENBANK = DF_SAMPLES[DF_SAMPLES.input_type.eq("gbk")].genome_id.to_list(
 CUSTOM_GENBANK = DF_SAMPLES[(DF_SAMPLES.source.eq("custom")) & (DF_SAMPLES.input_type.eq("gbk"))].genome_id.to_list()
 CUSTOM_FNA = DF_SAMPLES[(DF_SAMPLES.source.eq("custom")) & (DF_SAMPLES.input_type.eq("fna"))].genome_id.to_list()
 NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
+NCBI_FASTA = DF_SAMPLES[(DF_SAMPLES.source.eq("ncbi")) & (DF_SAMPLES.input_type.eq("fna"))].genome_id.to_list()
+NCBI_GENBANK = DF_SAMPLES[(DF_SAMPLES.source.eq("ncbi")) & (DF_SAMPLES.input_type.eq("gbk"))].genome_id.to_list()
 PATRIC = DF_SAMPLES[DF_SAMPLES.source.eq("patric")].genome_id.to_list()
 SAMPLE_PATHS = list(DF_PROJECTS.samples.unique())
 GTDB_PATHS = [
@@ -38,6 +40,8 @@ wildcard_constraints:
     strains_fna="|".join(STRAINS_FNA),
     strains_genbank="|".join(STRAINS_GENBANK),
     ncbi="|".join(NCBI),
+    ncbi_fasta="|".join(NCBI_FASTA),
+    ncbi_genbank="|".join(NCBI_GENBANK),
     custom_fna="|".join(CUSTOM_FNA),
     custom_genbank="|".join(CUSTOM_GENBANK),
     patric="|".join(PATRIC),
