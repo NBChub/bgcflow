@@ -18,20 +18,26 @@ def gbk_to_faa(input_files, output_file):
                 logging.info(f"Processing file: {input_file}")
                 for seq_feature in record.features:
                     if seq_feature.type == "CDS":
-                        assert len(seq_feature.qualifiers["translation"]) == 1
-                        try:
-                            locus_tag = seq_feature.qualifiers["locus_tag"][0]
-                        except KeyError:
+                        if "translation" not in seq_feature.qualifiers:
                             logging.warning(
-                                f"Feature entry {seq_feature.qualifiers} does not have locus tag!"
+                                f"Feature entry does not have translation!{seq_feature.qualifiers}"
                             )
-                            locus_tag = seq_feature.qualifiers["protein_id"][0]
-                        text = ">%s from %s\n%s\n" % (
-                            locus_tag,
-                            record.name,
-                            seq_feature.qualifiers["translation"][0],
-                        )
-                        output.append(text)
+                            continue
+                        else:
+                            assert len(seq_feature.qualifiers["translation"]) == 1
+                            try:
+                                locus_tag = seq_feature.qualifiers["locus_tag"][0]
+                            except KeyError:
+                                logging.warning(
+                                    f"Feature entry {seq_feature.qualifiers} does not have locus tag!"
+                                )
+                                locus_tag = seq_feature.qualifiers["protein_id"][0]
+                            text = ">%s from %s\n%s\n" % (
+                                locus_tag,
+                                record.name,
+                                seq_feature.qualifiers["translation"][0],
+                            )
+                            output.append(text)
     with open(output_file, "w") as f:
         for item in output:
             f.write(item)
