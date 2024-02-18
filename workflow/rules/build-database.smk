@@ -127,7 +127,7 @@ rule get_dbt_template:
         python {params.dbt}/scripts/source_template.py {params.dbt}/templates/_sources.yml {output.profile} {params.as_version} {params.cutoff} &>> {log}
         """
 
-def exclude_model_dbt(model_to_ignore):
+def exclude_model_dbt(model_to_ignore, exclude_dna_sequences=True):
     """
     Returns a string containing the `--exclude` option followed by the models to ignore in a dbt project.
 
@@ -144,6 +144,9 @@ def exclude_model_dbt(model_to_ignore):
     Note:
         The returned string can be used as an argument to the `dbt build` command to exclude the specified models from the build process.
     """
+    if exclude_dna_sequences:
+        model_to_ignore.append("dna_sequences")
+
     if len(model_to_ignore) == 0:
         return ""
     else:
@@ -160,7 +163,7 @@ rule build_database:
     threads: 16
     params:
         dbt = "data/processed/{name}/dbt/antiSMASH_{version}",
-        exclude = lambda wildcards: exclude_model_dbt(models_to_ignore[wildcards.name])
+        exclude = lambda wildcards: exclude_model_dbt(models_to_ignore[wildcards.name]),
     shell:
         """
         command="dbt build --threads {threads} {params.exclude} -x"
