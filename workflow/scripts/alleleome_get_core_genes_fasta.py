@@ -8,6 +8,18 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
+def remove_special_char(s):
+    if "/" in str(s):
+        return s.replace("/", "_")
+    elif "'" in str(s):
+        return s.replace("'", "_variant")
+    elif "(" in str(s):
+        s = s.replace("(", "_")
+        return s.replace(")", "")
+    else:
+        return s
+
+
 def load_data(roary_path):
     """
     Load data from Roary output.
@@ -25,7 +37,7 @@ def load_data(roary_path):
         roary_path / "df_gene_presence_locustag.csv", index_col="Gene", low_memory=False
     )
     df_gene_presence_locustag.index = [
-        str(i).replace("/", "_") for i in list(df_gene_presence_locustag.index)
+        remove_special_char(str(i)) for i in list(df_gene_presence_locustag.index)
     ]
     return df_gene_presence_binary, df_gene_presence_locustag
 
