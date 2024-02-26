@@ -24,6 +24,7 @@ rule eggnog_roary:
         dmnd="resources/eggnog_db/bacteria.dmnd",
     output:
         eggnog_dir=directory("data/interim/eggnog_roary/{name}/"),
+        tempdir=temp(directory("data/interim/eggnog_roary/tmp/{name}"))
     conda:
         "../envs/eggnog.yaml"
     threads: 8
@@ -34,7 +35,8 @@ rule eggnog_roary:
     shell:
         """
         mkdir -p {output.eggnog_dir}
-        emapper.py -i {params.faa} --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} &>> {log}
+        mkdir -p {output.tempdir}
+        emapper.py -i {params.faa} --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} --temp_dir {output.tempdir} &>> {log}
         """
 
 
