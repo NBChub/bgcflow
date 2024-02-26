@@ -32,8 +32,7 @@ def test_mash_convert():
             "data/processed/Lactobacillus_delbrueckii/mash/df_mash.csv",
             "-f", 
             "-j1",
-            "--keep-target-files",
-    
+            "–-target-files-omit-workdir-adjustment",
             "--directory",
             workdir,
         ])

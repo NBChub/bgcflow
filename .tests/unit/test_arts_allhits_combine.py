@@ -32,8 +32,7 @@ def test_arts_allhits_combine():
             "data/processed/Lactobacillus_delbrueckii/tables/df_arts_all_hits_as-7.0.0.csv",
             "-f", 
             "-j1",
-            "--keep-target-files",
-    
+            "–-target-files-omit-workdir-adjustment",
             "--directory",
             workdir,
         ])

@@ -32,8 +32,7 @@ def test_deeptfactor_to_json():
             "data/interim/deeptfactor/GCA_000056065.1_deeptfactor.json",
             "-f", 
             "-j1",
-            "--keep-target-files",
-    
+            "–-target-files-omit-workdir-adjustment",
             "--directory",
             workdir,
         ])

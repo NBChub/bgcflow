@@ -32,8 +32,7 @@ def test_fix_gtdb_taxonomy():
             "data/processed/Lactobacillus_delbrueckii/tables/df_gtdb_meta.csv",
             "-f", 
             "-j1",
-            "--keep-target-files",
-    
+            "–-target-files-omit-workdir-adjustment",
             "--directory",
             workdir,
         ])

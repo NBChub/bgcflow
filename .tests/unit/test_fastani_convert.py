@@ -32,8 +32,7 @@ def test_fastani_convert():
             "data/processed/Lactobacillus_delbrueckii/fastani/df_fastani.csv",
             "-f", 
             "-j1",
-            "--keep-target-files",
-    
+            "–-target-files-omit-workdir-adjustment",
             "--directory",
             workdir,
         ])

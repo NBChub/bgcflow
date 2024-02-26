@@ -32,8 +32,7 @@ def test_extract_ncbi_information():
             "data/processed/Lactobacillus_delbrueckii/tables/df_ncbi_meta.csv",
             "-f", 
             "-j1",
-            "--keep-target-files",
-    
+            "–-target-files-omit-workdir-adjustment",
             "--directory",
             workdir,
         ])

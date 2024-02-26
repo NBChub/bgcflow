@@ -32,8 +32,7 @@ def test_arts_extract():
             "data/interim/arts/antismash-7.0.0/GCA_000056065.1_arts_all_hits.json",
             "-f", 
             "-j1",
-            "--keep-target-files",
-    
+            "–-target-files-omit-workdir-adjustment",
             "--directory",
             workdir,
         ])

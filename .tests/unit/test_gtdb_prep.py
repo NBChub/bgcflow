@@ -32,8 +32,7 @@ def test_gtdb_prep():
             "data/interim/gtdb/GCA_000056065.1.json",
             "-f", 
             "-j1",
-            "--keep-target-files",
-    
+            "–-target-files-omit-workdir-adjustment",
             "--directory",
             workdir,
         ])

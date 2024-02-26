@@ -32,8 +32,7 @@ def test_antismash_overview():
             "data/interim/antismash/7.0.0/GCA_000056065.1_bgc_overview.json",
             "-f", 
             "-j1",
-            "--keep-target-files",
-    
+            "–-target-files-omit-workdir-adjustment",
             "--directory",
             workdir,
         ])

@@ -32,8 +32,7 @@ def test_antismash_summary():
             "data/processed/Lactobacillus_delbrueckii/tables/df_antismash_7.0.0_summary.csv",
             "-f", 
             "-j1",
-            "--keep-target-files",
-    
+            "–-target-files-omit-workdir-adjustment",
             "--directory",
             workdir,
         ])
