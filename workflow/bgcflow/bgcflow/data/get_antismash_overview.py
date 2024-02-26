@@ -76,25 +76,34 @@ def get_antismash_overview(json_path, outfile, genome_id=False, n_hits=1):
             assert n_hits > 0
 
             output_hits = []
-
-            for n, hits in enumerate(knownclusterblast["ranking"]):
-                if n + 1 <= (n_hits):
-                    most_similar_mibig_id = hits[0]["accession"]
-                    most_similar_mibig_description = hits[0]["description"]
-                    most_similar_mibig_clustertype = hits[0]["cluster_type"]
-                    n_genes_in_target = len(hits[0]["tags"])
-                    n_genes_hits = hits[1]["hits"]
-                    hit_similarity = n_genes_hits / n_genes_in_target
-                    output_hits.append(
-                        {
-                            "most_similar_known_cluster_id": most_similar_mibig_id,
-                            "most_similar_known_cluster_description": most_similar_mibig_description,
-                            "most_similar_known_cluster_type": most_similar_mibig_clustertype,
-                            "similarity": hit_similarity,
-                        }
-                    )
-                else:
-                    pass
+            logging.info(f'Getting most similar known clusters from KnownClusterBlast')
+            if knownclusterblast["total_hits"] == 0:
+                logging.debug("No knowncluster blast hits found. Returning empty values.")
+                output_hits.append(
+                    {
+                        "most_similar_known_cluster_id": None,
+                        "most_similar_known_cluster_description": None,
+                        "most_similar_known_cluster_type": None,
+                        "similarity": None,
+                    }
+                )
+            else:
+                for n, hits in enumerate(knownclusterblast["ranking"]):
+                    if n + 1 <= (n_hits):
+                        most_similar_mibig_id = hits[0]["accession"]
+                        most_similar_mibig_description = hits[0]["description"]
+                        most_similar_mibig_clustertype = hits[0]["cluster_type"]
+                        n_genes_in_target = len(hits[0]["tags"])
+                        n_genes_hits = hits[1]["hits"]
+                        hit_similarity = n_genes_hits / n_genes_in_target
+                        output_hits.append(
+                            {
+                                "most_similar_known_cluster_id": most_similar_mibig_id,
+                                "most_similar_known_cluster_description": most_similar_mibig_description,
+                                "most_similar_known_cluster_type": most_similar_mibig_clustertype,
+                                "similarity": hit_similarity,
+                            }
+                        )
 
             bgc_id = f"{record['id']}.region{str(c+1).zfill(3)}"
             output_cluster = {

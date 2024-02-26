@@ -9,7 +9,11 @@
     "product": [
       "lanthipeptide-class-iii"
     ],
-    "region_length": 22502
+    "region_length": 22502,
+    "most_similar_known_cluster_id": null,
+    "most_similar_known_cluster_description": null,
+    "most_similar_known_cluster_type": null,
+    "similarity": null
   },
   "CR954253.1.region002": {
     "genome_id": "GCA_000056065.1",
@@ -21,7 +25,11 @@
     "product": [
       "RiPP-like"
     ],
-    "region_length": 10966
+    "region_length": 10966,
+    "most_similar_known_cluster_id": null,
+    "most_similar_known_cluster_description": null,
+    "most_similar_known_cluster_type": null,
+    "similarity": null
   },
   "CR954253.1.region003": {
     "genome_id": "GCA_000056065.1",
@@ -33,6 +41,10 @@
     "product": [
       "lanthipeptide-class-iv"
     ],
-    "region_length": 22196
+    "region_length": 22196,
+    "most_similar_known_cluster_id": null,
+    "most_similar_known_cluster_description": null,
+    "most_similar_known_cluster_type": null,
+    "similarity": null
   }
 }
