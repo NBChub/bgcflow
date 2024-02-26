@@ -18,7 +18,7 @@ dependencies:
   - ipykernel
   - xlrd >= 1.0.0
   - altair
-  - itables
+  - itables>=1.7.0
   - scikit-learn==1.4.0
   - pyarrow
   - pygraphviz
