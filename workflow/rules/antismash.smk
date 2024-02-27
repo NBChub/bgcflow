@@ -3,22 +3,32 @@ antismash_db_path = Path(f"resources/antismash_db")
 if antismash_major_version <= 6:
     rule antismash_db_setup:
         output:
-            database=directory(str(antismash_db_path)),
+            clusterblast=directory(antismash_db_path / "clusterblast"),
+            clustercompare_mibig=directory(antismash_db_path / "clustercompare/mibig"),
+            pfam=directory(antismash_db_path / "pfam/34.0"),
+            resfam=directory(antismash_db_path / "resfam"),
+            tigrfam=directory(antismash_db_path / "tigrfam"),
         conda:
             "../envs/antismash_v6.yaml"
         log:
             "logs/antismash/antismash_db_setup.log",
+        params:
+            antismash_db_path=antismash_db_path
         shell:
             """
-            download-antismash-databases --database-dir {output.database} &>> {log}
+            download-antismash-databases --database-dir {params.antismash_db_path} &>> {log}
             antismash --version >> {log}
-            antismash --check-prereqs --databases {output.database} &>> {log}
+            antismash --check-prereqs --databases {params.antismash_db_path} &>> {log}
             """
 
     rule antismash:
         input:
             gbk="data/interim/processed-genbank/{strains}.gbk",
-            resources="resources/antismash_db/",
+            clusterblast=rules.antismash_db_setup.output.clusterblast,
+            clustercompare_mibig=rules.antismash_db_setup.output.clustercompare_mibig,
+            pfam=rules.antismash_db_setup.output.pfam,
+            resfam=rules.antismash_db_setup.output.resfam,
+            tigrfam=rules.antismash_db_setup.output.tigrfam
         output:
             folder=directory("data/interim/antismash/{version}/{strains}/"),
             gbk="data/interim/antismash/{version}/{strains}/{strains}.gbk",
@@ -32,11 +42,12 @@ if antismash_major_version <= 6:
         params:
             folder=directory("data/interim/antismash/{version}/{strains}/"),
             genefinding="none",
+            antismash_db_path=antismash_db_path,
         shell:
             """
             antismash \
                 --genefinding-tool {params.genefinding} \
-                --database {input.resources} \
+                --database {params.antismash_db_path,} \
                 --output-dir {params.folder} \
                 --cb-general \
                 --cb-subclusters \
