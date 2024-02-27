@@ -1,7 +1,9 @@
+antismash_db_path = Path(f"resources/antismash_db")
+
 if antismash_major_version <= 6:
     rule antismash_db_setup:
         output:
-            database=directory("resources/antismash_db"),
+            database=directory(str(antismash_db_path)),
         conda:
             "../envs/antismash_v6.yaml"
         log:
@@ -45,22 +47,46 @@ if antismash_major_version <= 6:
 elif antismash_major_version >= 7:
     rule antismash_db_setup:
         output:
-            database=directory(f"resources/antismash{antismash_major_version}_db"),
+            as_js=directory(antismash_db_path / "as-js/0.13"),
+            clusterblast=directory(antismash_db_path / "clusterblast"),
+            clustercompare_mibig=directory(antismash_db_path / "clustercompare/mibig/3.1"),
+            comparippson_asdb=directory(antismash_db_path / "comparippson/asdb/3.0"),
+            comparippson_mibig=directory(antismash_db_path / "comparippson/mibig/3.1"),
+            knownclusterblast=directory(antismash_db_path / "knownclusterblast/3.1"),
+            nrps_pks_stachelhaus=directory(antismash_db_path / "nrps_pks/stachelhaus/1.1"),
+            nrps_pks_svm=directory(antismash_db_path / "nrps_pks/svm/2.0"),
+            nrps_pks_transATor=directory(antismash_db_path / "nrps_pks/transATor/2023.02.23"),
+            pfam=directory(antismash_db_path / "pfam/34.0"),
+            resfam=directory(antismash_db_path / "resfam"),
+            tigrfam=directory(antismash_db_path / "tigrfam"),
         conda:
             "../envs/antismash.yaml"
         log:
             "logs/antismash/antismash_db_setup.log",
+        params:
+            antismash_db_path=antismash_db_path
         shell:
             """
-            download-antismash-databases --database-dir {output} &>> {log}
+            download-antismash-databases --database-dir {params.antismash_db_path} &>> {log}
             antismash --version >> {log}
-            antismash --database {output} --prepare-data &>> {log}
+            antismash --database {params.antismash_db_path} --prepare-data &>> {log}
             """
 
     rule antismash:
         input:
             gbk="data/interim/processed-genbank/{strains}.gbk",
-            resources=f"resources/antismash{antismash_major_version}_db/",
+            as_js=rules.antismash_db_setup.output.as_js,
+            clusterblast=rules.antismash_db_setup.output.clusterblast,
+            clustercompare_mibig=rules.antismash_db_setup.output.clustercompare_mibig,
+            comparippson_asdb=rules.antismash_db_setup.output.comparippson_asdb,
+            comparippson_mibig=rules.antismash_db_setup.output.comparippson_mibig,
+            knownclusterblast=rules.antismash_db_setup.output.knownclusterblast,
+            nrps_pks_stachelhaus=rules.antismash_db_setup.output.nrps_pks_stachelhaus,
+            nrps_pks_svm=rules.antismash_db_setup.output.nrps_pks_svm,
+            nrps_pks_transATor=rules.antismash_db_setup.output.nrps_pks_transATor,
+            pfam=rules.antismash_db_setup.output.pfam,
+            resfam=rules.antismash_db_setup.output.resfam,
+            tigrfam=rules.antismash_db_setup.output.tigrfam
         output:
             folder=directory("data/interim/antismash/{version}/{strains}/"),
             gbk="data/interim/antismash/{version}/{strains}/{strains}.gbk",
@@ -73,6 +99,7 @@ elif antismash_major_version >= 7:
             "logs/antismash/antismash/{version}/antismash_{version}-{strains}.log",
         params:
             folder=directory("data/interim/antismash/{version}/{strains}/"),
+            antismash_db_path=antismash_db_path,
             genefinding="none",
         shell:
             """
@@ -94,7 +121,7 @@ elif antismash_major_version >= 7:
 
             # Run AntiSMASH
             antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
-                --database {input.resources} \
+                --database {params.antismash_db_path} \
                 --cb-general --cb-subclusters --cb-knownclusters -c {threads} $antismash_input --logfile {log} 2>> {log}
 
             # Check if the run failed due to changed detection results
@@ -102,7 +129,7 @@ elif antismash_major_version >= 7:
                 # Use genbank input instead
                 echo "Previous JSON result is invalid, starting AntiSMASH from scratch..." >> {log}
                 antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
-                    --database {input.resources} \
+                    --database {params.antismash_db_path} \
                     --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} --logfile {log} 2>> {log}
             fi
             """
