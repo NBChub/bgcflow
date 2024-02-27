@@ -60,7 +60,7 @@ include: "rules/gtdb.smk"
 include: "rules/prokka.smk"
 include: "rules/ncbi.smk"
 include: "rules/antismash.smk"
-resource_mapping["antismash_db"] = str(rules.antismash_db_setup.output.database)
+resource_mapping["antismash_db"] = str(antismash_db_path)
 include: "rules/bgc.smk"
 include: "rules/bigscape.smk"
 resource_mapping["BiG-SCAPE"] = str(rules.install_bigscape.output.bigscape)

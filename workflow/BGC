@@ -189,7 +189,7 @@ include: "rules/bigscape.smk"
 resource_mapping["BiG-SCAPE"] = str(rules.install_bigscape.output.bigscape)
 include: "rules/bgc_analytics.smk"
 include: "rules/antismash.smk"
-resource_mapping["antismash_db"] = str(rules.antismash_db_setup.output.database)
+resource_mapping["antismash_db"] = str(antismash_db_path)
 include: "rules/bigslice.smk"
 resource_mapping["bigslice"] = str(rules.fetch_bigslice_db.output.folder)
 include: "rules/clinker.smk"
