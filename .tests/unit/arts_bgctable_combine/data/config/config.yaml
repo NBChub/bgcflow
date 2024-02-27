@@ -16,7 +16,7 @@
 
 projects:
 # Project 2 (PEP file)
-  - pep: config/lactobacillus_delbrueckii/project_config.yaml
+  - pep: config/lactobacillus_delbruecki/project_config.yaml
 
 bgc_projects:
   - pep: config/lanthipeptide_lactobacillus/project_config.yaml
