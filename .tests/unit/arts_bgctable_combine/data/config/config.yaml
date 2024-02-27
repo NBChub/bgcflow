@@ -15,11 +15,11 @@
 # PS: the variable pep and name is an alias
 
 projects:
-# Project 1 (yaml object)
-  - name: config/lactobacillus_delbruecki/project_config.yaml
+# Project 2 (PEP file)
+  - pep: config/Lactobacillus_delbrueckii/project_config.yaml
 
 bgc_projects:
-  - pep: config/lanthipeptide/project_config.yaml
+  - pep: config/lanthipeptide_lactobacillus/project_config.yaml
 
 #### GLOBAL RULE CONFIGURATION ####
 # This section configures the rules to run globally.
@@ -50,7 +50,7 @@ pipelines:
 # resources : the location of the resources to run the rule.
 # The default location is at "resources/{resource_name}".
 resources_path:
-  antismash_db: resources/antismash7_db
+  antismash_db: resources/antismash_db
   eggnog_db: resources/eggnog_db
   BiG-SCAPE: resources/BiG-SCAPE
   bigslice: resources/bigslice
@@ -58,7 +58,23 @@ resources_path:
   gtdbtk: resources/gtdbtk
   #RNAmmer: resources/RNAmmer # If specified, will override Barnapp in Prokka
 
+# Check for valid release versions from https://data.gtdb.ecogenomic.org/releases/
+# Examples:
+# - release 214.1, release_version r214 --> https://data.gtdb.ecogenomic.org/releases/release214/214.1/auxillary_files/gtdbtk_r214_data.tar.gz
+# - release 207, release_version r207_v2 --> https://data.gtdb.ecogenomic.org/releases/release207/207.0/auxillary_files/gtdbtk_r207_v2_data.tar.gz
+
 rule_parameters:
   install_gtdbtk:
-    release: 214
-    release_version: 214
+    release: "214.1"
+    release_version: "r214"
+  gtdbtk:
+    ani_screen: FALSE
+  antismash:
+    version: "7" # valid versions: 6, 7
+  use_gtdb_api: TRUE # Set to false to enable offline mode for taxonomic assignment, see https://github.com/NBChub/bgcflow/wiki/07-Advanced-Configurations#using-gtdb_api-offline-mode
+
+utility_parameters:
+  METABASE_MIN_MEMORY: "2g"
+  METABASE_MAX_MEMORY: "8g"
+  METABASE_VERSION: "v0.47.0"
+  METABASE_DUCKDB_PLUGIN_VERSION: "0.2.2"
