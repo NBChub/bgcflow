@@ -2,7 +2,7 @@
 This folder contains all processed results and reports for a BGCFlow project. To serve an interactive report, using `BGCFlow wrapper`:
 - Install BGCFlow wrapper via pip
 ```bash
-pip install git+https://github.com/NBChub/bgcflow_wrapper.git
+pip install bgcflow_wrapper
 
 # make sure you are in the right directory (where this README file is located)
 bgcflow serve --project <project name>
