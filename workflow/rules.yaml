@@ -61,7 +61,7 @@ roary:
     Parkhill, ''Roary: Rapid large-scale prokaryote pan genome analysis'', Bioinformatics,
     2015;31(22):3691-3693 [doi:10.1093/bioinformatics/btv421](https://academic.oup.com/bioinformatics/article/31/22/3691/240757)'
 eggnog-roary:
-  final_output: data/interim/eggnog_roary/{name}/
+  final_output: data/processed/{name}/eggnog_roary/emapper.annotations
   description: Annotate Roary output using eggNOG mapper
   category: Comparative Genomics
   link:

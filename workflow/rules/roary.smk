@@ -16,6 +16,21 @@ rule roary:
         roary -p {threads} -f {output.roary_dir} -i {params.i} -g {params.g} -e -n -r -v {input.gff} &>> {log}
         """
 
+rule roary_reassign_pangene_categories:
+    input:
+        roary="data/interim/roary/{name}"
+    output:
+        pangene="data/processed/{name}/tables/df_roary_pangene_summary_reassigned.csv",
+    log:
+        "logs/roary_reassign_pangene_categories/{name}.log"
+    conda:
+        "../envs/bgc_analytics.yaml"
+    shell:
+        """
+        python workflow/scripts/alleleome_reassign_pangene_categories.py \
+            --data-dir {input.roary} \
+            --output-file {output.pangene} 2>> {log}
+        """
 
 rule eggnog_roary:
     input:
@@ -39,6 +54,22 @@ rule eggnog_roary:
         emapper.py -i {params.faa} --translate --itype "CDS" --excel --cpu {threads} -o {wildcards.name} --output_dir {output.eggnog_dir} --data_dir {input.eggnog_db} --temp_dir {output.tempdir} &>> {log}
         """
 
+rule eggnog_roary_result_copy:
+    input:
+        eggnog_dir="data/interim/eggnog_roary/{name}/",
+        pangene="data/processed/{name}/tables/df_roary_pangene_summary_reassigned.csv",
+    output:
+        eggnog_xlsx="data/processed/{name}/eggnog_roary/eggnog_roary.xlsx",
+        eggnog_annotations="data/processed/{name}/eggnog_roary/emapper.annotations"
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log:
+        "logs/eggnog-roary/eggnog-result-copy-{name}.log",
+    shell:
+        """
+        cp {input.eggnog_dir}/{wildcards.name}.emapper.annotations.xlsx {output.eggnog_xlsx}
+        cp {input.eggnog_dir}/{wildcards.name}.emapper.annotations {output.eggnog_annotations}
+        """
 
 rule deeptfactor_roary:
     input:
