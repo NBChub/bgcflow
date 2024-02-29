@@ -838,32 +838,35 @@ def custom_resource_dir(resources_path, resource_mapping):
         if len(slink.parts) > 2:
             sys.stderr.write(f' - Symlink for {slink} has more than two levels, using only the first two...\n')
             slink = Path(*slink.parts[:2])
-        print(str(path), str(slink))
         if str(path) == str(slink):
             pass
         # check for user-defined external resources
         elif path.exists():
             try:
-                if slink.is_file() or slink.is_dir():
-                    raise OSError(f"The resources directory '{slink}' already exists. If you want to replace it with your custom path: '{path}', remove '{slink}' from the resources directory.")
-                existing_path = slink.readlink()
-                # check if symlink for external path is already generated
-                if existing_path == path:
-                    sys.stderr.write(
-                        f" - Symlink for {r} already generated from: {existing_path}\n"
-                    )
-                # update symlink because new path is given
-                else:
-                    slink.unlink()
-                    slink.symlink_to(path)
-                    updated_path = Path.readlink(Path(slink))
-                    sys.stderr.write(
-                        f" - Updating symlink for {r} from: {existing_path} to: {updated_path}\n"
-                    )
-            # generate a new symlink
+                if path.resolve() == slink.readlink().resolve():
+                    pass
             except FileNotFoundError:
-                sys.stderr.write(f" - Generating symlink for {slink} from: {path}\n")
-                slink.symlink_to(path)
+                try:
+                    if slink.is_file() or slink.is_dir():
+                        raise OSError(f"The resources directory '{slink}' already exists. If you want to replace it with your custom path: '{path}', remove '{slink}' from the resources directory.")
+                    existing_path = slink.readlink()
+                    # check if symlink for external path is already generated
+                    if existing_path == path:
+                        sys.stderr.write(
+                            f" - Symlink for {r} already generated from: {existing_path}\n"
+                        )
+                    # update symlink because new path is given
+                    else:
+                        slink.unlink()
+                        slink.symlink_to(path.resolve())
+                        updated_path = Path.readlink(Path(slink))
+                        sys.stderr.write(
+                            f" - Updating symlink for {r} from: {existing_path} to: {updated_path}\n"
+                        )
+                # generate a new symlink
+                except FileNotFoundError:
+                    sys.stderr.write(f" - Generating symlink for {slink} from: {path.resolve()}\n")
+                    slink.symlink_to(path.resolve())
         # raise an Error if external path not found
         else:
             raise FileNotFoundError(
