@@ -1,0 +1,27 @@
+name: mq_saccharopolyspora
+pep_version: 2.1.0
+description: '26 Saccharopolysopra genomes of medium to high quality with less than 50 contigs. The new cutoff now removes GCF_000710755.1, GCF_015209505.1, GCF_014646075.1 and adds GCF_014697215.1'
+sample_table: samples.csv
+prokka-db: prokka-db.csv
+gtdb-tax: 'gtdbtk.bac120.summary.tsv'
+
+rules:
+  seqfu: TRUE
+  mash: TRUE
+  fastani: TRUE
+  checkm: TRUE
+  gtdbtk: FALSE
+  prokka-gbk: TRUE
+  antismash: TRUE
+  query-bigslice: TRUE
+  bigscape: TRUE
+  bigslice: TRUE
+  automlst-wrapper: TRUE
+  arts: TRUE
+  roary: TRUE
+  eggnog: FALSE
+  eggnog-roary: TRUE
+  deeptfactor: TRUE
+  deeptfactor-roary: FALSE
+  cblaster-genome: TRUE
+  cblaster-bgc: TRUE
