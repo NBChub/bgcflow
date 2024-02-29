@@ -75,10 +75,23 @@ rule gtdb_prep:
         samples_path=bgcflow_util_dir / "samples.csv",
         gtdb_paths=GTDB_PATHS,
         version=f"R{str(gtdb_release).split('.')[0]}",
+        gtdb_release=gtdb_release,
+        gtdb_release_version=gtdb_release_version,
+        gtdb_table = f"https://data.gtdb.ecogenomic.org/releases/release{str(gtdb_release).split('.')[0]}/{gtdb_release}/bac120_metadata_r{str(gtdb_release).split('.')[0]}.tsv.gz",
         offline=gtdb_offline_mode,
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} '{params.samples_path}' '{params.gtdb_paths}' {params.version} {params.offline} 2> {log}
+        if python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} '{params.samples_path}' '{params.gtdb_paths}' {params.version} {params.offline} 2> {log}; then
+            echo "gtdb_prep.py executed successfully"
+        else
+            echo "gtdb_prep.py failed, getting dataset from table instead..." >> {log}
+            if [ ! -f resources/gtdb_download/bac120_metadata_r{params.gtdb_release}.tsv ]; then
+                mkdir -p resources/gtdb_download/
+                wget -P resources/gtdb_download/ {params.gtdb_table} -nc 2>> {log}
+                gunzip -c resources/gtdb_download/bac120_metadata_{params.gtdb_release_version}.tsv.gz > resources/gtdb_download/bac120_metadata_{params.gtdb_release_version}.tsv 2>> {log}
+            fi
+            python workflow/bgcflow/bgcflow/data/gtdb_prep_from_table.py {wildcards.strains} resources/gtdb_download/bac120_metadata_{params.gtdb_release_version}.tsv {params.version} {output.gtdb_json} 2>> {log}
+        fi
         """
 
 

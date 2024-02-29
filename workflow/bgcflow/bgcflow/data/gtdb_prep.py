@@ -226,6 +226,7 @@ def get_ncbi_taxon_GTDB(accession, release="R207"):
             )
         elif api_type == "summary":
             api_url = f"https://api.gtdb.ecogenomic.org/genome/{accession}/card"
+        logging.debug(f"Requesting GTDB API: {api_url}")
         response = requests.get(api_url)
 
         try:
