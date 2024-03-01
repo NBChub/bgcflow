@@ -20,7 +20,7 @@ def test_gtdb_prep():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("data/interim/gtdb/GCA_000056065.1.json", file=sys.stderr)
+        print("data/interim/gtdb/GCF_000056065.1.json", file=sys.stderr)
 
         # Run the test job.
         sp.check_output(
@@ -28,7 +28,7 @@ def test_gtdb_prep():
                 "python",
                 "-m",
                 "snakemake",
-                "data/interim/gtdb/GCA_000056065.1.json",
+                "data/interim/gtdb/GCF_000056065.1.json",
                 "-f",
                 "-j1",
                 "--target-files-omit-workdir-adjustment",
