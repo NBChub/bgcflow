@@ -85,7 +85,7 @@ rule gtdb_prep:
             echo "gtdb_prep.py executed successfully"
         else
             echo "gtdb_prep.py failed, getting dataset from table instead..." >> {log}
-            if [ ! -f resources/gtdb_download/bac120_metadata_r{params.gtdb_release}.tsv ]; then
+            if [ ! -f resources/gtdb_download/bac120_metadata_{params.gtdb_release}.tsv ]; then
                 mkdir -p resources/gtdb_download/
                 wget -P resources/gtdb_download/ {params.gtdb_table} -nc 2>> {log}
                 gunzip -c resources/gtdb_download/bac120_metadata_{params.gtdb_release_version}.tsv.gz > resources/gtdb_download/bac120_metadata_{params.gtdb_release_version}.tsv 2>> {log}
