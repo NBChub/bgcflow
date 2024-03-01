@@ -1,6 +1,6 @@
 {
-  "genome_id": "GCA_000056065.1",
-  "gtdb_url": "https://api.gtdb.ecogenomic.org/genome/GCA_000056065.1/taxon-history",
+  "genome_id": "GCF_000056065.1",
+  "gtdb_url": "https://gtdb-api.ecogenomic.org/genome/GCF_000056065.1/taxon-history",
   "gtdb_release": "R214",
   "gtdb_taxonomy": {
     "domain": "d__Bacteria",
@@ -11,7 +11,7 @@
     "genus": "g__Lactobacillus",
     "species": "s__Lactobacillus delbrueckii"
   },
-  "metadata_url": "https://api.gtdb.ecogenomic.org/genome/GCA_000056065.1/card",
+  "metadata_url": "https://gtdb-api.ecogenomic.org/genome/GCF_000056065.1/card",
   "metadata": {
     "genome": {
       "accession": "GCA_000056065.1",
