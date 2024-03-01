@@ -75,22 +75,24 @@ rule gtdb_prep:
         samples_path=bgcflow_util_dir / "samples.csv",
         gtdb_paths=GTDB_PATHS,
         version=f"R{str(gtdb_release).split('.')[0]}",
-        gtdb_release=gtdb_release,
-        gtdb_release_version=gtdb_release_version,
-        gtdb_table = f"https://data.gtdb.ecogenomic.org/releases/release{str(gtdb_release).split('.')[0]}/{gtdb_release}/bac120_metadata_r{str(gtdb_release).split('.')[0]}.tsv.gz",
+        gtdb_link = f"https://data.gtdb.ecogenomic.org/releases/release{str(gtdb_release).split('.')[0]}/{gtdb_release}/bac120_metadata_r{str(gtdb_release).split('.')[0]}.tsv.gz",
+        gtdb_table = f"bac120_metadata_r{str(gtdb_release).split('.')[0]}.tsv",
         offline=gtdb_offline_mode,
+        api_base="https://gtdb-api.ecogenomic.org",
     shell:
         """
-        if python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} '{params.samples_path}' '{params.gtdb_paths}' {params.version} {params.offline} 2> {log}; then
-            echo "gtdb_prep.py executed successfully"
+        if python workflow/bgcflow/bgcflow/data/gtdb_prep.py {wildcards.strains} {output.gtdb_json} '{params.samples_path}' '{params.gtdb_paths}' {params.version} {params.offline} {params.api_base} 2> {log}; then
+            echo "gtdb_prep.py executed successfully" >> {log}
         else
             echo "gtdb_prep.py failed, getting dataset from table instead..." >> {log}
-            if [ ! -f resources/gtdb_download/bac120_metadata_{params.gtdb_release}.tsv ]; then
+            if [ ! -f resources/gtdb_download/{params.gtdb_table} ]; then
+                echo "Downloading GTDB table from {params.gtdb_link}" >> {log}
                 mkdir -p resources/gtdb_download/
-                wget -P resources/gtdb_download/ {params.gtdb_table} -nc 2>> {log}
-                gunzip -c resources/gtdb_download/bac120_metadata_{params.gtdb_release_version}.tsv.gz > resources/gtdb_download/bac120_metadata_{params.gtdb_release_version}.tsv 2>> {log}
+                wget -P resources/gtdb_download/ {params.gtdb_link} -nc 2>> {log}
+                gunzip -c resources/gtdb_download/{params.gtdb_table}.gz > resources/gtdb_download/{params.gtdb_table} 2>> {log}
             fi
-            python workflow/bgcflow/bgcflow/data/gtdb_prep_from_table.py {wildcards.strains} resources/gtdb_download/bac120_metadata_{params.gtdb_release_version}.tsv {params.version} {output.gtdb_json} 2>> {log}
+            echo "Running gtdb_prep_from_table.py" >> {log}
+            python workflow/bgcflow/bgcflow/data/gtdb_prep_from_table.py {wildcards.strains} resources/gtdb_download/{params.gtdb_table} {params.version} {output.gtdb_json} 2>> {log}
         fi
         """
 
