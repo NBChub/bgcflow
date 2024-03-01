@@ -126,7 +126,9 @@ def gather_bgc_overview(input_json, mapping_dir, table):
     df.index.name = "bgc_id"
 
     logging.debug("Checking similarity values...")
-    df["similarity"] = df["similarity"].apply(lambda x: 1 if x > 1 else x)
+    df["similarity"] = df["similarity"].apply(
+        lambda x: 1 if x is not None and x > 1 else x
+    )
 
     logging.debug(f"Writing file to: {table}")
 
