@@ -616,7 +616,7 @@ def get_dependency_version(dep, dep_key):
         for i in documents["dependencies"]:
             if type(i) == str:
                 if i.startswith(dep_key):
-                    dep_name, dep_version = i.split("=")
+                    dep_name, dep_version = i.replace("==", "=").split("=")
                     result.append(dep_version)
             elif type(i) == dict:
                 assert len(i.keys()) == 1
@@ -667,7 +667,8 @@ dependencies = {
     "roary": r"workflow/envs/roary.yaml",
     "seqfu": r"workflow/envs/seqfu.yaml",
     "checkm": r"workflow/envs/checkm.yaml",
-    "gtdbtk" : r"workflow/envs/gtdbtk.yaml"
+    "gtdbtk" : r"workflow/envs/gtdbtk.yaml",
+    "gecco" : r"workflow/envs/gecco.yaml",
 }
 
 print(f"Checking dependencies...", file=sys.stderr)
@@ -717,7 +718,6 @@ def get_project_outputs(
         wc = re.findall(r"\{.*?\}", rule_dict[k]["final_output"])
         wc = [i.replace("{", "").replace("}", "") for i in wc]
         wc.sort()
-
         # find relevant wildcards
         if wc == ["strains"]:
             value = expand(rule_dict[k]["final_output"], strains=selection)
@@ -730,6 +730,12 @@ def get_project_outputs(
                 rule_dict[k]["final_output"],
                 name=PROJECT_IDS,
                 version=dependency_version["antismash"],
+            )
+        elif wc == ["gecco_version", "name"]:
+            value = expand(
+                rule_dict[k]["final_output"],
+                name=PROJECT_IDS,
+                gecco_version=dependency_version["gecco"],
             )
         elif wc == ["name", "strains"]:
             value = expand(

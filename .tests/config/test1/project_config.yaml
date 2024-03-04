@@ -21,3 +21,4 @@ rules:
   cblaster-genome: TRUE
   cblaster-bgc: TRUE
   ppanggolin: TRUE
+  gecco: TRUE
