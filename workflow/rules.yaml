@@ -231,3 +231,13 @@ bigscape:
   - Navarro-Muñoz, J.C., Selem-Mojica, N., Mullowney, M.W. et al. A computational
     framework to explore large-scale biosynthetic diversity. [Nat Chem Biol 16, 60–68
     (2020)](https://doi.org/10.1038/s41589-019-0400-9)
+gecco:
+  final_output: data/processed/{name}/gecco/{gecco_version}
+  description: GEne Cluster prediction with COnditional random fields.
+  category: Genome Mining
+  link:
+  - https://github.com/zellerlab/GECCO
+  references:
+  - "Accurate de novo identification of biosynthetic gene clusters with GECCO. Laura M Carroll,
+    Martin Larralde, Jonas Simon Fleck, Ruby Ponnudurai, Alessio Milanese, Elisa Cappio Barazzone,
+    Georg Zeller. bioRxiv 2021.05.03.442509; doi:10.1101/2021.05.03.442509"
