@@ -22,6 +22,8 @@ dependencies:
   - scikit-learn==1.4.0
   - pyarrow
   - pygraphviz
+  - lxml
+  - jinja2
   - pip
   - pip:
       - biopython
