@@ -2,11 +2,11 @@ import json
 import logging
 import sys
 
+import yaml
+
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
 logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
-
-import yaml
 
 # list of the main dependecies used in the workflow
 dependencies = {
@@ -19,6 +19,7 @@ dependencies = {
     "seqfu": r"workflow/envs/seqfu.yaml",
     "checkm": r"workflow/envs/checkm.yaml",
     "gtdbtk": r"workflow/envs/gtdbtk.yaml",
+    "gecco": r"workflow/envs/gecco.yaml",
 }
 
 
