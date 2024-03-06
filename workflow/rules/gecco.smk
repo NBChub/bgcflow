@@ -3,7 +3,7 @@ rule gecco:
         genbank = "data/interim/processed-genbank/{strains}.gbk"
     output:
         gecco = "data/interim/gecco/{gecco_version}/{strains}/{strains}.clusters.tsv",
-        antismash_sideload = "data/interim/gecco/{gecco_version}/{strains}/{strains}.sideload.json",
+        #antismash_sideload = "data/interim/gecco/{gecco_version}/{strains}/{strains}.sideload.json",
     conda: "../envs/gecco.yaml"
     log: "logs/gecco/run/{gecco_version}_{strains}.log"
     threads: 2
@@ -31,7 +31,7 @@ rule antismash_sideload_gecco:
         pfam=rules.antismash_db_setup.output.pfam,
         resfam=rules.antismash_db_setup.output.resfam,
         tigrfam=rules.antismash_db_setup.output.tigrfam,
-        gecco=rules.gecco.output.antismash_sideload
+        #gecco=rules.gecco.output.antismash_sideload
     output:
         folder=directory("data/interim/gecco/{gecco_version}/antismash_sideload/{version}/{strains}/"),
         gbk="data/interim/gecco/{gecco_version}/antismash_sideload/{version}/{strains}/{strains}.gbk",
