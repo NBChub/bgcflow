@@ -25,3 +25,4 @@ dependencies:
   - rpy2
   - jupyter_contrib_nbextensions
   - pyarrow
+  - itables>=1.7.0

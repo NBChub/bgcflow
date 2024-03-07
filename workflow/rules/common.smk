@@ -737,6 +737,13 @@ def get_project_outputs(
                 name=PROJECT_IDS,
                 gecco_version=dependency_version["gecco"],
             )
+        elif wc == ["gecco_version", "name", "version"]:
+            value = expand(
+                rule_dict[k]["final_output"],
+                name=PROJECT_IDS,
+                gecco_version=dependency_version["gecco"],
+                version=dependency_version["antismash"],
+            )
         elif wc == ["name", "strains"]:
             value = expand(
                 rule_dict[k]["final_output"], name=PROJECT_IDS, strains=selection
