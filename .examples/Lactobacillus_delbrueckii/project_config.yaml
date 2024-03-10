@@ -28,3 +28,4 @@ rules:
   deeptfactor-roary: FALSE
   cblaster-genome: TRUE
   cblaster-bgc: FALSE
+  gecco: TRUE

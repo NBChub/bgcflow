@@ -112,6 +112,7 @@ Here you can find pipeline keywords that you can run using the main Snakefile of
 | 16 | cblaster-genome   | Build diamond database of genomes for cblaster search.                                           | [cblaster](https://github.com/gamcil/cblaster)                                           |
 | 17 | cblaster-bgc      | Build diamond database of BGCs for cblaster search.                                              | [cblaster](https://github.com/gamcil/cblaster)                                           |
 | 18 | bigscape          | Cluster BGCs using BiG-SCAPE                                                                     | [BiG-SCAPE](https://github.com/medema-group/BiG-SCAPE)                                   |
+| 19 | gecco          | GEne Cluster prediction with COnditional random fields.                                                                     | [GECCO](https://gecco.embl.de/index.html)
 
 ## Development & Funding
 
@@ -146,3 +147,4 @@ The development of BGCFlow commenced within the Natural Products Genome Mining r
 > - *Buchfink, B., Xie, C. & Huson, D. H. Fast and sensitive protein alignment using DIAMOND. [Nat. Methods 12, 59–60 (2015)](https://www.nature.com/articles/nmeth.3176).*
 > - *Navarro-Muñoz, J.C., Selem-Mojica, N., Mullowney, M.W. et al. A computational framework to explore large-scale biosynthetic diversity. [Nat Chem Biol 16, 60–68 (2020)](https://doi.org/10.1038/s41589-019-0400-9)*
 > - *Kai Blin, Simon Shaw, Hannah E Augustijn, Zachary L Reitz, Friederike Biermann, Mohammad Alanjary, Artem Fetter, Barbara R Terlouw, William W Metcalf, Eric J N Helfrich, Gilles P van Wezel, Marnix H Medema, Tilmann Weber, antiSMASH 7.0: new and improved predictions for detection, regulation, chemical structures and visualisation, Nucleic Acids Research, Volume 51, Issue W1, 5 July 2023, Pages W46–W50, https://doi.org/10.1093/nar/gkad344*
+> - *Laura M Carroll, Martin Larralde, Jonas Simon Fleck, Ruby Ponnudurai, Alessio Milanese, Elisa Cappio Barazzone, Georg Zeller. 2021. Accurate de novo identification of biosynthetic gene clusters with GECCO. bioRxiv 2021.05.03.442509; doi:[10.1101/2021.05.03.442509](https://doi.org/10.1101/2021.05.03.442509)*
