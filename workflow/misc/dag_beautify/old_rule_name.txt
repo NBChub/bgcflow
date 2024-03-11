@@ -1,0 +1,60 @@
+node_number	Rule Name	Description
+1	fix_gtdb_taxonomy	Gather and fix taxonomy metadata into a summary table
+2	gtdb_prep	Fetch taxonomic information from publicly available genomes using GTDB API
+3	seqfu_stats	Calculate sequence statistics using SeqFu.
+4	mash	Calculate pairwise distance estimation for all samples using MinHash.
+5	fastani	Calculate pairwise Average Nucleotide Identity (ANI) across all samples.
+6	checkm	Assess genome quality with CheckM.
+7	install_checkm	Install CheckM locally
+8	install_gtdbtk	Install GTDB-tk locally
+9	prepare_gtdbtk_input	Prepare input files for GTDB-tk
+10	format_gbk	Correct naming and add taxonomy metadata in annotated genbank files
+11	prokka	Annotate bacterial genomes with prodigal and Prokka
+12	extract_meta_prokka	Extract any taxonomy information from  fasta files
+13	bgc_count	Summarizes BGC count of a given antiSMASH result
+14	antismash	Detection of Biosynthetic Gene Clusters with antiSMASH
+15	antismash_db_setup	Set up databases required for antiSMASH locally
+16	copy_antismash	Generate symlinks of antiSMASH result in the processed folder
+17	antismash_overview_gather	Compile all antiSMASH summary pages into a table
+18	antismash_overview	Extract the antiSMASH summary page of a given antiSMASH result
+19	downstream_bgc_prep	Prepare region genbank files and metadata for downstream analysis
+20	query_bigslice	Map BGCs to BiG-FAM database (https://bigfam.bioinformatics.nl/)
+21	fetch_bigslice_db	Install BiG-FAM database locally
+22	bigscape	Cluster BGCs using BiG-SCAPE
+23	install_bigscape	Install BiG-SCAPE locally
+24	bigscape_to_cytoscape	Generate cytoscape ready tables and annotation files
+25	get_mibig_table	Get MIBIG 3.0 tables locally
+26	bigslice_prep	Prepare files and metadata required for BiG-SLICE clustering
+27	automlst_wrapper	Simplified Species Tree building of all samples using [autoMLST](https://github.com/NBChub/automlst-simplified-wrapper)
+28	prep_automlst_gbk	Prepare input files for autoMLST
+29	install_automlst_wrapper	Install autoMLST locally
+30	arts_extract	Extract BGC proximity hits summary from an ARTS result
+31	arts	Targeted genome mining with Antibiotic Resistant Target Seeker (ARTS2) on samples.
+32	install_eggnog	Install Eggnog databases locally
+33	deeptfactor_to_json	Convert DeepTFactor result into json table
+34	deeptfactor	Use deep learning to find Transcription Factors.
+35	deeptfactor_setup	Install DeepTFactor locally
+36	roary	Build pangenome from all samples using Roary.
+37	ncbi_genome_download	Download NCBI genome assemblies from RefSeq or GenBank using ncbi-genome-download (https://github.com/kblin/ncbi-genome-download) 
+38	patric_genome_download	Fetch genome fasta files from Patric database
+39	copy_custom_fasta	Grab user-provided input fasta file for processing
+40	seqfu_combine	Combine all seqfu result into a table
+41	checkm_out	Extract and summarizes CheckM results
+42	extract_ncbi_information	Capture metadata of downloaded genomes from NCBI
+43	copy_prokka_gbk	Get a copy of annotated genbank files into processed folder
+44	eggnog	Functional annotation of genome sequences using pre-computed Orthologous Group and phylogenies from the EggNOG database (http://eggnog5.embl.de).
+45	deeptfactor_summary	Combine all DeepTFactor result into a table
+46	mash_convert	Convert MASH distance result into pandas ready matrix
+47	fastani_convert	Convert FastANI result into pandas ready matrix
+48	gtdbtk	Taxonomic placement with GTDB-Tk with GTDB release 207
+49	automlst_wrapper_out	Extract and format autoMLST tree into processed folder
+50	antismash_summary	Correct shortened accession and compile antiSMASH summary into a table
+51	arts_combine	Combine ARTS result into a table
+52	cblaster_genome_db	Build diamond database of genomes for cblaster search.
+53	summarize_bigslice_query	Summarize BiG-FAM GCF hits
+54	copy_bigscape	Copy and format BiG-SCAPE result into processed folder
+55	bigslice	Cluster BGCs using BiG-SLiCE (https://github.com/medema-group/bigslice)
+56	cblaster_bgc_db	Build diamond database of BGCs for cblaster search.
+57	roary_out	Extract ROARY information
+58	eggnog_roary	Functional annotation of Roary output using eggNOG mapper
+59	deeptfactor_roary	Use DeepTFactor on Roary outputs.

@@ -1,6 +1,6 @@
-genome_id,source,organism,genus,species,strain,closest_placement_reference,input_file
-GCF_000359525.1,ncbi,,,,,,
-1223307.4,patric,Streptomyces sp. PVA 94-07,Streptomyces,sp.,PVA 94-07,GCF_000495755.1,
-P8-2B-3.1,custom,Streptomyces sp. P8-2B-3,Streptomyces,sp.,P8-2B-3,,../../data/raw/fasta/P8-2B-3.1.fna
-GCF_000495755.1,ncbi,,,,,,
-test_genome,custom,,,,,,
+genome_id,source,organism,genus,species,strain,closest_placement_reference
+GCF_000359525.1,ncbi,,,,,
+1223307.4,patric,Streptomyces sp. PVA 94-07,Streptomyces,sp.,PVA 94-07,GCF_000495755.1
+P8-2B-3.1,custom,Streptomyces sp. P8-2B-3,Streptomyces,sp.,P8-2B-3,
+GCF_000495755.1,ncbi,,,,,
+test_genome,custom,,,,,
