@@ -8,7 +8,7 @@ sample_table: samples.csv
 input_folder: "."
 
 prokka-db: prokka-db.csv
-gtdb-tax: gtdbtk.bac120.summary.tsv
+#gtdb-tax: gtdbtk.bac120.summary.tsv
 
 #### RULE CONFIGURATION ####
 # rules: set value to TRUE if you want to run the analysis or FALSE if you don't
@@ -25,10 +25,11 @@ rules:
   bigslice: TRUE
   automlst-wrapper: TRUE
   arts: TRUE
-  roary: FALSE
-  eggnog: FALSE
-  eggnog-roary: FALSE
+  roary: TRUE
+  eggnog: TRUE
+  eggnog-roary: TRUE
   deeptfactor: TRUE
-  deeptfactor-roary: FALSE
+  deeptfactor-roary: TRUE
   cblaster-genome: TRUE
   cblaster-bgc: TRUE
+  gecco: TRUE
