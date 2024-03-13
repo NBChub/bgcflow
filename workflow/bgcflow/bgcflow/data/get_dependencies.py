@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 import sys
 
 import yaml
@@ -45,9 +46,16 @@ def get_dependency_version(dep, dep_key, antismash_version="7"):
                     if dep_key in p:
                         if p.startswith("git+"):
                             result = p.split("@")[-1]
-                            result = result.replace("-", ".")
+                            if dep_key == "antismash" and "-" in result:
+                                result = re.sub(r"\-", ".", result, count=2).split("-")[
+                                    0
+                                ]
+                            else:
+                                result = result.replace("-", ".")
                         else:
                             result = p.split("=")[-1]
+
+    logging.debug(f"Version of {dep_key} is: {result}")
     return str(result)
 
 
