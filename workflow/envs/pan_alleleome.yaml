@@ -1,4 +1,4 @@
-name: alleleome
+name: pan_alleleome
 channels:
   - conda-forge
   - bioconda
@@ -9,4 +9,4 @@ dependencies:
   - blast==2.14.0
   - pip
   - pip:
-    - git+https://github.com/anpanche/Core-Alleleome.git@v0.1.0
+    - git+https://github.com/anpanche/PAN_Alleleome.git@v0.1.0

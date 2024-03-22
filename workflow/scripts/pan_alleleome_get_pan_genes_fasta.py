@@ -87,36 +87,36 @@ def parse_genbank_files(df_gene_presence_locustag, gbk_folder):
     return all_locustag_df
 
 
-def get_core_genes(pangene_summary_path):
+def get_pan_genes(pangene_summary_path):
     """
-    Get list of core genes.
+    Get list of pan genes.
 
     Parameters:
     pangene_summary_path (Path): Path to pangenome summary file
 
     Returns:
-    list: List of core genes
+    list: List of pan genes
     """
     gene_class_table = pd.read_csv(pangene_summary_path, index_col=0)
-    Core_gene_list = list(
-        gene_class_table.loc[gene_class_table["pangenome_class_2"] == "Core", :].index
+    pan_gene_list = list(
+        gene_class_table.loc[gene_class_table["pangenome_class_2"], :].index
     )
-    return Core_gene_list
+    return pan_gene_list
 
 
 def process_genes(
-    Core_gene_list, df_gene_presence_locustag, all_locustag_df, output_folder
+    pan_gene_list, df_gene_presence_locustag, all_locustag_df, output_folder
 ):
     """
     Process genes and save output files.
 
     Parameters:
-    Core_gene_list (list): List of core genes
+    pan_gene_list (list): List of pan genes
     df_gene_presence_locustag (DataFrame): DataFrame with gene presence information
     all_locustag_df (DataFrame): DataFrame with all locus tags
     output_folder (Path): Path to output folder
     """
-    for gene_id in [str(i).replace("/", "") for i in Core_gene_list]:
+    for gene_id in [str(i).replace("/", "") for i in pan_gene_list]:
         logging.info(f"   Processing gene: {gene_id}")
         alignment_dir_path = output_folder / "pangenome_alignments" / gene_id / "input"
         alignment_dir_path.mkdir(exist_ok=True, parents=True)
@@ -181,9 +181,9 @@ def main():
 
     df_gene_presence_binary, df_gene_presence_locustag = load_data(roary_path)
     all_locustag_df = parse_genbank_files(df_gene_presence_locustag, gbk_folder)
-    Core_gene_list = get_core_genes(pangene_summary_path)
+    pan_gene_list = get_pan_genes(pangene_summary_path)
     process_genes(
-        Core_gene_list, df_gene_presence_locustag, all_locustag_df, output_folder
+        pan_gene_list, df_gene_presence_locustag, all_locustag_df, output_folder
     )
 
 

@@ -91,6 +91,7 @@ include: "rules/deeptfactor.smk"
 include: "rules/cblaster.smk"
 include: "rules/data_warehouse.smk"
 include: "rules/convert_genbank.smk"
+include: "rules/pan_alleleome.smk"
 
 ##### 4. Generate user-defined local resources
 custom_resource_dir(config["resources_path"], resource_mapping)
