@@ -40,4 +40,4 @@ dependencies:
   - yaml
   - pip
   - pip:
-    - git+https://github.com/antismash/antismash.git@7-0-0
+    - git+https://github.com/antismash/antismash.git@7-1-0-1
