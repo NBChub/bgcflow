@@ -135,8 +135,10 @@ elif antismash_major_version >= 7:
                 --database {params.antismash_db_path} \
                 --cb-general --cb-subclusters --cb-knownclusters -c {threads} $antismash_input --logfile {log} 2>> {log}
 
-            # Check if the run failed due to changed detection results
-            if grep -q "ValueError: Detection results have changed. No results can be reused" {log}; then
+            # Check if the run failed due to changed detection results or changed protocluster types
+            if grep -q -e "ValueError: Detection results have changed. No results can be reused" \
+                    -e "RuntimeError: Protocluster types supported by HMM detection have changed, all results invalid" {log}
+            then
                 # Use genbank input instead
                 echo "Previous JSON result is invalid, starting AntiSMASH from scratch..." >> {log}
                 antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
