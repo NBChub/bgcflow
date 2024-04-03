@@ -6,7 +6,7 @@ dependencies:
   - python=3.6
   - dataclasses
   - hmmer
-  - biopython
+  - biopython=1.70
   - fasttree
   - numpy
   - scipy

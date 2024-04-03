@@ -6,7 +6,7 @@ rule install_bigscape:
     log:
         "logs/bigscape/bigscape-install_bigscape.log",
     params:
-        release="1.1.5",
+        release="1.1.9",
     shell:
         """
         (cd resources && wget https://github.com/medema-group/BiG-SCAPE/archive/refs/tags/v{params.release}.zip) &>> {log}
