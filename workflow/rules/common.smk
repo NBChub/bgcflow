@@ -236,12 +236,13 @@ def read_pep_project(p, prokka_db_table, prokka_db_map):
     df_sample = p.sample_table.rename(columns={"sample_name": "genome_id"}).set_index(
         "genome_id", drop=False
     )
-
     df_sample.loc[:, "name"] = p.name
     df_sample.loc[:, "sample_paths"] = p.config["sample_table"]
-    df_sample.loc[:, "prokka-db"] = np.nan
-    df_sample.loc[:, "gtdb_paths"] = np.nan
-    df_sample.loc[:, "ref_annotation"] = np.nan
+
+    # Create empty columns if they do not exist yet
+    for col in ["prokka-db", "gtdb_paths", "ref_annotation"]:
+        if col not in df_sample.columns:
+            df_sample[col] = pd.Series(dtype=str)
 
     # load prokka_db
     if "prokka-db" in p.config.keys():
