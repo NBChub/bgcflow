@@ -156,8 +156,8 @@ def setup_metabase(token, api_url, metabase_config):
 metabase_config = {
     "METABASE_MIN_MEMORY": "2g",
     "METABASE_MAX_MEMORY": "8g",
-    "METABASE_VERSION": "v0.47.0",
-    "METABASE_DUCKDB_PLUGIN_VERSION": "0.2.2",
+    "METABASE_VERSION": "v0.49.6",
+    "METABASE_DUCKDB_PLUGIN_VERSION": "0.2.6",
     "DMB_SETUP_TOKEN": "ad0fb086-351b-4fa5-a17e-76282d2c9753",
     "METABASE_HTTP": "http://localhost:3000",
     "MB_IS_METABOT_ENABLED" : "true"
