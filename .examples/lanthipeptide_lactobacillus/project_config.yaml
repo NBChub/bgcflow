@@ -6,7 +6,8 @@ sample_table: df_regions_antismash_7.1.0.csv
 rules:
   bigslice: TRUE
   bigscape: TRUE
-  query-bigslice: TRUE
+  query-bigslice: FALSE
   clinker: TRUE
-  interproscan: TRUE
+  interproscan: FALSE
   mmseqs2: TRUE
+  getphylo: TRUE
