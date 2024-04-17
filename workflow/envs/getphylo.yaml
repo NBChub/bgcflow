@@ -9,4 +9,4 @@ dependencies:
   - fasttree
   - pip
   - pip:
-    - getphylo
+    - getphylo==0.2.1
