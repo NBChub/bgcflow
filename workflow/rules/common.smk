@@ -365,6 +365,14 @@ def extract_project_information(config, project_variable="projects"):
                 not p.name in df_projects["name"].unique()
             ), f"Project name [{p.name}] in [{pep_file}] has been used. Please use different name for each project."
 
+            # assign column types as string
+            for col in ["name", "samples", "rules"]:
+                if not col in df_projects.columns:
+                    df_projects[col] = pd.Series(dtype=str)
+                else:
+                    df_projects[col] = df_projects[col].astype(str)
+
+            # add values
             df_projects.loc[p.name, "name"] = p.name
             df_projects.loc[p.name, "samples"] = p.config_file
             df_projects.loc[p.name, "rules"] = p.config_file
