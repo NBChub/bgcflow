@@ -16,7 +16,7 @@ def get_bgc_inputs(pep_object, antismash_version):
         bgc_id = df.loc[i, "bgc_id"]
         genome_id = df.loc[i, "genome_id"]
         # override with custom path
-        if 'gbk_path' in df.columns:
+        if 'gbk_path' in df.columns and 'input_file' not in df.columns:
             df.rename(columns={'gbk_path': 'input_file'}, inplace=True)
         assert 'input_file' in df.columns
         custom_path = df.loc[i, "input_file"]
