@@ -10,4 +10,4 @@ rules:
   clinker: TRUE
   interproscan: FALSE
   mmseqs2: TRUE
-  getphylo: TRUE
+  getphylo: FALSE
