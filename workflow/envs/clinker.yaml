@@ -6,4 +6,4 @@ channels:
 dependencies:
   - pip
   - pip:
-    - clinker
+    - clinker==0.0.28
