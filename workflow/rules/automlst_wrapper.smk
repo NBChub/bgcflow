@@ -62,6 +62,9 @@ rule automlst_wrapper_out:
         organism_info=lambda wildcards: expand("data/interim/prokka/{strains}/organism_info.txt",
                     strains=[s for s in list(PEP_PROJECTS[wildcards.name].sample_table.index)],
         ),
+        gtdb=lambda wildcards: expand("data/interim/gtdb/{strains}.json",
+            name=wildcards.name,
+            strains=[s for s in PEP_PROJECTS[wildcards.name].sample_table.genome_id.unique()])
     output:
         automlst_processed=directory("data/processed/{name}/automlst_wrapper/"),
         final_tree="data/processed/{name}/automlst_wrapper/final.newick",
