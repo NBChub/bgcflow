@@ -1,5 +1,5 @@
 genome_id,source,organism,genus,species,strain,closest_placement_reference,input_file
-GCF_000056065.1,ncbi,,,,,,
+GCA_000056065.1,ncbi,,,,,,
 GCF_000182835.1,ncbi,,,,,,
 GCA_000191165.1,ncbi,,,,,,
 GCF_000014405.1,ncbi,,,,,,
