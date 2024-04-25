@@ -29,6 +29,8 @@ def csv_to_parquet(project_folder, output_folder="."):
             pass
         elif "assets" in str(i):
             pass
+        elif "notebooks" in str(i):
+            pass
         elif "ipynb_checkpoints" in str(i):
             pass
         else:
