@@ -114,11 +114,11 @@ def get_input_location(p, force_extension=False):
         extension = force_extension
     elif "input_type" in list(p.config.keys()):
         extension = p.config["input_type"]
-    else:
-        extension = "fna"
+
     print(f" - Default input file type: {extension}", file=sys.stderr)
     assert extension in valid_extensions, f"ERROR: Invalid extension: `{extension}`, choose from {valid_extensions}"
     for i in p.sample_table.index:
+        p.sample_table.loc[i, "input_type"] = extension
         if p.sample_table.loc[i, "source"] == "custom":
 
             # try if there is hardcoded path in "input_file"
@@ -138,14 +138,13 @@ def get_input_location(p, force_extension=False):
             assert input_file.is_file(), f"ERROR: Cannot find {input_file}"
             p.sample_table.loc[i, "input_file"] = input_file
         # only accept fna for ncbi and patric
-        if p.sample_table.loc[i, "source"] in ["ncbi", "patric"]:
+        elif p.sample_table.loc[i, "source"] in ["ncbi", "patric"]:
             if extension != "fna":
                 print(
-                    f"   - ! WARNING: {i} is from {p.sample_table.loc[i, 'source']}. Only fna files are accepted.",
+                    f"   - ! WARNING: {i} is from {p.sample_table.loc[i, 'source']}. Enforcing format to `fna`.",
                     file=sys.stderr,
                 )
-            extension = "fna"
-        p.sample_table.loc[i, "input_type"] = extension
+                p.sample_table.loc[i, "input_type"] = "fna"
     return p.sample_table
 
 

@@ -87,7 +87,7 @@ def generate_symlink(path, genome_id, output_dir, selected_bgcs=False):
                     # Assert that the symlink was correctly generated
                     assert link.is_symlink(), f"Failed to create symlink: {link}"
                     assert (
-                        link.resolve() == target_path
+                        link.resolve() == target_path.resolve()
                     ), f"Symlink {link} does not point to the correct target: {target_path}"
 
                 record_log["record_id"] = record.id
