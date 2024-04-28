@@ -20,15 +20,13 @@ def get_bgc_inputs(pep_object, antismash_version):
             df.rename(columns={'gbk_path': 'input_file'}, inplace=True)
         assert 'input_file' in df.columns
         custom_path = df.loc[i, "input_file"]
-        #print(custom_path, type(custom_path), custom_path != None, file=sys.stderr)
 
         if custom_path != None:
-            gbk_path = input_path / custom_path
+            gbk_path = Path(input_path) / custom_path
         elif 'input_folder' in pep_object.config.keys():
             gbk_path = Path(input_path / f"{bgc_id}.gbk")
         else:
             gbk_path = antismash_path / genome_id / f"{bgc_id}.gbk"
-        #print(bgc_id, gbk_path, file=sys.stderr)
         gbk_list.append(gbk_path)
     return gbk_list
 
@@ -64,7 +62,7 @@ rule downstream_bgc_prep_selection:
             echo "Previous dataset detected, appending dataset information for {wildcards.name}..."
             sed -i 'a {wildcards.name}_antismash_{wildcards.version}\t{wildcards.name}_antismash_{wildcards.version}\ttaxonomy/taxonomy_{wildcards.name}_antismash_{wildcards.version}.tsv\t{wildcards.name}' {params.dataset} 2>> {log}
         else
-            echo "No previous dataset detected, generating dataset information for {wildcards.name}..."
+            echo "No previous dataset detected, generating dataset information for {wildcards.name}..." 2>> {log}
             echo -e '# Dataset name\tPath to folder\tPath to taxonomy\tDescription' > {params.dataset} 2>> {log}
             sed -i 'a {wildcards.name}_antismash_{wildcards.version}\t{wildcards.name}_antismash_{wildcards.version}\ttaxonomy/taxonomy_{wildcards.name}_antismash_{wildcards.version}.tsv\t{wildcards.name}' {params.dataset} 2>> {log}
         fi

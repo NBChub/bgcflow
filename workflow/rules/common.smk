@@ -75,7 +75,7 @@ def hash_prokka_db(prokka_db_path):
     return hash_object, file_map
 
 
-def get_input_location(p, force_extension=False):
+def get_input_location(p, force_extension=False, extension="fna"):
     """
     Get input file locations for custom samples
 
@@ -108,17 +108,17 @@ def get_input_location(p, force_extension=False):
         f" - Custom input format: {'input_type' in list(p.config.keys())}",
         file=sys.stderr,
     )
-
+    valid_extensions = ["fna", "gbk"]
     if force_extension is not False:
-        assert force_extension in ["fna", "fasta", "faa", "gbk"]
+        assert force_extension in valid_extensions
         extension = force_extension
     elif "input_type" in list(p.config.keys()):
         extension = p.config["input_type"]
-    else:
-        extension = "fna"
-    print(f" - Default input file type: {extension}", file=sys.stderr)
 
+    print(f" - Default input file type: {extension}", file=sys.stderr)
+    assert extension in valid_extensions, f"ERROR: Invalid extension: `{extension}`, choose from {valid_extensions}"
     for i in p.sample_table.index:
+        p.sample_table.loc[i, "input_type"] = extension
         if p.sample_table.loc[i, "source"] == "custom":
 
             # try if there is hardcoded path in "input_file"
@@ -137,7 +137,14 @@ def get_input_location(p, force_extension=False):
             input_file = input_file.resolve()
             assert input_file.is_file(), f"ERROR: Cannot find {input_file}"
             p.sample_table.loc[i, "input_file"] = input_file
-        p.sample_table.loc[i, "input_type"] = extension
+        # only accept fna for ncbi and patric
+        elif p.sample_table.loc[i, "source"] in ["ncbi", "patric"]:
+            if extension != "fna":
+                print(
+                    f"   - ! WARNING: {i} is from {p.sample_table.loc[i, 'source']}. Enforcing format to `fna`.",
+                    file=sys.stderr,
+                )
+                p.sample_table.loc[i, "input_type"] = "fna"
     return p.sample_table
 
 
