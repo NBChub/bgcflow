@@ -75,7 +75,7 @@ def hash_prokka_db(prokka_db_path):
     return hash_object, file_map
 
 
-def get_input_location(p, force_extension=False):
+def get_input_location(p, force_extension=False, extension="fna"):
     """
     Get input file locations for custom samples
 
