@@ -78,12 +78,9 @@ if len(CUSTOM_GENBANK) > 0:
     rule copy_converted_gbk:
         input:
             gbk = "data/interim/processed-genbank/{custom_genbank}.gbk",
-            #summary = "data/interim/prokka/{strains_fna}/{strains_fna}.txt",
-            #tsv = "data/interim/prokka/{strains_fna}/{strains_fna}.tsv"
         output:
             gbk = report("data/processed/{name}/genbank/{custom_genbank}.gbk", \
                 caption="../report/file-genbank.rst", category="{name}", subcategory="Annotated Genbanks"),
-            #summary = "data/processed/{name}/genbank/{strains_fna}.txt",
             #tsv = "data/processed/{name}/genbank/{strains_fna}.tsv",
         conda:
             "../envs/bgc_analytics.yaml"
@@ -91,4 +88,17 @@ if len(CUSTOM_GENBANK) > 0:
         shell:
             """
             cp {input.gbk} {output.gbk} 2>> {log}
+            """
+
+    rule summarize_converted_gbk:
+        input:
+            gbk = "data/processed/{name}/genbank/{custom_genbank}.gbk"
+        output:
+            summary = "data/processed/{name}/genbank/{custom_genbank}.txt",
+        conda:
+            "../envs/bgc_analytics.yaml"
+        log: "logs/custom_genbank/summarize_converted_gbk/summarize_converted_gbk_-{custom_genbank}-{name}.log"
+        shell:
+            """
+            python workflow/bgcflow/bgcflow/misc/summarize_gbk_txt.py {input.gbk} {output.summary} 2>> {log}
             """

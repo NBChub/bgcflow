@@ -137,7 +137,7 @@ gtdbtk:
   - Parks DH, et al. 2018. A standardized bacterial taxonomy based on genome phylogeny
     substantially revises the tree of life. Nature Biotechnology, [http://dx.doi.org/10.1038/nbt.4229](http://dx.doi.org/10.1038/nbt.4229).
 prokka-gbk:
-  final_output: data/processed/{name}/genbank/{strains}.gbk
+  final_output: "data/processed/{name}/genbank/{strains}.txt"
   description: Copy annotated genbank results.
   category: Functional Annotation
   link:
