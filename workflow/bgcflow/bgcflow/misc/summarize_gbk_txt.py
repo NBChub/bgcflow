@@ -28,7 +28,11 @@ def extract_genbank_info(gb_file):
             len(source) == 1
         ), f"Expected 1 source feature in the record, found {len(source)}"
         info_dict = {}
-        info_dict["organism"] = source[0].qualifiers["strain"][0]
+        info_dict["organism"] = "unknown"
+        for qualifiers in ["strain", "organism"]:
+            if qualifiers in source[0].qualifiers:
+                info_dict["organism"] = source[0].qualifiers[qualifiers][0]
+                break
         info_dict["bases"] = len(record)
         info_dict["CDS"] = len([feat for feat in record.features if feat.type == "CDS"])
         info_dict["rRNA"] = len(
