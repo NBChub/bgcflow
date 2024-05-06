@@ -13,7 +13,7 @@
 At present, `BGCFlow` is only tested and confirmed to work on **Linux** systems with `conda` / `mamba` package manager.
 
 ## Publication
-> Matin Nuhamunada, Omkar S. Mohite, Patrick V. Phaneuf, Bernhard O. Palsson, and Tilmann Weber. (2023). BGCFlow: Systematic pangenome workflow for the analysis of biosynthetic gene clusters across large genomic datasets. bioRxiv 2023.06.14.545018; doi: [https://doi.org/10.1101/2023.06.14.545018](https://doi.org/10.1101/2023.06.14.545018)
+> Matin Nuhamunada, Omkar S Mohite, Patrick V Phaneuf, Bernhard O Palsson, Tilmann Weber, BGCFlow: systematic pangenome workflow for the analysis of biosynthetic gene clusters across large genomic datasets, Nucleic Acids Research, 2024;, gkae314, [https://doi.org/10.1093/nar/gkae314](https://doi.org/10.1093/nar/gkae314)
 
 ## Pre-requisites
 `BGCFlow` requires `gcc` and the `conda`/`mamba` package manager. See [installation instruction](https://github.com/NBChub/bgcflow/wiki/00-Installation-Guide) for details.
@@ -27,7 +27,7 @@ A quick and easy way to use `BGCFlow` using the command line interface wrapper:
 
 ```bash
 # create and activate a new conda environment
-conda create -n bgcflow -c conda-forge python=3.11 pip openjdk -y # also install java for metabase
+mamba create -n bgcflow -c conda-forge python=3.11 pip openjdk -y # also install java for metabase
 conda activate bgcflow
 
 # install `BGCFlow` wrapper
