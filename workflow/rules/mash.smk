@@ -7,6 +7,8 @@ rule mash:
     conda:
         "../envs/mash.yaml"
     threads: 32
+    params:
+        sketch_size=1000,
     log:
         "logs/mash/mash-triangle-{name}.log",
     shell:
@@ -15,7 +17,7 @@ rule mash:
         do
             echo $fna >> {output.mash_infile}
         done
-        (mash triangle -p {threads} -l {output.mash_infile} >> {output.triangle_dist}) 2>> {log}
+        (mash triangle -s {params.sketch_size} -p {threads} -l {output.mash_infile} >> {output.triangle_dist}) 2>> {log}
         """
 
 
