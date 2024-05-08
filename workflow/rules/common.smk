@@ -520,21 +520,29 @@ def get_prokka_refdb(genome_id, params, df_samples, mapping_file, config=config)
     return output
 
 
-# bigscape.smk, bigslice.smk, and bgc_analytics.smk #
 def get_antismash_inputs(name, version, df_samples):
     """
-    Given a project name, find the corresponding sample file to use
+    This function retrieves the list of antismash GenBank (.gbk) files for a given project.
 
-    Arguments:
-        name {str} -- project name
-        version {str} -- antismash version
-        df_samples {pd.DataFrame} -- sample table
+    It iterates over the sample table (DataFrame), selects the rows where the project name matches the provided name,
+    and for each matching sample, it constructs a path to the directory where the antismash files for that sample are stored.
+    It then collects all GenBank files in these directories that have 'region' in their name.
+
+    Parameters:
+        name (str): The name of the project for which to retrieve the antismash files.
+        version (str): The version of antismash used to generate the files.
+        df_samples (pd.DataFrame): A DataFrame containing the sample table. It is expected to have a 'name' column.
 
     Returns:
-        output {list} -- list of antismash gbk files
+        output (list): A list of strings, where each string is the path to an antismash GenBank file for the given project.
     """
     selection = [i for i in df_samples.index if name in df_samples.loc[i, "name"]]
-    output = [f"data/interim/antismash/{version}/{s}/{s}.gbk" for s in selection]
+    output = []
+    for genome_id in selection:
+        genome_path = Path(f"data/interim/antismash/{version}/{genome_id}/")
+        region_genbanks = list(genome_path.glob("*.region*.gbk"))
+        for r in region_genbanks:
+            output.append(str(r))
     return output
 
 
