@@ -5,6 +5,7 @@ rule downstream_bgc_prep:
         ),
         table="data/processed/{name}/tables/df_gtdb_meta.csv",
     output:
+        input_list=temp("data/interim/bgcs/{name}/{version}/input_list.txt"),
         taxonomy="data/interim/bgcs/taxonomy/taxonomy_{name}_antismash_{version}.tsv",
         outdir=directory("data/interim/bgcs/{name}/{version}"),
         bgc_mapping="data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
@@ -12,33 +13,29 @@ rule downstream_bgc_prep:
         "../envs/bgc_analytics.yaml"
     params:
         dataset="data/interim/bgcs/datasets.tsv",
-    log:
-        general="logs/bgcs/downstream_bgc_prep/{name}/downstream_bgc_prep-{version}.log",
-        symlink="logs/bgcs/downstream_bgc_prep/{name}/bgc_downstream_bgc_prep-{version}.log",
-        taxonomy="logs/bgcs/downstream_bgc_prep/{name}/tax_downstream_bgc_prep-{version}.log",
+    log: "logs/bgcs/downstream_bgc_prep/{name}/downstream_bgc_prep-{version}.log",
     shell:
         """
-        echo "Preparing BGCs for {wildcards.name} downstream analysis..." > {log.general}
-        #mkdir -p {output.outdir} 2>> {log.general}
-        # Generate symlink for each regions in genomes in dataset
-        for i in $(dirname {input.gbk})
-        do
-            echo Processing $i >> {log.symlink}
-            python workflow/bgcflow/bgcflow/data/bgc_downstream_prep.py $i {output.outdir} 2>> {log.symlink}
-        done
-        # generate taxonomic information for dataset
-        python workflow/bgcflow/bgcflow/data/bigslice_prep.py {input.table} {output.taxonomy} 2>> {log.taxonomy}
+        echo "Preparing BGCs for {wildcards.name} downstream analysis..." >> {log}
+
+        echo "Step 1. Generate symlink for each regions in genomes in dataset" >> {log}
+        echo {input.gbk} | tr ' ' '\n' > {output.input_list} 2>> {log}
+        head -n 5 {output.input_list} >> {log}
+        python workflow/bgcflow/bgcflow/data/bgc_downstream_prep_selection.py {output.input_list} {output.outdir} 2>> {log}
+
+        echo "Step 2. Generate taxonomic information for dataset" >> {log}
+        python workflow/bgcflow/bgcflow/data/bigslice_prep.py {input.table} {output.taxonomy} 2>> {log}
         # append new dataset information
         ## check if previous dataset exists
         if [[ -s {params.dataset} ]]
         then
-            echo "Previous dataset detected, appending dataset information for {wildcards.name}..." >> {log.symlink}
-            sed -i 'a {wildcards.name}_antismash_{wildcards.version}\t{wildcards.name}_antismash_{wildcards.version}\ttaxonomy/taxonomy_{wildcards.name}_antismash_{wildcards.version}.tsv\t{wildcards.name}' {params.dataset} 2>> {log.general}
+            echo "Previous dataset detected, appending dataset information for {wildcards.name}..."
+            sed -i 'a {wildcards.name}_antismash_{wildcards.version}\t{wildcards.name}_antismash_{wildcards.version}\ttaxonomy/taxonomy_{wildcards.name}_antismash_{wildcards.version}.tsv\t{wildcards.name}' {params.dataset} 2>> {log}
         else
-            echo "No previous dataset detected, generating dataset information for {wildcards.name}..." >> {log.symlink}
-            echo -e '# Dataset name\tPath to folder\tPath to taxonomy\tDescription' > {params.dataset} >> {log.general}
-            sed -i 'a {wildcards.name}_antismash_{wildcards.version}\t{wildcards.name}_antismash_{wildcards.version}\ttaxonomy/taxonomy_{wildcards.name}_antismash_{wildcards.version}.tsv\t{wildcards.name}' {params.dataset} 2>> {log.general}
+            echo "No previous dataset detected, generating dataset information for {wildcards.name}..." 2>> {log}
+            echo -e '# Dataset name\tPath to folder\tPath to taxonomy\tDescription' > {params.dataset} 2>> {log}
+            sed -i 'a {wildcards.name}_antismash_{wildcards.version}\t{wildcards.name}_antismash_{wildcards.version}\ttaxonomy/taxonomy_{wildcards.name}_antismash_{wildcards.version}.tsv\t{wildcards.name}' {params.dataset} 2>> {log}
         fi
-        # generate mapping for visualization
-        python workflow/bgcflow/bgcflow/data/get_bigscape_mapping.py {output.outdir} {output.bgc_mapping} 2>> {log.general}
+        echo "Step 3. Generate mapping for visualization" >> {log}
+        python workflow/bgcflow/bgcflow/data/get_bigscape_mapping.py {output.outdir} {output.bgc_mapping} 2>> {log}
         """
