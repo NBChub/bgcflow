@@ -520,7 +520,7 @@ def get_prokka_refdb(genome_id, params, df_samples, mapping_file, config=config)
     return output
 
 
-def get_antismash_inputs(name, version, df_samples):
+def get_antismash_regions(name, version, df_samples):
     """
     This function retrieves the list of antismash GenBank (.gbk) files for a given project.
 

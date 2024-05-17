@@ -19,7 +19,7 @@ def generate_symlink(path, genome_id, output_dir, selected_bgcs=False):
     logging.debug(f"Deducting genome id as {genome_id}")
     ctr = 0
     matches = selected_bgcs.stem
-    for gbk in path.glob("*.gbk"):
+    for gbk in path.glob("*region*.gbk"):
         if gbk.stem in matches:
             logging.debug(f"Found match: {gbk.stem}")
             filename = gbk.name
@@ -125,6 +125,7 @@ def bgc_downstream_prep(input_file, output_dir):
             "genome_id": genome_id,
             "value": region_change_log,
         }
+    logging.info("Writing change logs...")
     change_logs = {}
     genome_ids = set(v["genome_id"] for v in change_log_containers.values())
     for genome_id in genome_ids:
@@ -134,7 +135,7 @@ def bgc_downstream_prep(input_file, output_dir):
                 entry_name = list(v["value"].keys())[0]
                 change_log[entry_name] = v["value"][entry_name]
         change_logs[genome_id] = change_log
-    logging.debug(change_logs)
+        logging.debug(f"Change log for {genome_id}: {change_log}")
 
     for genome_id in change_logs.keys():
         outpath = Path(output_dir) / genome_id
