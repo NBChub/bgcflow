@@ -47,7 +47,7 @@ if antismash_major_version <= 6:
             """
             antismash \
                 --genefinding-tool {params.genefinding} \
-                --database {params.antismash_db_path,} \
+                --database {params.antismash_db_path} \
                 --output-dir {params.folder} \
                 --cb-general \
                 --cb-subclusters \
