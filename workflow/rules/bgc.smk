@@ -23,6 +23,7 @@ rule downstream_bgc_prep:
         echo "Preparing BGCs for {wildcards.name} downstream analysis..." >> {log}
 
         echo "Step 1. Generate symlink for each regions in genomes in dataset" >> {log}
+        echo {input.gbk} | tr ' ' '\n' >> {output.input_list} 2>> {log}
         echo {params.regions} | tr ' ' '\n' >> {output.input_list} 2>> {log}
         python workflow/bgcflow/bgcflow/data/bgc_downstream_prep_selection.py {output.input_list} {output.outdir} 2>> {log}
 

@@ -18,8 +18,9 @@ def generate_symlink(path, genome_id, output_dir, selected_bgcs=False):
     outpath.mkdir(parents=True, exist_ok=True)
     logging.debug(f"Deducting genome id as {genome_id}")
     ctr = 0
+    change_log = None
     matches = selected_bgcs.stem
-    for gbk in path.glob("*region*.gbk"):
+    for gbk in path.glob("*.gbk"):
         if gbk.stem in matches:
             logging.debug(f"Found match: {gbk.stem}")
             filename = gbk.name
