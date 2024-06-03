@@ -9,7 +9,7 @@ if len(CUSTOM_GENBANK) > 0:
         log: "logs/prokka/copy_custom_fasta/copy_custom_fasta-{custom_genbank}.log"
         shell:
             """
-            if [[ {input} == *.gb || {input} == *.gbk || {input} == *.genbank ]]
+            if [[ {input} == *.gb || {input} == *.gbk || {input} == *.genbank || {input} == *.gbff ]]
             then
                 cp {input} {output} 2>> {log}
             else
