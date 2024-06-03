@@ -112,6 +112,7 @@ elif antismash_major_version >= 7:
             folder=directory("data/interim/antismash/{version}/{strains}/"),
             antismash_db_path=antismash_db_path,
             genefinding="none",
+            taxon="bacteria",
         shell:
             """
             set +e
@@ -132,7 +133,7 @@ elif antismash_major_version >= 7:
 
             # Run AntiSMASH
             antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
-                --database {params.antismash_db_path} \
+                --database {params.antismash_db_path} --taxon {params.taxon} \
                 --cb-general --cb-subclusters --cb-knownclusters -c {threads} $antismash_input --logfile {log} 2>> {log}
 
             # Check if the run failed due to changed detection results or changed protocluster types
@@ -142,7 +143,7 @@ elif antismash_major_version >= 7:
                 # Use genbank input instead
                 echo "Previous JSON result is invalid, starting AntiSMASH from scratch..." >> {log}
                 antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
-                    --database {params.antismash_db_path} \
+                    --database {params.antismash_db_path} --taxon {params.taxon} \
                     --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} --logfile {log} 2>> {log}
             fi
             """
