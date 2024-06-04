@@ -132,6 +132,7 @@ elif antismash_major_version >= 7:
             fi
 
             # Run AntiSMASH
+            echo "Running AntiSMASH {params.taxon} mode..." >> {log}
             antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
                 --database {params.antismash_db_path} --taxon {params.taxon} \
                 --cb-general --cb-subclusters --cb-knownclusters -c {threads} $antismash_input --logfile {log} 2>> {log}
