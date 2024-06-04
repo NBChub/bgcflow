@@ -3,7 +3,7 @@
 resource_dir="resources"
 output_lsabgc="$resource_dir/lsaBGC"
 repository="https://github.com/Kalan-Lab/lsaBGC"
-version="1.40.0"
+version="1.52"
 release="$repository/archive/refs/tags/v$version.tar.gz"
 
 log="logs/lsabgc/install.log"
