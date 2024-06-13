@@ -118,8 +118,7 @@ elif antismash_major_version >= 7:
             set +e
 
             # Find the latest existing JSON output for this strain
-            latest_version=$(ls -d data/interim/antismash/*/{wildcards.strains}/{wildcards.strains}.json | grep {wildcards.strains} | sort -r | head -n 1 | cut -d '/' -f 4) 2>> {log}
-
+            latest_version=$(find data/interim/antismash/*/{wildcards.strains} -name "{wildcards.strains}.json" | sort -r | head -n 1 | cut -d '/' -f 4) 2>> {log}
             if [ -n "$latest_version" ]; then
                 # Use existing JSON result as starting point
                 old_json="data/interim/antismash/$latest_version/{wildcards.strains}/{wildcards.strains}.json"
@@ -131,11 +130,26 @@ elif antismash_major_version >= 7:
                 antismash_input="{input.gbk}"
             fi
 
+            # Store common parameters in a variable
+            antismash_params="--genefinding-tool {params.genefinding} \
+                --output-dir {params.folder} \
+                --database {params.antismash_db_path} \
+                --taxon {params.taxon} \
+                --cb-knownclusters \
+                --cb-subclusters \
+                --cc-mibig \
+                --clusterhmmer \
+                --tigrfam \
+                --pfam2go \
+                --rre \
+                --asf \
+                --tfbs \
+                -c {threads} \
+                --logfile {log}"
+
             # Run AntiSMASH
             echo "Running AntiSMASH {params.taxon} mode..." >> {log}
-            antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
-                --database {params.antismash_db_path} --taxon {params.taxon} \
-                --cb-general --cb-subclusters --cb-knownclusters -c {threads} $antismash_input --logfile {log} 2>> {log}
+            antismash $antismash_params $antismash_input 2>> {log}
 
             # Check if the run failed due to changed detection results or changed protocluster types
             if grep -q -e "ValueError: Detection results have changed. No results can be reused" \
@@ -143,9 +157,7 @@ elif antismash_major_version >= 7:
             then
                 # Use genbank input instead
                 echo "Previous JSON result is invalid, starting AntiSMASH from scratch..." >> {log}
-                antismash --genefinding-tool {params.genefinding} --output-dir {params.folder} \
-                    --database {params.antismash_db_path} --taxon {params.taxon} \
-                    --cb-general --cb-subclusters --cb-knownclusters -c {threads} {input.gbk} --logfile {log} 2>> {log}
+                antismash $antismash_params {input.gbk} 2>> {log}
             fi
             """
 
