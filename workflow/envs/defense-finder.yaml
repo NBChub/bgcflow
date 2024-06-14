@@ -1,0 +1,8 @@
+name: defense-finder
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pip
+  - pip:
+    - mdmparis-defense-finder==1.2.0
