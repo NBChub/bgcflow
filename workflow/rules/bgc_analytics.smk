@@ -42,7 +42,7 @@ rule antismash_overview_gather:
         "logs/bgc_analytics/antismash_overview_gather-{version}-{name}.log",
     shell:
         """
-        TMPDIR="data/interim/tmp/{wildcards.name}/{wildcards.version}"
+        TMPDIR="data/interim/bgcs/{wildcards.name}/tmp/{wildcards.version}"
         mkdir -p $TMPDIR
         INPUT_JSON="$TMPDIR/df_regions_antismash.txt"
         echo '{input.bgc_overview}' > $INPUT_JSON

@@ -30,7 +30,9 @@ def correct_bgc_id_overview(overview_file, mapping_file, genome_id=False):
     new_dict : dict
         Corrected BGC overview dictionary with updated BGC IDs
     """
-    logging.info(f"Correcting shortened bgc ids for {genome_id}...")
+    logging.info(
+        f"Correcting shortened bgc ids for {genome_id} using mapping from {mapping_file}..."
+    )
     overview_path = Path(overview_file)
     mapping_path = Path(mapping_file)
 
@@ -86,7 +88,7 @@ def gather_bgc_overview(input_json, mapping_dir, table):
     None
     """
     input_json = Path(input_json)
-    logging.info(input_json)
+
     if input_json.is_file() and input_json.suffix == ".json":
         logging.info(f"Getting BGC overview from a single file: {input_json}")
         input_json_files = input_json
@@ -104,6 +106,7 @@ def gather_bgc_overview(input_json, mapping_dir, table):
             input_json_files = [
                 Path(path) for path in paths if Path(path).suffix == ".json"
             ]
+            logging.info(f"Found entries of {len(input_json_files)} region files...")
     else:
         input_json_files = [
             Path(file)
@@ -120,6 +123,9 @@ def gather_bgc_overview(input_json, mapping_dir, table):
         genome_id = mapping_file.name.replace("_bgc_overview.json", "")
         mapping_path = Path(mapping_dir) / f"{genome_id}/{genome_id}-change_log.json"
         corrected = correct_bgc_id_overview(mapping_file, mapping_path, genome_id)
+        logging.debug(
+            f"Adding {len(corrected)} entries from {genome_id} to the merged table..."
+        )
         merged_dict.update(corrected)
 
     df = pd.DataFrame.from_dict(merged_dict).T
@@ -130,13 +136,13 @@ def gather_bgc_overview(input_json, mapping_dir, table):
         lambda x: 1 if x is not None and x > 1 else x
     )
 
-    logging.debug(f"Writing file to: {table}")
+    logging.debug(f"Writing file containing {len(df)} entries to: {table}")
 
     # Save dataframes to csv tables
     df_table = Path(table)
     df_table.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(table)
-    logging.info("Job done")
+
     return None
 
 
