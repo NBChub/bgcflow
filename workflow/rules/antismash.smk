@@ -118,12 +118,11 @@ elif antismash_major_version >= 7:
             set +e
 
             # Find the latest existing JSON output for this strain
-            latest_version=$(find data/interim/antismash/*/{wildcards.strains} -name "{wildcards.strains}.json" | sort -r | head -n 1 | cut -d '/' -f 4) 2>> {log}
-            if [ -n "$latest_version" ]; then
+            latest_json=$(find data/interim/antismash/*/* -name "{wildcards.strains}.json" | sort -V | tail -n 1) 2>> {log}
+            if [ -n "$latest_json" ]; then
                 # Use existing JSON result as starting point
-                old_json="data/interim/antismash/$latest_version/{wildcards.strains}/{wildcards.strains}.json"
-                echo "Using existing JSON from $old_json as starting point..." >> {log}
-                antismash_input="--reuse-result $old_json"
+                echo "Using existing JSON from $latest_json as starting point..." >> {log}
+                antismash_input="--reuse-result $latest_json"
             else
                 # No existing JSON result found, use genbank input
                 echo "No existing JSON result found, starting AntiSMASH from scratch..." >> {log}
