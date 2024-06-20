@@ -148,7 +148,6 @@ jobs:
       - run: pip install bgcflow_wrapper
       - run: pip install pytest-cov
       - run: pip install alive-progress
-      - run: pip install snakemake==8.5.2
       - name: Test coverage
         run: pytest --cov=.tests/unit .tests/unit/
       - name: Build coverage file
