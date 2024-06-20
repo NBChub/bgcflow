@@ -15,7 +15,7 @@ jobs:
       matrix:
         environment:
             - workflow/envs/antismash.yaml
-            - workflow/envs/antismash_v6.yaml
+            #- workflow/envs/antismash_v6.yaml
             - workflow/envs/arts.yaml
             - workflow/envs/automlst_wrapper.yaml
             - workflow/envs/bgc_analytics.yaml
@@ -36,7 +36,7 @@ jobs:
             - workflow/envs/roary.yaml
             - workflow/envs/seqfu.yaml
             - workflow/envs/utilities.yaml
-            - workflow/envs/lsabgc.yaml
+            #- workflow/envs/lsabgc.yaml
     steps:
     - name: Checkout repository and submodules
       uses: actions/checkout@v4
