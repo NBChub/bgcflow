@@ -19,8 +19,8 @@ rule install_bigscape:
 rule bigscape:
     input:
         bigscape="resources/BiG-SCAPE",
-        bgc_mapping="data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
-        antismash_dir="data/interim/bgcs/{name}/{version}/",
+        bgc_mapping=rules.downstream_bgc_prep.output.bgc_mapping,
+        antismash_dir=rules.downstream_bgc_prep.output.outdir,
     output:
         index="data/interim/bigscape/{name}_antismash_{version}/index.html",
     conda:
@@ -51,7 +51,7 @@ rule bigscape_no_mibig:
         bigscape_dir="data/interim/bigscape/no_mibig_{name}_antismash_{version}/",
         label="{name}_antismash_{version}",
     log:
-        "logs/bigscape/{name}_antismash_{version}/bigscape.log",
+        "logs/bigscape_no_mibig/{name}_antismash_{version}/bigscape.log",
     threads: 32
     shell:
         """
@@ -60,8 +60,8 @@ rule bigscape_no_mibig:
 
 rule copy_bigscape_zip:
     input:
-        bgc_mapping="data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
-        index="data/interim/bigscape/no_mibig_{name}_antismash_{version}/index.html",
+        bgc_mapping=rules.downstream_bgc_prep.output.bgc_mapping,
+        index=rules.bigscape.output.index,
     output:
         zip="data/processed/{name}/bigscape/no_mibig_bigscape_as{version}.zip",
     conda:
@@ -78,15 +78,15 @@ rule copy_bigscape_zip:
 
 rule bigscape_to_cytoscape:
     input:
-        index="data/interim/bigscape/{name}_antismash_{version}/index.html",
-        bgc_mapping="data/interim/bgcs/{name}/{name}_antismash_{version}.csv",
-        mibig_bgc_table="resources/mibig/df_mibig_bgcs.csv/",
+        index=rules.bigscape.output.index,
+        bgc_mapping=rules.downstream_bgc_prep.output.bgc_mapping,
+        mibig_bgc_table="resources/mibig/df_mibig_bgcs.csv",
         as_dir="data/interim/bgcs/{name}/{version}",
-        df_genomes_path="data/processed/{name}/tables/df_antismash_{version}_summary.csv",
+        df_genomes_path=rules.antismash_summary.output.df_antismash_summary,
     output:
-        output_dir=directory(
-            "data/processed/{name}/bigscape/for_cytoscape_antismash_{version}"
-        ),
+        output_dir=temp(directory(
+            "data/interim/bigscape/for_cytoscape/{name}/{version}"
+        )),
         bgc_mapping="data/processed/{name}/bigscape/{name}_bigscape_as_{version}_mapping.csv",
     conda:
         "../envs/bgc_analytics.yaml"
@@ -98,11 +98,29 @@ rule bigscape_to_cytoscape:
         cp {input.bgc_mapping} {output.bgc_mapping}
         """
 
+rule check_missing_bigscape:
+    input:
+        processed_bigscape=rules.bigscape_to_cytoscape.output.output_dir,
+        antismash_region_table=rules.antismash_overview_gather.output.df_bgc,
+        bigscape_log=rules.bigscape.log,
+    output:
+        cytoscape=directory("data/processed/{name}/bigscape/for_cytoscape_antismash_{version}"),
+    conda:
+        "../envs/bgc_analytics.yaml"
+    log:
+        "logs/bigscape/check_missing_bigscape/check_missing_bigscape-{name}-{version}.log",
+    shell:
+        """
+        python workflow/bgcflow/bgcflow/data/check_missing_bigscape.py {input.processed_bigscape} \
+            {input.antismash_region_table} \
+            {input.bigscape_log} \
+            {output.cytoscape} 2>> {log}
+        """
 
 rule copy_bigscape:
     input:
-        index="data/interim/bigscape/{name}_antismash_{version}/index.html",
-        cytoscape="data/processed/{name}/bigscape/for_cytoscape_antismash_{version}",
+        index=rules.bigscape.output.index,
+        cytoscape=rules.check_missing_bigscape.output.cytoscape,
     output:
         main="data/processed/{name}/bigscape/result_as{version}/index.html",
     conda:

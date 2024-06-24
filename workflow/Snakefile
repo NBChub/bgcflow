@@ -62,9 +62,13 @@ resource_mapping = {}
 
 ##### Modules #####
 include: "rules/ncbi.smk"
+include: "rules/patric.smk"
 include: "rules/prokka.smk"
+include: "rules/convert_genbank.smk"
 include: "rules/antismash.smk"
 resource_mapping["antismash_db"] = str(antismash_db_path)
+include: "rules/bgc_analytics.smk"
+include: "rules/bgc.smk"
 include: "rules/roary.smk"
 include: "rules/bigscape.smk"
 resource_mapping["BiG-SCAPE"] = str(rules.install_bigscape.output.bigscape)
@@ -75,7 +79,6 @@ resource_mapping["gtdbtk"] = str(rules.install_gtdbtk.output.gtdbtk)
 include: "rules/mash.smk"
 include: "rules/fastani.smk"
 include: "rules/refseq_masher.smk"
-include: "rules/patric.smk"
 include: "rules/eggnog.smk"
 resource_mapping["eggnog_db"] = str(rules.install_eggnog.output.eggnog_db)
 include: "rules/mlst.smk"
@@ -83,15 +86,12 @@ include: "rules/automlst_wrapper.smk"
 include: "rules/seqfu.smk"
 include: "rules/checkm.smk"
 resource_mapping["checkm"] = str(rules.install_checkm.output.checkm_db)
-include: "rules/bgc_analytics.smk"
 include: "rules/arts.smk"
-include: "rules/bgc.smk"
 include: "rules/diamond.smk"
 include: "rules/deeptfactor.smk"
 include: "rules/cblaster.smk"
-include: "rules/data_warehouse.smk"
-include: "rules/convert_genbank.smk"
 include: "rules/gecco.smk"
+include: "rules/data_warehouse.smk"
 
 ##### 4. Generate user-defined local resources
 custom_resource_dir(config["resources_path"], resource_mapping)
