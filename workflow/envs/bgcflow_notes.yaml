@@ -30,3 +30,4 @@ dependencies:
       - jupyterlab-dash
       - networkx
       - alive_progress
+      - duckdb==1.0.0
