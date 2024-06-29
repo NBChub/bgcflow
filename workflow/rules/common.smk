@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 import yaml, json, sys, itertools, hashlib
+from collections import defaultdict
 from snakemake.utils import validate
 from snakemake.utils import min_version
 from pathlib import Path
