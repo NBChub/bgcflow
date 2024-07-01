@@ -960,3 +960,30 @@ def get_user_input_with_timeout(prompt, timeout):
         result[0] = None  # Timeout occurred
 
     return result[0]
+
+def find_common_prefix(input_dir):
+    """
+    Find common prefixes of antiSMASH JSON files in the input directory.
+    Used in to define allowed prefixes in antismash-db-duckdb.smk
+    """
+    input_path = Path(input_dir)
+
+    # Find all .json files in the input directory recursively
+    json_files = list(input_path.glob('**/*.json'))
+
+    # Group files by the first letter of each file
+    files_by_first_letter = defaultdict(list)
+    for file in json_files:
+        first_letter = file.stem[0] if file.stem else ''
+        files_by_first_letter[first_letter].append(file)
+
+    # Find the common prefix within each group
+    common_prefixes = []
+    for files in files_by_first_letter.values():
+        filenames = [file.stem for file in files]
+        common_prefix = os.path.commonprefix(filenames)
+        if common_prefix:  # Only add non-empty prefixes
+            common_prefixes.append(common_prefix)
+
+    # Join the common prefixes with ","
+    return ",".join(common_prefixes)
