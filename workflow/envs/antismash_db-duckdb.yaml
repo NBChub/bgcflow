@@ -295,4 +295,4 @@ dependencies:
       - scikit-learn==1.3.2
       - scipy==1.11.3
       - threadpoolctl==3.5.0
-      - sqlparse
+      - sqlparse==0.5.0
