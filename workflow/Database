@@ -39,6 +39,7 @@ for name in PEP_PROJECTS.keys():
                 model_to_ignore.append(item)
     models_to_ignore[name] = model_to_ignore
     db.append(f"data/processed/{name}/dbt/antiSMASH_{version}/dbt_bgcflow.duckdb")
+    db.append(f"data/processed/{name}/antismash_database/antiSMASH_database_{version}")
 
 rule all:
     input:
@@ -46,3 +47,4 @@ rule all:
 
 ##### Modules #####
 include: "rules/build-database.smk"
+include: "rules/antismash-db-duckdb.smk"

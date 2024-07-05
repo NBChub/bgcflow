@@ -13,9 +13,6 @@ git clone https://github.com/antismash/db-schema.git resources/antismash_db-sche
 # Download the antiSMASH databases using a custom script or command
 download-antismash-databases
 
-# Initialize the DuckDB database with the schema from the db-schema directory
-(cd resources/antismash_db-schema_duckdb && python init_duckdb.py db-schema duckdb-schema)
-
 # Download the NCBI taxonomy dump files into the ncbi-taxdump directory
 (cd resources/antismash_db-schema_duckdb && wget -P ncbi-taxdump https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz -nc)
 
