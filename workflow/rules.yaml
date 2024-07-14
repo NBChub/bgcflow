@@ -241,3 +241,11 @@ gecco:
   - "Accurate de novo identification of biosynthetic gene clusters with GECCO. Laura M Carroll,
     Martin Larralde, Jonas Simon Fleck, Ruby Ponnudurai, Alessio Milanese, Elisa Cappio Barazzone,
     Georg Zeller. bioRxiv 2021.05.03.442509; doi:10.1101/2021.05.03.442509"
+amrfinderplus:
+  final_output: "data/processed/{name}/tables/df_amrfinderplus.csv"
+  description: Identify AMR genes and point mutations, and virulence and stress resistance genes in assembled bacterial nucleotide and protein sequence.
+  category: Genome Mining
+  link:
+  - https://github.com/ncbi/amr
+  references:
+  - "Feldgarden M, Brover V, Gonzalez-Escalona N, Frye JG, Haendiges J, Haft DH, Hoffmann M, Pettengill JB, Prasad AB, Tillman GE, Tyson GH, Klimke W. AMRFinderPlus and the Reference Gene Catalog facilitate examination of the genomic links among antimicrobial resistance, stress response, and virulence. Sci Rep. 2021 Jun 16;11(1):12728. doi: 10.1038/s41598-021-91456-0. PMID: 34135355; PMCID: PMC8208984."
