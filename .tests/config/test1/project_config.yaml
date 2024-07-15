@@ -20,5 +20,5 @@ rules:
   deeptfactor-roary: FALSE
   cblaster-genome: TRUE
   cblaster-bgc: TRUE
-  ppanggolin: TRUE
   gecco: TRUE
+  amrfinderplus: TRUE
