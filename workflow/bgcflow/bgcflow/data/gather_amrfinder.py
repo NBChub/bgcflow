@@ -53,9 +53,9 @@ def gather_amrfinder(input_list, output_file):
     dataframes = []
 
     with open(input_list, "r") as f:
-        data = f.readlines()
+        data = f.read()
 
-    dataframes = pd.concat([cleanup_amrfinder(i.strip("\n")) for i in data])
+    dataframes = pd.concat([cleanup_amrfinder(i) for i in data.split()])
     dataframes.to_csv(output_file, index=False)
     return
 
