@@ -23,5 +23,5 @@ rule metabase_duckdb_plugin:
         release=metabase_config["METABASE_DUCKDB_PLUGIN_VERSION"]
     shell:
         """
-        wget -O {output.plugin} https://github.com/AlexR2D2/metabase_duckdb_driver/releases/download/{params.release}/duckdb.metabase-driver.jar 2>> {log}
+        wget -O {output.plugin} https://github.com/MotherDuck-Open-Source/metabase_duckdb_driver/releases/download/{params.release}/duckdb.metabase-driver.jar 2>> {log}
         """

@@ -151,6 +151,7 @@ def exclude_model_dbt(model_to_ignore):
 
 rule build_database:
     input:
+        database="data/processed/{name}/antismash_database/antiSMASH_database_{version}",
         profile = "data/processed/{name}/dbt/antiSMASH_{version}/models/sources.yml"
     output:
         duckdb = "data/processed/{name}/dbt/antiSMASH_{version}/dbt_bgcflow.duckdb"
@@ -163,6 +164,7 @@ rule build_database:
         exclude = lambda wildcards: exclude_model_dbt(models_to_ignore[wildcards.name])
     shell:
         """
+        cp {input.database}/antismash_db.duckdb {output.duckdb} 2>> {log}
         command="dbt build --threads {threads} {params.exclude} -x"
         echo $command >> {log}
         (cd {params.dbt} \
