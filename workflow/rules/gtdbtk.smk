@@ -107,4 +107,11 @@ rule evaluate_gtdbtk_input:
     log:
         "logs/gtdbtk/gtdbtk/evaluate_gtdbtk_{name}.log",
     shell:
-        "cp {input} {output.summary_processed} 2>> {log}"
+        """
+        if [ -f "data/interim/gtdbtk/{wildcards.name}/result/classify/gtdbtk.bac120.summary.tsv" ]; then
+            cp "data/interim/gtdbtk/{wildcards.name}/result/classify/gtdbtk.bac120.summary.tsv" {output.summary_processed}
+        else
+            echo "WARNING: No genomes are eligible for GTDB-Tk classification. Please check if the genome ids already exists in GTDB. Returning empty ouput." > {log}
+            cp {input} {output.summary_processed}
+        fi 2>> {log}
+        """
