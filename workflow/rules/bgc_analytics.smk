@@ -145,7 +145,20 @@ rule get_mibig_table:
         mibig_version="3.1",
     shell:
         """
-        (cd resources && wget  https://dl.secondarymetabolites.org/mibig/mibig_json_{params.mibig_version}.tar.gz) &>> {log}
+        # Define the MIBiG tar.gz file path
+        TAR_GZ_FILE="resources/mibig_json_{params.mibig_version}.tar.gz"
+
+        # Check if the tar.gz file exists and remove it if it does
+        if [ -f "$TAR_GZ_FILE" ]; then
+            rm "$TAR_GZ_FILE"
+        fi
+
+        # Download the tar.gz file
+        (cd resources && wget https://dl.secondarymetabolites.org/mibig/mibig_json_{params.mibig_version}.tar.gz -nc) &>> {log}
+
+        # Extract the tar.gz file and organize the contents
         (cd resources && tar -xvf mibig_json_{params.mibig_version}.tar.gz && mkdir -p mibig && mv mibig_json_{params.mibig_version}/ mibig/json && rm mibig_json_{params.mibig_version}.tar.gz) &>> {log}
+
+        # Run the Python script to convert into table
         python workflow/bgcflow/bgcflow/data/get_mibig_data.py {output.mibig_json_folder} {output.mibig_bgc_table} 2>> {log}
         """
