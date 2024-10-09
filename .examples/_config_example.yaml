@@ -65,8 +65,8 @@ resources_path:
 
 rule_parameters:
   install_gtdbtk:
-    release: "214.1"
-    release_version: "r214"
+    release: "220.0"
+    release_version: "r220"
   gtdbtk:
     ani_screen: FALSE
   antismash:
