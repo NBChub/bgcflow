@@ -36,8 +36,28 @@ rule install_gtdbtk:
         release_version=gtdb_release_version,
     shell:
         """
-        (cd resources && wget https://data.gtdb.ecogenomic.org/releases/release{params.release_major}/{params.release_major}.{params.release_minor}/auxillary_files/gtdbtk_{params.release_version}_data.tar.gz -nc) 2>> {log}
-        (cd resources && mkdir -p gtdbtk && tar -xvzf gtdbtk_{params.release_version}_data.tar.gz -C "gtdbtk" --strip 1 && rm gtdbtk_{params.release_version}_data.tar.gz) &>> {log}
+        if [ {params.release_major} -ge 220 ]; then
+            echo "Release major is 220 or above. Using split package option." >> {log}
+            # Define the base URL for the split packages
+            BASE_URL="https://data.gtdb.ecogenomic.org/releases/release{params.release_major}/{params.release_major}.{params.release_minor}/auxillary_files/gtdbtk_package/split_package"
+            # Define the parts
+            PARTS=(aa ab ac ad ae af ag ah ai aj ak)
+            # Download each part
+            for PART in "${{PARTS[@]}}"; do
+                wget "$BASE_URL/gtdbtk_r{params.release_major}_data.tar.gz.part_$PART" -O "resources/gtdbtk_r{params.release_major}_data.tar.gz.part_$PART" -nc &>> {log}
+            done
+            # Concatenate the parts into a single tar.gz file
+            cat resources/gtdbtk_r{params.release_major}_data.tar.gz.part_* > resources/gtdbtk_r{params.release_major}_data.tar.gz
+            # Extract the concatenated tar.gz file
+            mkdir -p resources/gtdbtk
+            tar -xvzf resources/gtdbtk_r{params.release_major}_data.tar.gz -C "resources/gtdbtk" --strip 1 &>> {log}
+            # Clean up the parts and the concatenated tar.gz file
+            rm resources/gtdbtk_r{params.release_major}_data.tar.gz.part_*
+            rm resources/gtdbtk_r{params.release_major}_data.tar.gz
+        else
+            (cd resources && wget https://data.gtdb.ecogenomic.org/releases/release{params.release_major}/{params.release_major}.{params.release_minor}/auxillary_files/gtdbtk_{params.release_version}_data.tar.gz -nc) 2>> {log}
+            (cd resources && mkdir -p gtdbtk && tar -xvzf gtdbtk_{params.release_version}_data.tar.gz -C "gtdbtk" --strip 1 && rm gtdbtk_{params.release_version}_data.tar.gz) &>> {log}
+        fi
         """
 
 checkpoint prepare_gtdbtk_input:
