@@ -112,7 +112,7 @@ elif antismash_major_version >= 7:
             folder=directory("data/interim/antismash/{version}/{strains}/"),
             antismash_db_path=antismash_db_path,
             genefinding="none",
-            taxon="bacteria",
+            taxon=os.getenv("BGCFLOW_ANTISMASH_MODE", "bacteria")
         shell:
             """
             set +e
