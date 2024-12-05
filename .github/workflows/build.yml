@@ -43,9 +43,9 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Micromamba
-      uses: mamba-org/setup-micromamba@v1
+      uses: mamba-org/setup-micromamba@v2
       with:
-        micromamba-version: '2.0.2'
+        micromamba-version: '2.0.4-0'
         environment-file: ${{ matrix.environment }}
         init-shell: bash
         cache-environment: true
