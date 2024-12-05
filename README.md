@@ -31,7 +31,7 @@ mamba create -n bgcflow -c conda-forge python=3.11 pip openjdk -y # also install
 conda activate bgcflow
 
 # install `BGCFlow` wrapper
-pip install bgcflow_wrapper
+pip install bgcflow_wrapper==0.4.0
 
 # make sure to use bgcflow_wrapper version >= 0.2.7
 bgcflow --version
