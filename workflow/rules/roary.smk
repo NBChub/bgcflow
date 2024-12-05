@@ -18,7 +18,7 @@ rule roary:
 
 rule roary_reassign_pangene_categories:
     input:
-        roary="data/interim/roary/{name}"
+        roary="data/processed/{name}/roary"
     output:
         pangene="data/processed/{name}/tables/df_roary_pangene_summary_reassigned.csv",
     log:
