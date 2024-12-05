@@ -45,7 +45,7 @@ jobs:
     - name: Set up Micromamba
       uses: mamba-org/setup-micromamba@v1
       with:
-        micromamba-version: '1.5.8-0'
+        micromamba-version: '2.0.2'
         environment-file: ${{ matrix.environment }}
         init-shell: bash
         cache-environment: true
