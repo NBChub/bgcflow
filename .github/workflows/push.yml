@@ -10,7 +10,7 @@ jobs:
       with:
         submodules: recursive
     - name: Formatting
-      uses: github/super-linter@v5
+      uses: github/super-linter@v6
       env:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: main
@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Linting
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v1
       with:
         directory: .tests
         snakefile: workflow/Snakefile
@@ -39,7 +39,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v1
       with:
         directory: .tests
         snakefile: workflow/Snakefile
@@ -57,7 +57,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v1
       with:
         directory: .tests
         snakefile: workflow/Report
@@ -75,7 +75,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v1
       with:
         directory: .tests
         snakefile: workflow/Metabase
@@ -93,7 +93,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v1
       with:
         directory: .tests
         snakefile: workflow/BGC
@@ -111,7 +111,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v1
       with:
         directory: .tests
         snakefile: workflow/ppanggolin
@@ -129,7 +129,7 @@ jobs:
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v1
       with:
         directory: .tests
         snakefile: workflow/lsabgc
@@ -145,7 +145,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.11
-      - run: pip install bgcflow_wrapper==0.4.0
+      - run: pip install "bgcflow_wrapper>=0.5.0"
       - run: pip install pytest-cov
       - run: pip install alive-progress
       - name: Test coverage

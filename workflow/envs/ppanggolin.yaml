@@ -3,6 +3,5 @@ channels:
   - conda-forge
   - bioconda
   - r
-  - defaults
 dependencies:
   - ppanggolin=1.2.105
