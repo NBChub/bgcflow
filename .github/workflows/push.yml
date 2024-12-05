@@ -145,7 +145,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.11
-      - run: pip install bgcflow_wrapper
+      - run: pip install bgcflow_wrapper==0.4.0
       - run: pip install pytest-cov
       - run: pip install alive-progress
       - name: Test coverage
