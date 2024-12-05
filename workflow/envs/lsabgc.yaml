@@ -1,6 +1,5 @@
 name: lsaBGC
 channels:
-  - defaults
   - bioconda
   - conda-forge
 dependencies:
