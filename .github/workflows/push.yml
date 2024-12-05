@@ -10,7 +10,7 @@ jobs:
       with:
         submodules: recursive
     - name: Formatting
-      uses: github/super-linter@v7
+      uses: github/super-linter@v6
       env:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: main
