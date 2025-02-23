@@ -10,7 +10,7 @@ version = dependency_version["antismash"]
 
 ##### Make sure all required inputs exist
 NCBI = DF_SAMPLES[DF_SAMPLES.source.eq("ncbi")].genome_id.to_list()
-final_outputs = get_final_output(DF_SAMPLES, PEP_PROJECTS, rule_dict_path="workflow/rules.yaml", ignore_missing=True)
+final_outputs = get_final_output(DF_SAMPLES, PEP_PROJECTS, rule_dict_path="rules.yaml", ignore_missing=True)
 
 error_message = " * Has the jobs from the main workflow finished?\n * Check by running: 'bgcflow run -n'"
 for main_pipeline_outputs in final_outputs:

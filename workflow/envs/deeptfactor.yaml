@@ -2,7 +2,6 @@ name: deeptfactor
 channels:
   - pytorch
   - gurobi
-  - defaults
   - conda-forge
   - bioconda
 dependencies:

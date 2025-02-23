@@ -2,7 +2,6 @@ name: bgcflow_notes
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - python>=3.9,<3.12
   - jupyterlab>3

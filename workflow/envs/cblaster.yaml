@@ -1,7 +1,6 @@
 name: cblaster
 channels:
   - conda-forge
-  - default
   - bioconda
 dependencies:
   - diamond==2.1.9

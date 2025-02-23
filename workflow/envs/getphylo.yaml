@@ -1,7 +1,6 @@
 name: getphylo
 channels:
   - conda-forge
-  - defaults
   - bioconda
 dependencies:
   - diamond

@@ -2,9 +2,8 @@ name: bgc_analytics
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
-  - python>=3.9,<3.10
+  - python==3.11
   - jupyterlab>3
   - ipywidgets>=7.6
   - jupyter-dash
@@ -16,11 +15,11 @@ dependencies:
   - python-kaleido
   - bokeh
   - openpyxl
-  - nbconvert==6.4.2
+  - nbconvert
   - ipykernel
   - ete3
   - pyarrow
-  - peppy==0.35.7
+  - peppy
   - xlrd >= 1.0.0
   - zip
   - altair
@@ -34,4 +33,4 @@ dependencies:
       - networkx
       - alive_progress
       - python-louvain
-      - ncbi-genome-download==0.3.3
+      - ncbi-genome-download

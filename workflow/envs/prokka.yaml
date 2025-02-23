@@ -2,6 +2,5 @@ name: prokka_env
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - prokka=1.14.6

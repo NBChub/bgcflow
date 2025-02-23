@@ -2,7 +2,6 @@ name: gtdbtk
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - gtdbtk=2.4.0
   - wget

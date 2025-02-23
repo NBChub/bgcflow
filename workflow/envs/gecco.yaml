@@ -1,7 +1,6 @@
 name: gecco
 channels:
   - conda-forge
-  - defaults
   - bioconda
 dependencies:
   - gecco=0.9.10

@@ -8,8 +8,8 @@ from snakemake.utils import min_version
 from pathlib import Path
 import peppy
 
-min_version("7.14.0")
-__version__ = "1.1.2"
+min_version("8.25.5")
+__version__ = "1.2.0"
 
 
 container: "docker://matinnu/bgcflow:latest"
@@ -728,7 +728,7 @@ def get_project_outputs(
     Returns:
         final_output {list} -- list of final output files
     """
-    with open(workflow.source_path(f"../../{rule_dict_path}"), "r") as file:
+    with open(workflow.source_path(rule_dict_path), "r") as file:
         rule_dict = yaml.safe_load(file)
 
     selection = [
