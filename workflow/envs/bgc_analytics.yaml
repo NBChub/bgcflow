@@ -2,7 +2,6 @@ name: bgc_analytics
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - python>=3.9,<3.10
   - jupyterlab>3

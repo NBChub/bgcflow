@@ -58,18 +58,19 @@ if antismash_major_version <= 6:
 elif antismash_major_version >= 7:
     rule antismash_db_setup:
         output:
-            as_js=directory(antismash_db_path / "as-js/0.13"),
+            as_js=directory(antismash_db_path / "as-js/0.16"),
             clusterblast=directory(antismash_db_path / "clusterblast"),
-            clustercompare_mibig=directory(antismash_db_path / "clustercompare/mibig/3.1"),
+            clustercompare_mibig=directory(antismash_db_path / "clustercompare/mibig/4.0"),
             comparippson_asdb=directory(antismash_db_path / "comparippson/asdb/4.0"),
-            comparippson_mibig=directory(antismash_db_path / "comparippson/mibig/3.1"),
-            knownclusterblast=directory(antismash_db_path / "knownclusterblast/3.1"),
+            comparippson_mibig=directory(antismash_db_path / "comparippson/mibig/4.0"),
+            knownclusterblast=directory(antismash_db_path / "knownclusterblast/4.0"),
             nrps_pks_stachelhaus=directory(antismash_db_path / "nrps_pks/stachelhaus/1.1"),
             nrps_pks_svm=directory(antismash_db_path / "nrps_pks/svm/2.0"),
             nrps_pks_transATor=directory(antismash_db_path / "nrps_pks/transATor/2023.02.23"),
             pfam=directory(antismash_db_path / "pfam/35.0"),
             resfam=directory(antismash_db_path / "resfam"),
             tigrfam=directory(antismash_db_path / "tigrfam"),
+            mite=directory(antismash_db_path / "mite/1.3"),
         conda:
             "../envs/antismash.yaml"
         log:
