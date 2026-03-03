@@ -1,0 +1,6 @@
+name: bigscape2
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - bigscape=2.0.2

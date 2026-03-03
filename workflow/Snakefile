@@ -67,6 +67,7 @@ include: "rules/antismash.smk"
 resource_mapping["antismash_db"] = str(antismash_db_path)
 include: "rules/roary.smk"
 include: "rules/bigscape.smk"
+include: "rules/bigscape2.smk"
 resource_mapping["BiG-SCAPE"] = str(rules.install_bigscape.output.bigscape)
 include: "rules/bigslice.smk"
 resource_mapping["bigslice"] = str(rules.fetch_bigslice_db.output.folder)
