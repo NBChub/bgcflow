@@ -16,6 +16,9 @@ def region_table_builder(f, accession):
     region_number = f["qualifiers"]["region_number"][0]
     region_id = f"{accession}.region{str(region_number).zfill(3)}"
     location = f["location"].strip("[").strip("]")
+    if location.startswith("join"):
+        logging.debug(f"Unusual location format: {location}")
+        location = location.split(",")[0]
     start_pos, end_pos = location.split(":")
     contig_edge = f["qualifiers"]["contig_edge"][0]
     # fill values
@@ -130,10 +133,17 @@ def get_antismash_overview(json_path, outfile, genome_id=False, n_hits=1):
                 start_pos = "".join(
                     [s for s in output_cluster["start_pos"] if s.isdigit()]
                 )
+                end_pos  = "".join(
+                    [s for s in output_cluster["end_pos"] if s.isdigit()]
+                )
                 logging.warning(
                     f'Correcting start position from {output_cluster["start_pos"]} to {start_pos}'
                 )
+                logging.warning(
+                    f'Correcting end position from {output_cluster["end_pos"]} to {end_pos}'
+                )
                 output_cluster["start_pos"] = start_pos
+                output_cluster["end_pos"] = end_pos
                 output_cluster["region_length"] = int(output_cluster["end_pos"]) - int(
                     output_cluster["start_pos"]
                 )
