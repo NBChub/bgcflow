@@ -49,7 +49,7 @@ wildcard_constraints:
 
 ##### Target rules #####
 
-final_outputs = get_final_output(DF_SAMPLES, PEP_PROJECTS, rule_dict_path="workflow/rules.yaml", ignore_missing=True)
+final_outputs = get_final_output(DF_SAMPLES, PEP_PROJECTS, rule_dict_path="rules.yaml", ignore_missing=True)
 
 rule all:
     input:

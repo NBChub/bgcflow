@@ -728,7 +728,7 @@ def get_project_outputs(
     Returns:
         final_output {list} -- list of final output files
     """
-    with open(workflow.source_path(f"../../{rule_dict_path}"), "r") as file:
+    with open(workflow.source_path(f"{rule_dict_path}"), "r") as file:
         rule_dict = yaml.safe_load(file)
 
     selection = [
