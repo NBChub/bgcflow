@@ -284,8 +284,9 @@ def update_cluster_family(
             df_families.loc[fam_id, "mibig_ids"] = ";".join(known_bgcs)
         else:
             df_families.loc[fam_id, "fam_type"] = "unknown_family"
+            user_bgcs_in_family = [bgc for bgc in family if bgc in df_clusters.index]
             bgc_class = ",".join(
-                df_clusters.loc[list(family), "bigscape_class"].unique().tolist()
+                df_clusters.loc[user_bgcs_in_family, "bigscape_class"].unique().tolist()
             )
             df_families.loc[fam_id, "fam_name"] = "u_" + bgc_class + "_" + str(fam_id)
             df_families.loc[fam_id, "clusters_in_fam"] = len(family)
@@ -309,11 +310,17 @@ def update_cluster_family(
 
             elif bgc in df_known.index:
                 df_known.loc[bgc, "fam_id_" + cutoff] = str(fam_id)
-                df_known.loc[bgc, "fam_type_" + cutoff] = "known_family"
-                known_compounds = ";".join(
-                    df_known.loc[known_bgcs, "compounds"].tolist()
-                )
-                df_known.loc[bgc, "fam_known_compounds_" + cutoff] = known_compounds
+                if len(known_bgcs) > 0:
+                    df_known.loc[bgc, "fam_type_" + cutoff] = "known_family"
+                    known_compounds = ";".join(
+                        df_known.loc[known_bgcs, "compounds"].tolist()
+                    )
+                    df_known.loc[bgc, "fam_known_compounds_" + cutoff] = known_compounds
+                else:
+                    df_known.loc[bgc, "fam_type_" + cutoff] = "unknown_family"
+                    df_known.loc[bgc, "fam_known_compounds_" + cutoff] = (
+                        "u_" + bgc_class + "_" + str(fam_id)
+                    )
 
     return df_clusters, df_known, df_families
 
