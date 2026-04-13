@@ -728,8 +728,13 @@ def get_project_outputs(
     Returns:
         final_output {list} -- list of final output files
     """
-    with open(workflow.source_path(f"{rule_dict_path}"), "r") as file:
-        rule_dict = yaml.safe_load(file)
+    # accomodate snakemake version 8 and 9 difference
+    try:
+        with open(workflow.source_path(f"{rule_dict_path}"), "r") as file:
+            rule_dict = yaml.safe_load(file)
+    except FileNotFoundError:
+         with open(workflow.source_path(f"../{rule_dict_path}"), "r") as file:
+            rule_dict = yaml.safe_load(file)
 
     selection = [
         i for i in df_samples.index if PROJECT_IDS in df_samples.loc[i, "name"]
