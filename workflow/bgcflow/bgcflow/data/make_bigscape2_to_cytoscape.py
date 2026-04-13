@@ -50,23 +50,24 @@ def get_cluster_dataframes(
             logging.info(f"Processing BGCs in the genome: {genome_id}")
             if genome_id in os.listdir(as_dir):
                 genome_dir = os.path.join(as_dir, genome_id)
-                bgc_id_list = [
-                    region[:-4]
-                    for region in os.listdir(genome_dir)
-                    if "region0" in region
-                ]
+                bgc_id_list = []
+                for region in os.listdir(genome_dir):
+                    if "region" in region and region.endswith(".gbk"):
+                        region_number = int(region.split("region")[1].split(".")[0])
+                        bgc_id = region + "_region_" + str(region_number)
+                        bgc_id_list.append(bgc_id)
                 for bgc_id in bgc_id_list:
                     logging.debug(f"Processing {bgc_id}")
                     if bgc_id in df_nodes.index:
                         df_clusters.loc[bgc_id, "genome_id"] = genome_id
                         df_clusters.loc[bgc_id, "product"] = df_nodes.loc[
-                            bgc_id, "Product Prediction"
+                            bgc_id, "Category"
                         ]
                         df_clusters.loc[bgc_id, "bigscape_class"] = df_nodes.loc[
-                            bgc_id, "BiG-SCAPE class"
+                            bgc_id, "Class"
                         ]
                         df_clusters.loc[bgc_id, "accn_id"] = df_nodes.loc[
-                            bgc_id, "Accession ID"
+                            bgc_id, "GBK"
                         ]
                     else:
                         logging.debug(f"{bgc_id} not in df_nodes")
@@ -78,12 +79,12 @@ def get_cluster_dataframes(
     logging.info("Generating separate table for known BGCs from MIBIG")
     with alive_bar(len(df_nodes.index)) as bar:
         for bgc_id in df_nodes.index:
-            if "BGC0" in bgc_id:
+            if "BGC" in bgc_id:
                 df_known.loc[bgc_id, "product"] = df_nodes.loc[
-                    bgc_id, "Product Prediction"
+                    bgc_id, "Category"
                 ]
                 df_known.loc[bgc_id, "bigscape_class"] = df_nodes.loc[
-                    bgc_id, "BiG-SCAPE class"
+                    bgc_id, "Class"
                 ]
                 if "." in bgc_id:
                     mibig_id = bgc_id.split(".")[0]
@@ -100,7 +101,7 @@ def get_cluster_dataframes(
     return df_known, df_clusters
 
 
-def add_bigscape_families(df_clusters, df_known, net_data_path):
+def add_bigscape_families(df_clusters, df_known, net_data_path, cutoff):
     """
     Adds GCC and GCF numbers detected by BiG-SCAPE clustering for different cut-offs
     """
@@ -108,92 +109,66 @@ def add_bigscape_families(df_clusters, df_known, net_data_path):
     cluster_class_set = [
         cluster_class
         for cluster_class in os.listdir(net_data_path)
-        if ".tsv" not in cluster_class
+        if cluster_class != "record_annotations.tsv" and (net_data_path / cluster_class).is_dir()
     ]
 
     for cluster_class in cluster_class_set:
         logging.info(f"Processing all BGCs from {cluster_class}")
-        class_dir = os.path.join(net_data_path, cluster_class)
-        gcf_cutoffs_files = [
-            file for file in os.listdir(class_dir) if "_clustering_" in file
-        ]
-        for gcf_file in gcf_cutoffs_files:
-            cutoff = gcf_file[-8:-4]
-            gcf_path = os.path.join(class_dir, gcf_file)
-            df_clusters = read_gcf_df(df_clusters, gcf_path, cutoff)
-            df_known = read_gcf_df(df_known, gcf_path, cutoff)
-
-        clan_files = [file for file in os.listdir(class_dir) if "_clans_" in file]
-        if len(clan_files) == 1:
-            clan_select = clan_files[0]
-            clan_path = os.path.join(class_dir, clan_select)
-
-            df_clusters = read_gcc_df(df_clusters, clan_path)
-            df_known = read_gcc_df(df_known, clan_path)
+        class_dir = net_data_path / cluster_class
+        clust_path = class_dir / (cluster_class + "_clustering_c" + cutoff + ".tsv")
+        if clust_path.exists():
+            df_clusters = read_clustering_df(df_clusters, clust_path, cutoff)
+            df_known = read_clustering_df(df_known, clust_path, cutoff)
 
     return df_clusters, df_known
 
 
-def read_gcf_df(df_clusters, gcf_path, cutoff):
+def read_clustering_df(df_clusters, clust_path, cutoff):
     """
-    Adds GCF (Gene Cluster Family) number for each BGC
+    Adds GCF (Gene Cluster Family) and GCC (Clan) numbers for each BGC
     """
 
-    df_gcf = pd.read_csv(gcf_path, sep="\t", index_col="#BGC Name", dtype=str)
+    df_clust = pd.read_csv(clust_path, sep="\t", index_col="Record", dtype=str)
     col_name = "gcf_" + cutoff
 
     for bgc in df_clusters.index:
-        if bgc in df_gcf.index:
-            df_clusters.loc[bgc, col_name] = df_gcf.loc[bgc, "Family Number"]
+        if bgc in df_clust.index:
+            df_clusters.loc[bgc, col_name] = df_clust.loc[bgc, "Family"]
+            df_clusters.loc[bgc, "Clan Number"] = df_clust.loc[bgc, "CC"]
 
     return df_clusters
 
 
-def read_gcc_df(df_clusters, clan_path):
+def get_bigscape_network(net_data_path, cutoff="0.3"):
     """
-    Adds GCC (Gene Cluster Clan) number for each BGC
-    """
-
-    df_gcc = pd.read_csv(clan_path, sep="\t", index_col="#BGC Name", dtype=str)
-    col_name = "Clan Number"
-
-    for bgc in df_clusters.index:
-        if bgc in df_gcc.index:
-            df_clusters.loc[bgc, col_name] = df_gcc.loc[bgc, "Clan Number"]
-
-    return df_clusters
-
-
-def get_bigscape_network(net_data_path, cutoff="0.30"):
-    """
-    Reads similarity network for a particular to a dataframe
+    Reads similarity network for a particular cutoff
     """
 
     cluster_class_set = [
         cluster_class
         for cluster_class in os.listdir(net_data_path)
-        if ".tsv" not in cluster_class
+        if cluster_class != "record_annotations.tsv" and (net_data_path / cluster_class).is_dir()
     ]
 
     df_network = pd.DataFrame()
     for cluster_class in cluster_class_set:
-        class_dir = os.path.join(net_data_path, cluster_class)
+        class_dir = net_data_path / cluster_class
         net_file = cluster_class + "_c" + cutoff + ".network"
-        net_path = os.path.join(class_dir, net_file)
-        if os.path.isfile(net_path):
+        net_path = class_dir / net_file
+        if net_path.exists():
             df_class_net = pd.read_csv(net_path, sep="\t")
             df_network = pd.concat([df_network, df_class_net], ignore_index=True)
 
     return df_network
 
 
-def get_network_graph(df_network, weight="Raw distance"):
+def get_network_graph(df_network, weight="distance"):
     """
     Returns networkX graph for a given network
     """
 
     G_clusters = nx.from_pandas_edgelist(
-        df_network, "Clustername 1", "Clustername 2", weight
+        df_network, "Record_a", "Record_b", weight
     )
     G_families = nx.connected_components(G_clusters)
     family_nodes = [c for c in sorted(G_families, key=len, reverse=True)]
@@ -222,8 +197,8 @@ def remove_single_mibig(df_network, df_known, family_nodes):
     logging.debug(
         f"{len(nodes_to_remove)} number of MIBIG nodes will be removed from analysis due to no similarity"
     )
-    df_network = df_network[~df_network["Clustername 1"].isin(nodes_to_remove)]
-    df_network = df_network[~df_network["Clustername 2"].isin(nodes_to_remove)]
+    df_network = df_network[~df_network["Record_a"].isin(nodes_to_remove)]
+    df_network = df_network[~df_network["Record_b"].isin(nodes_to_remove)]
     for node in nodes_to_remove:
         if node in df_known.index:
             df_known = df_known.drop(node)
@@ -371,9 +346,9 @@ def run_family_analysis(
 ):
     logging.info(f"Processing data from BiG-SCAPE with cutoff {cutoff}")
     df_network = get_bigscape_network(net_data_path, cutoff=cutoff)
-    G_clusters, family_nodes = get_network_graph(df_network, weight="Raw distance")
+    G_clusters, family_nodes = get_network_graph(df_network, weight="distance")
     df_network, df_known = remove_single_mibig(df_network, df_known_all, family_nodes)
-    G_clusters, family_nodes = get_network_graph(df_network, weight="Raw distance")
+    G_clusters, family_nodes = get_network_graph(df_network, weight="distance")
     singleton_bgc = [list(fam)[0] for fam in family_nodes if len(fam) == 1]
     family_graphs = get_family_graph(G_clusters)
     df_clusters, df_known, df_families = update_cluster_family(
@@ -435,44 +410,41 @@ def process_bigscape_output(
     # get the latest run
     bigscape_runs = {}
     logging.info("Getting BiG-SCAPE runs...")
-    for net_data_path in bigscape_directory.glob("network_files/*"):
+    for net_data_path in bigscape_directory.glob("output_files/*"):
         logging.debug(f"Found network data: {net_data_path}")
-        selected_run_folder = net_data_path.name
-        selected_run_time = selected_run_folder.split("_glocal")[0]
-        selected_run_time = datetime.strptime(selected_run_time, "%Y-%m-%d_%H-%M-%S")
-        bigscape_runs[selected_run_time] = net_data_path
+        if net_data_path.is_dir() and "_c" in net_data_path.name:
+            selected_run_folder = net_data_path.name
+            selected_run_time_str = '_'.join(selected_run_folder.split("_c")[0].split('_')[-2:])
+            selected_run_time = datetime.strptime(selected_run_time_str, "%Y-%m-%d_%H-%M-%S")
+            bigscape_runs[selected_run_time] = selected_run_folder.split("_c")[0]  # the base
     run_times = list(bigscape_runs.keys())
     run_times.sort(reverse=True)
 
     # make sure run times has values
-    assert len(run_times) > 0
     selected_run = run_times[0]
-    net_data_path = bigscape_runs[selected_run]
+    base = bigscape_runs[selected_run]
 
     logging.info(f"Processing {selected_run}")
-    node_annot_path = (
-        net_data_path / "Network_Annotations_Full.tsv"
-    )  # Read the BGC table
-
-    df_nodes = pd.read_csv(node_annot_path, index_col="BGC", sep="\t")
-
-    # Generate df_clusters and df_known dataframe
     df_genomes = pd.read_csv(df_genomes_path).set_index("genome_id", drop=False)
     df_genomes.to_csv(f"{output_dir}/df_genome_antismash_summary.csv")
 
-    df_known_all, df_clusters = get_cluster_dataframes(
-        df_genomes, df_nodes, mibig_bgc_table, as_dir
-    )
-    assert (
-        len(df_clusters) > 0
-    ), f"df_cluster is empty {df_clusters.shape}. Check folder data/interim/bgcs to have proper antismash region genbank files."
-    # Enrich dataframes with BiGSCAPE information on GCCs and GCFs with cutoffs
-    df_clusters, df_known_all = add_bigscape_families(
-        df_clusters, df_known_all, net_data_path
-    )
+    # Process each cutoff
+    for cutoff in ["0.3", "0.4", "0.5"]:
+        net_data_path = bigscape_directory / "output_files" / (base + "_c" + cutoff)
+        node_annot_path = net_data_path / "record_annotations.tsv"
+        df_nodes = pd.read_csv(node_annot_path, index_col="Record", sep="\t")
 
-    # Get GCF data as per the cutoff
-    for cutoff in ["0.30", "0.40", "0.50"]:
+        df_known_all, df_clusters = get_cluster_dataframes(
+            df_genomes, df_nodes, mibig_bgc_table, as_dir
+        )
+        assert (
+            len(df_clusters) > 0
+        ), f"df_cluster is empty {df_clusters.shape}. Check folder data/interim/bgcs to have proper antismash region genbank files."
+        # Enrich dataframes with BiGSCAPE information on GCCs and GCFs with cutoffs
+        df_clusters, df_known_all = add_bigscape_families(
+            df_clusters, df_known_all, net_data_path, cutoff
+        )
+
         df_clusters, df_families, df_network = run_family_analysis(
             cutoff,
             net_data_path,

@@ -71,5 +71,5 @@ rule copy_bigscape2:
         "logs/bigscape2/copy_bigscape2_zip/copy_bigscape2-{name}-{version}.log",
     shell:
         """
-        python workflow/bgcflow/bgcflow/data/bigscape2_copy.py {input.index} data/processed/{wildcards.name}/bigscape2/result_as{wildcards.version} 2>> {log}
+        python workflow/bgcflow/bgcflow/data/bigscape_copy.py {input.index} data/processed/{wildcards.name}/bigscape2/result_as{wildcards.version} 2>> {log}
         """
