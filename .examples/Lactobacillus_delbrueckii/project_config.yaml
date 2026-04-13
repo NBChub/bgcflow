@@ -17,7 +17,7 @@ rules:
   prokka-gbk: TRUE
   antismash: TRUE
   query-bigslice: FALSE
-  bigscape: TRUE
+  bigscape2: TRUE
   bigslice: TRUE
   automlst-wrapper: TRUE
   arts: TRUE
