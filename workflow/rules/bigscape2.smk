@@ -55,7 +55,7 @@ rule bigscape2_to_cytoscape:
     shell:
         """
         python workflow/bgcflow/bgcflow/data/make_bigscape2_to_cytoscape.py data/interim/bigscape2/{wildcards.name}_antismash_{wildcards.version}/ {input.as_dir} {input.df_genomes_path} {input.mibig_bgc_table} {output.output_dir} 2>> {log}
-        cp {input.bgc_mapping} {output.bgc_mapping}
+        python workflow/bgcflow/bgcflow/data/convert_region_to_bigscape2_region.py {input.bgc_mapping} {output.bgc_mapping} --overwrite 2>> {log}
         """
 
 
