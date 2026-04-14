@@ -432,7 +432,15 @@ def process_bigscape_output(
     base = bigscape_runs[selected_run]
 
     logging.info(f"Processing {selected_run}")
-    df_genomes = pd.read_csv(df_genomes_path).set_index("genome_id", drop=False)
+    df_genomes = pd.read_csv(df_genomes_path)
+    duplicated_ids = df_genomes[df_genomes.duplicated(subset=["genome_id"], keep=False)]["genome_id"].unique().tolist()
+    if len(duplicated_ids) > 0:
+        logging.warning(
+            "Found duplicate genome_id values in genome summary input: %s",
+            ", ".join(duplicated_ids),
+        )
+        df_genomes = df_genomes.drop_duplicates(subset=["genome_id"], keep="first")
+    df_genomes = df_genomes.set_index("genome_id", drop=False)
     df_genomes.to_csv(f"{output_dir}/df_genome_antismash_summary.csv")
 
     # Process each cutoff
