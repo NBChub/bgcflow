@@ -191,6 +191,10 @@ def find_conflicting_samples(df_samples):
     filtered_columns = ["sample_paths", "prokka-db", "gtdb_paths", "name"]
 
     df_filtered = df_samples.copy().drop(columns=filtered_columns)
+    # Convert any list columns to tuples to make them hashable
+    for col in df_filtered.columns:
+        if df_filtered[col].dtype == object:
+            df_filtered[col] = df_filtered[col].apply(lambda x: tuple(x) if isinstance(x, list) else x)
     dropped_ids = df_filtered[df_filtered.duplicated()].index
     df_filtered = df_filtered.drop_duplicates()
     if df_filtered.index.has_duplicates:
