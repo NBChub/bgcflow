@@ -27,13 +27,13 @@ A quick and easy way to use `BGCFlow` using the command line interface wrapper:
 
 ```bash
 # create and activate a new conda environment
-mamba create -n bgcflow -c conda-forge python=3.11 pip openjdk -y # also install java for metabase
+mamba create -n bgcflow -c conda-forge python pip openjdk -y # also install java for metabase
 conda activate bgcflow
 
 # install `BGCFlow` wrapper
-pip install bgcflow_wrapper==0.4.0
+pip install bgcflow_wrapper==0.6.1
 
-# make sure to use bgcflow_wrapper version >= 0.2.7
+# check bgcflow version
 bgcflow --version
 ```
 
