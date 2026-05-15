@@ -6,11 +6,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         submodules: recursive
     - name: Formatting
-      uses: github/super-linter@v5
+      uses: github/super-linter@v8
       env:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: main
@@ -19,9 +19,9 @@ jobs:
   linting:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Linting
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v2
       with:
         directory: .tests
         snakefile: workflow/Snakefile
@@ -35,11 +35,11 @@ jobs:
       - formatting
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v2
       with:
         directory: .tests
         snakefile: workflow/Snakefile
@@ -53,11 +53,11 @@ jobs:
       - formatting
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v2
       with:
         directory: .tests
         snakefile: workflow/Report
@@ -71,11 +71,11 @@ jobs:
       - formatting
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v2
       with:
         directory: .tests
         snakefile: workflow/Metabase
@@ -89,11 +89,11 @@ jobs:
       - formatting
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v2
       with:
         directory: .tests
         snakefile: workflow/BGC
@@ -107,11 +107,11 @@ jobs:
       - formatting
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v2
       with:
         directory: .tests
         snakefile: workflow/ppanggolin
@@ -125,11 +125,11 @@ jobs:
       - formatting
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         submodules: recursive
     - name: Dry-run workflow
-      uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      uses: snakemake/snakemake-github-action@v2
       with:
         directory: .tests
         snakefile: workflow/lsabgc
@@ -141,11 +141,11 @@ jobs:
     needs:
       - dry-run
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: 3.11
-      - run: pip install bgcflow_wrapper==0.4.0
+          python-version: 3.14
+      - run: pip install bgcflow_wrapper==0.6.1
       - run: pip install pytest-cov
       - run: pip install alive-progress
       - name: Test coverage

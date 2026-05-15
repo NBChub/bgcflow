@@ -15,7 +15,6 @@ jobs:
       matrix:
         environment:
             - workflow/envs/antismash.yaml
-            #- workflow/envs/antismash_v6.yaml
             - workflow/envs/arts.yaml
             - workflow/envs/automlst_wrapper.yaml
             - workflow/envs/bgc_analytics.yaml
@@ -39,13 +38,13 @@ jobs:
             #- workflow/envs/lsabgc.yaml
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         submodules: recursive
     - name: Set up Micromamba
-      uses: mamba-org/setup-micromamba@v1
+      uses: mamba-org/setup-micromamba@v3
       with:
-        micromamba-version: '1.5.8-0'
+        micromamba-version: '3.0.0'
         environment-file: ${{ matrix.environment }}
         init-shell: bash
         cache-environment: true
