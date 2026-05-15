@@ -12,7 +12,7 @@ rules:
   seqfu: TRUE
   mash: TRUE
   fastani: TRUE
-  checkm: TRUE
+  checkm: FALSE
   gtdbtk: FALSE
   prokka-gbk: TRUE
   antismash: TRUE
@@ -28,5 +28,5 @@ rules:
   deeptfactor-roary: FALSE
   cblaster-genome: TRUE
   cblaster-bgc: FALSE
-  gecco: TRUE
+  gecco: FALSE
   amrfinderplus: FALSE
