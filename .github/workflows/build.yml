@@ -18,13 +18,10 @@ jobs:
             - workflow/envs/arts.yaml
             - workflow/envs/automlst_wrapper.yaml
             - workflow/envs/bgc_analytics.yaml
-            - workflow/envs/bigscape.yaml
-            - workflow/envs/bigslice.yaml
-            - workflow/envs/checkm.yaml
+            - workflow/envs/bigscape2.yaml
             - workflow/envs/cblaster.yaml
             - workflow/envs/clinker.yaml
             - workflow/envs/dbt-duckdb.yaml
-            - workflow/envs/deeptfactor.yaml
             - workflow/envs/eggnog.yaml
             - workflow/envs/fastani.yaml
             - workflow/envs/gtdbtk.yaml
@@ -35,7 +32,6 @@ jobs:
             - workflow/envs/roary.yaml
             - workflow/envs/seqfu.yaml
             - workflow/envs/utilities.yaml
-            #- workflow/envs/lsabgc.yaml
     steps:
     - name: Checkout repository and submodules
       uses: actions/checkout@v6
