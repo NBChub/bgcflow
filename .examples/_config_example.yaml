@@ -65,12 +65,12 @@ resources_path:
 
 rule_parameters:
   install_gtdbtk:
-    release: "220.0"
-    release_version: "r220"
+    release: "232.0"
+    release_version: "r232"
   gtdbtk:
     ani_screen: FALSE
   antismash:
-    version: "7" # valid versions: 6, 7
+    version: "8" # valid versions: 6, 7
   use_gtdb_api: TRUE # Set to false to enable offline mode for taxonomic assignment, see https://github.com/NBChub/bgcflow/wiki/07-Advanced-Configurations#using-gtdb_api-offline-mode
 
 utility_parameters:
