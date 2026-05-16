@@ -75,34 +75,31 @@ rule ppanggolin_genome:
         echo "\n##### 3. Building pangenome graph with ppanggolin graph... #####" >> {log}
         ppanggolin graph \
             -p {output.ppanggolin} \
-            --cpu {threads} \
             --verbose 1 &>> {log}
 
-        echo "\n##### 3. Partitioning graph with ppanggolin partition... #####" >> {log}
+        echo "\n##### 4. Partitioning graph with ppanggolin partition... #####" >> {log}
         ppanggolin partition \
             -p {output.ppanggolin} \
             --cpu {threads} \
             --verbose 1 &>> {log}
 
-        echo "\n#### 4. Predicting region of genome plasticity with ppanggolin rgp... ####" >> {log}
+        echo "\n#### 5. Predicting region of genome plasticity with ppanggolin rgp... ####" >> {log}
         ppanggolin rgp \
             -p {output.ppanggolin} \
-            --cpu {threads} \
             --verbose 1 &>> {log}
 
-        echo "\n#### 5. Finding spots of insertion with ppanggolin spot... ####" >> {log}
+        echo "\n#### 6. Finding spots of insertion with ppanggolin spot... ####" >> {log}
         ppanggolin spot \
             -p {output.ppanggolin} \
-            --cpu {threads} \
             --verbose 1 &>> {log}
 
-        echo "\n#### 6. Finding conserved modules with ppanggolin module... ####" >> {log}
+        echo "\n#### 7. Finding conserved modules with ppanggolin module... ####" >> {log}
         ppanggolin module \
             -p {output.ppanggolin} \
             --cpu {threads} \
             --verbose 1 &>> {log}
 
-        echo "\n#### 7. Calculating rarefaction curves with ppanggolin rarefaction... ####" >> {log}
+        echo "\n#### 8. Calculating rarefaction curves with ppanggolin rarefaction... ####" >> {log}
         ppanggolin rarefaction -f \
             --min {params.rarefaction_min} \
             --max {params.rarefaction_max} \
@@ -111,235 +108,79 @@ rule ppanggolin_genome:
             --cpu {threads} \
             --output {output.rarefaction} &>> {log}
 
-        echo "\n#### 8. Building trees using ppanggolin msa... ####" >> {log}
+        echo "\n#### 9. Building trees using ppanggolin msa... ####" >> {log}
         ppanggolin msa -f -p {output.ppanggolin} --partition {params.msa_partition} --output {output.msa_core} &>> {log}
         ppanggolin msa -f -p {output.ppanggolin} --phylo --output {output.msa_phylo} &>> {log}
         """
 
-rule ppanggolin_genome_write_regions:
+rule ppanggolin_write_pangenome:
     input:
         ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/rarefaction"
+        previous = "data/processed/{name}/ppanggolin/genome/msa_phylo"
     output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/regions"),
+        folder = directory("data/processed/{name}/ppanggolin/genome/write_pangenome"),
     conda:
         "../envs/ppanggolin.yaml"
+    threads: 16
     log:
-        "logs/ppanggolin/genome/write_regions_{name}.log"
+        "logs/ppanggolin/genome/write_pangenome_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --regions --output {output.folder} &>> {log}
+        ppanggolin write_pangenome -f -p {input.ppanggolin} \
+            --gexf \
+            --light_gexf \
+            --json \
+            --csv \
+            --stats \
+            --partitions \
+            --families_tsv \
+            --regions \
+            --regions_families \
+            --spots \
+            --borders \
+            --modules \
+            --spot_modules \
+            --cpu {threads} \
+            --output {output.folder} &>> {log}
         """
 
-rule ppanggolin_genome_write_stats:
+rule ppanggolin_write_genomes:
     input:
         ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/regions"
+        previous = "data/processed/{name}/ppanggolin/genome/write_pangenome"
     output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/stats"),
+        folder = directory("data/processed/{name}/ppanggolin/genome/write_genomes"),
     conda:
         "../envs/ppanggolin.yaml"
+    threads: 16
     log:
-        "logs/ppanggolin/genome/write_stats_{name}.log"
+        "logs/ppanggolin/genome/write_genomes_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --stats --output {output.folder} &>> {log}
+        ppanggolin write_genomes -f -p {input.ppanggolin} \
+            --cpu {threads} \
+            --proksee \
+            --output {output.folder} &>> {log}
         """
 
-rule ppanggolin_genome_write_spots:
+rule ppanggolin_genome_draw:
     input:
         ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/stats"
+        previous = "data/processed/{name}/ppanggolin/genome/write_genomes"
     output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/spots"),
+        folder = directory("data/processed/{name}/ppanggolin/genome/draw"),
     conda:
         "../envs/ppanggolin.yaml"
     log:
-        "logs/ppanggolin/genome/write_spots_{name}.log"
+        "logs/ppanggolin/genome/draw_{name}.log"
     shell:
         """
-        ppanggolin write -f -p {input.ppanggolin} --spots --output {output.folder} &>> {log}
-        """
-
-rule ppanggolin_genome_draw_ucurve:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/spots"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/ucurve"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/draw_ucurve_{name}.log"
-    shell:
-        """
-        ppanggolin draw -f -p {input.ppanggolin} --ucurve --output {output.folder} &>> {log}
-        """
-
-rule ppanggolin_genome_draw_tile_plot:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/ucurve"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/tile_plot"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/tile_plot_{name}.log"
-    shell:
-        """
-        ppanggolin draw -f -p {input.ppanggolin} --tile_plot --output {output.folder} &>> {log}
-        """
-
-rule ppanggolin_genome_draw_tile_plot_nocloud:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/tile_plot"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/tile_plot_nocloud"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/tile_plot_nocloud_{name}.log"
-    shell:
-        """
-        ppanggolin draw -f -p {input.ppanggolin} --tile_plot --nocloud --output {output.folder} &>> {log}
-        """
-
-rule ppanggolin_genome_draw_spots:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/tile_plot_nocloud"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/spots_draw"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/draw_spots_{name}.log"
-    shell:
-        """
-        ppanggolin draw -f -p {input.ppanggolin} --spots all --output {output.folder} &>> {log}
-        """
-
-rule ppanggolin_genome_gexf:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/spots_draw"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/gexf"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/gexf_{name}.log"
-    shell:
-        """
-        ppanggolin write -f -p {input.ppanggolin} --light_gexf --output {output.folder} &>> {log}
-        ppanggolin write -f -p {input.ppanggolin} --gexf --output {output.folder} &>> {log}
-        ppanggolin write -f -p {input.ppanggolin} --json --output {output.folder} &>> {log}
-        """
-
-rule ppanggolin_genome_gene_pres_abs:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/gexf"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/gene_pres_abs"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/gene_pres_abs_{name}.log"
-    shell:
-        """
-        ppanggolin write -f -p {input.ppanggolin} --Rtab --output {output.folder} &>> {log}
-        ppanggolin write -f -p {input.ppanggolin} --csv --output {output.folder} &>> {log}
-        """
-
-rule ppanggolin_genome_partitions:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/gene_pres_abs"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/partitions"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/partitions_{name}.log"
-    shell:
-        """
-        ppanggolin write -f -p {input.ppanggolin} --partitions --output $(dirname {input.ppanggolin}) &>> {log}
-        """
-
-rule ppanggolin_genome_projection:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/partitions"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/projection"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/projection_{name}.log"
-    shell:
-        """
-        ppanggolin write -f -p {input.ppanggolin} --projection --output $(dirname {input.ppanggolin}) &>> {log}
-        """
-
-rule ppanggolin_genome_families:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/projection"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/families"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/families_{name}.log"
-    shell:
-        """
-        ppanggolin write -f -p {input.ppanggolin} --families_tsv --output {output.folder} &>> {log}
-        """
-
-rule ppanggolin_genome_borders:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/families"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/borders"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/borders_{name}.log"
-    shell:
-        """
-        ppanggolin write -f -p {input.ppanggolin} --borders --output {output.folder} &>> {log}
-        """
-
-rule ppanggolin_genome_modules:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/borders"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/modules"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/modules_{name}.log"
-    shell:
-        """
-        ppanggolin write -f -p {input.ppanggolin} --modules --output {output.folder} &>> {log}
-        """
-
-rule ppanggolin_genome_spot_modules:
-    input:
-        ppanggolin = "data/processed/{name}/ppanggolin/genome/pangenome.h5",
-        previous = "data/processed/{name}/ppanggolin/genome/modules"
-    output:
-        folder = directory("data/processed/{name}/ppanggolin/genome/spot_modules"),
-    conda:
-        "../envs/ppanggolin.yaml"
-    log:
-        "logs/ppanggolin/genome/spot_modules_{name}.log"
-    shell:
-        """
-        ppanggolin write -f -p {input.ppanggolin} --spot_modules --output {output.folder} &>> {log}
+        ppanggolin draw -f -p {input.ppanggolin} \
+            --tile_plot \
+            --ucurve \
+            --draw_spots \
+            --nocloud \
+            --add_dendrogram \
+            --add_metadata \
+            --output {output.folder} &>> {log}
         """
