@@ -186,7 +186,7 @@ wildcard_constraints:
 rule all:
     input:
         expand("data/processed/{name}/tables/df_gtdb_meta.csv", name=PROJECT_IDS),
-        get_final_output(DF_SAMPLES, PEP_PROJECTS, rule_dict_path="workflow/rules_bgc.yaml"),
+        get_final_output(DF_SAMPLES, PEP_PROJECTS, rule_dict_path="rules_bgc.yaml"),
 
 # Create place holder for resources defined in each modules, will be added if module is included, and passed to create custom_resource_dir
 resource_mapping = {}
