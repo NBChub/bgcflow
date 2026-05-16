@@ -2,7 +2,6 @@ name: alleleome
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - python==3.11
   - mafft==7.505
